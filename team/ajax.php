@@ -1,0 +1,3082 @@
+<?php
+    include("../conn.php");
+
+    // ----------------------- DISPLAY ASSIGN EMAIL -----------------------
+    if(isset($_POST['display_email_assign']))
+    {
+        $email_id = $_POST['email_id'];
+        $results = mysqli_query($conn, "SELECT * FROM email_assign INNER JOIN list ON email_assign.assign_list_id = list.list_id WHERE email_assign.assign_email_id = '$email_id'");
+        while($rows = mysqli_fetch_array($results))
+        {
+            echo'<li class="scrumboard-item btn-alt-warning" style="box-shadow: 0px 1px 1px 0px rgba(119, 119, 119, 0.27);-moz-box-shadow: 0px 1px 1px 0px rgba(119, 119, 119, 0.27);-webkit-box-shadow: 0px 1px 1px 0px rgba(119, 119, 119, 0.27); height: 20px;">
+                        <div class="scrumboard-item-options">
+                            <button class="btn btn-sm btn-noborder btn-danger" id="'.$rows['assign_id'].'" onclick="delete_assign_field(this.id)"><i class="fa fa-trash"></i></button>
+                        </div>
+                        <div class="scrumboard-item-content">';
+                            echo'<label>'.$rows['list_name'].'</label>
+                        </div>
+                </li>';
+        }
+    }
+    // ----------------------- END DISPLAY ASSIGN EMAIL -----------------------
+    // ----------------------- ASSIGN EMAIL -----------------------
+    if(isset($_POST['click_assign_email']))
+    {
+        $user_id = $_POST['user_id'];
+        $email_assign_id = $_POST['email_assign_id'];
+        $space_id_no = $_POST['space_id_no'];
+        $list_id_no = $_POST['list_id_no'];
+
+        $select_email_assign = mysqli_query($conn,"SELECT * FROM email_assign WHERE assign_email_id = '$email_assign_id' AND assign_list_id = '$list_id_no'");
+        $count = mysqli_num_rows($select_email_assign);
+        if($count == 1)
+        {
+            echo "exist";
+        }
+        else
+        {
+            mysqli_query($conn,"INSERT into email_assign values ('', '$user_id', '$email_assign_id', '$list_id_no')") or die(mysqli_error());
+            echo "success";
+        }
+    }
+    // ----------------------- END ASSIGN EMAIL -----------------------
+    // ----------------------- DELETE ASSIGN EMAIL LIST -----------------------
+    if(isset($_POST['delete_assign_field']))
+    {
+        $assign_field_id = $_POST['assign_field_id'];
+        // delete from db
+        $sucess_delete = mysqli_query($conn, "DELETE FROM email_assign WHERE assign_id = '$assign_field_id'") or die(mysqli_error());
+        // echo "success";
+        if ($sucess_delete) {
+            echo "success";
+        }
+    }
+    // -----------------------END DELETE ASSIGN EMAIL LIST -----------------------
+    // ----------------------- GET EMAIL CONTENT -----------------------
+    if(isset($_POST['get_email_content']))
+    {
+        $email_name = $_POST['email_name'];
+        $file_loc = "email_content/".$email_name.".txt";
+
+        $myfile = fopen($file_loc, "r") or die("Unable to open file!");
+        echo fread($myfile,filesize($file_loc));
+        fclose($myfile);
+    }
+    // ----------------------- END GET EMAIL CONTENT -----------------------
+    // ----------------------- DELETE EMAIL -----------------------
+    if(isset($_POST['delete_email']))
+    {
+        $email_id = $_POST['id'];
+        $select_email = mysqli_query($conn,"SELECT * FROM email_format WHERE email_id = '$email_id'");
+        $fetch_email = mysqli_fetch_array($select_email);
+        $email_name = $fetch_email['email_name'];
+
+        // remove emailname.txt from email_content folder
+        $file_loc = "email_content/".$email_name.".txt";
+        unlink($file_loc);
+
+        // delete from db
+        mysqli_query($conn, "DELETE FROM email_format WHERE email_id = '$email_id'") or die(mysqli_error());
+    }
+    // ----------------------- END DELETE EMAIL -----------------------
+    // ----------------------- PREVIEW EMAIL -----------------------
+    if(isset($_POST['preview_email']))
+    {
+        $email_content = $_POST['email_content'];
+        echo '
+            <td style="background-color: #fff; border-top: 20px solid #006786; border-bottom: 20px solid #006786;">
+                '.$email_content.'
+            </td>
+        ';
+    }
+    // ----------------------- END PREVIEW EMAIL -----------------------
+    // ----------------------- PUBLISH EMAIL -----------------------
+    if(isset($_POST['publish']))
+    {
+        $email_created_by = $_POST['email_created_by'];
+        $email_template = $_POST['email_template'];
+        $email_name = $_POST['email_name'];
+        $email_subject = $_POST['email_subject'];
+        $email_content = $_POST['email_content'];
+
+        // save to db
+
+        if(file_exists("email_content/".$email_name.".txt")) // if email exist then update
+        {
+            mysqli_query($conn, "UPDATE email_format SET email_created_by = '$email_created_by', email_template = '$email_template', email_name = '$email_name', email_subject = '$email_subject' WHERE email_name='$email_name'") or die(mysqli_error());
+            // save email content to specific location
+            $fp = fopen("email_content/".$email_name.".txt","wb");
+            fwrite($fp,$email_content);
+            fclose($fp);
+
+            echo "Update";
+        }
+        else // else create new
+        {
+            mysqli_query($conn, "INSERT into email_format values ('', '$email_created_by', '$email_template', '$email_name', '$email_subject')") or die(mysqli_error());
+
+            // save email content to specific location
+            $fp = fopen("email_content/".$email_name.".txt","wb");
+            fwrite($fp,$email_content);
+            fclose($fp);
+
+            echo "Insert";
+        }
+    }
+    // ----------------------- END PUBLISH EMAIL -----------------------
+    // ----------------------- SEND EMAIL -----------------------
+    if(isset($_POST['test_send_email']))
+    {
+        $to = $_POST['test_email'];
+        $subject = $_POST['email_subject'];
+        $email_content = $_POST['email_content'];
+
+        // Message can be change base on template selected
+        $message = '
+            <div style="padding: 20px 0px 0px 0px; background-color: #00465a;" class="shadow">
+                <img src="http://ipasspmt.site/assets/media/photos/IPASS-Logo-05.png" style="height: 120px; padding: 0px 0px 30px 0px; display: block; margin-left: auto;
+              margin-right: auto;">
+                <table width="100%" border="0" cellspacing="0" cellpadding="20" style="background-color: #47bcde; color: #5a5f61; font-family:verdana;">
+                    <tr>
+                        <td style="background-color: #fff; border-top: 20px solid #006786; border-bottom: 20px solid #006786;">
+                            '.$email_content.'
+                        </td>
+                    </tr>
+                </table>
+                <div style="text-align: center; padding: 20px 0px; color: #fff; background-color: #00465a;">
+                    PROCESSING MADE EASY BY IPASS<br>
+                    Rm 1, 2nd Floor, Doña Segunda Complex,<br>
+                    Ponciano Street, Davao City, Philippines 8000<br><br>
+                    <a href="https://ipassprocessing.com/" style="color: #2196f3;">https://ipassprocessing.com/</a>
+                </div>
+            </div>
+        ';
+
+        // Always set content-type when sending HTML email
+        $headers = "MIME-Version: 1.0" . "\r\n";
+        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+        // More headers
+        $headers .= 'From: <ipasspmt.site>' . "\r\n";
+        $headers .= 'Cc: ipasspmt.site' . "\r\n";
+
+        $send = mail($to,$subject,$message,$headers);
+        if($send)
+        {
+            echo "Email sent successfully.";
+        }
+        else
+        {
+            echo "Email not sent.";
+        }
+    }
+    // ----------------------- END SEND EMAIL -----------------------
+
+
+    // ----------------------- MEMBER UPLOAD PROFILE PICTURE -----------------------
+    if(isset($_POST['update_profile']))
+    {
+        $user_id = $_POST['user_id'];
+        $attachment_name = $_FILES['file_attachment']['name'];
+        $attachment_temp = $_FILES['file_attachment']['tmp_name'];
+        $attachment_size = $_FILES['file_attachment']['size'];
+
+        $exp = explode(".", $attachment_name);
+        $ext = end($exp);
+        $allowed_ext = array('jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG');
+        if(in_array($ext, $allowed_ext)) // check the file extension
+        {
+            date_default_timezone_set('Asia/Manila');
+            //$todays_date = date("y-m-d H:i:sa"); //  original format
+            $date = date("His"); // for unique file name
+
+            $words = explode(' ',trim($attachment_name)); // convert name to array
+            $get_name = substr($words[0], 0, 6); // get only 6 character of the name
+
+            $image = $date.'-'.$get_name.'.'.$ext;
+            $location = "../assets/media/upload/".$image; // upload location
+            if($attachment_size < 3000000) // Maximum 3 MB;
+            {
+                $select_user = mysqli_query($conn, "SELECT * FROM user where user_id = '$user_id'");
+                $fetch_user = mysqli_fetch_array($select_user);
+                $existing_frofile = $fetch_user['profile_pic'];
+                if($existing_frofile != "")
+                {
+                    array_map('unlink', glob("../assets/media/upload/".$existing_frofile)); // remove image
+                }
+                move_uploaded_file($attachment_temp, $location);
+                $update = mysqli_query($conn, "UPDATE user SET profile_pic = '$image' WHERE user_id='$user_id'") or die(mysqli_error());
+                echo "success";
+            }
+            else
+            {
+                echo "size";
+            }
+        }
+        else
+        {
+            echo "format";
+        }
+    }
+    // ----------------------- END MEMBER UPLOAD PROFILE PICTURE -----------------------
+
+    // ----------------------- CHANGE MODE -----------------------
+    if(isset($_POST['change_mode']))
+    {
+        $user_id = $_POST['user_id'];
+        $select_mode = mysqli_query($conn,"SELECT * FROM mode WHERE mode_user_id = '$user_id'");
+        $fetch_mode = mysqli_fetch_array($select_mode);
+        $count = mysqli_num_rows($select_mode);
+        if($count == 0) //insert
+        {
+            mysqli_query($conn,"INSERT into `mode` values ('','$user_id','White')") or die(mysqli_error());
+        }
+        else //update
+        {
+            $mode_type = $fetch_mode['mode_type'];
+            if($mode_type == "Custom" || $mode_type == "")
+            {
+                $update = mysqli_query($conn, "UPDATE mode SET mode_type = 'White' WHERE mode_user_id='$user_id'") or die(mysqli_error());
+                echo 'White';
+            }
+            else if($mode_type == "White")
+            {
+                $update = mysqli_query($conn, "UPDATE mode SET mode_type = 'Dark' WHERE mode_user_id='$user_id'") or die(mysqli_error());
+                echo 'Dark';
+            }
+            else
+            {
+                $update = mysqli_query($conn, "UPDATE mode SET mode_type = 'Custom' WHERE mode_user_id='$user_id'") or die(mysqli_error());
+                echo 'Custom';
+            }
+        }
+    }
+    // ----------------------- EDN CHANGE MODE  -----------------------
+
+    // ----------------------- add_task_save -----------------------
+    if(isset($_POST['add_task_save']))
+    {
+        $user_id = $_POST['user_id'];
+        $space_id = $_POST['space_id'];
+        $list_id = $_POST['list_id'];
+        $status_id = $_POST['status_id'];
+        $contact_id = $_POST['contact_id'];
+        $task_name = $_POST['task_name'];
+
+        // update contact_assign_to
+        $select_contact = mysqli_query($conn,"SELECT * FROM contact WHERE contact_id = '$contact_id'");
+        $fetch_contact = mysqli_fetch_array($select_contact);
+        $new_assign_to = $fetch_contact['contact_assign_to'].','. $space_id.','.$list_id.','.$status_id;
+
+        $update = mysqli_query($conn, "UPDATE contact SET contact_assign_to = '$new_assign_to' WHERE contact_id='$contact_id'") or die(mysqli_error());
+
+        //Send email to client
+        $emailfor = "New contact assign";
+        include 'email_format.php';
+        //END Send email to client
+
+        // insert into task db
+        mysqli_query($conn,"INSERT into `task` (task_name, task_status_id, task_list_id, task_created_by, task_date_created, task_assign_to, task_contact) values ('$task_name', '$status_id', '$list_id', '$user_id', NOW(), '$user_id', $contact_id)") or die(mysqli_error());
+
+        // get last task id
+        $last_id = mysqli_query($conn,"SELECT * FROM task WHERE task_status_id = '$status_id' ORDER BY task_id DESC LIMIT 1");
+        $fetch_last_id = mysqli_fetch_array($last_id);
+        $task_id = $fetch_last_id['task_id'];
+
+        // then insert into specific space db
+        $select_space = mysqli_query($conn,"SELECT * FROM space WHERE space_id = '$space_id'");
+        $fetch_select_space = mysqli_fetch_array($select_space);
+        $space_db_name = $fetch_select_space['space_db_table'];
+        mysqli_query($conn,"INSERT into `$space_db_name` (task_id) values ('$task_id')") or die(mysqli_error());
+    }
+    // ----------------------- END add_task_save -----------------------
+
+
+    // ----------------------- FILTER TASK -----------------------
+    if(isset($_POST['fetch_field_dropdown']))
+    {
+        $space_id = $_POST['space_id'];
+        $list_id = $_POST['list_id'];
+        $field_id = $_POST['field_id'];
+
+        $select_space_name = mysqli_query($conn, "SELECT * FROM space WHERE space_id = '$space_id'");
+        $fetch_space_name = mysqli_fetch_array($select_space_name);
+        $space_name = $fetch_space_name['space_name'];
+
+        $select_list_name = mysqli_query($conn, "SELECT * FROM list WHERE list_id = '$list_id'");
+        $fetch_list_name = mysqli_fetch_array($select_list_name);
+        $list_name = $fetch_list_name['list_name'];
+
+        $select_field_col_name = mysqli_query($conn, "SELECT * FROM field WHERE field_id = '$field_id'");
+        $fetch_field_col_name = mysqli_fetch_array($select_field_col_name);
+
+        $select_option = mysqli_query($conn, "SELECT * FROM child WHERE child_field_id = '$field_id' ORDER BY child_order ASC");
+        while ($fetch_option = mysqli_fetch_array($select_option))
+        {
+            echo '<a class="dropdown-item text-center text-white" style="background-color: '.$fetch_option['child_color'].';" href="main_dashboard.php?space_name='.$space_name.'&list_name='.$list_name.'&list_id='.$list_id.'&filter=field&field='.$fetch_option['child_id'].',,'.$fetch_field_col_name['field_col_name'].',,dropdown">'.$fetch_option['child_name'].'</a>';
+        }
+    }
+    if(isset($_POST['fetch_field_radio']))
+    {
+        $space_id = $_POST['space_id'];
+        $list_id = $_POST['list_id'];
+        $field_id = $_POST['field_id'];
+
+        $select_field_name = mysqli_query($conn, "SELECT * FROM field WHERE field_id = '$field_id'");
+        $fetch_field_name = mysqli_fetch_array($select_field_name);
+
+        echo '<div class="text-center">
+                <div style="font-size: 22px; margin-bottom: 20px;">'.$fetch_field_name['field_name'].'<div>
+                <div style="background-color: #1b9598; margin-top: 5px; color: #fff; padding: 3px 20px; border-radius: 10px;">
+                    <label class="css-control css-control-primary css-radio">
+                        <input type="radio" class="css-control-input" name="radio-group2" value="'.$fetch_field_name['field_col_name'].'" onclick="filter_yes(this.value)">
+                        <span class="css-control-indicator"></span> Yes
+                    </label>
+                    <label class="css-control css-control-primary css-radio">
+                        <input type="radio" class="css-control-input" name="radio-group2" value="'.$fetch_field_name['field_col_name'].'" onclick="filter_no(this.value)">
+                        <span class="css-control-indicator"></span> No
+                    </label>
+                </div>
+            </div>';
+    }
+    // ----------------------- END FILTER TASK -----------------------
+
+    // ----------------------- MODAL UPPER OPTION / ADD DETAILS -----------------------
+    if(isset($_POST['fetch_status']))
+    {
+        $task_id = $_POST['task_id'];
+        $status_list_id = $_POST['list_id'];
+
+        $select_task = mysqli_query($conn, "SELECT * FROM task WHERE task_id = '$task_id'");
+        $fetch_select_task = mysqli_fetch_array($select_task);
+
+        $findstatus = mysqli_query($conn, "SELECT * FROM status WHERE status_list_id = '$status_list_id' ORDER BY status_order_no ASC");
+        while($result_findstatus = mysqli_fetch_array($findstatus))
+        {
+            if($fetch_select_task['task_status_id'] == $result_findstatus['status_id'])
+            {
+                echo '<button type="button" class="dropdown-item" style="background-color: '.$result_findstatus['status_color'].'; color: #fff">
+                          <i class="fa fa-square mr-5"></i>'.$result_findstatus['status_name'].'
+                </button>';
+            }
+            else
+            {
+                echo '<button type="button" class="dropdown-item" id="move_task'.$result_findstatus['status_id'].'" onclick="move_task(this.id)">
+                          <i class="fa fa-square mr-5" style="color: '.$result_findstatus['status_color'].';"></i>'.$result_findstatus['status_name'].'
+                </button>';
+            }
+        }
+    }
+    if(isset($_POST['fetch_email_name']))
+    {
+        $task_id = $_POST['task_id'];
+        $status_list_id = $_POST['list_id'];
+
+        $select_task = mysqli_query($conn, "SELECT email_format.email_name, contact.contact_email, email_format.email_id, email_format.email_subject, email_format.email_name FROM email_assign INNER JOIN email_format ON email_assign.assign_email_id = email_format.email_id INNER JOIN task ON task.task_list_id = email_assign.assign_list_id INNER JOIN contact ON contact.contact_id = task.task_contact WHERE task.task_id = '$task_id'");
+
+        while($result_findstatus = mysqli_fetch_array($select_task))
+        {
+            echo '<button type="button" class="dropdown-item" id="'.$result_findstatus['email_id'].'" onclick="fetch_email_name(this.id)">
+                      <i class="fa fa-square mr-5" style="color: #3f9ce8;"></i>'.$result_findstatus['email_name'].'
+            </button>
+            <input id="contact_email'.$result_findstatus['email_id'].'" type="hidden" value="'.$result_findstatus['contact_email'].'"></input>
+            <input id="email_subject'.$result_findstatus['email_id'].'" type="hidden" value="'.$result_findstatus['email_subject'].'"></input>
+            <input id="email_name'.$result_findstatus['email_id'].'" type="hidden" value="'.$result_findstatus['email_name'].'"></input>
+            ';
+        }
+    }
+    if(isset($_POST['move_task']))
+    {
+        $task_id = $_POST['task_id'];
+        $status_id = $_POST['status_id'];
+
+        $select_task = mysqli_query($conn, "SELECT * FROM task WHERE task_id = '$task_id'");
+        $fetch_select_task = mysqli_fetch_array($select_task);
+        $task_status_id = $fetch_select_task['task_status_id'];
+        $contact_id = $fetch_select_task['task_contact'];
+
+        $move = mysqli_query($conn, "UPDATE task SET task_status_id = '$status_id' WHERE task_id='$task_id'") or die(mysqli_error());
+
+        if($move == true)
+        {
+            $select_contact = mysqli_query($conn, "SELECT * FROM contact WHERE contact_id = '$contact_id'");
+            $fetch_select_contact = mysqli_fetch_array($select_contact);
+            $contact_assign_to = $fetch_select_contact['contact_assign_to'];
+            $assign_array = explode(",", $contact_assign_to); // convert string to array
+            $new_array = str_replace($task_status_id,$status_id,$assign_array); // current,change_to,array
+            $new_assign_to = implode(",",$new_array); // convert array to string
+            mysqli_query($conn, "UPDATE contact SET contact_assign_to = '$new_assign_to' WHERE contact_id = '$contact_id'") or die(mysqli_error());
+            echo 'move';
+        }
+        else
+        { echo 'error'; }
+    }
+    if(isset($_POST['add_priority']))
+    {
+        $priority = $_POST['priority'];
+        $task_id = $_POST['task_id'];
+        mysqli_query($conn, "UPDATE task SET task_priority = '$priority' WHERE task_id='$task_id'") or die(mysqli_error());
+    }
+    if(isset($_POST['assign_member']))
+    {
+        $task_id = $_POST['task_id'];
+        $member_id = $_POST['member_id'];
+        $list_id = $_POST['list_id'];
+
+        $find_task = mysqli_query($conn, "SELECT * FROM task WHERE task_id = '$task_id'");
+        $result_find_task = mysqli_fetch_array($find_task);
+        $current_assign_to = $result_find_task['task_assign_to'];
+
+        if($current_assign_to == "")
+        {
+            mysqli_query($conn, "UPDATE task SET task_assign_to='$member_id' WHERE task_id='$task_id'") or die(mysqli_error());
+        }
+        else
+        {
+            $current_array = explode(",", $current_assign_to); // convert string to array
+            array_push($current_array,$member_id); // insert the new user id to $current_array | ex. "1" then new array ==  [1,2,3,4,5,1]
+            if(count($current_array) != count(array_unique($current_array))) // checking for existing element of array.
+            {
+                echo "error1";
+            }
+            else
+            {
+                $many_assign = $current_assign_to.",".$member_id;
+                mysqli_query($conn, "UPDATE task SET task_assign_to='$many_assign' WHERE task_id='$task_id'") or die(mysqli_error());
+            }
+        }
+
+        // Update the DB in table "list" at "list_assign_id"
+        $select_list_assign_id = mysqli_query($conn, "SELECT * FROM list WHERE list_id = '$list_id'") or die(mysqli_error());
+        $fetch_list = mysqli_fetch_array($select_list_assign_id);
+        $list_assign_id = $fetch_list['list_assign_id'];
+        $array_assign_id = explode(",", $list_assign_id); // convert string to array
+        if($list_assign_id == "")
+        {
+            mysqli_query($conn, "UPDATE list SET list_assign_id='$member_id' WHERE list_id='$list_id'") or die(mysqli_error());
+        }
+        else
+        {
+            if (in_array($member_id, $array_assign_id))
+            {}
+            else
+            {
+                $multiple_assign = $list_assign_id.",".$member_id;
+                mysqli_query($conn, "UPDATE list SET list_assign_id='$multiple_assign' WHERE list_id='$list_id'") or die(mysqli_error());
+            }
+        }
+    }
+    if(isset($_POST['add_due_date']))
+    {
+        $task_id = $_POST['task_id'];
+        $txt_date = $_POST['txt_date'];
+        $txt_time = $_POST['txt_time'];
+        $due_date_and_time = $txt_date. " " .$txt_time;
+        mysqli_query($conn, "UPDATE task SET task_due_date = '$due_date_and_time' WHERE task_id='$task_id'") or die(mysqli_error());
+    }
+    if(isset($_POST['assign_tag']))
+    {
+        $task_id = $_POST['task_id'];
+        $tasktag = $_POST['tag_id'];
+        $find_task = mysqli_query($conn, "SELECT * FROM task WHERE task_id = '$task_id'");
+        $result_find_task = mysqli_fetch_array($find_task);
+        $current_task_tag = $result_find_task['task_tag'];
+
+        if($current_task_tag == "")
+        {
+            mysqli_query($conn, "UPDATE task SET task_tag='$tasktag' WHERE task_id='$task_id'") or die(mysqli_error());
+        }
+        else
+        {
+            $current_array = explode(",", $current_task_tag); // convert string to array
+            array_push($current_array,$tasktag); // insert the new user id to $current_array | ex. "1" then new array ==  [1,2,3,4,5,1]
+            if(count($current_array) != count(array_unique($current_array))) // checking for existing element of array.
+            {
+                echo "error1";
+            }
+            else
+            {
+                $many_tag = $current_task_tag.",".$tasktag;
+                mysqli_query($conn, "UPDATE task SET task_tag='$many_tag' WHERE task_id='$task_id'") or die(mysqli_error());
+            }
+        }
+    }
+    if(isset($_POST['rename_task']))
+    {
+        $task_id = $_POST['task_id'];
+        $txt_modal_name = $_POST['txt_modal_name'];
+        mysqli_query($conn, "UPDATE task SET task_name='$txt_modal_name' WHERE task_id = '$task_id'") or die(mysqli_error());
+    }
+    if(isset($_POST['delete_task']))
+    {
+        $space_id = $_POST['space_id'];
+        $list_id = $_POST['list_id'];
+        $task_id = $_POST['task_id'];
+        $select = mysqli_query($conn, "SELECT * FROM task WHERE task_id = '$task_id'");
+        $fetch = mysqli_fetch_array($select);
+        /*if($fetch['task_contact'] == "")
+        {
+            mysqli_query($conn, "DELETE FROM task WHERE task_id='$task_id'") or die(mysqli_error());
+        }
+        else
+        {
+            echo "error1";
+        }*/
+
+        $task_contact = $fetch['task_contact'];
+        $select_contact = mysqli_query($conn,"SELECT * FROM contact WHERE contact_id='$task_contact'");
+        $fetch_contact = mysqli_fetch_array($select_contact);
+        $contact_assign_to = $fetch_contact['contact_assign_to'];
+
+        $select_space = mysqli_query($conn, "SELECT * FROM space WHERE space_id='$space_id'");
+        $fetch_space_td_name = mysqli_fetch_array($select_space);
+        $space_db = $fetch_space_td_name['space_db_table'];
+
+        mysqli_query($conn, "DELETE FROM $space_db WHERE task_id='$task_id'") or die(mysqli_error());//remove task to specific space
+        mysqli_query($conn, "DELETE FROM task WHERE task_id='$task_id'") or die(mysqli_error());//delete task
+
+        // code to identify if contact has only 1 task, then delete contact and remove profile pic
+        $assign_array = explode(",", $contact_assign_to); // convert string to array
+        $count = count($assign_array);
+        $tota_task = 0;
+        for($x = 0; $x < $count; $x+=3)
+        {
+            $tota_task++;
+        }
+
+        if($tota_task == 1) // if contact has 1 task
+        {
+            if($fetch_contact['contact_profile'] != "")
+            {
+                //remove profile if has
+                $existing_frofile = $fetch_contact['contact_profile'];
+                array_map('unlink', glob("../client/client_profile/".$existing_frofile)); // remove image
+            }
+            mysqli_query($conn, "DELETE FROM contact WHERE contact_id='$task_contact'") or die(mysqli_error());//delete contact
+        }
+        else // else many then, update contact_assign_to
+        {
+            $key = array_search($space_id,$assign_array); // get the key or position of space
+            unset($assign_array[$key]); // remove space_id from array
+            unset($assign_array[$key+1]); // remove list_id from array
+            unset($assign_array[$key+2]); // remove status_id from array
+
+            $new_assign_to = implode(",",$assign_array); // convert array to string
+            $update = mysqli_query($conn, "UPDATE contact SET contact_assign_to = '$new_assign_to' WHERE contact_id='$task_contact'") or die(mysqli_error());
+        }
+    }
+    // ----------------------- END MODAL UPPER OPTION / ADD DETAILS -----------------------
+
+    // ----------------------- MODAL REMOVE DETAILS -----------------------
+    if(isset($_POST['remove_priority']))
+    {
+        $task_id = $_POST['task_id'];
+        mysqli_query($conn,"UPDATE task set task_priority = '' where task_id = '$task_id'");
+    }
+    if(isset($_POST['remove_assign']))
+    {
+        $task_last_id = $_POST['list_id'];
+        $task_id = $_POST['task_id'];
+        $txt_assign_user_id = $_POST['assign_id'];
+
+        // ___________________ Update the DB in table "list" at "list_assign_id"
+        $count = 0;
+        $get_task = mysqli_query($conn,"SELECT * FROM task WHERE task_list_id = '$task_last_id' ORDER BY task_id ASC"); //get last id
+        while($fetch_get_task = mysqli_fetch_array($get_task))
+        {
+            $taskss_id = $fetch_get_task['task_assign_to'];
+            $array = explode(",", $taskss_id);  // convert string to array
+            if (in_array($txt_assign_user_id, $array))
+            {
+                $count++;
+            }
+            else
+            {}
+        }
+
+        if($count == 1)
+        {
+            $find_list = mysqli_query($conn, "SELECT * FROM list WHERE list_id = '$task_last_id'") or die(mysqli_error());
+            $result_find_list = mysqli_fetch_array($find_list);
+            $list_assign_id = $result_find_list['list_assign_id'];
+            $list_array = explode(",", $list_assign_id);  // convert string to array
+            $find_different = array_diff($list_array, array($txt_assign_user_id));
+            $finalarray = implode( ",", $find_different ); // convert array to string
+            mysqli_query($conn, "UPDATE list SET list_assign_id='$finalarray' WHERE list_id = '$task_last_id'") or die(mysqli_error());
+        }
+        else{}
+        // ___________________ End Update the DB in table "list" at "list_assign_id"
+
+        $find_task = mysqli_query($conn, "SELECT * FROM task WHERE task_id = '$task_id'");
+        $result_find_task = mysqli_fetch_array($find_task);
+        $current_assign_to = $result_find_task['task_assign_to'];
+        $current_array = explode(",", $current_assign_to);  // convert string to array
+        $new_arr = array_diff($current_array, array($txt_assign_user_id));
+        $final_array = implode( ",", $new_arr ); // convert array to string
+        mysqli_query($conn, "UPDATE task SET task_assign_to='$final_array' WHERE task_id = '$task_id'") or die(mysqli_error());
+    }
+    if(isset($_POST['remove_due_date']))
+    {
+        $task_id = $_POST['task_id'];
+        mysqli_query($conn,"UPDATE task set task_due_date = '0000-00-00 00:00:00' where task_id = '$task_id'");
+    }
+    if(isset($_POST['remove_tag']))
+    {
+        $txt_task_id = $_POST['task_id'];
+        $tag_id = $_POST['tag_id'];
+        $find_tag = mysqli_query($conn, "SELECT * FROM task WHERE task_id = '$txt_task_id'");
+        $result_find_tag = mysqli_fetch_array($find_tag);
+        $current_tag = $result_find_tag['task_tag'];
+        $current_array = explode(",", $current_tag);  // convert string to array
+        $new_arr = array_diff($current_array, array($tag_id));
+        $final_array = implode( ",", $new_arr ); // convert array to string
+        mysqli_query($conn, "UPDATE task SET task_tag='$final_array' WHERE task_id='$txt_task_id'") or die(mysqli_error());
+    }
+    // -----------------------  END MODAL REMOVE DETAILS -----------------------
+
+    // -----------------------  ASSIGN FIELD -----------------------
+    if(isset($_POST['display_field']))
+    {
+        echo '<option value=""></option>';
+        $space_id = $_POST['space_id'];
+        $list_id = $_POST['list_id'];
+        $select_field = mysqli_query($conn, "SELECT * FROM field WHERE field_space_id ='$space_id' ORDER BY field_order ASC");
+        while($result_select_field = mysqli_fetch_array($select_field))
+        {
+            $field_assign_to = $result_select_field['field_assign_to'];
+            $assign_array = explode(",", $field_assign_to);
+            if (in_array($list_id, $assign_array) == false)
+            {
+                echo '<option value="'.$result_select_field['field_id'].'">'.$result_select_field['field_name'].'</option>';
+            }
+        }
+    }
+
+    if(isset($_POST['display_assign_status']))
+    {
+        echo'<div class="row" style="padding: 0px 15px;">';
+        $space_id = $_POST['space_id'];
+        $list_id = $_POST['list_id'];
+        $select_status = mysqli_query($conn, "SELECT * FROM status WHERE status_list_id ='$list_id' ORDER BY status_order_no ASC");
+        while($result_select_status = mysqli_fetch_array($select_status))
+        {
+            echo'<div class="col-md-12" style="border-bottom: solid 1px '.$result_select_status['status_color'].'; border-left: solid 1px '.$result_select_status['status_color'].'; border-radius: 3px; padding: 5px 10px; margin: 5px 0px;">
+                    <span><strong><i class="fa fa-square" style="color: '.$result_select_status['status_color'].';"></i> &nbsp;'.$result_select_status['status_name'].'</strong></span>';
+                    $status_id = $result_select_status['status_id'];
+                    $select_field = mysqli_query($conn, "SELECT * FROM field WHERE field_space_id = '$space_id' ORDER BY field_order ASC");
+                    while($fetch_select_field = mysqli_fetch_array($select_field))
+                    {
+                        $field_assign_to = $fetch_select_field['field_assign_to'];
+
+                        if($field_assign_to != "")
+                        {
+                            $assign_array = explode(",", $field_assign_to);
+                            $key = array_search($list_id,$assign_array); // get the key or position of list
+                            $statusid = $assign_array[$key+1];
+
+                            if($status_id == $statusid)
+                            {
+                                echo'<div class="col-md-12" style="background-color: #eaeaea; border-radius: 3px; padding: 5px 10px; margin: 5px 0px; box-shadow: 0px 1px 1px 0px rgba(119, 119, 119, 0.27);-moz-box-shadow: 0px 1px 1px 0px rgba(119, 119, 119, 0.27);-webkit-box-shadow: 0px 1px 1px 0px rgba(119, 119, 119, 0.27);">
+                                    <span><strong>&nbsp;'.$fetch_select_field['field_name'].'</strong></span>
+                                    <span class="float-right" style="margin-top: -3px;">
+                                        <button class="btn btn-sm btn-noborder btn-danger" id="'.$fetch_select_field['field_id'].'" onclick="remove_assign_field(this.id)"><i class="fa fa-trash"></i></button>
+                                    </span>
+                                </div>';
+                            }
+                        }
+                    }
+                echo'</div>';
+        }
+        echo "</div>";
+    }
+
+    if(isset($_POST['update_field_assign']))
+    {
+        $assign_field_id = $_POST['assign_field_id'];
+        $field_assign_to = $_POST['list_id'].','.$_POST['assign_status_id'];
+
+        $select_field = mysqli_query($conn, "SELECT * FROM field WHERE field_id = '$assign_field_id'");
+        $fetch_select_field = mysqli_fetch_array($select_field);
+        $prev_field_assign_to = $fetch_select_field['field_assign_to'];
+        if($prev_field_assign_to == "")
+        {
+            mysqli_query($conn, "UPDATE field SET field_assign_to = '$field_assign_to' WHERE field_id = '$assign_field_id'") or die(mysqli_error());
+        }
+        else
+        {
+            $new_assign = $prev_field_assign_to.','.$field_assign_to;
+            mysqli_query($conn, "UPDATE field SET field_assign_to = '$new_assign' WHERE field_id = '$assign_field_id'") or die(mysqli_error());
+        }
+    }
+
+    if(isset($_POST['remove_assign_field']))
+    {
+        $list_id = $_POST['list_id'];
+        $id = $_POST['id'];
+
+        $select_field = mysqli_query($conn, "SELECT * FROM field WHERE field_id = '$id'");
+        $fetch_select_field = mysqli_fetch_array($select_field);
+        $field_assign_to = $fetch_select_field['field_assign_to'];
+
+        $assign_array = explode(",", $field_assign_to); // convert string to array
+        $count = count($assign_array);
+        $tota_assign = 0;
+        for($x = 0; $x < $count; $x+=2)
+        {
+            $tota_assign++;
+        }
+
+        if($tota_assign == 1)
+        {
+            mysqli_query($conn, "UPDATE field SET field_assign_to = '' WHERE field_id = '$id'") or die(mysqli_error());
+        }
+        else
+        {
+            $key = array_search($list_id,$assign_array); // get the key or position of list
+            unset($assign_array[$key]); // remove list_id from array
+            unset($assign_array[$key+1]); // remove status_id from array
+            $new_assign = implode(",",$assign_array);
+            mysqli_query($conn, "UPDATE field SET field_assign_to = '$new_assign' WHERE field_id = '$id'") or die(mysqli_error());
+        }
+    }
+    // -----------------------  END ASSIGN FIELD -----------------------
+
+    // -----------------------  SAVE NPUT FIELD -----------------------
+    if(isset($_POST['save_input_in_task']))
+    {
+        $id = $_POST['user_id'];
+        $space_id = $_POST['space_id'];
+        $task_id = $_POST['task_id'];
+        $field_id = $_POST['field_id'];
+        $input_value = $_POST['input_value'];
+
+        //auto create row specific space db
+        $select_db = mysqli_query($conn, "SELECT * FROM space WHERE space_id ='$space_id'");
+        $fetch_select_db = mysqli_fetch_array($select_db);
+        $space_db_table = $fetch_select_db['space_db_table']; // getting the db_table name of the space
+
+        $check_if_task_exist = mysqli_query($conn, "SELECT * FROM $space_db_table WHERE task_id ='$task_id'");
+        $count1 = mysqli_num_rows($check_if_task_exist);
+        if($count1 == 0)
+        {
+            mysqli_query($conn,"INSERT INTO `$space_db_table` (task_id) values ('$task_id')") or die(mysqli_error());
+        }
+
+        // another code below
+        //$select_db = mysqli_query($conn, "SELECT * FROM space WHERE space_id ='$space_id'");
+        //$fetch_select_db = mysqli_fetch_array($select_db);
+        $count = mysqli_num_rows($select_db);
+        if($count == 1)
+        {
+            //$space_db_table = $fetch_select_db['space_db_table']; // getting the db_table name of the space
+            $slect_field = mysqli_query($conn, "SELECT * FROM field WHERE field_space_id ='$space_id'");
+            $count_slect_field = mysqli_num_rows($slect_field);
+            for($x = 0; $x < $count_slect_field; $x++)
+            {
+                //echo $x."<br>";
+                $field_id_array = explode(",", $field_id); // convert string to array
+                $final_field_id = $field_id_array[$x]; //getting every value from x = 0
+                $input_value_array = explode(",", $input_value); // convert string to array
+                $final_input_value = $input_value_array[$x]; //getting every value from x = 0
+
+                $select_col_name = mysqli_query($conn, "SELECT * FROM field WHERE field_id ='$final_field_id'");
+                $fetch_col_name = mysqli_fetch_array($select_col_name);
+                $col_name = $fetch_col_name['field_col_name']; // get the col_name in db
+                $field_name = $fetch_col_name['field_name']; // get the field_name in db
+                $field_type = $fetch_col_name['field_type']; // get the field_name in db
+
+                // Below is code for adding comment
+                $select_if_has_value = mysqli_query($conn, "SELECT * FROM `$space_db_table` WHERE task_id = '$task_id'");
+                $result = mysqli_fetch_array($select_if_has_value);
+                $col_value = $result[''.$col_name.'']; // get current value
+
+                if($col_value == $final_input_value) // check if current value == new value
+                {} // no comment appear
+                else if($col_value == "0000-00-00")
+                {} // no comment appear - for field type date
+                else
+                {
+                    if ($field_type == "Dropdown")// identify if dropdown
+                    {
+                        // get the value if specific option
+                        $select_child = mysqli_query($conn, "SELECT * FROM `child` WHERE child_id = '$final_input_value'");
+                        $fetch_result = mysqli_fetch_array($select_child);
+                        $child_name = $fetch_result['child_name']; // get the child name
+
+                        $msg = 'Update field name: "'.$field_name.'" value: "'.$child_name.'".';
+                    }
+                    else
+                    {
+                        $msg = 'Update field name: "'.$field_name.'" value: "'.$final_input_value.'".';
+                    }
+                    mysqli_query($conn,"INSERT into `comment` (comment_task_id, comment_user_id, comment_message, comment_date, comment_type) values ('$task_id', '$id', '$msg', NOW(), '1')") or die(mysqli_error());
+                }
+                // END code for adding comment
+
+                mysqli_query($conn, "UPDATE `$space_db_table` SET `$col_name` = '$final_input_value' WHERE task_id = '$task_id'") or die(mysqli_error());
+            }
+            echo "update";
+        }
+        else
+        {
+            echo "error1";
+        }
+    }
+    // -----------------------  END SAVE INPUT FIELD -----------------------
+
+
+
+    // -----------------------  FETCH CURRENCY -----------------------
+    if(isset($_POST['fetch_currency']))
+    {
+        $md_mode = $_POST['md_mode'];
+        $table = "";
+        if($md_mode == "Dark") //insert
+        {
+            $table = "bg-primary-darker text-body-color-light";
+        }
+        echo '
+        <table class="table table-bordered table-striped table-vcenter table-hover'.$table.' js-dataTable-full">
+            <thead>
+                <tr>
+                    <th class="d-none d-sm-table-cell">DATE</th>
+                    <th class="d-none d-sm-table-cell">NAME</th>
+                    <th>CODE</th>
+                    <th class="text-right">Value (USD)</th>
+                    <th class="text-right">Value (PHP)</th>
+                    <th class="text-center">Tools</th>
+                </tr>
+            </thead>
+            <tbody>';
+                $results = mysqli_query($conn, "SELECT * FROM finance_currency ORDER BY currency_name ASC");
+                while($rows = mysqli_fetch_array($results))
+                {
+                    echo '
+                    <tr>
+                        <td class="d-none d-sm-table-cell">
+                            '.$rows['currency_date'].'
+                        </td>
+                        <td class="d-none d-sm-table-cell">
+                            '.$rows['currency_name'].'
+                            <input type="hidden" class="form-control" value="'.$rows['currency_name'].'" id="currency_name'.$rows['currency_id'].'">
+                        </td>
+                        <td>
+                            '.$rows['currency_code'].'
+                            <input type="hidden" class="form-control" value="'.$rows['currency_code'].'" id="currency_code'.$rows['currency_id'].'">
+                        </td>
+                        <td class="text-right">
+                            '.$rows['currency_val_usd'].'
+                            <input type="hidden" class="form-control" value="'.$rows['currency_val_usd'].'" id="currency_val_usd'.$rows['currency_id'].'">
+                        </td>
+                        <td class="text-right">
+                            '.$rows['currency_val_php'].'
+                            <input type="hidden" class="form-control" value="'.$rows['currency_val_php'].'" id="currency_val_php'.$rows['currency_id'].'">
+                        </td>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-noborder btn-primary" data-toggle="modal" data-target="#modal-currency" id="edit_currency'.$rows['currency_id'].'" onclick="edit_currency(this.id)"><i class="si si-pencil"></i></button>
+                            <button class="btn btn-sm btn-noborder btn-danger" id="delete_currency'.$rows['currency_id'].'" onclick="delete_currency(this.id)"><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>';
+                }
+                echo'
+            </tbody>
+        </table>';
+    }
+    // -----------------------  FETCH CURRENCY -----------------------
+    // -----------------------  CREATE / UPDATE CURRENCY -----------------------
+    if(isset($_POST['create_currency']))
+    {
+        $currency_id = $_POST['currency_id'];
+
+        date_default_timezone_set('Asia/Manila');
+        $todays_date = date("y-m-d H:i:sa"); //  original format
+        $currency_name = $_POST['currency_name'];
+        $currency_code = $_POST['currency_code'];
+        $currency_val_usd = $_POST['currency_val_usd'];
+        $currency_val_php = $_POST['currency_val_php'];
+        if($currency_id == "")
+        {
+            mysqli_query($conn,"INSERT INTO finance_currency (currency_date, currency_name, currency_code, currency_val_usd, currency_val_php) values ('$todays_date','$currency_name','$currency_code','$currency_val_usd','$currency_val_php')") or die(mysqli_error());
+            echo "Insert";
+        }
+        else
+        {
+            mysqli_query($conn,"UPDATE finance_currency set currency_date = '$todays_date', currency_name = '$currency_name', currency_code = '$currency_code', currency_val_usd = '$currency_val_usd', currency_val_php = '$currency_val_php' where currency_id = '$currency_id'");
+            echo "Update";
+        }
+    }
+    // -----------------------  END CREATE / UPDATE CURRENCY -----------------------
+    // -----------------------  DELETE CURRENCY -----------------------
+    if(isset($_POST['delete_currency']))
+    {
+        $currency_id = $_POST['currency_id'];
+        mysqli_query($conn,"DELETE from finance_currency where currency_id = '$currency_id'");
+    }
+    // -----------------------  END DELETE CURRENCY -----------------------
+
+    // -----------------------  CREATE FINANCE PHASE -----------------------
+    if(isset($_POST['create_finance_phase']))
+    {
+        $space_id = $_POST['space_id'];
+        $finance_phase_name = $_POST['finance_phase_name'];
+        mysqli_query($conn,"INSERT INTO finance_phase (phase_space_id, phase_name) values ('$space_id','$finance_phase_name')") or die(mysqli_error());
+    }
+    // -----------------------  END CREATE FINANCE PHASE -----------------------
+    // -----------------------  FETCH FINANCE PHASE -----------------------
+    if(isset($_POST['fetch_finance_phase']))
+    {
+        $space_id = $_POST['space_id'];
+        $results = mysqli_query($conn, "SELECT * FROM finance_phase WHERE phase_space_id = '$space_id' ORDER BY phase_id ASC");
+            while($rows = mysqli_fetch_array($results))
+            {
+                 echo'<li class="scrumboard-item btn-alt-warning" style="box-shadow: 0px 1px 1px 0px rgba(119, 119, 119, 0.27);-moz-box-shadow: 0px 1px 1px 0px rgba(119, 119, 119, 0.27);-webkit-box-shadow: 0px 1px 1px 0px rgba(119, 119, 119, 0.27); height: 20px;">
+                        <div class="scrumboard-item-options">
+                            <input type="hidden" value="'.$rows['phase_name'].'" id="phase_name'.$rows['phase_id'].'">
+                            <button class="btn btn-sm btn-noborder btn-primary" data-toggle="modal" data-target="#modal-editfinancephase" data-dismiss="modal" id="edit_finance_phase'.$rows['phase_id'].'" onclick="edit_finance_phase(this.id)"><i class="si si-pencil"></i></button>
+                            <button class="btn btn-sm btn-noborder btn-danger" id="delete_finance_phase'.$rows['phase_id'].'" onclick="delete_finance_phase(this.id)"><i class="fa fa-trash"></i></button>
+                        </div>
+                        <div class="scrumboard-item-content">
+                            <label>'.$rows['phase_name'].'</label>
+                            <button type="submit" hidden="hidden" class="btn btn-primary btn-noborder mr-1 mb-5" name="btn_modal_status_names"><i class="fa fa-check"></i></button>
+                        </div>
+                </li>';
+            }
+    }
+    // -----------------------  END FETCH FINANCE PHASE -----------------------
+    // -----------------------  EDIT FINANCE PHASE -----------------------
+    if(isset($_POST['edit_finance_phase']))
+    {
+        $edit_finance_phase_id = $_POST['edit_finance_phase_id'];
+        $edit_finance_phase_name = $_POST['edit_finance_phase_name'];
+        mysqli_query($conn,"UPDATE finance_phase set phase_name = '$edit_finance_phase_name' where phase_id = '$edit_finance_phase_id'");
+    }
+    // -----------------------  END EDIT FINANCE PHASE -----------------------
+    // -----------------------  DELETE FINANCE PHASE -----------------------
+    if(isset($_POST['delete_finance_phase']))
+    {
+        $field_id = $_POST['field_id'];
+
+        $select_phase = mysqli_query($conn, "SELECT * FROM finance_field WHERE finance_phase_id ='$field_id'");
+        $count = mysqli_num_rows($select_phase);
+        if($count > 0) // cannot delete if has field under specific phase
+        {
+            echo 'Delete the field under this phase first to delete this phase.';
+        }
+        else // delete
+        {
+            echo 'Phase deleted.';
+            mysqli_query($conn,"DELETE from finance_phase where phase_id = '$field_id'");
+        }
+    }
+    // -----------------------  END DELETE FINANCE PHASE -----------------------
+    // -----------------------  FINANCE FETCH PHASE SELECTOR -----------------------
+    if(isset($_POST['phase_select']))
+    {
+        $space_id = $_POST['space_id'];
+        echo'
+        <select class="form-control text-muted mb-10" onchange="status3(this)" style="width: 100%;">
+            <option value="">Select phase...</option>';
+                $select_phase = mysqli_query($conn, "SELECT * FROM finance_phase WHERE phase_space_id ='$space_id' ORDER BY phase_id ASC");
+                while($rows = mysqli_fetch_array($select_phase))
+                {
+                    echo '<option value="'.$rows['phase_id'].'">'.$rows['phase_name'].'</option>';
+                }
+        echo '
+        </select>';
+    }
+    // -----------------------  END FINANCE FETCH PHASE SELECTOR -----------------------
+    // -----------------------  FINANCE FETCH FIELD BY PHASE -----------------------
+    if(isset($_POST['fetch_finance_field_by_phase']))
+    {
+        $user_type = $_POST['user_type'];
+        $task_id = $_POST['task_id'];
+        $phase_id = $_POST['phase_id'];
+
+        echo'
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover table-vcenter shad">
+                <thead>
+                    <tr>
+                        <th class="text-center">Tools</th>
+                        <th class="text-left">ID</th>
+                        <th class="text-left">Payment_name</th>
+                        <th class="text-right" style="width: 20%;">CURRENCY</th>
+                        <th class="text-right" style="width: 20%;">AMOUNT(USD)</th>
+                    </tr>
+                </thead>
+                <tbody>';
+                    $select_field = mysqli_query($conn, "SELECT * FROM finance_field WHERE finance_phase_id = '$phase_id' ORDER BY finance_order ASC");
+                    $total_amount = 0;
+                    while($fetch_select_field = mysqli_fetch_array($select_field))
+                    {
+                        $field_id = $fetch_select_field['finance_id'];
+
+                        $select_custom_amount = mysqli_query($conn, "SELECT * FROM finance_field_ca WHERE custom_amount_task_id = '$task_id' AND custom_amount_field_id = '$field_id'");
+                        $fetch_custom_amount = mysqli_fetch_array($select_custom_amount);
+                        $count1 = mysqli_num_rows($select_custom_amount);
+
+                        $select_finance_field_hs = mysqli_query($conn, "SELECT * FROM finance_field_hide WHERE hideshow_task_id = '$task_id' AND hideshow_field_id = '$field_id'");
+                        $fetch_hs = mysqli_fetch_array($select_finance_field_hs);
+                        $count = mysqli_num_rows($select_finance_field_hs);
+                        if($count == 1) // if field is hide in specific task
+                        {
+                            echo'
+                            <tr class="bg-danger-light">
+                                <td class="text-center">
+                                    <button type="button" class="btn btn-sm btn-primary" title="Show" id="show_field_per_task'.$fetch_select_field['finance_id'].'" onclick="show_field_per_task(this.id)">
+                                        <i class="fa fa-eye"></i>
+                                    </button>';
+                        }
+                        else
+                        {
+                            echo'
+                            <tr>
+                                <td class="text-center">
+                                    <button type="button" class="btn btn-sm btn-secondary" title="Hide" id="hide_field_per_task'.$fetch_select_field['finance_id'].'" onclick="hide_field_per_task(this.id)">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </button>';
+                                        if($count1 == 1) // if has custom amount
+                                        {
+                                            $amount = $fetch_custom_amount['custom_amount_value'] == 0 ? '' : number_format((float)$fetch_custom_amount['custom_amount_value'],2,".",'');
+                                            $total_amount += $amount;
+                                        }
+                                        else
+                                        {
+                                            $amount = $fetch_select_field['finance_value'] == 0 ? '' : number_format((float)$fetch_select_field['finance_value'],2,".",'');
+                                            $total_amount += $amount;
+                                        }
+                        }
+                        echo '
+                                    <button type="button" class="btn btn-sm btn-secondary" title="Edit amount" id="edit_amount_per_task'.$fetch_select_field['finance_id'].'" onclick="edit_amount_per_task(this.id)">
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+                                </td>
+                                <td>'.$fetch_select_field['finance_id'].'</td>
+                                <td>'.$fetch_select_field['finance_name'].'</td>
+                                <td class="text-right">'.$fetch_select_field['finance_currency'].'</td>
+                                <td class="text-right">';
+                                    if($count1 == 1) // if has custom amount
+                                    {
+                                        echo '
+                                        '.number_format($fetch_custom_amount['custom_amount_value'],2).'
+                                        <input type="hidden" class="form-control" style="text-align: right;" value="'.$fetch_select_field['finance_name'].'" id="name_field_per_task'.$fetch_select_field['finance_id'].'">
+                                        <input type="hidden" class="form-control" style="text-align: right;" value="'.$fetch_custom_amount['custom_amount_value'].'" id="amount_field_per_task'.$fetch_select_field['finance_id'].'">
+                                        ';
+                                    }
+                                    else
+                                    {
+                                        echo '
+                                        '.number_format($fetch_select_field['finance_value'],2).'
+                                        <input type="hidden" class="form-control" style="text-align: right;" value="'.$fetch_select_field['finance_name'].'" id="name_field_per_task'.$fetch_select_field['finance_id'].'">
+                                        <input type="hidden" class="form-control" style="text-align: right;" value="'.$fetch_select_field['finance_value'].'" id="amount_field_per_task'.$fetch_select_field['finance_id'].'">
+                                        ';
+                                    }
+                                    echo'
+                                </td>
+                            </tr>';
+                    }
+                    $total_paid = 0;
+                    $total_due = $total_amount - $total_paid;
+                    echo'
+                    <tr class="table-success">';
+                        echo'
+                        <td colspan="4" class="text-right font-w600">Total Amount:</td>
+                        <td class="text-right font-w600"><input type="hidden" value="'.$total_amount.'" id="totaldue'.$phase_id.'"> '.number_format($total_amount,2).'</td>
+                    </tr>
+                    <tr>';
+                            $select_remarks = mysqli_query($conn, "SELECT * FROM finance_remarks WHERE remarks_to = '$task_id' AND remarks_phase_id = '$phase_id'");
+                            $fetch_select_remarks = mysqli_fetch_array($select_remarks);
+                            $remarks_value = $fetch_select_remarks['remarks_value'];
+                            if($user_type == "Admin")
+                            {
+                                echo '
+                                <td class="text-right font-w600">Select remarks:</td>
+                                <td class="text-right font-w600">
+                                    <select class="form-control text-muted" id="select_remarks" onchange="select_remarks(this)">
+                                        <option value=""></option>
+                                        <option value="Payment received">Payment received</option>
+                                        <option value="Payment encoded">Payment encoded</option>
+                                        <option value="On hold">On hold</option>
+                                        <option value="Pending">Pending</option>
+                                        <option value="Waiting to be received">Waiting to be received</option>
+                                        <option value="Refunded">Refunded</option>
+                                    </select>
+                                </td>
+                                <td colspan="2" class="text-right font-w600">Remarks:</td>
+                                <td class="text-right font-w600">';
+                                    if($remarks_value != "")
+                                    {
+                                        echo '<input type="text" class="form-control" style="text-align: center;" value="'.$fetch_select_remarks['remarks_value'].'" readonly>';
+                                    }
+                                    else
+                                    {
+                                        echo '<input type="text" class="form-control" style="text-align: center;" value="" readonly>';
+                                    }
+                                    echo '
+                                </td>
+                                </tr>';
+                            }
+                            else
+                            {
+                                echo '
+                                <td class="text-right font-w600" colspan="4">Remarks:</td>
+                                <td class="text-right font-w600">
+                                    <input type="text" class="form-control" style="text-align: center;" value="'.$fetch_select_remarks['remarks_value'].'" readonly>
+                                </td>
+                                </tr>
+                                ';
+                            }
+                            echo'
+                </tbody>
+            </table>
+        </div>
+        ';
+    }
+    // -----------------------  END FINANCE FETCH FIELD BY PHASE -----------------------
+    // -----------------------  DISPLAY DISCOUNTED AMOUNT -----------------------
+    if(isset($_POST['display_discount']))
+    {
+        $task_id = $_POST['task_id2'];
+        $phase_id = $_POST['phase_id2'];
+        $select_discount = mysqli_query($conn, "SELECT * FROM finance_discount WHERE discount_phase_id = '$phase_id' AND discount_assign_to = '$task_id'");
+        $fetch_select_discount = mysqli_fetch_array($select_discount);
+        $discount_id = $fetch_select_discount['discount_id'];
+        $discount_amount = $fetch_select_discount['discount_amount'];
+
+        $count = mysqli_num_rows($select_discount);
+        if($count == 1)
+        {
+            echo $discount_id.'|'.$discount_amount;
+        }
+        else
+        {
+            echo "|";
+        }
+    }
+    // -----------------------  END DISPLAY DISCOUNTED AMOUNT -----------------------
+    // -----------------------  add hide_field_per_task -----------------------
+    if(isset($_POST['hide_field_per_task']))
+    {
+        $user_id = $_POST['user_id'];
+        $task_id = $_POST['task_id'];
+        $field_id = $_POST['field_id'];
+
+        $select_hide = mysqli_query($conn, "SELECT * FROM finance_field_hide WHERE hideshow_task_id = '$task_id' AND hideshow_field_id = '$field_id'");
+        $fetch_select_hide = mysqli_fetch_array($select_hide);
+        $hideshow_id = $fetch_select_hide['hideshow_id'];
+        mysqli_query($conn,"INSERT INTO finance_field_hide values ('','$user_id','$task_id','$field_id')") or die(mysqli_error());
+    }
+    // -----------------------  END add hide_field_per_task -----------------------
+    // -----------------------  show_field_per_task -----------------------
+    if(isset($_POST['show_field_per_task']))
+    {
+        $user_id = $_POST['user_id'];
+        $task_id = $_POST['task_id'];
+        $field_id = $_POST['field_id'];
+
+        $select_hide = mysqli_query($conn, "SELECT * FROM finance_field_hide WHERE hideshow_task_id = '$task_id' AND hideshow_field_id = '$field_id'");
+        $fetch_select_hide = mysqli_fetch_array($select_hide);
+        $hideshow_id = $fetch_select_hide['hideshow_id'];
+        $count = mysqli_num_rows($select_hide);
+        if($count == 1)
+        {
+            mysqli_query($conn,"DELETE from finance_field_hide where hideshow_id = '$hideshow_id'") or die(mysqli_error());// delete
+            echo 'update';
+        }
+    }
+    // -----------------------  END show_field_per_task -----------------------
+    // -----------------------  edit_amount_per_task -----------------------
+    if(isset($_POST['save_field_amount_per_task']))
+    {
+        $user_id = $_POST['user_id'];
+        $task_id = $_POST['task_id'];
+        $field_id = $_POST['field_id'];
+        $field_amount = $_POST['field_amount'];
+
+        $select_custom_amount = mysqli_query($conn, "SELECT * FROM finance_field_ca WHERE custom_amount_task_id = '$task_id' AND custom_amount_field_id = '$field_id'");
+        $fetch_custom_amount = mysqli_fetch_array($select_custom_amount);
+        $custom_amount_id = $fetch_custom_amount['custom_amount_id'];
+        $count = mysqli_num_rows($select_custom_amount);
+
+        if($count == 1)
+        {
+            mysqli_query($conn, "UPDATE `finance_field_ca` SET `custom_amount_user_id` = '$user_id', `custom_amount_value` = '$field_amount' WHERE custom_amount_id = '$custom_amount_id'") or die(mysqli_error());
+            echo 'Amount updated successfully.';
+        }
+        else
+        {
+            mysqli_query($conn, "INSERT into finance_field_ca values('','$user_id','$task_id','$field_id','$field_amount')") or die(mysqli_error());
+            echo 'Amount change successfully.';
+        }
+    }
+    // -----------------------  END edit_amount_per_task -----------------------
+
+    // -----------------------  ADD REMARKS -----------------------
+    if(isset($_POST['add_remarks']))
+    {
+        $user_id = $_POST['user_id'];
+        $task_id = $_POST['task_id'];
+        $phase_id = $_POST['phase_id'];
+        $remarks_value = $_POST['remarks_value'];
+
+        $select_remarks = mysqli_query($conn, "SELECT * FROM finance_remarks WHERE remarks_to = '$task_id' AND remarks_phase_id = '$phase_id'");
+        $fetch_remarks = mysqli_fetch_array($select_remarks);
+        $remarks_id = $fetch_remarks['remarks_id'];
+        $count = mysqli_num_rows($select_remarks);
+        if($count == 1)
+        {
+            mysqli_query($conn, "UPDATE `finance_remarks` SET `remarks_by` = '$user_id', `remarks_value` = '$remarks_value' WHERE remarks_id = '$remarks_id'") or die(mysqli_error());
+            echo 'update';
+        }
+        else
+        {
+            mysqli_query($conn,"INSERT INTO finance_remarks values ('','$user_id','$task_id','$phase_id','$remarks_value')") or die(mysqli_error());
+            echo 'insert';
+        }
+    }
+    // -----------------------  END ADD REMARKS -----------------------
+
+
+
+
+    // -----------------------  ADD DISCOUNT -----------------------
+    if(isset($_POST['add_discount']))
+    {
+        $disc_id = $_POST['disc_id'];
+        $user_id = $_POST['user_id'];
+        $phase_id = $_POST['phase_id'];
+        $task_id = $_POST['task_id'];
+        $disc_amount = $_POST['disc_amount'];
+
+        $select_discount = mysqli_query($conn, "SELECT * FROM finance_discount WHERE discount_phase_id = '$phase_id' AND discount_assign_to = '$task_id'");
+        $fetch = mysqli_fetch_array($select_discount);
+        $count = mysqli_num_rows($select_discount);
+
+        if($count == 1) // if has existing discount
+        {
+            $id = $fetch['discount_id'];
+            mysqli_query($conn, "UPDATE `finance_discount` SET `discount_by` = '$user_id', `discount_amount` = '$disc_amount' WHERE discount_id = '$disc_id'") or die(mysqli_error());
+            echo 'Discount updated successfully.';
+        }
+        else
+        {
+            mysqli_query($conn, "INSERT INTO finance_discount (discount_by, discount_phase_id, discount_assign_to, discount_amount) values ('$user_id','$phase_id','$task_id','$disc_amount')") or die(mysqli_error());
+            echo 'Discount added successfully.';
+        }
+
+    }
+    // -----------------------  END ADD DISCOUNT -----------------------
+
+    // -----------------------  Update DISCOUNT -----------------------
+    // if(isset($_POST['update_disc_amount']))
+    // {
+    //     $disc_id = $_POST['disc_id'];
+    //     $disc_amount = $_POST['disc_amount'];
+    //     $user_id = $_POST['user_id'];
+    //
+    //     mysqli_query($conn, "UPDATE finance_discount SET discount_by = '$user_id', discount_amount = '$disc_amount' WHERE discount_id = '$disc_id'") or die(mysqli_error());
+    //     echo 'success';
+    // }
+    // -----------------------  END Update DISCOUNT -----------------------
+
+
+    // -----------------------  SAVE FINANCE TRANSACTION -----------------------
+    if(isset($_POST['save_transaction']))
+    {
+        $user_id = $_POST['user_id'];
+        $phase_id = $_POST['phase_id'];
+        $task_id = $_POST['task_id'];
+        $tran_date = $_POST['tran_date'];
+        $tran_method = $_POST['tran_method'];
+        $tran_transaction_no = $_POST['tran_transaction_no'];
+        $tran_currency = $_POST['tran_currency'];
+        $tran_amount = $_POST['tran_amount'];
+
+        $tran_charge = $_POST['tran_charge'];
+        $tran_charge_type = $_POST['tran_charge_type'];
+        if($tran_charge == "")
+        {
+            $charge = "|";
+        }
+        else
+        {
+            $charge = $tran_charge_type.'|'.$tran_charge;
+        }
+
+        $tran_client_rate = $_POST['tran_client_rate'];
+        $tran_note = $_POST['tran_note'];
+        $tran_initial = $_POST['tran_initial'];
+        $tran_usd_rate = $_POST['tran_usd_rate'];
+        $tran_usd_total = $_POST['tran_usd_total'];
+        $tran_php_rate = $_POST['tran_php_rate'];
+        $tran_php_total = $_POST['tran_php_total'];
+        $tran_client_php_total = $_POST['tran_client_php_total'];
+
+        $attachment_name = $_FILES['file_attachment']['name'];
+        $attachment_temp = $_FILES['file_attachment']['tmp_name'];
+        $attachment_size = $_FILES['file_attachment']['size'];
+        $exp = explode(".", $attachment_name);
+        $ext = end($exp);
+        $allowed_ext = array('jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG');
+        if(in_array($ext, $allowed_ext)) // check the file extension
+        {
+            date_default_timezone_set('Asia/Manila');
+            //$todays_date = date("y-m-d H:i:sa"); //  original format
+            $date = date("His"); // for unique file name
+
+            $words = explode(' ',trim($attachment_name)); // convert name to array
+            $get_name = substr($words[0], 0, 6); // get only 6 character of the name
+
+            $image = $date.'-'.$get_name.'.'.$ext;
+            $location = "../assets/media/transaction/".$image; // upload location
+            if($attachment_size < 3000000) // Maximum 3 MB
+            {
+                move_uploaded_file($attachment_temp, $location);
+                mysqli_query($conn,"INSERT INTO finance_transaction values ('','$user_id','$phase_id','$task_id','$tran_date','$tran_method','$tran_transaction_no','$tran_currency','$tran_amount','$charge','$tran_initial','$tran_usd_rate','$tran_usd_total','$tran_php_rate','$tran_php_total','$tran_client_rate','$tran_client_php_total','$tran_note','$image')") or die(mysqli_error());
+                echo "success";
+            }
+            else
+            {
+                echo "error3";
+            }
+        }
+        else
+        {
+            echo "error2";
+        }
+    }
+    // -----------------------  END SAVE FINANCE TRANSACTION -----------------------
+    // -----------------------  FETCH TRANSACTION BY PHASE -----------------------
+    if(isset($_POST['fetch_transaction_by_phase']))
+    {
+        $phase_id = $_POST['phase_id'];
+        $task_id = $_POST['task_id'];
+
+
+        $select_discount = mysqli_query($conn, "SELECT * FROM finance_discount WHERE discount_phase_id = '$phase_id' AND discount_assign_to = '$task_id'");
+        $fetch_select_discount = mysqli_fetch_array($select_discount);
+        $discount_amount = $fetch_select_discount['discount_amount'] == 0 ? '' : number_format((float)$fetch_select_discount['discount_amount'],2,".",'');
+
+        $select_field = mysqli_query($conn, "SELECT * FROM finance_field WHERE finance_phase_id = '$phase_id' AND finance_type = 'text' ORDER BY finance_order ASC");
+        $total_amount = 0;
+        while($fetch_select_field = mysqli_fetch_array($select_field))
+        {
+            $field_id = $fetch_select_field['finance_id'];
+            //$total_amount += $fetch_select_field['finance_value'] == 0 ? '' : number_format((float)$fetch_select_field['finance_value'],2,".",'');
+            $select_custom_amount = mysqli_query($conn, "SELECT * FROM finance_field_ca WHERE custom_amount_task_id = '$task_id' AND custom_amount_field_id = '$field_id'");
+            $fetch_custom_amount = mysqli_fetch_array($select_custom_amount);
+            $count1 = mysqli_num_rows($select_custom_amount);
+
+            $select_finance_field_hs = mysqli_query($conn, "SELECT * FROM finance_field_hide WHERE hideshow_task_id = '$task_id' AND hideshow_field_id = '$field_id'");
+            $fetch_hs = mysqli_fetch_array($select_finance_field_hs);
+            $count = mysqli_num_rows($select_finance_field_hs);
+            if($count == 0) // check if this field is visible in this task
+            {
+                if($count1 == 1) // if has custom amount
+                {
+                    $amount = $fetch_custom_amount['custom_amount_value'] == 0 ? '' : number_format((float)$fetch_custom_amount['custom_amount_value'],2,".",'');
+                    $total_amount += $amount;
+                }
+                else
+                {
+                    $amount = $fetch_select_field['finance_value'] == 0 ? '' : number_format((float)$fetch_select_field['finance_value'],2,".",'');
+                    $total_amount += $amount;
+                }
+            }
+        }
+
+        echo'
+        <div class="table-responsive">
+            <table class="js-table-sections table table-bordered table-striped table-hover table-vcenter shad">
+                <thead>
+                    <tr>
+                        <th class="text-left">Date</th>
+                        <th class="text-left">Remittance</th>
+                        <th class="text-left">Trans_no</th>
+                        <th class="text-center">Currency</th>
+                        <th class="text-center">Amount</th>
+                        <th class="text-center">Charge</th>
+                        <th class="text-center">Initial</th>
+                        <th class="text-center">Rate(UPC)</th>
+                        <th class="text-right">Amount(USD)</th>
+                        <th class="text-right">Amount(PHP)</th>
+                        <th class="text-right">Amount(PAID)</th>
+                    </tr>
+                </thead>
+                <tbody>';
+                    $USD_tot = 0;
+                    $PHP_tot = 0;
+                    $PHP_tot_client = 0;
+                    $transaction = mysqli_query($conn, "SELECT * FROM finance_transaction WHERE val_phase_id = '$phase_id' AND val_assign_to = '$task_id' ORDER BY val_date DESC");
+                    while($rows = mysqli_fetch_array($transaction))
+                    {
+                        $USD_tot += $rows['val_usd_total'];
+                        $PHP_tot += $rows['val_php_total'];
+                        $PHP_tot_client += $rows['val_client_total'];
+
+                        $val_php_total = $rows['val_php_total'];
+                        $val_client_total = $rows['val_client_total'];
+                        echo '
+                        <tr>
+                            <td>'.$rows['val_date'].'</td>
+                            <td>'.$rows['val_method'].'</td>
+                            <td>'.$rows['val_transaction_no'].'</td>
+                            <td class="text-center">'.$rows['val_currency'].'</td>
+                            <td class="text-center">'.number_format($rows['val_amount'],2).'</td>
+                            <td class="text-center">'.$rows['val_charge'].'</td>
+                            <td class="text-center">'.number_format($rows['val_initial_amount'],2).'</td>
+                            <td class="text-center">'.$rows['val_usd_rate'].'|'.$rows['val_php_rate'].'|'.$rows['val_client_rate'].'</td>
+                            <td class="text-right">$'.number_format($rows['val_usd_total'],2).'</td>
+                            <td class="text-right">₱'.number_format($val_php_total,2).'</td>
+                            <td class="text-right">‭₱'.number_format($val_client_total,2).'</td>
+                        </tr>
+                        ';
+                    }
+                    $USD_paid = $USD_tot;
+                    $PHP_paid = $PHP_tot;
+                    $PHP_paid_client = $PHP_tot_client;
+
+                    $USD_depo = 0.00;
+                    $PHP_depo = 0.00;
+                    $PHP_depo_client = 0.00;
+
+                    if($discount_amount == "") // check if no discount
+                    {
+                        $USD_bal = $total_amount;
+                        $USD_bal = $total_amount - $USD_paid;
+                        if($USD_bal < 0)
+                        {
+                            $USD_depo = $USD_bal * (-1);
+                            if($USD_tot == 0)
+                            {
+                                $PHP_depo = 0.00;
+                            }
+                            else
+                            {
+                                $PHP_depo = $USD_depo * $PHP_tot / $USD_tot;
+                            }
+                            $USD_bal = 0.00;
+                        }
+                    }
+                    else // has discount
+                    {
+                        if($USD_paid == "0") // if USD paid == 0
+                        {
+                            $USD_bal = $total_amount - $discount_amount;
+                        }
+                        else // else USD paid != 0
+                        {
+                            $deduct = $discount_amount + $USD_paid;
+                            $USD_bal = $total_amount - $deduct;
+                        }
+
+                        if($USD_bal < 0) // if USD Balace is negative
+                        {
+                            $USD_depo = $USD_bal * (-1);
+                            $PHP_depo = $USD_depo * $PHP_tot / $USD_tot;
+                            $USD_bal = 0.00;
+                        }
+                    }
+
+                    // Code in getting client BALANCE & DEPOSIT
+                    if($USD_tot == 0) // check if no USD paid or payment
+                    {
+                        $PHP_bal = 0;
+                        $PHP_bal_client = 0;
+                    }
+                    else // else has payment
+                    {
+                        $PHP_bal = $USD_bal * $PHP_tot / $USD_tot;// apply ratio and proportion formula
+                        $difference = $PHP_paid - $PHP_paid_client;
+                        $PHP_bal_client = $difference + $PHP_bal;// apply ratio and proportion formula
+                        if($PHP_depo != 0) // if IPASS php deposit is not equal to 0
+                        {
+                            $PHP_depo_client = $PHP_depo - $PHP_bal_client;
+                            if($PHP_depo_client < 0) // if Client deposit is negative
+                            {
+                                $PHP_bal_client = $PHP_depo_client * (-1);
+                                $PHP_depo_client = 0;
+                            }
+                            else
+                            {
+                                $PHP_bal_client = 0;
+                            }
+                        }
+
+                        if($PHP_bal_client < 0)// if Client balance is negative, meaninng client rate is greater than IPASS rate
+                        {
+                            $PHP_depo_client = $PHP_bal_client * (-1);
+                            $PHP_bal_client = 0;
+                        }
+                    }
+// END IPASS Total amount, Deposit, Balance
+                    echo'
+                </tbody>
+                    <tr>
+                        <td colspan="8" class="text-right font-w600">Total Amount:</td>
+                        <td class="text-right font-w600">$'.number_format($USD_paid,2).'</td>
+                        <td class="text-right font-w600">₱'.number_format($PHP_paid,2).'</td>
+                        <td class="text-right font-w600">₱'.number_format($PHP_paid_client,2).'</td>
+                    </tr>
+                    <tr>
+                        <td colspan="8" class="text-right font-w600">Deposit:</td>
+                        <td class="text-right font-w600">$'.number_format($USD_depo,2).'</td>
+                        <td class="text-right font-w600">₱'.number_format($PHP_depo,2).'</td>
+                        <td class="text-right font-w600">₱'.number_format($PHP_depo_client,2).'</td>
+                    </tr>
+                    <tr class="table-success">
+                        <td colspan="7" class="font-w600 text-uppercase">';
+                        if($discount_amount == "")
+                        {
+                            echo 'No discount';
+                        }
+                        else
+                        {
+                            echo 'Less '.$discount_amount.' discount';
+                        }
+                        echo '
+                        </td>
+                        <td class="text-right font-w600 text-uppercase">Balance:</td>
+                        <td class="text-right font-w600">$'.number_format($USD_bal,2).'</td>
+                        <td class="text-right font-w600">₱'.number_format($PHP_bal,2).'</td>
+                        <td class="text-right font-w600">₱'.number_format($PHP_bal_client,2).'</td>
+                    </tr>
+            </table>
+        </div>
+        ';
+    }
+    // -----------------------  END FETCH TRANSACTION BY PHASE -----------------------
+
+
+    // -----------------------  CREATE FINANCE FIELD TEXT -----------------------
+    if(isset($_POST['create_finance_field_text']))
+    {
+        $space_id = $_POST['space_id'];
+        $field_id = $_POST['field_id'];
+        $finance_text_field_id = $_POST['finance_text_field_id'];
+        $finance_field_name = $_POST['finance_field_name'];
+        $finance_privacy_text = $_POST['finance_privacy_text'];
+        $finance_currency_text = $_POST['finance_currency_text'];
+        $finance_converter_value = $_POST['finance_converter_value'];
+
+        if($finance_text_field_id == "") // insert
+        {
+            $select_finance_field = mysqli_query($conn, "SELECT * FROM finance_field WHERE finance_space_id = '$space_id' AND finance_phase_id = '$field_id'");
+            $count = mysqli_num_rows($select_finance_field);
+            if($count == 0)
+            {
+                mysqli_query($conn,"INSERT INTO finance_field (finance_space_id, finance_phase_id, finance_name, finance_currency, finance_value, finance_type, finance_privacy) values ('$space_id','$field_id','$finance_field_name','$finance_currency_text','$finance_converter_value','text','$finance_privacy_text')") or die(mysqli_error());
+            }
+            else
+            {
+                mysqli_query($conn,"INSERT INTO finance_field (finance_space_id, finance_phase_id, finance_order, finance_name, finance_currency, finance_value, finance_type, finance_privacy) values ('$space_id','$field_id','$count','$finance_field_name','$finance_currency_text','$finance_converter_value','text','$finance_privacy_text')") or die(mysqli_error());
+            }
+            echo 'Field added successfully.';
+        }
+        else // update
+        {
+            mysqli_query($conn, "UPDATE `finance_field` SET `finance_name` = '$finance_field_name', `finance_privacy` = '$finance_privacy_text', `finance_currency` = '$finance_currency_text', `finance_value` = '$finance_converter_value' WHERE finance_id = '$finance_text_field_id'") or die(mysqli_error());
+            echo 'Field updated successfully.';
+        }
+    }
+    // -----------------------  END CREATE FINANCE FIELD TEXT -----------------------
+    // -----------------------  CREATE FINANCE FIELD DROPDOWN -----------------------
+    if(isset($_POST['create_finance_field_dropdown']))
+    {
+        $space_id = $_POST['space_id'];
+        $field_id = $_POST['field_id'];
+        $finance_text_field_id = $_POST['finance_text_field_id'];
+        $finance_field_name = $_POST['finance_field_name'];
+        $finance_privacy_text = $_POST['finance_privacy_text'];
+
+        if($finance_text_field_id == "") // insert
+        {
+            $select_finance_field = mysqli_query($conn, "SELECT * FROM finance_field WHERE finance_space_id = '$space_id' AND finance_phase_id = '$field_id'");
+            $count = mysqli_num_rows($select_finance_field);
+            if($count == 0)
+            {
+                mysqli_query($conn,"INSERT INTO finance_field (finance_space_id, finance_phase_id, finance_name, finance_type, finance_privacy) values ('$space_id','$field_id','$finance_field_name','dropdown','$finance_privacy_text')") or die(mysqli_error());
+            }
+            else
+            {
+                mysqli_query($conn,"INSERT INTO finance_field (finance_space_id, finance_phase_id, finance_order, finance_name, finance_type, finance_privacy) values ('$space_id','$field_id','$count','$finance_field_name','dropdown','$finance_privacy_text')") or die(mysqli_error());
+            }
+            echo 'insert';
+        }
+        else // update
+        {
+            mysqli_query($conn, "UPDATE `finance_field` SET `finance_name` = '$finance_field_name', `finance_privacy` = '$finance_privacy_text' WHERE finance_id = '$finance_text_field_id'") or die(mysqli_error());
+            echo 'upadate';
+        }
+    }
+    // -----------------------  END CREATE FINANCE FIELD DROPDOWN -----------------------
+    // -----------------------  CREATE FINANCE FIELD DROPDOWN OPTION -----------------------
+    if(isset($_POST['finance_dropdown_field_id']))
+    {
+        $id = $_POST['finance_dropdown_field_id'];
+        $color_array = array("#d60606","#b90453","#ca0b85","#ce19c1","#AD00A1","#9000AD","#5600AD","#440386","#330365","#0015AD","#005FAD","#0088AD","#00ADA9","#00AD67","#038e56","#05981d","#017514","#00AD1D","#6FAD00","#8ad00c","#bfc304","#AD9000","#d47604","#e67f01","#AD5F00","#827a71","#7da6ab","#5C797C","#3a4e50","#000000");
+        $randIndex = array_rand($color_array);
+        $option_color = $color_array[$randIndex];
+        mysqli_query($conn,"INSERT into finance_child (child_name, child_field_id, child_color) values ('', '$id', '$option_color')") or die(mysqli_error());
+    }
+    // -----------------------  END CREATE FINANCE FIELD DROPDOWN OPTION  -----------------------
+    // -----------------------  FETCH FINANCE FIELD -----------------------
+    if(isset($_POST['fetch_finance_field']))
+    {
+        $space_id = $_POST['space_id'];
+        $field_id = $_POST['field_id'];
+        $results = mysqli_query($conn, "SELECT * FROM finance_field WHERE finance_space_id = '$space_id' and finance_phase_id = '$field_id' ORDER BY finance_order ASC");
+            while($rows = mysqli_fetch_array($results))
+            {
+                 echo'<li class="scrumboard-item btn-alt-warning" id="entry_'.$rows['finance_id'].'" style="box-shadow: 0px 1px 1px 0px rgba(119, 119, 119, 0.27);-moz-box-shadow: 0px 1px 1px 0px rgba(119, 119, 119, 0.27);-webkit-box-shadow: 0px 1px 1px 0px rgba(119, 119, 119, 0.27); height: 20px;">
+                        <div class="scrumboard-item-options">
+                            <input type="hidden" value="'.$rows['finance_name'].'" id="finance_field_name'.$rows['finance_id'].'">
+                            <input type="hidden" value="'.$rows['finance_privacy'].'" id="finance_field_privacy'.$rows['finance_id'].'">
+                            <input type="hidden" value="'.$rows['finance_currency'].'" id="finance_currency'.$rows['finance_id'].'">
+                            <input type="hidden" value="'.$rows['finance_value'].'" id="finance_value'.$rows['finance_id'].'">';
+                            if($rows['finance_type'] == "text")
+                            {
+                                echo '<button class="btn btn-sm btn-noborder btn-primary" data-toggle="modal" data-target="#modal-financetext" data-dismiss="modal" id="edit_finance_field'.$rows['finance_id'].'" onclick="edit_finance_field(this.id)"><i class="si si-pencil"></i></button>';
+                            }
+                            else
+                            {
+                                echo '<button class="btn btn-sm btn-noborder btn-primary" data-toggle="modal" data-target="#modal-financedropdown" data-dismiss="modal" id="edit_finance_field_dropdown'.$rows['finance_id'].'" onclick="edit_finance_field_dropdown(this.id)"><i class="si si-pencil"></i></button>';
+                            }
+                            echo '
+
+                            <button class="btn btn-sm btn-noborder btn-danger" id="delete_finance_field'.$rows['finance_id'].'" onclick="delete_finance_field(this.id)"><i class="fa fa-trash"></i></button>
+                        </div>
+                        <div class="scrumboard-item-content">
+                            <a class="scrumboard-item-handler btn btn-sm bg-gd-leaf mr-10" href="javascript:void(0)" style="margin-top: -3.5px;"><i class="fa fa-hand-grab-o text-white"></i></a>';
+                            if($rows['finance_type'] == "text") { echo '<i class="fa fa-text-height"></i>'; }
+                            else { echo '<i class="fa fa-angle-double-down"></i>'; }
+                            echo '
+                            <label class="ml-5">'.$rows['finance_name'].'</label>
+                            <button type="submit" hidden="hidden" class="btn btn-primary btn-noborder mr-1 mb-5" name="btn_modal_status_names"><i class="fa fa-check"></i></button>
+                        </div>
+                </li>';
+            }
+    }
+    // -----------------------  END FETCH FINANCE FIELD -----------------------
+    // -----------------------  EDIT FINANCE FIELD -----------------------
+    if(isset($_POST['edit_finance_field']))
+    {
+        $edit_finance_field_id = $_POST['edit_finance_field_id'];
+        $edit_finance_field_name = $_POST['edit_finance_field_name'];
+        $finance_currency = $_POST['finance_currency'];
+        $finance_value = $_POST['finance_value'];
+        mysqli_query($conn,"UPDATE finance_field set finance_name = '$edit_finance_field_name', finance_currency = '$finance_currency', finance_value = '$finance_value' where finance_id = '$edit_finance_field_id'");
+    }
+    // -----------------------  END EDIT FINANCE FIELD -----------------------
+    // -----------------------  DELETE FINANCE FIELD -----------------------
+    if(isset($_POST['delete_finance_field']))
+    {
+        $field_id = $_POST['field_id'];
+        $results = mysqli_query($conn, "SELECT * FROM finance_field WHERE finance_id = '$field_id'");
+        $rows = mysqli_fetch_array($results);
+        $finance_phase_id = $rows['finance_phase_id'];
+
+        $select_transaction = mysqli_query($conn, "SELECT * FROM finance_transaction WHERE val_phase_id = '$finance_phase_id'");
+        $count = mysqli_num_rows($select_transaction);
+        if($count > 0) // cannot delete any field if has transaction under specific phase
+        {
+            echo 'Make sure no transaction is assign to any task that link into this phase.';
+        }
+        else // delete
+        {
+            if($rows['finance_type'] == "dropdown") // check if dropdown to delete child
+            {
+                mysqli_query($conn,"DELETE from finance_child where child_field_id = '$field_id'"); // delete child/option
+            }
+            mysqli_query($conn,"DELETE from finance_field where finance_id = '$field_id'"); // delete the field
+            echo 'Field deleted.';
+        }
+    }
+    // -----------------------  END DELETE FINANCE FIELD -----------------------
+
+
+    // -----------------------  SORT FINANCE FIELD -----------------------
+    if(isset($_POST['sort_finance']))
+    {
+        $space_id = $_POST['space_id'];
+        $sort1 = '';
+        parse_str($_POST['sort1'], $sort1);
+        $query = "SELECT finance_id FROM finance_field WHERE finance_space_id = '$space_id'";
+        $result = $conn->query($query) or die('Error, query failed');
+        if ($result->num_rows == 0)
+        {
+        }
+        else
+        {
+            foreach($sort1['entry'] as $key=>$value)
+            {
+                $updatequery = "UPDATE `finance_field` SET finance_order = '$key' WHERE finance_id = '$value'";
+                $conn->query($updatequery) or die('Error, UPDATE failed!');
+            }
+            echo 'update';
+        }
+    }
+    // -----------------------  END SORT FINANCE FIELD -----------------------
+
+
+    // -----------------------  FETCH FINANCE FIELD TO SELECT OPTION -----------------------
+    if(isset($_POST['display_finance_field1']))
+    {
+        echo '<option value=""></option>';
+        $space_id = $_POST['space_id'];
+        $select_field = mysqli_query($conn, "SELECT * FROM finance_field WHERE finance_space_id ='$space_id' AND finance_phase_id = '' ORDER BY finance_order ASC");
+        while($result_select_field = mysqli_fetch_array($select_field))
+        {
+            echo '<option value="'.$result_select_field['finance_id'].'">'.$result_select_field['finance_name'].'</option>';
+        }
+    }
+    // -----------------------  END FETCH FINANCE FIELD TO SELECT OPTION -----------------------
+    // -----------------------  FETCH FINANCE FIELD TO SELECT OPTION -----------------------
+    if(isset($_POST['assign_field_phase']))
+    {
+        $assign_field_id = $_POST['assign_field_id'];
+        $assign_phase_id = $_POST['assign_status_id'];
+        mysqli_query($conn, "UPDATE finance_field SET finance_phase_id = '$assign_phase_id' WHERE finance_id = '$assign_field_id'") or die(mysqli_error());
+    }
+    // -----------------------  END FETCH FINANCE FIELD TO SELECT OPTION -----------------------
+    // -----------------------  FETCH ASSGIN FIELD PER PHASE -----------------------
+    if(isset($_POST['display_assign_phase']))
+    {
+        echo'<div class="row" style="padding: 0px 15px;">';
+        $space_id = $_POST['space_id'];
+        $select_phase = mysqli_query($conn, "SELECT * FROM finance_phase WHERE phase_space_id ='$space_id' ORDER BY phase_id ASC");
+        while($result_select_phase = mysqli_fetch_array($select_phase))
+        {
+            echo'<div class="col-md-12" style="padding: 5px 10px; margin: 5px 0px; border: solid 2px #afafaf;">
+                    <span><strong>'.$result_select_phase['phase_name'].'</strong></span>';
+                    $phase_id = $result_select_phase['phase_id'];
+                    $select_field = mysqli_query($conn, "SELECT * FROM finance_field WHERE finance_phase_id = '$phase_id' ORDER BY finance_order ASC");
+                    while($fetch_select_field = mysqli_fetch_array($select_field))
+                    {
+                        echo'
+                        <div class="col-md-12" style="background-color: #eaeaea; border-radius: 3px; padding: 5px 10px; margin: 5px 0px; box-shadow: 0px 1px 1px 0px rgba(119, 119, 119, 0.27);-moz-box-shadow: 0px 1px 1px 0px rgba(119, 119, 119, 0.27);-webkit-box-shadow: 0px 1px 1px 0px rgba(119, 119, 119, 0.27);">
+                                <span><strong>&nbsp;'.$fetch_select_field['finance_name'].'</strong></span>
+                                <span class="float-right" style="margin-top: -3px;">
+                                    <button class="btn btn-sm btn-noborder btn-danger" id="'.$fetch_select_field['finance_id'].'" onclick="remove_assign_field_phase(this.id)"><i class="fa fa-trash"></i></button>
+                                </span>
+                            </div>';
+                    }
+                echo'</div>';
+        }
+        echo "</div>";
+    }
+    // -----------------------  END FETCH ASSGIN FIELD PER PHASE -----------------------
+    // -----------------------  REMOVE ASSGIN FIELD PER PHASE -----------------------
+    if(isset($_POST['remove_assign_field_phase']))
+    {
+        $id = $_POST['id'];
+        mysqli_query($conn, "UPDATE finance_field SET finance_phase_id = '' WHERE finance_id = '$id'") or die(mysqli_error());
+    }
+    // -----------------------  END REMOVE ASSGIN FIELD PER PHASE -----------------------
+
+
+    // -----------------------  ADD REQUIREMENTS FIELD -----------------------
+    if(isset($_POST['create_requirement_field']))
+    {
+        $space_id = $_POST['space_id'];
+        $type = $_POST['type'];
+        $privacy = $_POST['privacy'];
+        $name = $_POST['name'];
+
+        $select_requirement_field = mysqli_query($conn, "SELECT * FROM requirement_field WHERE requirement_space_id = '$space_id'");
+        $count = mysqli_num_rows($select_requirement_field);
+        if($count == 0)
+        {
+            mysqli_query($conn,"INSERT INTO requirement_field values ('','','$space_id','$type','$privacy','$name')") or die(mysqli_error());
+        }
+        else
+        {
+            mysqli_query($conn,"INSERT INTO requirement_field values ('','$count','$space_id','$type','$privacy','$name')") or die(mysqli_error());
+        }
+    }
+    // -----------------------  END ADD REQUIREMENTS FIELD -----------------------
+    // -----------------------  FETCH REQUIREMENTS FIELD -----------------------
+    if(isset($_POST['fetch_requirements_field']))
+    {
+        $space_id = $_POST['space_id'];
+        $results = mysqli_query($conn, "SELECT * FROM requirement_field WHERE requirement_space_id = '$space_id' ORDER BY requirement_order_no ASC");
+        while($rows = mysqli_fetch_array($results))
+        {
+            echo'<li class="scrumboard-item btn-alt-warning" id="entry_'.$rows['requirement_id'].'" style="box-shadow: 0px 1px 1px 0px rgba(119, 119, 119, 0.27);-moz-box-shadow: 0px 1px 1px 0px rgba(119, 119, 119, 0.27);-webkit-box-shadow: 0px 1px 1px 0px rgba(119, 119, 119, 0.27); height: 20px;">
+                    <div class="scrumboard-item-options">
+                        <input type="hidden" value="'.$rows['requirement_name'].'" id="requirement_name'.$rows['requirement_id'].'">
+                        <input type="hidden" value="'.$rows['requirement_privacy'].'" id="requirement_privacy'.$rows['requirement_id'].'">
+                        <input type="hidden" value="'.$rows['requirement_type'].'" id="requirement_type'.$rows['requirement_id'].'">';
+                            if($rows['requirement_type'] == "Text")
+                            {
+                                echo '<button class="btn btn-sm btn-noborder btn-primary" data-toggle="modal" data-target="#modal-requirementtext" data-dismiss="modal" id="edit_requirement_field_text'.$rows['requirement_id'].'" onclick="edit_requirement_field_text(this.id)"><i class="si si-pencil"></i></button>';
+                            }
+                            else
+                            {
+                                echo '<button class="btn btn-sm btn-noborder btn-primary" data-toggle="modal" data-target="#modal-requirementdropdown" data-dismiss="modal" id="edit_requirement_field_dropdown'.$rows['requirement_id'].'" onclick="edit_requirement_field_dropdown(this.id)"><i class="si si-pencil"></i></button>';
+                            }
+                            echo '
+                        <button class="btn btn-sm btn-noborder btn-danger" id="delete_requirement_field'.$rows['requirement_id'].'" onclick="delete_requirement_field(this.id)"><i class="fa fa-trash"></i></button>
+                    </div>
+                    <div class="scrumboard-item-content">
+                        <a class="scrumboard-item-handler btn btn-sm bg-gd-sea mr-10" href="javascript:void(0)" style="margin-top: -3.5px;"><i class="fa fa-hand-grab-o text-white"></i></a>';
+                        if($rows['requirement_type'] == "Text") { echo '<i class="fa fa-text-height"></i>'; }
+                        else { echo '<i class="fa fa-angle-double-down"></i>'; }
+                        echo '
+                        <label class="ml-5">'.$rows['requirement_name'].'</label>
+                    </div>
+            </li>';
+        }
+    }
+    // -----------------------  END FETCH REQUIREMENTS FIELD -----------------------
+    // -----------------------  SORT REQUIREMENTS FIELD -----------------------
+    if(isset($_POST['sort_requirement']))
+    {
+        $space_id = $_POST['space_id'];
+        $sort1 = '';
+        parse_str($_POST['sort1'], $sort1);
+        $query = "SELECT requirement_id FROM requirement_field WHERE requirement_space_id = '$space_id'";
+        $result = $conn->query($query) or die('Error, query failed');
+        if ($result->num_rows == 0)
+        {
+        }
+        else
+        {
+            foreach($sort1['entry'] as $key=>$value)
+            {
+                $updatequery = "UPDATE `requirement_field` SET requirement_order_no = '$key' WHERE requirement_id = '$value'";
+                $conn->query($updatequery) or die('Error, UPDATE failed!');
+            }
+            echo 'update';
+        }
+    }
+    // -----------------------  END SORT REQUIREMENTS FIELD -----------------------
+    // -----------------------  UPDATE REQUIREMENTS TEXT & DROPDOWN FIELD -----------------------
+    if(isset($_POST['update_requirements_text_field']))
+    {
+        $field_id = $_POST['field_id'];
+        $name = $_POST['name'];
+        $privacy = $_POST['privacy'];
+        mysqli_query($conn, "UPDATE requirement_field SET requirement_privacy = '$privacy', requirement_name = '$name' WHERE requirement_id = '$field_id'") or die(mysqli_error());
+    }
+    // -----------------------  END UPDATE REQUIREMENTS TEXT FIELD -----------------------
+    // -----------------------  UPDATE REQUIREMENTS TEXT & DROPDOWN FIELD -----------------------
+    if(isset($_POST['requirements_add_dropdown_option']))
+    {
+        $color_array = array("#d60606","#b90453","#ca0b85","#ce19c1","#AD00A1","#9000AD","#5600AD","#440386","#330365","#0015AD","#005FAD","#0088AD","#00ADA9","#00AD67","#038e56","#05981d","#017514","#00AD1D","#6FAD00","#8ad00c","#bfc304","#AD9000","#d47604","#e67f01","#AD5F00","#827a71","#7da6ab","#5C797C","#3a4e50","#000000");
+        $randIndex = array_rand($color_array);
+        $option_color = $color_array[$randIndex];
+
+        $id = $_POST['field_id'];
+        mysqli_query($conn,"INSERT into requirement_child values ('', '', '$id', '$option_color')") or die(mysqli_error());
+    }
+    // -----------------------  END UPDATE REQUIREMENTS TEXT FIELD -----------------------
+    // -----------------------  DELETE REQUIREMENTS FIELD -----------------------
+    if(isset($_POST['delete_requirement_field']))
+    {
+        $field_id = $_POST['field_id'];
+        $type = $_POST['type'];
+        $results = mysqli_query($conn, "SELECT * FROM requirement_value WHERE value_field_id = '$field_id'");
+        $count = mysqli_num_rows($results);
+        if($count > 0) // cannot delete any field if has transaction under specific phase
+        {
+            echo 'Cannot delete field with value into specific task.';
+        }
+        else
+        {
+            if($type == "Dropdown") // check if dropdown to delete child
+            {
+                mysqli_query($conn,"DELETE from requirement_child where child_field_id  = '$field_id'"); // delete child/option
+            }
+            mysqli_query($conn,"DELETE from requirement_field where requirement_id = '$field_id'"); // delete the field
+            echo 'Field deleted.';
+        }
+    }
+    // -----------------------  END DELETE REQUIREMENTS FIELD -----------------------
+    // -----------------------  DISPLAY REQUIREMENTS FIELD IN TASK -----------------------
+    if(isset($_POST['display_requirements']))
+    {
+        $task_id = $_POST['task_id'];
+        $space_id = $_POST['space_id'];
+        $select_db = mysqli_query($conn, "SELECT * FROM requirement_field WHERE requirement_space_id ='$space_id' ORDER BY requirement_order_no ASC");
+        $count_field = mysqli_num_rows($select_db);
+        while($rows = mysqli_fetch_array($select_db))
+        {
+            $field_id = $rows['requirement_id'];
+            $select_requirement_value = mysqli_query($conn, "SELECT * FROM requirement_value WHERE value_to ='$task_id' AND value_field_id ='$field_id'");
+            $field_value = mysqli_fetch_array($select_requirement_value);
+            $count = mysqli_num_rows($select_requirement_value);
+            if($count == 0) // checking if field has value in specific task
+            {
+                $value = "";
+            }
+            else
+            {
+                $value = $field_value['value_value'];
+            }
+
+            if($rows['requirement_type'] == "Text")
+            {
+                echo'<div class="form-group row">
+                        <label class="col-lg-4 col-form-label">'.$rows['requirement_name'].'</label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" id="requirement_input_field'.$rows['requirement_id'].'" value="'.$value.'">
+                        </div>
+                    </div>';
+            }
+            else
+            {
+                echo'<div class="form-group row">
+                        <label class="col-lg-4 col-form-label">'.$rows['requirement_name'].'</label>
+                        <div class="col-lg-8">';
+                            $select_field1 = mysqli_query($conn, "SELECT * FROM requirement_child WHERE child_id = '$value'");
+                            $get_color = mysqli_fetch_array($select_field1);
+                            if($get_color['child_color'] == "")
+                            { $color = ""; }
+                            else
+                            { $color = "#ffffff"; }
+                            echo'
+                            <select class="form-control" id="requirement_input_field'.$rows['requirement_id'].'" style="color: '.$color.'; background-color: '.$get_color['child_color'].';">
+                                <option value="">Select...</option>
+                                ';
+                                    $select_field = mysqli_query($conn, "SELECT * FROM requirement_child WHERE child_field_id = '$field_id' ORDER BY child_id ASC");
+                                    while($fetch_select_field = mysqli_fetch_array($select_field))
+                                    {
+                                        if($fetch_select_field['child_id'] == $value)
+                                        {
+                                            echo'<option value="'.$fetch_select_field['child_id'].'" style="color: #fff; background-color: '.$fetch_select_field['child_color'].';" selected>'.$fetch_select_field['child_name'].'</option>';
+                                        }
+                                        else
+                                        {
+                                            echo'<option value="'.$fetch_select_field['child_id'].'" style="color: #fff; background-color: '.$fetch_select_field['child_color'].';">'.$fetch_select_field['child_name'].'</option>';
+                                        }
+                                    }
+                                echo'
+                            </select>
+                        </div>
+                    </div>';
+            }
+        }
+	    if($count_field == 0)
+	    {}
+	    else
+	    {
+	        echo '<div class="row">
+	                <div class="col-12">
+	                    <button type="button" class="btn btn-md btn-noborder btn-primary btn-block" onclick="btn_save_requirements_field()"><li class="fa fa-check"></li> Save</button>
+	                </div>
+	            </div>';
+	    }
+    }
+    // -----------------------  END DISPLAY REQUIREMENTS FIELD IN TASK -----------------------
+    // -----------------------  REQUIREMENTS GET FIELD ID PER SPACE -----------------------
+    if(isset($_POST['requirements_get_field_id']))
+    {
+        $space_id = $_POST['space_id'];
+        $field_array = array();
+        $field = mysqli_query($conn, "SELECT * FROM requirement_field WHERE requirement_space_id ='$space_id' ORDER BY requirement_order_no ASC");
+        while($fetch_field = mysqli_fetch_array($field))
+        {
+            $field_id = $fetch_field['requirement_id'];
+            array_push($field_array,$field_id); // add value to array $field_array
+        }
+        $finalarray = implode(",",$field_array); // convert array to string
+        echo $finalarray;
+    }
+    // -----------------------  END REQUIREMENTS GET FIELD ID PER SPACE -----------------------
+    // -----------------------  REQUIREMENTS SAVE FIELD VALUE PER TASK -----------------------
+    if(isset($_POST['save_requirements_field_value']))
+    {
+        $user_id = $_POST['user_id'];
+        $task_id = $_POST['task_id'];
+        $field_id_in_array = $_POST['field_id_in_array'];
+        $field_value = $_POST['field_value'];
+
+        $select_field = mysqli_query($conn, "SELECT * FROM requirement_field WHERE requirement_id ='$field_id_in_array'");
+        $fetch_select_field = mysqli_fetch_array($select_field);
+        $field_name = $fetch_select_field['requirement_name']; // get the field_name in db
+        $field_type = $fetch_select_field['requirement_type']; // get the field_name in db
+
+        $select_requirement_value = mysqli_query($conn, "SELECT * FROM requirement_value WHERE value_to ='$task_id' AND value_field_id ='$field_id_in_array'");
+        $fetch_field_value = mysqli_fetch_array($select_requirement_value);
+        $value_id = $fetch_field_value['value_id'];
+        $previous_value = $fetch_field_value['value_value'];
+
+        $count = mysqli_num_rows($select_requirement_value);
+        if($count == 0) // check if field has value in specific task
+        {
+            if($field_value == "") // check if no value
+            { }
+            else
+            {
+                mysqli_query($conn,"INSERT into requirement_value values ('', '$user_id', '$task_id', '$field_id_in_array', '$field_value')") or die(mysqli_error());
+                if ($field_type == "Dropdown")// identify if dropdown
+                {
+                    // get the value if specific option
+                    $select_child = mysqli_query($conn, "SELECT * FROM `requirement_child` WHERE child_id = '$field_value'");
+                    $fetch_result = mysqli_fetch_array($select_child);
+                    $child_name = $fetch_result['child_name']; // get the child name
+
+                    $msg = 'Update field name: "'.$field_name.'" value: "'.$child_name.'".';
+                }
+                else
+                {
+                    $msg = 'Update field name: "'.$field_name.'" value: "'.$field_value.'".';
+                }
+                mysqli_query($conn,"INSERT into requirement_comment (comment_task_id, comment_user_id, comment_message, comment_date, comment_type) values ('$task_id', '$user_id', '$msg', NOW(), '1')") or die(mysqli_error());
+            }
+        }
+        else
+        {
+            mysqli_query($conn, "UPDATE requirement_value SET value_by = '$user_id', value_value = '$field_value' WHERE value_id = '$value_id'") or die(mysqli_error());
+            if($field_value == $previous_value) // check if current value == previous value
+            {} // no comment appear
+            else
+            {
+                if ($field_type == "Dropdown")// identify if dropdown
+                {
+                    // get the value if specific option
+                    $select_child = mysqli_query($conn, "SELECT * FROM `requirement_child` WHERE child_id = '$field_value'");
+                    $fetch_result = mysqli_fetch_array($select_child);
+                    $child_name = $fetch_result['child_name']; // get the child name
+
+                    $msg = 'Update field name: "'.$field_name.'" value: "'.$child_name.'".';
+                }
+                else
+                {
+                    $msg = 'Update field name: "'.$field_name.'" value: "'.$field_value.'".';
+                }
+                mysqli_query($conn,"INSERT into requirement_comment (comment_task_id, comment_user_id, comment_message, comment_date, comment_type) values ('$task_id', '$user_id', '$msg', NOW(), '1')") or die(mysqli_error());
+            }
+        }
+    }
+    // -----------------------  REQUIREMENTS SAVE FIELD VALUE PER TASK -----------------------
+    // -----------------------  REQUIREMENTS SEND COMMENT PER TASK -----------------------
+    if(isset($_POST['send_requirement_comment']))
+    {
+        $task_id = $_POST['task_id'];
+        $user_id = $_POST['user_id'];
+        $message = $_POST['message'];
+
+        $attachment_name = $_FILES['file_attachment']['name'];
+        $attachment_temp = $_FILES['file_attachment']['tmp_name'];
+        $attachment_size = $_FILES['file_attachment']['size'];
+
+        if($attachment_name == "")
+        {
+            mysqli_query($conn,"INSERT into requirement_comment values ('', '$task_id', '$user_id', '$message', NOW(), '', '')") or die(mysqli_error());
+            echo "success";
+        }
+        else
+        {
+            $exp = explode(".", $attachment_name);
+            $ext = end($exp);
+            $allowed_ext = array('jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG', 'gif', 'docx', 'xlsx', 'csv', 'pdf');
+            if(in_array($ext, $allowed_ext)) // check the file extension
+            {
+                date_default_timezone_set('Asia/Manila');
+                //$todays_date = date("y-m-d H:i:sa"); //  original format
+                $date = date("His"); // for unique file name
+
+                $words = explode(' ',trim($attachment_name)); // convert name to array
+                $get_name = substr($words[0], 0, 6); // get only 6 character of the name
+
+                $image = $date.'-'.$get_name.'.'.$ext;
+                $location = "../assets/media/requirements/".$image; // upload location
+                if($attachment_size < 3000000) // Maximum 3 MB
+                {
+                    move_uploaded_file($attachment_temp, $location);
+                    mysqli_query($conn,"INSERT into requirement_comment values ('', '$task_id', '$user_id', '$message', NOW(), '$image', '')") or die(mysqli_error());
+                    echo "success";
+                }
+                else
+                {
+                    echo "size";
+                }
+            }
+            else
+            {
+                echo "format";
+            }
+        }
+
+    }
+    // -----------------------  END REQUIREMENTS SEND COMMENT PER TASK -----------------------
+    // -----------------------  DISPLAY SEND COMMENT PER TASK -----------------------
+    if(isset($_POST['display_requirement_comment']))
+    {
+        $id = $_POST['id'];
+        $select_user = mysqli_query($conn, "SELECT * FROM user WHERE user_id = '$id'");
+        $fetch_select_user = mysqli_fetch_array($select_user);
+        $user_type = $fetch_select_user['user_type'];
+
+        $task_id = $_POST['task_id'];
+        $results = mysqli_query($conn, "SELECT * FROM requirement_comment left join user on user.user_id = requirement_comment.comment_user_id WHERE comment_task_id = '$task_id' ORDER BY comment_date DESC");
+        while($rows = mysqli_fetch_array($results))
+        {
+            echo '
+            <tr class="parent">
+                <td class="d-none d-sm-table-cell font-w600" style="width: 50px;">
+                    <div>';
+                        $user_id = $rows['user_id'];
+                        $comment_user_id = $rows['comment_user_id'];
+                        $comment_type = $rows['comment_type'];
+
+                        $res = mysqli_query($conn, "SELECT * FROM user WHERE user_id = $user_id");
+                        $row12 = mysqli_fetch_assoc($res);
+                        $get_first_letter_in_fname = $row12['fname'];
+                        $get_first_letter_in_lname = $row12['lname'];
+
+                        if($row12['profile_pic'] != "")
+                        {
+                            echo '<img style="width: 38px;border-radius: 50px;" src="../assets/media/upload/'.$row12['profile_pic'].'">';
+                        }
+                        else
+                        {
+                            echo '<span style="padding: 10px 10px; border-radius: 50px; color: #fff; background-color: '.$row12['user_color'].'"><?php echo $get_first_letter_in_fname[0]; echo $get_first_letter_in_lname[0]?></span>';
+                        }
+                    echo'
+                    </div>
+                </td>
+                <td>
+                    <div>';
+                        if($user_type == "Member")
+                        {
+                            if($comment_user_id == $id && $comment_type == "")
+                            {
+                                echo '
+                                <div class="child float-right">
+                                    <button type="button" class="btn-block-option" style="margin-top: -3px;" id="'.$rows['comment_id'].'" style="display: none;" onclick="delete_requirement_comment(this.id)">
+                                        <i class="si si-close text-danger"></i>
+                                    </button>
+                                </div>';
+                            }
+                        }
+                        else
+                        {
+                            echo '
+                            <div class="child float-right">
+                                <button type="button" class="btn-block-option" style="margin-top: -3px;" id="'.$rows['comment_id'].'" style="display: none;" onclick="delete_requirement_comment(this.id)">
+                                    <i class="si si-close text-danger"></i>
+                                </button>
+                            </div>';
+                        }
+                    echo'
+                            <div class="float-right">
+                                <span style="text-align: right; font-size: 11px; font-style: italic;">
+                                    '.date('M d Y',strtotime($rows['comment_date'])).' at '.date('h:i A',strtotime($rows['comment_date'])).'
+                                </span>
+                            </div><strong>'.$row12['fname'].' '.$row12['lname'].'</strong>
+                    </div>
+                    <div class="text-muted mt-5">
+                        <span style="font-size: 13px;">'.$rows['comment_message'].'</span>
+                    </div>
+                    <div class="text-muted mt-5">';
+                        if($rows['comment_attactment'] != "")
+                        {
+                            $path_info = pathinfo('../assets/media/requirements/'.$rows['comment_attactment'].'');
+                            $extension = $path_info['extension']; // get the file extension
+
+                            if($extension == "docx")
+                            {
+                                echo'<img src="../assets/media/icon/WORD.png" style="float:left; margin: 0px 0px 0px 0px; width: 60px; height: auto; border-radius: 5px; box-shadow: 0 8px 6px -6px #dedede; border: solid 1px #e2e2e2;">
+                                    <span class="ml-10">'.$rows['comment_attactment'].'</span>
+                                    <input type="hidden" name="txt_image" value="'.$rows['comment_attactment'].'">
+                                    <a href="download_image.php?req_comment_id='.$rows['comment_id'].'" class="btn-block-option btn" style="margin: 0px 10px -5px 0px;"><i class="fa fa-download"></i></a>';
+                            }
+                            else if($extension == "xlsx")
+                            {
+                                echo'<img src="../assets/media/icon/EXCEL.png" style="float:left; margin: 0px 0px 0px 0px; width: 60px; height: auto; border-radius: 5px; box-shadow: 0 8px 6px -6px #dedede; border: solid 1px #e2e2e2;">
+                                    <span class="ml-10">'.$rows['comment_attactment'].'</span>
+                                    <input type="hidden" name="txt_image" value="'.$rows['comment_attactment'].'">
+                                    <a href="download_image.php?req_comment_id='.$rows['comment_id'].'" class="btn-block-option btn" style="margin: 0px 10px -5px 0px;"><i class="fa fa-download"></i></a>';
+                            }
+                            else if($extension == "csv")
+                            {
+                                echo'<img src="../assets/media/icon/CSV.png" style="float:left; margin: 0px 0px 0px 0px; width: 60px; height: auto; border-radius: 5px; box-shadow: 0 8px 6px -6px #dedede; border: solid 1px #e2e2e2;">
+                                    <span class="ml-10">'.$rows['comment_attactment'].'</span>
+                                    <input type="hidden" name="txt_image" value="'.$rows['comment_attactment'].'">
+                                    <a href="download_image.php?req_comment_id='.$rows['comment_id'].'" class="btn-block-option btn" style="margin: 0px 10px -5px 0px;"><i class="fa fa-download"></i></a>';
+                            }
+                            else if($extension == "pdf")
+                            {
+                                echo'<img src="../assets/media/icon/PDF.png" style="float:left; margin: 0px 0px 0px 0px; width: 50px; height: auto; border-radius: 5px; box-shadow: 0 8px 6px -6px #dedede; border: solid 1px #e2e2e2;">
+                                    <span class="ml-10">'.$rows['comment_attactment'].'</span>
+                                    <input type="hidden" name="txt_image" value="'.$rows['comment_attactment'].'">
+                                    <a href="download_image.php?req_comment_id='.$rows['comment_id'].'" class="btn-block-option btn" style="margin: 0px 10px -5px 0px;"><i class="fa fa-download"></i></a>';
+                            }
+                            else
+                            {
+                                echo'<img src="../assets/media/requirements/'.$rows['comment_attactment'].'" style="float:left; margin: 0px 0px 0px 0px; width: 200px; height: auto; border-radius: 5px; box-shadow: 0 8px 6px -6px #dedede; border: solid 1px #e2e2e2;">
+                                <input type="hidden" name="txt_image" value="'.$rows['comment_attactment'].'">
+                                <a href="download_image.php?req_comment_id='.$rows['comment_id'].'" class="btn-block-option btn" style="margin: 0px 10px -5px 0px;"><i class="fa fa-download"></i></a>';
+                            }
+                        }
+                        else
+                        {}
+                    echo'
+                    </div>
+                </td>
+            </tr>
+            ';
+        }
+    }
+    // -----------------------  END DISPLAY SEND COMMENT PER TASK -----------------------
+
+    // ----------------------- GET EMAIL CONTENT -----------------------
+    if(isset($_POST['get_email_content_to_be_send']))
+    {
+        $email_name = $_POST['email_name'];
+        $file_loc = "email_content/".$email_name.".txt";
+
+        $myfile = fopen($file_loc, "r") or die("Unable to open file!");
+        echo fread($myfile,filesize($file_loc));
+        fclose($myfile);
+    }
+    // ----------------------- END GET EMAIL CONTENT -----------------------
+    // ----------------------- SAVE EMAIL SENT IN HISTORY -----------------------
+    if(isset($_POST['email_send_history']))
+    {
+        // date_default_timezone_set('Asia/Manila');
+        $user_id = $_POST['user_id'];
+        $email_id = $_POST['email_id'];
+        $task_id = $_POST['task_id'];
+        $contact_email = $_POST['contact_email'];
+
+        // Store data from db
+        $email_send_history = mysqli_query($conn, "INSERT INTO email_send_history values ('', NOW(), '$user_id', '$email_id', '$contact_email', '$task_id')") or die(mysqli_error());
+        if ($email_send_history)
+        {
+            echo "Email sent successfully.";
+        }
+    }
+    // ----------------------- END SAVE EMAIL SENT IN HISTORY -----------------------
+
+    // ----------------------- DISPLAY SPACE FOR SORT -----------------------
+    if(isset($_POST['fetch_space_for_sort']))
+    {
+        $select_space_sort = mysqli_query($conn, "SELECT * FROM space_sort");
+        $count = mysqli_num_rows($select_space_sort);
+        if($count == 0) // check if no sort
+        {
+            $results = mysqli_query($conn, "SELECT * FROM space ORDER BY space_name ASC");
+            while($rows = mysqli_fetch_array($results))
+            {
+                echo '<li class="scrumboard-item btn-alt-warning" id="entry_'.$rows['space_id'].'" style="box-shadow: 0px 1px 1px 0px rgba(119, 119, 119, 0.27);-moz-box-shadow: 0px 1px 1px 0px rgba(119, 119, 119, 0.27);-webkit-box-shadow: 0px 1px 1px 0px rgba(119, 119, 119, 0.27); height: 20px;">
+                        <div class="scrumboard-item-content">
+                            <a class="scrumboard-item-handler btn btn-sm bg-gd-sea mr-10" href="javascript:void(0)" style="margin-top: -3.5px;"><i class="fa fa-hand-grab-o text-white"></i></a>
+                            <label class="ml-5">'.$rows['space_name'].'</label>
+                        </div>
+                    </li>';
+            }
+        }
+        else // check if has sort
+        {
+            $results = mysqli_query($conn, "SELECT * FROM space_sort ORDER BY sort_space_order ASC");
+            while($rows1 = mysqli_fetch_array($results))
+            {
+                $space_id = $rows1['sort_space_id'];
+                $select_space = mysqli_query($conn, "SELECT * FROM space WHERE space_id = '$space_id'");
+                $rows = mysqli_fetch_array($select_space);
+
+                echo '<li class="scrumboard-item btn-alt-warning" id="entry_'.$rows['space_id'].'" style="box-shadow: 0px 1px 1px 0px rgba(119, 119, 119, 0.27);-moz-box-shadow: 0px 1px 1px 0px rgba(119, 119, 119, 0.27);-webkit-box-shadow: 0px 1px 1px 0px rgba(119, 119, 119, 0.27); height: 20px;">
+                        <div class="scrumboard-item-content">
+                            <a class="scrumboard-item-handler btn btn-sm bg-gd-sea mr-10" href="javascript:void(0)" style="margin-top: -3.5px;"><i class="fa fa-hand-grab-o text-white"></i></a>
+                            <label class="ml-5">'.$rows['space_name'].'</label>
+                        </div>
+                    </li>';
+            }
+        }
+    }
+    // ----------------------- END DISPLAY SPACE FOR SORT -----------------------
+    // ----------------------- SORT SPACE PER ADMIN -----------------------
+    if(isset($_POST['sort_space_per_user']))
+    {
+        $user_id = $_POST['user_id'];
+        $sort1 = '';
+        parse_str($_POST['sort1'], $sort1);
+        $query = "SELECT * FROM space_sort";
+        $result = $conn->query($query) or die('Error, query failed');
+        if ($result->num_rows == 0)
+        {
+            foreach($sort1['entry'] as $key=>$value)
+            {
+                mysqli_query($conn,"INSERT into space_sort values ('', '$user_id', '$value', '$key')") or die(mysqli_error());
+            }
+            echo 'insert';
+        }
+        else
+        {
+            foreach($sort1['entry'] as $key=>$value)
+            {
+                $updatequery = "UPDATE `space_sort` SET sort_user_id = '$user_id', sort_space_order = '$key' WHERE sort_space_id = '$value'";
+                $conn->query($updatequery) or die('Error, UPDATE failed!');
+            }
+            echo 'update';
+        }
+    }
+    // ----------------------- END SORT SPACE PER ADMIN -----------------------
+
+    // ----------------------- Show Box Space Unasssign list in Everthing page -----------------------
+    if(isset($_POST['show_space']))
+    {
+            $filter = $_POST['filter'];
+            echo '<ul class="nav-main" style="margin-top: -20px;">';
+
+                    $find_space = mysqli_query($conn, "SELECT * FROM space ORDER BY space_name ASC");
+                    while($fetch_space = mysqli_fetch_array($find_space))
+                    {
+                        $space_id = $fetch_space['space_id'];
+
+                        //query for filtering data
+                        $filter = $_POST['filter'];
+                        if ($filter) {
+                            $filterby = $filter;
+
+                            if($filterby == "All")
+                            {
+                                $findtaskper_space = mysqli_query($conn, "SELECT * FROM task WHERE task_assign_to = ''");
+                            }
+                            else if($filterby == "Today")
+                            {
+                                $filter = date("Y-m-d");
+                                $findtaskper_space = mysqli_query($conn, "SELECT * FROM task WHERE task_assign_to = '' and task_date_created LIKE '%$filter%'");
+                            }
+                            else if($filterby == "This Week")
+                            {
+                                $dt = new DateTime();
+                                $dates = [];
+                                for ($d = 1; $d <= 7; $d++) {
+                                    $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
+                                    $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
+                                }
+                                $from = current($dates); // monday
+                                $to = end($dates); // sunday
+                                $findtaskper_space = mysqli_query($conn, "SELECT * FROM task WHERE task_assign_to = '' and task_date_created BETWEEN '$from' AND '$to'");
+                            }
+                            else if($filterby == "This Month")
+                            {
+                                $filter = date("Y-m");
+                                $findtaskper_space = mysqli_query($conn, "SELECT * FROM task WHERE task_assign_to = '' and task_date_created LIKE '%$filter%'");
+                            }
+                            else if($filterby == "This Year")
+                            {
+                                $filter = date("Y");
+                                $findtaskper_space = mysqli_query($conn, "SELECT * FROM task WHERE task_assign_to = '' and task_date_created LIKE '%$filter%'");
+                            }
+                            else if($filterby == "Custom Date")
+                            {
+                                $get_from = $_GET['From'];
+                                $get_to = $_GET['To'];
+                                $findtaskper_space = mysqli_query($conn, "SELECT * FROM task WHERE task_assign_to = '' and task_date_created BETWEEN '$get_from' AND '$get_to'");
+                            }
+                        }
+                        else
+                        {
+                            $dt = new DateTime();
+                            $dates = [];
+                            for ($d = 1; $d <= 7; $d++) {
+                                $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
+                                $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
+                            }
+                            $from = current($dates); // monday
+                            $to = end($dates); // sunday
+                            $findtaskper_space = mysqli_query($conn, "SELECT * FROM task WHERE task_assign_to = '' and task_date_created BETWEEN '$from' AND '$to'");
+                        }
+
+                        // $findtaskper_space = mysqli_query($conn, "SELECT * FROM task WHERE task_assign_to = ''");
+                        $count_for_space = 0;
+                        while($fetch_findtaskper_space = mysqli_fetch_array($findtaskper_space))
+                        {
+                            $task_list_id = $fetch_findtaskper_space['task_list_id'];
+                            $select_list = mysqli_query($conn, "SELECT * FROM list WHERE list_id = '$task_list_id'");
+                            $fetch_array = mysqli_fetch_array($select_list);
+                            if($fetch_array['list_space_id'] == $space_id)
+                            {
+                                $count_for_space++;
+                            }
+                        }
+                        echo '
+                        <li>
+                            <a class="dropdown-item nav-submenu" data-toggle="nav-submenu" style="padding: 5px 0px;">
+                                <i class="fa fa-th-large text-secondary mr-1"></i>';
+                                    $new_name = substr($fetch_space['space_name'], 0, 18); // get specific character
+                                    if(strlen($fetch_space['space_name']) > 18)
+                                    {
+                                        echo '<span class="sidebar-mini-hide aaa" style="margin-left: 40px;" data-toggle="popover" title="'.$fetch_space['space_name'].'" data-placement="bottom">'.$new_name.'...</span>';
+                                    }
+                                    else
+                                    {
+                                        echo '<span class="sidebar-mini-hide aaa" style="margin-left: 40px;">'.$fetch_space['space_name'].'</span>';
+                                    }
+
+                                    if($count_for_space != 0)
+                                    {
+                                        echo '<span class="badge ml-5" style="background-color: #64b1a0; color: #fff;">'.number_format($count_for_space).'</span>';
+                                    }
+                                echo'
+                            </a>'
+                            ;
+
+                            $find_list = mysqli_query($conn, "SELECT * FROM list WHERE list_space_id = '$space_id' ORDER BY list_name ASC");
+                            while($fetch_list = mysqli_fetch_array($find_list))
+                            {
+                                $list_id = $fetch_list['list_id'];
+                                //query for filtering data
+                                $filter = $_POST['filter'];
+                                if ($filter) {
+                                    $filterby = $filter;
+
+                                    if($filterby == "All")
+                                    {
+                                        $findtaskper_list = mysqli_query($conn, "SELECT * FROM task WHERE task_list_id = '$list_id' and task_assign_to = ''");
+                                    }
+                                    else if($filterby == "Today")
+                                    {
+                                        $filter = date("Y-m-d");
+                                        $findtaskper_list = mysqli_query($conn, "SELECT * FROM task WHERE task_list_id = '$list_id' and task_assign_to = '' and task_date_created LIKE '%$filter%'");
+                                    }
+                                    else if($filterby == "This Week")
+                                    {
+                                        $dt = new DateTime();
+                                        $dates = [];
+                                        for ($d = 1; $d <= 7; $d++) {
+                                            $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
+                                            $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
+                                        }
+                                        $from = current($dates); // monday
+                                        $to = end($dates); // sunday
+                                        $findtaskper_list = mysqli_query($conn, "SELECT * FROM task WHERE task_list_id = '$list_id' and task_assign_to = '' and task_date_created BETWEEN '$from' AND '$to'");
+                                    }
+                                    else if($filterby == "This Month")
+                                    {
+                                        $filter = date("Y-m");
+                                        $findtaskper_list = mysqli_query($conn, "SELECT * FROM task WHERE task_list_id = '$list_id' and task_assign_to = '' and task_date_created LIKE '%$filter%'");
+                                    }
+                                    else if($filterby == "This Year")
+                                    {
+                                        $filter = date("Y");
+                                        $findtaskper_list = mysqli_query($conn, "SELECT * FROM task WHERE task_list_id = '$list_id' and task_assign_to = '' and task_date_created LIKE '%$filter%'");
+                                    }
+                                    else if($filterby == "Custom Date")
+                                    {
+                                        $get_from = $_GET['From'];
+                                        $get_to = $_GET['To'];
+                                        $findtaskper_list = mysqli_query($conn, "SELECT * FROM task WHERE task_list_id = '$list_id' and task_assign_to = '' and task_date_created BETWEEN '$get_from' AND '$get_to'");
+                                    }
+                                }
+                                else
+                                {
+                                    $dt = new DateTime();
+                                    $dates = [];
+                                    for ($d = 1; $d <= 7; $d++) {
+                                        $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
+                                        $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
+                                    }
+                                    $from = current($dates); // monday
+                                    $to = end($dates); // sunday
+                                    $findtaskper_space = mysqli_query($conn, "SELECT * FROM task WHERE task_list_id = '$list_id' and task_assign_to = '' and task_date_created BETWEEN '$from' AND '$to'");
+                                }
+                                // $findtaskper_list= mysqli_query($conn, "SELECT * FROM task WHERE task_list_id = '$list_id' AND task_assign_to = ''");
+                                $list_count = mysqli_num_rows($findtaskper_list);
+                                echo'
+                                <ul>
+                                    <li>
+                                        <a class="dropdown-item nav-submenu" data-toggle="nav-submenu" style="padding: 5px 0px;">
+                                            <i class="fa fa-folder text-warning mr-1"></i>';
+                                            $new_name = substr($fetch_list['list_name'], 0, 17); // get specific character
+                                            if(strlen($fetch_list['list_name']) > 17)
+                                            {
+                                                echo '<span class="sidebar-mini-hide aaa" style="margin-left: 40px;" data-toggle="popover" title="'.$fetch_list['list_name'].'" data-placement="bottom">'.$new_name.'...</span>';
+                                            }
+                                            else
+                                            {
+                                                echo '<span class="sidebar-mini-hide aaa" style="margin-left: 40px;">'.$fetch_list['list_name'].'</span>';
+                                            }
+                                            if($list_count != 0)
+                                            {
+                                                echo '<span class="badge ml-5" style="background-color: #64b1a0; color: #fff;">'.number_format($list_count).'</span>';
+                                            }
+                                            echo'
+                                        </a>';
+                                        $find_status = mysqli_query($conn, "SELECT * FROM status WHERE status_list_id = '$list_id' ORDER BY status_order_no ASC");
+                                        while($fetch_status = mysqli_fetch_array($find_status))
+                                        {
+                                            $status_idss = $fetch_status['status_id'];
+                                            //query for filtering data
+                                            $filter = $_POST['filter'];
+                                            if ($filter) {
+                                                $filterby = $filter;
+
+                                                if($filterby == "All")
+                                                {
+                                                    $findtaskper_status = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$status_idss' and task_assign_to = '' ORDER BY task_name");
+                                                }
+                                                else if($filterby == "Today")
+                                                {
+                                                    $filter = date("Y-m-d");
+                                                    $findtaskper_status = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$status_idss' and task_assign_to = '' and task_date_created LIKE '%$filter%' ORDER BY task_name");
+                                                }
+                                                else if($filterby == "This Week")
+                                                {
+                                                    $dt = new DateTime();
+                                                    $dates = [];
+                                                    for ($d = 1; $d <= 7; $d++) {
+                                                        $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
+                                                        $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
+                                                    }
+                                                    $from = current($dates); // monday
+                                                    $to = end($dates); // sunday
+                                                    $findtaskper_status = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$status_idss' and task_assign_to = '' and task_date_created BETWEEN '$from' AND '$to' ORDER BY task_name");
+                                                }
+                                                else if($filterby == "This Month")
+                                                {
+                                                    $filter = date("Y-m");
+                                                    $findtaskper_status = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$status_idss' and task_assign_to = '' and task_date_created LIKE '%$filter%' ORDER BY task_name");
+                                                }
+                                                else if($filterby == "This Year")
+                                                {
+                                                    $filter = date("Y");
+                                                    $findtaskper_status = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$status_idss' and task_assign_to = '' and task_date_created LIKE '%$filter%' ORDER BY task_name");
+                                                }
+                                                else if($filterby == "Custom Date")
+                                                {
+                                                    $get_from = $_GET['From'];
+                                                    $get_to = $_GET['To'];
+                                                    $findtaskper_status = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$status_idss' and task_assign_to = '' and task_date_created BETWEEN '$get_from' AND '$get_to' ORDER BY task_name");
+                                                }
+                                            }
+                                            else
+                                            {
+                                                $dt = new DateTime();
+                                                $dates = [];
+                                                for ($d = 1; $d <= 7; $d++) {
+                                                    $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
+                                                    $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
+                                                }
+                                                $from = current($dates); // monday
+                                                $to = end($dates); // sunday
+                                                $findtaskper_status = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$status_idss' and task_assign_to = '' and task_date_created BETWEEN '$from' AND '$to' ORDER BY task_name");
+                                            }
+                                            // $findtaskper_status = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$status_idss' AND task_assign_to = '' ORDER BY task_name ASC");
+                                            $status_count = mysqli_num_rows($findtaskper_status);
+                                            echo'
+                                            <ul>
+                                                <li>
+                                                            <a class="dropdown-item nav-submenu" data-toggle="nav-submenu" style="padding: 5px 0px;">
+                                                                <i class="fa fa-square" style="color: '.$fetch_status['status_color'].';"></i>';
+                                                                $new_name = substr($fetch_status['status_name'], 0, 14); // get specific character
+                                                                if(strlen($fetch_status['status_name']) > 14)
+                                                                {
+                                                                    echo '<span class="sidebar-mini-hide aaa" style="margin-left: 40px;" data-toggle="popover" title="'.$fetch_status['status_name'].'" data-placement="bottom">'.$new_name.'...</span>';
+                                                                }
+                                                                else
+                                                                {
+                                                                    echo '<span class="sidebar-mini-hide aaa" style="margin-left: 40px;">'.$fetch_status['status_name'].'</span>';
+                                                                }
+                                                                if($status_count != 0)
+                                                                {
+                                                                    echo '<span class="badge ml-5" style="background-color: #64b1a0; color: #fff;">'.number_format($status_count).'</span>';
+                                                                }
+                                                                echo'
+                                                            </a>
+                                                            <ul style="border-left: 3px solid '.$fetch_status['status_color'].';">';
+                                                                while($result_findtaskper_status = mysqli_fetch_array($findtaskper_status))
+                                                                    {
+                                                                        echo '<li class="aaa bbb" >'.$result_findtaskper_status['task_name'].'</li>';
+                                                                    }
+                                                                echo'
+                                                            </ul>
+                                                        </li>
+                                            </ul>
+                                            ';
+                                        }
+                                        echo'
+                                    </li>
+                                </ul>';
+                            }
+                        echo'
+                        </li>';
+                    }
+                echo '</ul>';
+    }
+    // ----------------------- End Show Box Space Unasssign list in Everthing page -----------------------
+
+    // ----------------------- Show Box Space Assign list in Everthing page -----------------------
+    if(isset($_POST['show_space_assign']))
+    {
+            $user_id = $_POST['user_id'];
+            $filter = $_POST['filter'];
+            echo '<ul class="nav-main" style="margin-top: -20px;">';
+
+                    $find_space = mysqli_query($conn, "SELECT * FROM space ORDER BY space_name ASC");
+                    while($fetch_space = mysqli_fetch_array($find_space))
+                    {
+                        $space_id = $fetch_space['space_id'];
+
+                        //query for filtering data
+                        $filter = $_POST['filter'];
+                        if ($filter) {
+                            $filterby = $filter;
+
+                            if($filterby == "All")
+                            {
+                                $findtaskper_space = mysqli_query($conn, "SELECT * FROM task WHERE task_assign_to != ''");
+                            }
+                            else if($filterby == "Today")
+                            {
+                                $filter = date("Y-m-d");
+                                $findtaskper_space = mysqli_query($conn, "SELECT * FROM task WHERE task_assign_to != '' and task_date_created LIKE '%$filter%'");
+                            }
+                            else if($filterby == "This Week")
+                            {
+                                $dt = new DateTime();
+                                $dates = [];
+                                for ($d = 1; $d <= 7; $d++) {
+                                    $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
+                                    $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
+                                }
+                                $from = current($dates); // monday
+                                $to = end($dates); // sunday
+                                $findtaskper_space = mysqli_query($conn, "SELECT * FROM task WHERE task_assign_to != '' and task_date_created BETWEEN '$from' AND '$to'");
+                            }
+                            else if($filterby == "This Month")
+                            {
+                                $filter = date("Y-m");
+                                $findtaskper_space = mysqli_query($conn, "SELECT * FROM task WHERE task_assign_to != '' and task_date_created LIKE '%$filter%'");
+                            }
+                            else if($filterby == "This Year")
+                            {
+                                $filter = date("Y");
+                                $findtaskper_space = mysqli_query($conn, "SELECT * FROM task WHERE task_assign_to != '' and task_date_created LIKE '%$filter%'");
+                            }
+                            else if($filterby == "Custom Date")
+                            {
+                                $get_from = $_GET['From'];
+                                $get_to = $_GET['To'];
+                                $findtaskper_space = mysqli_query($conn, "SELECT * FROM task WHERE task_assign_to != '' and task_date_created BETWEEN '$get_from' AND '$get_to'");
+                            }
+                        }
+                        else
+                        {
+                            $dt = new DateTime();
+                            $dates = [];
+                            for ($d = 1; $d <= 7; $d++) {
+                                $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
+                                $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
+                            }
+                            $from = current($dates); // monday
+                            $to = end($dates); // sunday
+                            $findtaskper_space = mysqli_query($conn, "SELECT * FROM task WHERE task_assign_to != '' and task_date_created BETWEEN '$from' AND '$to'");
+                        }
+
+                        // $findtaskper_space = mysqli_query($conn, "SELECT * FROM task WHERE task_assign_to = ''");
+                        $count_for_space = 0;
+                        while($fetch_findtaskper_space = mysqli_fetch_array($findtaskper_space))
+                        {
+
+                            $task_assign_to = $fetch_findtaskper_space['task_assign_to'];
+                            $array_assign = explode(",",$task_assign_to);
+                            if (in_array($user_id, $array_assign))
+                            {
+                                $task_list_id = $fetch_findtaskper_space['task_list_id'];
+                                $select_list = mysqli_query($conn, "SELECT * FROM list WHERE list_id = '$task_list_id'");
+                                $fetch_array = mysqli_fetch_array($select_list);
+                                if($fetch_array['list_space_id'] == $space_id)
+                                {
+                                    $count_for_space++;
+                                }
+                            }
+                        }
+                        echo '
+                        <li>
+                            <a class="dropdown-item nav-submenu" data-toggle="nav-submenu" style="padding: 5px 0px;">
+                                <i class="fa fa-th-large text-secondary mr-1"></i>';
+                                    $new_name = substr($fetch_space['space_name'], 0, 18); // get specific character
+                                    if(strlen($fetch_space['space_name']) > 18)
+                                    {
+                                        echo '<span class="sidebar-mini-hide aaa" style="margin-left: 40px;" data-toggle="popover" title="'.$fetch_space['space_name'].'" data-placement="bottom">'.$new_name.'...</span>';
+                                    }
+                                    else
+                                    {
+                                        echo '<span class="sidebar-mini-hide aaa" style="margin-left: 40px;">'.$fetch_space['space_name'].'</span>';
+                                    }
+
+                                    if($count_for_space != 0)
+                                    {
+                                        echo '<span class="badge ml-5" style="background-color: #64b1a0; color: #fff;">'.number_format($count_for_space).'</span>';
+                                    }
+                                echo'
+                            </a>'
+                            ;
+
+                            $find_list = mysqli_query($conn, "SELECT * FROM list WHERE list_space_id = '$space_id' ORDER BY list_name ASC");
+                            while($fetch_list = mysqli_fetch_array($find_list))
+                            {
+                                $list_id = $fetch_list['list_id'];
+                                //query for filtering data
+                                $filter = $_POST['filter'];
+                                if ($filter) {
+                                    $filterby = $filter;
+
+                                    if($filterby == "All")
+                                    {
+                                        $findtaskper_list = mysqli_query($conn, "SELECT * FROM task WHERE task_list_id = '$list_id' and task_assign_to != ''");
+                                    }
+                                    else if($filterby == "Today")
+                                    {
+                                        $filter = date("Y-m-d");
+                                        $findtaskper_list = mysqli_query($conn, "SELECT * FROM task WHERE task_list_id = '$list_id' and task_assign_to != '' and task_date_created LIKE '%$filter%'");
+                                    }
+                                    else if($filterby == "This Week")
+                                    {
+                                        $dt = new DateTime();
+                                        $dates = [];
+                                        for ($d = 1; $d <= 7; $d++) {
+                                            $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
+                                            $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
+                                        }
+                                        $from = current($dates); // monday
+                                        $to = end($dates); // sunday
+                                        $findtaskper_list = mysqli_query($conn, "SELECT * FROM task WHERE task_list_id = '$list_id' and task_assign_to != '' and task_date_created BETWEEN '$from' AND '$to'");
+                                    }
+                                    else if($filterby == "This Month")
+                                    {
+                                        $filter = date("Y-m");
+                                        $findtaskper_list = mysqli_query($conn, "SELECT * FROM task WHERE task_list_id = '$list_id' and task_assign_to != '' and task_date_created LIKE '%$filter%'");
+                                    }
+                                    else if($filterby == "This Year")
+                                    {
+                                        $filter = date("Y");
+                                        $findtaskper_list = mysqli_query($conn, "SELECT * FROM task WHERE task_list_id = '$list_id' and task_assign_to != '' and task_date_created LIKE '%$filter%'");
+                                    }
+                                    else if($filterby == "Custom Date")
+                                    {
+                                        $get_from = $_GET['From'];
+                                        $get_to = $_GET['To'];
+                                        $findtaskper_list = mysqli_query($conn, "SELECT * FROM task WHERE task_list_id = '$list_id' and task_assign_to != '' and task_date_created BETWEEN '$get_from' AND '$get_to'");
+                                    }
+                                }
+                                else
+                                {
+                                    $dt = new DateTime();
+                                    $dates = [];
+                                    for ($d = 1; $d <= 7; $d++) {
+                                        $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
+                                        $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
+                                    }
+                                    $from = current($dates); // monday
+                                    $to = end($dates); // sunday
+                                    $findtaskper_list = mysqli_query($conn, "SELECT * FROM task WHERE task_list_id = '$list_id' and task_assign_to != '' and task_date_created BETWEEN '$from' AND '$to'");
+                                }
+                                // $findtaskper_list= mysqli_query($conn, "SELECT * FROM task WHERE task_list_id = '$list_id' AND task_assign_to = ''");
+                                $list_count = 0;
+                                while($task_count = mysqli_fetch_array($findtaskper_list))
+                                {
+                                    $task_assign_to = $task_count['task_assign_to'];
+                                    $array_assign = explode(",",$task_assign_to);
+                                    if (in_array($user_id, $array_assign))
+                                    {
+                                        $list_count++;
+                                    }
+                                }
+                                // $list_count = mysqli_num_rows($findtaskper_list);
+                                echo'
+                                <ul>
+                                    <li>
+                                        <a class="dropdown-item nav-submenu" data-toggle="nav-submenu" style="padding: 5px 0px;">
+                                            <i class="fa fa-folder text-warning mr-1"></i>';
+                                            $new_name = substr($fetch_list['list_name'], 0, 17); // get specific character
+                                            if(strlen($fetch_list['list_name']) > 17)
+                                            {
+                                                echo '<span class="sidebar-mini-hide aaa" style="margin-left: 40px;" data-toggle="popover" title="'.$fetch_list['list_name'].'" data-placement="bottom">'.$new_name.'...</span>';
+                                            }
+                                            else
+                                            {
+                                                echo '<span class="sidebar-mini-hide aaa" style="margin-left: 40px;">'.$fetch_list['list_name'].'</span>';
+                                            }
+                                            if($list_count != 0)
+                                            {
+                                                echo '<span class="badge ml-5" style="background-color: #64b1a0; color: #fff;">'.number_format($list_count).'</span>';
+                                            }
+                                            echo'
+                                        </a>';
+                                        $find_status = mysqli_query($conn, "SELECT * FROM status WHERE status_list_id = '$list_id' ORDER BY status_order_no ASC");
+                                        while($fetch_status = mysqli_fetch_array($find_status))
+                                        {
+                                            $status_idss = $fetch_status['status_id'];
+                                            //query for filtering data
+                                            $filter = $_POST['filter'];
+                                            if ($filter) {
+                                                $filterby = $filter;
+
+                                                if($filterby == "All")
+                                                {
+                                                    $findtaskper_status = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$status_idss' and task_assign_to != '' ORDER BY task_name");
+                                                    $findtaskper_status_count = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$status_idss' and task_assign_to != '' ORDER BY task_name");
+                                                }
+                                                else if($filterby == "Today")
+                                                {
+                                                    $filter = date("Y-m-d");
+                                                    $findtaskper_status = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$status_idss' and task_assign_to != '' and task_date_created LIKE '%$filter%' ORDER BY task_name");
+                                                    $findtaskper_status_count = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$status_idss' and task_assign_to != '' and task_date_created LIKE '%$filter%' ORDER BY task_name");
+                                                }
+                                                else if($filterby == "This Week")
+                                                {
+                                                    $dt = new DateTime();
+                                                    $dates = [];
+                                                    for ($d = 1; $d <= 7; $d++) {
+                                                        $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
+                                                        $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
+                                                    }
+                                                    $from = current($dates); // monday
+                                                    $to = end($dates); // sunday
+                                                    $findtaskper_status = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$status_idss' and task_assign_to != '' and task_date_created BETWEEN '$from' AND '$to' ORDER BY task_name");
+                                                    $findtaskper_status_count = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$status_idss' and task_assign_to != '' and task_date_created BETWEEN '$from' AND '$to' ORDER BY task_name");
+                                                }
+                                                else if($filterby == "This Month")
+                                                {
+                                                    $filter = date("Y-m");
+                                                    $findtaskper_status = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$status_idss' and task_assign_to != '' and task_date_created LIKE '%$filter%' ORDER BY task_name");
+                                                    $findtaskper_status_count = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$status_idss' and task_assign_to != '' and task_date_created LIKE '%$filter%' ORDER BY task_name");
+                                                }
+                                                else if($filterby == "This Year")
+                                                {
+                                                    $filter = date("Y");
+                                                    $findtaskper_status = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$status_idss' and task_assign_to != '' and task_date_created LIKE '%$filter%' ORDER BY task_name");
+                                                    $findtaskper_status_count = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$status_idss' and task_assign_to != '' and task_date_created LIKE '%$filter%' ORDER BY task_name");
+                                                }
+                                                else if($filterby == "Custom Date")
+                                                {
+                                                    $get_from = $_GET['From'];
+                                                    $get_to = $_GET['To'];
+                                                    $findtaskper_status = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$status_idss' and task_assign_to != '' and task_date_created BETWEEN '$get_from' AND '$get_to' ORDER BY task_name");
+                                                    $findtaskper_status_count = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$status_idss' and task_assign_to != '' and task_date_created BETWEEN '$get_from' AND '$get_to' ORDER BY task_name");
+                                                }
+                                            }
+                                            else
+                                            {
+                                                $dt = new DateTime();
+                                                $dates = [];
+                                                for ($d = 1; $d <= 7; $d++) {
+                                                    $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
+                                                    $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
+                                                }
+                                                $from = current($dates); // monday
+                                                $to = end($dates); // sunday
+                                                $findtaskper_status = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$status_idss' and task_assign_to != '' and task_date_created BETWEEN '$from' AND '$to' ORDER BY task_name");
+                                                $findtaskper_status_count = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$status_idss' and task_assign_to != '' and task_date_created BETWEEN '$from' AND '$to' ORDER BY task_name");
+                                            }
+                                            // $findtaskper_status = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$status_idss' AND task_assign_to = '' ORDER BY task_name ASC");
+                                            $status_count = 0;
+                                            while($task_count_status = mysqli_fetch_array($findtaskper_status_count))
+                                            {
+                                                $task_assign_to = $task_count_status['task_assign_to'];
+                                                $array_assign = explode(",",$task_assign_to);
+                                                if (in_array($user_id, $array_assign))
+                                                {
+                                                    $status_count++;
+                                                }
+                                            }
+                                            echo'
+                                            <ul>
+                                                <li>
+                                                            <a class="dropdown-item nav-submenu" data-toggle="nav-submenu" style="padding: 5px 0px;">
+                                                                <i class="fa fa-square" style="color: '.$fetch_status['status_color'].';"></i>';
+                                                                $new_name = substr($fetch_status['status_name'], 0, 14); // get specific character
+                                                                if(strlen($fetch_status['status_name']) > 14)
+                                                                {
+                                                                    echo '<span class="sidebar-mini-hide aaa" style="margin-left: 40px;" data-toggle="popover" title="'.$fetch_status['status_name'].'" data-placement="bottom">'.$new_name.'...</span>';
+                                                                }
+                                                                else
+                                                                {
+                                                                    echo '<span class="sidebar-mini-hide aaa" style="margin-left: 40px;">'.$fetch_status['status_name'].'</span>';
+                                                                }
+                                                                if($status_count != 0)
+                                                                {
+                                                                    echo '<span class="badge ml-5" style="background-color: #64b1a0; color: #fff;">'.number_format($status_count).'</span>';
+                                                                }
+                                                                echo'
+                                                            </a>
+                                                            <ul style="border-left: 3px solid '.$fetch_status['status_color'].';">';
+
+                                                                while($result_findtaskper_status = mysqli_fetch_array($findtaskper_status))
+                                                                    {
+
+                                                                        echo '<li class="aaa bbb" >'.$result_findtaskper_status['task_name'].'</li>';
+                                                                    }
+                                                                echo'
+                                                            </ul>
+                                                        </li>
+                                            </ul>
+                                            ';
+                                        }
+                                        echo'
+                                    </li>
+                                </ul>';
+                            }
+                        echo'
+                        </li>';
+                    }
+                echo '</ul>';
+    }
+    // ----------------------- End Show Box Space Assign list in Everthing page -----------------------
+
+    // ----------------------- GET DATA FOR TABLE SEND HISTORY -----------------------
+    if(isset($_POST['display_email_history_table']))
+    {
+        $task_id = $_POST['task_id'];
+
+        $results = mysqli_query($conn, "SELECT `user`.fname, `user`.mname, `user`.lname, email_format.email_name, email_format.email_subject, email_format.email_id, email_send_history.`email_send_to`, email_send_history.email_send_date FROM email_send_history INNER JOIN `user` ON email_send_history.email_send_by = `user`.user_id INNER JOIN email_format ON email_send_history.email_format_id = email_format.email_id WHERE email_send_history.email_task_id = '$task_id' ORDER BY email_send_history.email_send_date DESC");
+        $count = 1;
+
+        while($rows = mysqli_fetch_array($results))
+        {
+            $email_name = $rows['email_name'];
+            $file_loc = "email_content/".$email_name.".txt";
+
+            $myfile = fopen($file_loc, "r") or die("Unable to open file!");
+            $content = fread($myfile,filesize($file_loc));
+            // fclose($myfile);
+
+            echo '
+                    <tr>
+                        <td colspan="1" style="width: 15%;text-align: end;">
+                        Date/Time Send:<br>
+                        Send by:<br>
+                        Email Name:<br>
+                        Email Subject:<br>
+                        Email Address:
+                        </td>
+                        <td colspan="2" style="width: 25%;">
+                        '.$rows["email_send_date"].' <br>
+                        '.$rows["fname"].' '.$rows["mname"].' '.$rows["lname"].'<br>
+                        '.$rows["email_name"].' <br>
+                        '.$rows["email_subject"].' <br>
+                        '.$rows["email_send_to"].'
+                        </td>
+                        <td colspan="3">
+                                <div style="padding: 20px 0px 0px 0px; background-color: #00465a; max-height:300px; overflow:auto;" class="shadow">
+                                    <img src="http://ipasspmt.site/assets/media/photos/IPASS-Logo-05.png" style="height: 120px; padding: 0px 0px 30px 0px; display: block; margin-left: auto;
+                                  margin-right: auto;">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="20" style="background-color: #47bcde; color: #5a5f61; font-family:verdana;">
+                                        <tr>
+                                            <td style="background-color: #fff; border-top: 20px solid #006786; border-bottom: 20px solid #006786;">
+                                                '.$content.'
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div style="text-align: center; padding: 20px 0px; color: #fff; background-color: #00465a;">
+                                        PROCESSING MADE EASY BY IPASS<br>
+                                        Rm 1, 2nd Floor, Doña Segunda Complex,<br>
+                                        Ponciano Street, Davao City, Philippines 8000<br><br>
+                                        <a href="https://ipassprocessing.com/" style="color: #2196f3;">https://ipassprocessing.com/</a>
+                                    </div>
+                                </div>
+                        <td>
+                    </tr>
+            ';
+        }
+    }
+
+    // ----------------------- TRANSACTION DETAILS UPDATE -----------------------
+    if(isset($_POST['update_transaction']))
+    {
+        $val_id = $_POST['val_id'];
+        $tran_date = $_POST['tran_date'];
+        $tran_method = $_POST['tran_method'];
+        $tran_transaction_no = $_POST['tran_transaction_no'];
+        $tran_amount = $_POST['tran_amount'];
+        $tran_client_rate = $_POST['tran_client_rate'];
+        $tran_currency = $_POST['tran_currency'];
+        $tran_note = $_POST['tran_note'];
+        $tran_file = $_POST['file_attachment'];
+
+        $tran_initial = $_POST['tran_initial'];
+        $tran_usd_rate = $_POST['tran_usd_rate'];
+        $tran_usd_total = $_POST['tran_usd_total'];
+        $tran_php_rate = $_POST['tran_php_rate'];
+        $tran_php_total = $_POST['tran_php_total'];
+        $tran_client_php_total = $_POST['tran_client_php_total'];
+
+        $tran_charge = $_POST['tran_charge'];
+        $tran_charge_type = $_POST['tran_charge_type'];
+            if($tran_charge == "")
+            {
+                $charge = "|";
+            }
+            else
+            {
+                $charge = $tran_charge_type.'|'.$tran_charge;
+            }
+
+            if (empty($tran_file))
+            {
+                mysqli_query($conn, "UPDATE finance_transaction SET val_date = '$tran_date', val_method = '$tran_method', val_transaction_no = '$tran_transaction_no', val_amount = '$tran_amount', val_client_rate = '$tran_client_rate', val_currency = '$tran_client_rate', val_note = '$tran_note', val_charge = '$charge', val_initial_amount = '$tran_initial', val_usd_rate = '$tran_usd_rate', val_usd_total = '$tran_usd_total', val_php_rate = '$tran_php_rate', val_php_total = '$tran_php_total', val_client_total = '$tran_client_php_total'  WHERE val_id = '$val_id'") or die(mysqli_error());
+
+                echo 'success';
+            }
+    }
+    // -----------------------END TRANSACTION DETAILS UPDATE -----------------------
+
+    // ----------------------- TRANSACTION DETAILS UPDATE WITH PICTURE -----------------------
+    if(isset($_POST['update_transaction_with_picture']))
+    {
+        $val_id = $_POST['val_id'];
+        $tran_date = $_POST['tran_date'];
+        $tran_method = $_POST['tran_method'];
+        $tran_transaction_no = $_POST['tran_transaction_no'];
+        $tran_amount = $_POST['tran_amount'];
+        $tran_client_rate = $_POST['tran_client_rate'];
+        $tran_currency = $_POST['tran_currency'];
+        $tran_note = $_POST['tran_note'];
+
+        $tran_initial = $_POST['tran_initial'];
+        $tran_usd_rate = $_POST['tran_usd_rate'];
+        $tran_usd_total = $_POST['tran_usd_total'];
+        $tran_php_rate = $_POST['tran_php_rate'];
+        $tran_php_total = $_POST['tran_php_total'];
+        $tran_client_php_total = $_POST['tran_client_php_total'];
+        $val_attachment = $_POST['val_attachment'];
+
+        $tran_charge = $_POST['tran_charge'];
+        $tran_charge_type = $_POST['tran_charge_type'];
+            if($tran_charge == "")
+            {
+                $charge = "|";
+            }
+            else
+            {
+                $charge = $tran_charge_type.'|'.$tran_charge;
+            }
+
+        $attachment_name = $_FILES['file_attachment']['name'];
+        $attachment_temp = $_FILES['file_attachment']['tmp_name'];
+        $attachment_size = $_FILES['file_attachment']['size'];
+        $exp = explode(".", $attachment_name);
+        $ext = end($exp);
+        $allowed_ext = array('jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG');
+            if(in_array($ext, $allowed_ext)) // check the file extension
+            {
+                date_default_timezone_set('Asia/Manila');
+                //$todays_date = date("y-m-d H:i:sa"); //  original format
+                $date = date("His"); // for unique file name
+
+                $words = explode(' ',trim($attachment_name)); // convert name to array
+                $get_name = substr($words[0], 0, 6); // get only 6 character of the name
+
+                $image = $date.'-'.$get_name.'.'.$ext;
+                $location = "../assets/media/transaction/".$image; // upload location
+
+                if($attachment_size < 3000000) // Maximum 3 MB
+                {
+                    unlink('../assets/media/transaction/'.$val_attachment);
+                    move_uploaded_file($attachment_temp, $location);
+                    mysqli_query($conn, "UPDATE finance_transaction SET val_date = '$tran_date', val_method = '$tran_method', val_transaction_no = '$tran_transaction_no', val_amount = '$tran_amount', val_client_rate = '$tran_client_rate', val_currency = '$tran_client_rate', val_note = '$tran_note', val_charge = '$charge', val_attachment = '$image'  WHERE val_id = '$val_id'") or die(mysqli_error());
+                    echo "success";
+                }
+            }
+    }
+    // -----------------------END TRANSACTION DETAILS UPDATE WITH PICTURE -----------------------
+
+?>

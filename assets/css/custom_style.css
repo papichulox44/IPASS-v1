@@ -1,0 +1,19 @@
+<style>
+    /* INBOX in messenger */
+    .sender {background-color: #f1f4f6; border-radius: 0px 20px 20px 20px; padding: 5px 10px 5px 10px; margin: 5px 250px 5px 5px;}
+    @media screen and (max-width: 1025px) { .sender{margin: 5px 40px 5px 5px;} }
+    .reciever {background-color: #e7eff5; border-radius: 20px 20px 0px 20px; padding: 5px 10px 5px 10px; margin: 5px 0px 5px 250px;}
+    @media screen and (max-width: 1025px) { .reciever{margin: 5px 5px 5px 40px;} }
+    .smallim { height: 45px; width: 45px; border-radius: 100px; margin-right: 10px; }
+    .contacts { cursor: pointer; }
+    /* END INBOX in messenger */
+
+    .shad { box-shadow:0px 2px 4px #b3b3b3; } 
+    @media only screen and (max-width: 1023px) /* this is the style until res 1023px */
+    { .prof { width: 200px; height: 200px; border-radius: 100px; } }
+    @media only screen and (max-width: 2000px)
+    { .prof { width: 175px; height: 175px; border-radius: 100px;} }
+    .inputlable 
+    { border-radius: 10px; background: #064d87; color: #fff; text-align: center; padding-bottom: 32px; }
+    .del:hover{ background-color: #ef5350; }
+</style>  
