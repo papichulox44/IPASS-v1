@@ -98,7 +98,7 @@
             <div class="col-md-6">
                 <div class="block block-rounded shadow bg-gray-darker">
                         <div class="block-header content-heading shadow bg-gray-darker">
-                            <h3 class="block-title text-white">Assigned Contacts</h3>
+                            <h3 class="block-title text-white">Assigned Task</h3>
                             <div class="block-options">
                             <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
                                 <i class="si si-refresh"></i>
@@ -136,7 +136,7 @@
     count_creating_contacts();
 
 
-    //Due Date functions
+    //Due Date functions-----------------------------------------------------------------------------------------------------------
     function due_date(){
 
         $.ajax({
@@ -184,9 +184,9 @@
             }
         });
     }
-    //End Due Date functions
+    //End Due Date functions---------------------------------------------------------------------------------------------------
 
-    //Creating Contacts Function
+    //Creating Contacts Function---------------------------------------------------------------------------------------------------
     function creating_contacts(){
 
         $.ajax({
@@ -234,6 +234,6 @@
             }
         });
     }
-    //End Creating Contacts Function
+    //End Creating Contacts Function---------------------------------------------------------------------------------------------------
 
 </script>
