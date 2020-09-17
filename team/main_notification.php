@@ -56,7 +56,7 @@
             <?php include 'header.php'; ?>  
             <?php include 'content_notification.php'; ?> 
         </div>
-        <!-- END Page Container -->afdsfd
+        <!-- END Page Container -->
 
         <script>
         $(window).on("load",function(){
