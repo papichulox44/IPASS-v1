@@ -42,26 +42,16 @@
              <div class="col-md-6">
                 <div class="block block-rounded shadow bg-gray-darker">
                         <div class="block-header content-heading shadow bg-gray-darker">
-                            <h3 class="block-title text-white">Comments</h3>
+                            <h3 class="block-title text-white">Comments <span class="badge badge-danger" id="count_creating_comments"></span></h3>
                             <div class="block-options">
-                            <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
+                            <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo" onclick="update_creating_comments()">
                                 <i class="si si-refresh"></i>
                             </button>
                             <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle"></button>
                         </div>
                         </div>
                     <div class="block-content" style="overflow: auto; height: 300px;">
-                        <ul class="list list-timeline pull-t">
-                            <!-- Twitter Notification -->
-                            <li>
-                                <div class="list-timeline-time">50 min agoadas</div>
-                                <i class="list-timeline-icon fa fa-twitter bg-info"></i>
-                                <div class="list-timeline-content">
-                                    <p class="font-w600">+ 79 Followers</p>
-                                    <p>You’re getting more and more followers, keep it up!</p>
-                                </div>
-                            </li>
-                            <!-- END Twitter Notification -->
+                        <ul class="list list-activity" id="view_creating_comments">
                         </ul>
                     </div>
                 </div>
@@ -70,59 +60,41 @@
             <div class="col-md-6">
                 <div class="block block-rounded shadow bg-gray-darker">
                         <div class="block-header content-heading shadow bg-gray-darker">
-                            <h3 class="block-title text-white">Remarks</h3>
+                            <h3 class="block-title text-white">Remarks <span class="badge badge-danger" id="count_creating_remarks"></h3>
                             <div class="block-options">
-                            <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
+                            <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo" onclick="update_creating_remarks()">
                                 <i class="si si-refresh"></i>
                             </button>
                             <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle"></button>
                         </div>
                         </div>
                     <div class="block-content" style="overflow: auto; height: 300px;">
-                        <ul class="list list-timeline pull-t">
-                            <!-- Twitter Notification -->
-                            <li>
-                                <div class="list-timeline-time">50 min agoadas</div>
-                                <i class="list-timeline-icon fa fa-twitter bg-info"></i>
-                                <div class="list-timeline-content">
-                                    <p class="font-w600">+ 79 Followers</p>
-                                    <p>You’re getting more and more followers, keep it up!</p>
-                                </div>
-                            </li>
-                            <!-- END Twitter Notification -->
+                        <ul class="list list-activity" id="view_creating_remarks">
                         </ul>
                     </div>
                 </div>
             </div>
-
+            <div class="col-md-3">
+            </div>
             <div class="col-md-6">
                 <div class="block block-rounded shadow bg-gray-darker">
                         <div class="block-header content-heading shadow bg-gray-darker">
-                            <h3 class="block-title text-white">Assigned Task</h3>
+                            <h3 class="block-title text-white">Assigned Task <span class="badge badge-danger" id="count_creating_assigned_task"></h3>
                             <div class="block-options">
-                            <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
+                            <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo" onclick="update_creating_assigned_task()">
                                 <i class="si si-refresh"></i>
                             </button>
                             <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle"></button>
                         </div>
                         </div>
                     <div class="block-content" style="overflow: auto; height: 300px;">
-                        <ul class="list list-timeline pull-t">
-                            <!-- Twitter Notification -->
-                            <li>
-                                <div class="list-timeline-time">50 min agoadas</div>
-                                <i class="list-timeline-icon fa fa-twitter bg-info"></i>
-                                <div class="list-timeline-content">
-                                    <p class="font-w600">+ 79 Followers</p>
-                                    <p>You’re getting more and more followers, keep it up!</p>
-                                </div>
-                            </li>
-                            <!-- END Twitter Notification -->
+                        <ul class="list list-activity" id="view_creating_assigned_task">
                         </ul>
                     </div>
                 </div>
             </div>
-
+            <div class="col-md-3">
+            </div>
         </div>
     </div>
         <!-- END Timeline Default Style -->
@@ -132,8 +104,18 @@
 <script>
     due_date();
     count_due_date();
+
     creating_contacts();
     count_creating_contacts();
+
+    creating_comments();
+    count_creating_comments();
+
+    creating_remarks();
+    count_creating_remarks();
+
+    creating_assigned_task();
+    count_creating_assigned_task();
 
 
     //Due Date functions-----------------------------------------------------------------------------------------------------------
@@ -235,5 +217,155 @@
         });
     }
     //End Creating Contacts Function---------------------------------------------------------------------------------------------------
+
+    //Creating Comments Function---------------------------------------------------------------------------------------------------
+    function creating_comments(){
+
+        $.ajax({
+        url: 'ajax_notification.php',
+        type: 'POST',
+        async: false,
+        data:{
+            creating_comments: 1,
+        },
+            success: function(response){
+                $('#view_creating_comments').html(response);
+            }
+        });
+    }
+
+    function count_creating_comments(){
+
+        $.ajax({
+        url: 'ajax_notification.php',
+        type: 'POST',
+        async: false,
+        data:{
+            count_creating_comments: 1,
+        },
+            success: function(response){
+                $('#count_creating_comments').html(response);
+            }
+        });
+    }
+
+    function update_creating_comments(){
+
+        $.ajax({
+        url: 'ajax_notification.php',
+        type: 'POST',
+        async: false,
+        data:{
+            update_creating_comments: 1,
+        },
+            success: function(response){
+                if (response == 'success') {
+                    creating_comments();
+                    count_creating_comments();
+                }
+            }
+        });
+    }
+    //End Creating Comments Function---------------------------------------------------------------------------------------------------
+
+    //Creating Remarks Function---------------------------------------------------------------------------------------------------
+    function creating_remarks(){
+
+        $.ajax({
+        url: 'ajax_notification.php',
+        type: 'POST',
+        async: false,
+        data:{
+            creating_remarks: 1,
+        },
+            success: function(response){
+                $('#view_creating_remarks').html(response);
+            }
+        });
+    }
+
+    function count_creating_remarks(){
+
+        $.ajax({
+        url: 'ajax_notification.php',
+        type: 'POST',
+        async: false,
+        data:{
+            count_creating_remarks: 1,
+        },
+            success: function(response){
+                $('#count_creating_remarks').html(response);
+            }
+        });
+    }
+
+    function update_creating_remarks(){
+
+        $.ajax({
+        url: 'ajax_notification.php',
+        type: 'POST',
+        async: false,
+        data:{
+            update_creating_remarks: 1,
+        },
+            success: function(response){
+                if (response == 'success') {
+                    creating_remarks();
+                    count_creating_remarks();
+                }
+            }
+        });
+    }
+    //End Creating Remarks Function---------------------------------------------------------------------------------------------------
+
+    //End Creating Assigned Task Function----------------------------------------------------------------------
+    function creating_assigned_task(){
+
+        $.ajax({
+        url: 'ajax_notification.php',
+        type: 'POST',
+        async: false,
+        data:{
+            creating_assigned_task: 1,
+        },
+            success: function(response){
+                $('#view_creating_assigned_task').html(response);
+            }
+        });
+    }
+
+    function count_creating_assigned_task(){
+
+        $.ajax({
+        url: 'ajax_notification.php',
+        type: 'POST',
+        async: false,
+        data:{
+            count_creating_assigned_task: 1,
+        },
+            success: function(response){
+                $('#count_creating_assigned_task').html(response);
+            }
+        });
+    }
+
+    function update_creating_assigned_task(){
+
+        $.ajax({
+        url: 'ajax_notification.php',
+        type: 'POST',
+        async: false,
+        data:{
+            update_creating_assigned_task: 1,
+        },
+            success: function(response){
+                if (response == 'success') {
+                    creating_assigned_task();
+                    count_creating_assigned_task();
+                }
+            }
+        });
+    }
+    //End Creating Assigned Task Function----------------------------------------------------------------------------------
 
 </script>
