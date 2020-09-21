@@ -1969,7 +1969,7 @@ $(document).ready(function(){
                                                     }
                                                     else
                                                     { ?>
-                                                        <input type="text" class="form-control" readonly>
+                                                        <input type="text" class="form-control" readonly id="tran_charge">
                                                     <?php
                                                     }
                                                     ?>
@@ -1987,7 +1987,7 @@ $(document).ready(function(){
                                                     }
                                                     else
                                                     { ?>
-                                                        <input type="text" class="form-control" readonly>
+                                                        <input type="text" class="form-control" readonly id="tran_charge_type">
                                                     <?php
                                                     }
                                                     ?>
@@ -5737,6 +5737,7 @@ function display_assign_field_phase(){
     });
 }
 </script>
+
     <!-- Custom Field -->
     <div class="modal" id="modal-customfield" tabindex="-1" role="dialog" aria-labelledby="modal-fadein" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog" role="document">

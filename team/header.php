@@ -1,4 +1,4 @@
-<!-- Header -->
+
 <header id="page-header">
     <!-- Header Content -->
     <div class="content-header <?php echo $md_header; ?>">

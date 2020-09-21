@@ -44,9 +44,9 @@
         }
     </style>
     <body class="<?php echo $body; ?>">
-        <div class="loader-wrapper">
+        <!-- <div class="loader-wrapper">
           <img src="../assets/media/photos/logo-ipass.png" class="loader">
-        </div>
+        </div> -->
         <!--<div id="page-container" class="sidebar-o sidebar-inverse enable-page-overlay side-scroll page-header-modern main-content-boxed">-->
         <div id="page-container" class="sidebar-o <?php echo $inverse; ?> enable-page-overlay side-scroll">
             <?php 

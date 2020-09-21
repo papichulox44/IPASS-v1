@@ -635,44 +635,4 @@
                     $("#new_message").scrollTop($("#new_message")[0].scrollHeight);
                 }
         });
-
-        /*function display_new_message(){
-            
-        }setInterval (display_new_message, 1000);
-        // END display new message -------------------------------
-    });
-
-    // Change mode -------------------------------
-    function mode()
-    {
-        user_id = <?php echo $user_id; ?>;
-        $.ajax({
-            type: "POST",
-            url: "ajax.php",
-            data: {
-                user_id:user_id,
-                change_mode: 1,
-            },
-            success: function(data){
-                if(data == "Dark") { alert("Dark Mode."); }
-                else if(data == "Custom") { alert("Custom Mode."); }
-                else { alert("White Mode."); }
-                location.reload();
-            }
-        });
-    }
-    // END Change mode -------------------------------
-    
-    // Toogle the color theme
-    /*window.onload=function(){
-        mode_type = "<?php echo $mode_type ?>";
-        if(mode_type == "Dark")
-        {
-            document.getElementById('btn_dark').click();
-        }
-        else
-        {
-            document.getElementById('btn_white').click();
-        }
-    };*/
 </script>

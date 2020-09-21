@@ -3,6 +3,7 @@
     <div class="content bg-primary-darker">
     <!-- Page Content -->
         <div class="row">
+            <?php if($_SESSION['user_type'] == 'Admin') { ?>
             <div class="col-md-6">
                 <div class="block block-rounded shadow bg-gray-darker">
                     <div class="block-header content-heading shadow bg-gray-darker">
@@ -20,7 +21,7 @@
                     </div>
                 </div>
             </div>
-
+            <?php } ?>
             <div class="col-md-6">
                 <div class="block block-rounded shadow bg-gray-darker">
                         <div class="block-header content-heading shadow bg-gray-darker">
@@ -57,6 +58,7 @@
                 </div>
             </div>
 
+            <?php if($_SESSION['user_type'] == 'Admin') { ?>
             <div class="col-md-6">
                 <div class="block block-rounded shadow bg-gray-darker">
                         <div class="block-header content-heading shadow bg-gray-darker">
@@ -74,8 +76,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-            </div>
+            <?php } ?>
             <div class="col-md-6">
                 <div class="block block-rounded shadow bg-gray-darker">
                         <div class="block-header content-heading shadow bg-gray-darker">
@@ -92,8 +93,6 @@
                         </ul>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-3">
             </div>
         </div>
     </div>
