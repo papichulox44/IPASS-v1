@@ -367,4 +367,121 @@
     }
     //End Creating Assigned Task Function----------------------------------------------------------------------------------
 
+    //Clickable Notification Function----------------------------------------------------------------------------------
+
+    function click_due_date(id){
+
+        array_id = id.split(",");
+        space_name = array_id[0];
+        list_name = array_id[1];
+        list_id = array_id[2];
+        get_task_id = array_id[3];
+
+        $.ajax({
+        url: 'ajax_notification.php',
+        type: 'POST',
+        async: false,
+        data:{
+            task_id:get_task_id,
+            click_due_date: 1,  
+        },
+            success: function(response){
+                if (response == 'success') {
+                    document.location = 'main_dashboard.php?space_name='+space_name+'&list_name='+list_name+'&list_id='+list_id+'&get_task_id='+get_task_id+'';
+                }
+            }
+        });
+    }
+
+    function click_creating_contacts(id){
+
+        $.ajax({
+        url: 'ajax_notification.php',
+        type: 'POST',
+        async: false,
+        data:{
+            contact_id:id,
+            click_creating_contacts: 1,  
+        },
+            success: function(response){
+                if (response == 'admin') {
+                    document.location = 'main_contact_assign.php';
+                } else {
+                    document.location = 'dashboard.php';
+                }
+            }
+        });
+    }
+
+    function click_comments(id){
+
+        array_id = id.split(",");
+        space_name = array_id[0];
+        list_name = array_id[1];
+        list_id = array_id[2];
+        get_task_id = array_id[3];
+        comment_id = array_id[4];
+
+        // alert(space_name + ' ' + list_name + ' ' + list_id + ' ' + get_task_id + ' ' + comment_id);
+
+        $.ajax({
+        url: 'ajax_notification.php',
+        type: 'POST',
+        async: false,
+        data:{
+            comment_id:comment_id,
+            click_comments: 1,  
+        },
+            success: function(response){
+                if (response == 'success') {
+                    document.location = 'main_dashboard.php?space_name='+space_name+'&list_name='+list_name+'&list_id='+list_id+'&get_task_id='+get_task_id+'';
+                }
+            }
+        });
+    }
+
+    function click_remarks(id){
+        // alert(id);
+        $.ajax({
+        url: 'ajax_notification.php',
+        type: 'POST',
+        async: false,
+        data:{
+            remarks_id:id,
+            click_remarks: 1,  
+        },
+            success: function(response){
+                if (response == 'success') {
+                    document.location = 'main_transaction.php?view=All Remarks&filter=This Week';
+                }
+            }
+        });
+    }
+
+    function click_assigned_task(id){
+
+        array_id = id.split(",");
+        space_name = array_id[0];
+        list_name = array_id[1];
+        list_id = array_id[2];
+        get_task_id = array_id[3];
+
+        // alert(space_name + ' ' + list_name + ' ' + list_id + ' ' + get_task_id );
+        $.ajax({
+        url: 'ajax_notification.php',
+        type: 'POST',
+        async: false,
+        data:{
+            task_id:get_task_id,
+            click_assigned_task: 1,  
+        },
+            success: function(response){
+                if (response == 'success') {
+                    document.location = 'main_dashboard.php?space_name='+space_name+'&list_name='+list_name+'&list_id='+list_id+'&get_task_id='+get_task_id+'';
+                }
+            }
+        });
+    }
+    //END Clickable Notification Function----------------------------------------------------------------------------------
+
 </script>

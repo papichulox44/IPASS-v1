@@ -6,14 +6,14 @@
 
 	//------------------------------------------------------------------------------------------
 	if (isset($_POST['due_date'])) {
-		$results = mysqli_query($conn, "SELECT task.task_name, `user`.fname, `user`.mname, `user`.lname, task.task_due_date, task.admin_notification FROM task INNER JOIN `user` ON task.task_created_by = `user`.user_id WHERE task.task_due_date != 0000-00-00 AND task.admin_notification = 0 ORDER BY task.admin_notification, task.task_due_date DESC");
+		$results = mysqli_query($conn, "SELECT task.task_name, `user`.fname, `user`.mname, `user`.lname, task.task_due_date, task.admin_notification, list.list_id, task.task_id, list.list_name, space.space_name FROM task INNER JOIN `user` ON task.task_created_by = `user`.user_id INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id WHERE task.task_due_date != 0000-00-00 AND task.admin_notification = 0 ORDER BY task.admin_notification ASC, task.task_due_date DESC");
 
 		$row = mysqli_num_rows($results);
 		if ($row) {
 	        while($rows = mysqli_fetch_array($results))
 	        {
 	            echo'
-		            <li>
+		            <li style="cursor: pointer;" id="'.$rows['space_name'].','.$rows['list_name'].','.$rows['list_id'].','.$rows['task_id'].'" onclick="click_due_date(this.id)">
 		                <div class="list-timeline-time text-white">'.$rows['task_name'].'</div>
 		                <i class="list-timeline-icon fa fa-calendar '; if($rows['admin_notification'] == 0){ echo 'bg-danger';} else { echo 'bg-success'; } echo '"></i>
 		                <div class="list-timeline-content">
@@ -57,9 +57,9 @@
 
 	if (isset($_POST['creating_contacts'])) {
 		if ($user_type == 'Admin') {
-			$results = mysqli_query($conn, "SELECT `user`.fname, `user`.mname, `user`.lname, contact.contact_mname, contact.contact_fname, contact.contact_lname, contact.contact_date_created, contact.admin_notification FROM contact INNER JOIN `user` ON contact.contact_created_by = `user`.user_id WHERE contact.admin_notification = 0 ORDER BY contact.admin_notification, contact.contact_date_created DESC");
+			$results = mysqli_query($conn, "SELECT `user`.fname, `user`.mname, `user`.lname, contact.contact_mname, contact.contact_fname, contact.contact_lname, contact.contact_date_created, contact.admin_notification, contact.contact_id FROM contact INNER JOIN `user` ON contact.contact_created_by = `user`.user_id WHERE contact.admin_notification = 0 ORDER BY contact.admin_notification, contact.contact_date_created DESC");
 		} else {
-			$results = mysqli_query($conn, "SELECT `user`.fname, `user`.mname, `user`.lname, contact.contact_mname, contact.contact_fname, contact.contact_lname, contact.contact_date_created, contact.user_notification FROM contact INNER JOIN `user` ON contact.contact_created_by = `user`.user_id WHERE contact.user_notification = 0 AND contact.contact_created_by = $user_id ORDER BY contact.user_notification, contact.contact_date_created DESC");	
+			$results = mysqli_query($conn, "SELECT `user`.fname, `user`.mname, `user`.lname, contact.contact_mname, contact.contact_fname, contact.contact_lname, contact.contact_date_created, contact.user_notification, contact.contact_id FROM contact INNER JOIN `user` ON contact.contact_created_by = `user`.user_id WHERE contact.user_notification = 0 AND contact.contact_created_by = $user_id ORDER BY contact.user_notification, contact.contact_date_created DESC");	
 		}
 
 		$row = mysqli_num_rows($results);
@@ -67,7 +67,7 @@
 	        while($rows = mysqli_fetch_array($results))
 	        {
 	            echo'
-		            <li>
+		            <li style="cursor: pointer;" id="'.$rows['contact_id'].'" onclick="click_creating_contacts(this.id)">
 		                <div class="list-timeline-time">'.$rows['contact_date_created'].'</div>
 						<i class="list-timeline-icon fa fa-address-book bg-danger"></i>
 		                <div class="list-timeline-content">
@@ -119,16 +119,16 @@
 	//------------------------------------------------------------------------------------------
 	if (isset($_POST['creating_comments'])) {
 		if ($user_type == 'Admin') {
-			$results = mysqli_query($conn, "SELECT `user`.fname, `user`.mname, `user`.lname, task.task_name, `comment`.comment_message, `comment`.comment_date, `comment`.comment_attactment, `comment`.admin_notification FROM `comment` INNER JOIN task ON `comment`.comment_task_id = task.task_id INNER JOIN `user` ON `comment`.comment_user_id = `user`.user_id WHERE `comment`.admin_notification = 0 ORDER BY `comment`.admin_notification ASC, `comment`.comment_date DESC");
+			$results = mysqli_query($conn, "SELECT `user`.fname, `user`.mname, `user`.lname, task.task_name, `comment`.comment_message, `comment`.comment_date, `comment`.comment_attactment, `comment`.admin_notification, list.list_id, space.space_name, list.list_name, task.task_id, `comment`.comment_id FROM `comment` INNER JOIN task ON `comment`.comment_task_id = task.task_id INNER JOIN `user` ON `comment`.comment_user_id = `user`.user_id INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id WHERE `comment`.admin_notification = 0 ORDER BY `comment`.admin_notification ASC, `comment`.comment_date DESC");
 		} else {
-			$results = mysqli_query($conn, "SELECT `user`.fname, `user`.mname, `user`.lname, task.task_name, `comment`.comment_message, `comment`.comment_date, `comment`.comment_attactment, `comment`.user_notification FROM `comment` INNER JOIN task ON `comment`.comment_task_id = task.task_id INNER JOIN `user` ON `comment`.comment_user_id = `user`.user_id WHERE `comment`.user_notification = 0 AND comment.comment_user_id = $user_id ORDER BY `comment`.user_notification ASC, `comment`.comment_date DESC");
+			$results = mysqli_query($conn, "SELECT `user`.fname, `user`.mname, `user`.lname, task.task_name, `comment`.comment_message, `comment`.comment_date, `comment`.comment_attactment, `comment`.user_notification, list.list_id, space.space_name, list.list_name, task.task_id, `comment`.comment_id FROM `comment` INNER JOIN task ON `comment`.comment_task_id = task.task_id INNER JOIN `user` ON `comment`.comment_user_id = `user`.user_id INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id WHERE `comment`.user_notification = 0 AND comment.comment_user_id = $user_id ORDER BY `comment`.user_notification ASC, `comment`.comment_date DESC");
 		}
 		$row = mysqli_num_rows($results);
 		if ($row) {
 	        while($rows = mysqli_fetch_array($results))
 	        {
 	            echo'
-		            <li style="cursor: pointer;">
+		            <li style="cursor: pointer;" id="'.$rows['space_name'].','.$rows['list_name'].','.$rows['list_id'].','.$rows['task_id'].','.$rows['comment_id'].'" onclick="click_comments(this.id)">
 		                <div class="row">
 		                    <div class="col-sm-6">
 		                        <i class="si si-pencil text-danger"></i>
@@ -147,7 +147,7 @@
 	        }
 	    } else {
 	    	echo'
-		            <li style="cursor: pointer;">
+		            <li>
 		                <div class="row">
 		                    <div class="col-sm-6">
 		                        <i class="si si-pencil text-danger"></i>
@@ -191,13 +191,13 @@
 	//------------------------------------------------------------------------------------------
 	if (isset($_POST['creating_remarks'])) {
 
-		$results = mysqli_query($conn, "SELECT task.task_name, finance_remarks.admin_notification, finance_remarks.remarks_value, `user`.fname, `user`.mname, `user`.lname FROM finance_remarks INNER JOIN `user` ON finance_remarks.remarks_by = `user`.user_id INNER JOIN task ON finance_remarks.remarks_to = task.task_id WHERE finance_remarks.admin_notification = 0 ORDER BY finance_remarks.admin_notification ASC, finance_remarks.remarks_id DESC");
+		$results = mysqli_query($conn, "SELECT task.task_name, finance_remarks.admin_notification, finance_remarks.remarks_value, finance_remarks.remarks_id, `user`.fname, `user`.mname, `user`.lname FROM finance_remarks INNER JOIN `user` ON finance_remarks.remarks_by = `user`.user_id INNER JOIN task ON finance_remarks.remarks_to = task.task_id WHERE finance_remarks.admin_notification = 0 ORDER BY finance_remarks.admin_notification ASC, finance_remarks.remarks_id DESC");
 		$row = mysqli_num_rows($results);
 		if ($row) {
 	        while($rows = mysqli_fetch_array($results))
 	        {
 	            echo'
-		            <li style="cursor: pointer;">
+		            <li style="cursor: pointer;" id="'.$rows['remarks_id'].'" onclick="click_remarks(this.id)">
 		                <div class="row">
 		                    <div class="col-sm-6">
 		                        <i class="si si-pencil '; if($rows['admin_notification'] == 0){ echo 'text-danger';} else { echo 'text-success'; } echo '"></i>
@@ -234,7 +234,7 @@
 	        }
 	    } else {
 	    	echo'
-		            <li style="cursor: pointer;">
+		            <li>
 		                <div class="row">
 		                    <div class="col-sm-6">
 		                        <i class="si si-pencil text-danger"></i>
@@ -272,16 +272,16 @@
 	//------------------------------------------------------------------------------------------
 	if (isset($_POST['creating_assigned_task'])) {
 		if ($user_type == 'Admin') {
-			$results = mysqli_query($conn, "SELECT `user`.fname, `user`.mname, `user`.lname, task.task_assign_to, task.task_date_created, task.task_name, task.admin_notification_assigned_task FROM task INNER JOIN `user` ON task.task_created_by = `user`.user_id WHERE task.admin_notification_assigned_task = 0 ORDER BY task.admin_notification_assigned_task ASC, task.task_created_by DESC");
+			$results = mysqli_query($conn, "SELECT `user`.fname, `user`.mname, `user`.lname, task.task_assign_to, task.task_date_created, task.task_name, task.admin_notification_assigned_task, list.list_name, list.list_id, space.space_name, task.task_id FROM task INNER JOIN `user` ON task.task_created_by = `user`.user_id INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id WHERE task.admin_notification_assigned_task = 0 ORDER BY task.admin_notification_assigned_task ASC, task.task_created_by DESC");
 		} else {
-			$results = mysqli_query($conn, "SELECT `user`.fname, `user`.mname, `user`.lname, task.task_assign_to, task.task_date_created, task.task_name, task.user_notification FROM task INNER JOIN `user` ON task.task_created_by = `user`.user_id WHERE task.user_notification = 0 AND task.task_assign_to LIKE '%$user_id%' ORDER BY task.user_notification ASC, task.task_created_by DESC");
+			$results = mysqli_query($conn, "SELECT `user`.fname, `user`.mname, `user`.lname, task.task_assign_to, task.task_date_created, task.task_name, task.user_notification, list.list_name, list.list_id, space.space_name, task.task_id FROM task INNER JOIN `user` ON task.task_created_by = `user`.user_id INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id WHERE task.user_notification = 0 AND task.task_assign_to LIKE '%$user_id%' ORDER BY task.user_notification ASC, task.task_created_by DESC");
 		}
 		$row = mysqli_num_rows($results);
 		if ($row) {
 	        while($rows = mysqli_fetch_array($results))
 	        {
 	            echo'
-		            <li style="cursor: pointer;">
+		            <li style="cursor: pointer;" id="'.$rows['space_name'].','.$rows['list_name'].','.$rows['list_id'].','.$rows['task_id'].'" onclick="click_assigned_task(this.id)">
 		                <div class="row">
 		                    <div class="col-sm-6">
 		                        <i class="si si-user-follow text-danger"></i>
@@ -332,7 +332,7 @@
 	        }
 	    } else {
 	    	echo'
-		            <li style="cursor: pointer;">
+		            <li>
 		                <div class="row">
 		                    <div class="col-sm-6">
 		                        <i class="si si-user-follow text-danger"></i>
@@ -373,4 +373,79 @@
 	}
 	//------------------------------------------------------------------------------------------
 
+	//------------------------------------------------------------------------------------------
+	// Update each table for every click of the notification
+
+	//Due Date Update when clicking
+	if (isset($_POST['click_due_date'])) {
+		$task_id = $_POST['task_id'];
+		$results = mysqli_query($conn, "UPDATE task SET admin_notification = 1 WHERE task_id = $task_id");
+		if ($results) {
+			echo 'success';
+		}
+		mysqli_close($conn);
+	}
+
+	//Creating Contacts Update when clicking
+	if (isset($_POST['click_creating_contacts'])) {
+		$contact_id = $_POST['contact_id'];
+		if ($user_type == 'Admin') {
+			$results = mysqli_query($conn, "UPDATE contact SET admin_notification = 1 WHERE contact_id = $contact_id");
+			if ($results) {
+				echo 'admin';
+			}
+		} else {
+			$results = mysqli_query($conn, "UPDATE contact SET user_notification = 1 WHERE contact_id = $contact_id");
+			if ($results) {
+				echo 'user';
+			}
+		}
+		mysqli_close($conn);
+	}
+
+	//Comment Update when clicking
+	if (isset($_POST['click_comments'])) {
+		$comment_id = $_POST['comment_id'];
+		if ($user_type == 'Admin') {
+			$results = mysqli_query($conn, "UPDATE comment SET admin_notification = 1 WHERE comment_id = $comment_id");
+			if ($results) {
+				echo 'success';
+			}
+		} else {
+			$results = mysqli_query($conn, "UPDATE comment SET user_notification = 1 WHERE comment_id = $comment_id");
+			if ($results) {
+				echo 'success';
+			}
+		}
+		mysqli_close($conn);
+	}
+
+	//Remarks Update when clicking
+	if (isset($_POST['click_remarks'])) {
+		$remarks_id = $_POST['remarks_id'];
+		$results = mysqli_query($conn, "UPDATE finance_remarks SET admin_notification = 1 WHERE remarks_id = $remarks_id");
+		if ($results) {
+			echo 'success';
+		}
+		mysqli_close($conn);
+	}
+
+	//Assigned Task Update when clicking
+	if (isset($_POST['click_assigned_task'])) {
+		$task_id = $_POST['task_id'];
+		if ($user_type == 'Admin') {
+			$results = mysqli_query($conn, "UPDATE task SET admin_notification_assigned_task = 1 WHERE task_id = $task_id");
+			if ($results) {
+				echo 'success';
+			}
+		} else {
+			$results = mysqli_query($conn, "UPDATE task SET user_notification = 1 WHERE task_id = $task_id");
+			if ($results) {
+				echo 'success';
+			}
+		}
+		mysqli_close($conn);
+	}
+	// END Update each table for every click of the notification
+	//-----------------------------------------------------------------------------------------
  ?>
