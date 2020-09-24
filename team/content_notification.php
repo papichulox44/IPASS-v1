@@ -442,17 +442,26 @@
 
     function click_remarks(id){
         // alert(id);
+        array_id = id.split(",");
+        space_name = array_id[0];
+        list_name = array_id[1];
+        list_id = array_id[2];
+        get_task_id = array_id[3];
+        remarks_id = array_id[4];
+
+        // alert(space_name + ' ' + list_name + ' ' + list_id + ' ' + get_task_id + ' ' + remarks_id);
         $.ajax({
         url: 'ajax_notification.php',
         type: 'POST',
         async: false,
         data:{
-            remarks_id:id,
+            remarks_id:remarks_id,
             click_remarks: 1,  
         },
             success: function(response){
                 if (response == 'success') {
-                    document.location = 'main_transaction.php?view=All Remarks&filter=This Week';
+                    document.location = 'main_dashboard.php?space_name='+space_name+'&list_name='+list_name+'&list_id='+list_id+'&get_task_id='+get_task_id+'';
+                    // document.location = 'main_transaction.php?view=All Remarks&filter=This Week';
                 }
             }
         });

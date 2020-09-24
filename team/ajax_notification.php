@@ -191,13 +191,13 @@
 	//------------------------------------------------------------------------------------------
 	if (isset($_POST['creating_remarks'])) {
 
-		$results = mysqli_query($conn, "SELECT task.task_name, finance_remarks.admin_notification, finance_remarks.remarks_value, finance_remarks.remarks_id, `user`.fname, `user`.mname, `user`.lname FROM finance_remarks INNER JOIN `user` ON finance_remarks.remarks_by = `user`.user_id INNER JOIN task ON finance_remarks.remarks_to = task.task_id WHERE finance_remarks.admin_notification = 0 ORDER BY finance_remarks.admin_notification ASC, finance_remarks.remarks_id DESC");
+		$results = mysqli_query($conn, "SELECT task.task_name, finance_remarks.admin_notification, finance_remarks.remarks_value, finance_remarks.remarks_id, `user`.fname, `user`.mname, `user`.lname, list.list_id, list.list_name, task.task_id, space.space_name FROM finance_remarks INNER JOIN `user` ON finance_remarks.remarks_by = `user`.user_id INNER JOIN task ON finance_remarks.remarks_to = task.task_id INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id WHERE finance_remarks.admin_notification = 0 ORDER BY finance_remarks.admin_notification ASC, finance_remarks.remarks_id DESC");
 		$row = mysqli_num_rows($results);
 		if ($row) {
 	        while($rows = mysqli_fetch_array($results))
 	        {
 	            echo'
-		            <li style="cursor: pointer;" id="'.$rows['remarks_id'].'" onclick="click_remarks(this.id)">
+		            <li style="cursor: pointer;" id="'.$rows['space_name'].','.$rows['list_name'].','.$rows['list_id'].','.$rows['task_id'].','.$rows['remarks_id'].'" onclick="click_remarks(this.id)">
 		                <div class="row">
 		                    <div class="col-sm-6">
 		                        <i class="si si-pencil '; if($rows['admin_notification'] == 0){ echo 'text-danger';} else { echo 'text-success'; } echo '"></i>
