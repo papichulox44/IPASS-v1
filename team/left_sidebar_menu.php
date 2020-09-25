@@ -618,21 +618,21 @@
 <script type="text/javascript" src="../assets/js/jquery-1.6.4.min.js"></script>
 <script type="text/javascript" src="../assets/js/jquery-3.2.1.min.js"></script>
 <script type="text/javascript">
-    $(document).ready(function(){
-        //display_new_message();
-        // Display new message -------------------------------
-        var user_id = <?php echo $user_id ?>;
-        $.ajax({
-            url: 'fetch_contact.php',
-            type: 'POST', 
-            async: false,
-            data:{
-                user_id:user_id,
-                menu_new_message: 1,
-            },
-                success: function(response){
-                    $('#new_message').html(response);
-                    $("#new_message").scrollTop($("#new_message")[0].scrollHeight);
-                }
-        });
+    // $(document).ready(function(){
+    //     //display_new_message();
+    //     // Display new message -------------------------------
+    //     var user_id = <?php echo $user_id ?>;
+    //     $.ajax({
+    //         url: 'fetch_contact.php',
+    //         type: 'POST', 
+    //         async: false,
+    //         data:{
+    //             user_id:user_id,
+    //             menu_new_message: 1,
+    //         },
+    //             success: function(response){
+    //                 $('#new_message').html(response);
+    //                 $("#new_message").scrollTop($("#new_message")[0].scrollHeight);
+    //             }
+    //     });
 </script>

@@ -66,6 +66,8 @@
           $(".loader-wrapper").fadeOut("slow");
         });
         </script>
+        
+        
         <script src="../assets/js/codebase.core.min.js"></script>
         <script src="../assets/js/codebase.app.min.js"></script>
         <script>jQuery(function () {

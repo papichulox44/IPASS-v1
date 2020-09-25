@@ -19,7 +19,7 @@
 
         <!-- Page JS Plugins -->
         <script src="../assets/js/plugins/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-
+        <!-- <script async src="//static.zotabox.com/a/3/a33969f630ec552131efd6c2dec61b27/widgets.js"></script> -->
         <!-- Page JS Helpers (SlimScroll plugin) -->
         <script>jQuery(function(){ Codebase.helpers(['slimscroll']); });</script>
 
