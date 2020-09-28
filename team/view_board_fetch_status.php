@@ -1,5 +1,14 @@
-<?php                          
+<?php        
+
+    // if (isset($_POST['view_board'])) {
+
     include_once '../conn.php';
+
+    // $mode_type = $_POST['mode_type'];
+    // $user_id = $_POST['user_id'];
+    // $space_id  = $_POST['space_id'];
+    // $status_list_id   = $_POST['status_list_id'];
+    // $status_list_id = $_GET["list_id"];
     $md_primary_darker = "";
     $md_text = "text-muted";
     $md_body = "";
@@ -601,3 +610,4 @@
         }).disableSelection();
     });
 </script>
+<?php //} ?>

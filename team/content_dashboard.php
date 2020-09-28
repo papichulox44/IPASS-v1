@@ -372,6 +372,7 @@
 <div class="bs-example">
     <ul class="nav nav-tabs" id="myTab">
         <li><a data-toggle="tab" href="#sectionA">List</a></li>
+        <!-- <li><a data-toggle="tab" id="<?php echo $mode_type;?>,<?php echo $row['user_id'];?>,<?php echo $space_id;?>,<?php echo $status_list_id;?>" onclick="view_board_fetch_status(this.id)" href="#sectionB">Board <?php echo $filter_tag; ?></a></li> -->
         <li><a data-toggle="tab" href="#sectionB">Board</a></li>
         <li><a data-toggle="tab" href="#sectionC">Box</a></li>
     </ul>
@@ -465,6 +466,30 @@
 <script type="text/javascript" src="../assets/js/jquery-3.2.1.min.js"></script>
 <script src="../assets/js/jquery.min.js"></script>
 <script>
+    // function view_board_fetch_status(id){
+    //     array = id.split(",")
+    //     mode_type = array[0];
+    //     user_id = array[1];
+    //     space_id = array[2];
+    //     status_list_id = array[3];
+
+    //     $.ajax({
+    //         url: 'view_board_fetch_status.php',
+    //         type: 'POST',
+    //         async: false,
+    //         data:{
+    //             mode_type: mode_type,
+    //             user_id:user_id,
+    //             space_id: space_id,
+    //             status_list_id:status_list_id,
+    //             view_board:1,
+    //         },
+    //             success: function(response){
+    //                 $('#view_board_fetch_status').html(response);
+    //             }
+    //     });
+    // }
+
 $(document).ready(function(){
   $('a[data-toggle="tab"]').on('show.bs.tab', function(e)
   {
