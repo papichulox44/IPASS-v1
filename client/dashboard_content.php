@@ -140,7 +140,7 @@
                         <div class="block block-content shadow">
                             <!-- Progress Details -->      
                             <h2 class="content-heading" style="margin-top: -40px;">
-                                Task progress 
+                                Application Progress 
                             </h2>
                             <div class="row items-push">
                                 <?php
@@ -181,7 +181,6 @@
                                         echo '
                                         <div class="col-md-6">
                                             <div class="block block-themed text-center ribbon ribbon-bookmark ribbon-primary">
-                                                <div class="ribbon-box">Task Id: '.$fetch_task['task_id'].'</div>
                                                 <div style="background: #eee; padding: 15px;">
                                                     <div class="py-20 text-center shadow" style="background-color: #fff;">
                                                         <div class="js-pie-chart pie-chart" data-percent="'.$percentage.'" data-line-width="9" data-size="180" data-bar-color="#42a5f5" data-track-color="#e9e9e9">
@@ -200,7 +199,7 @@
                                                             <div class="col-md-12">
                                                                 <div class="row">
                                                                     <div class="text-white text-left col-md-3" style="padding: 5px 10px; color: #fff; margin-bottom: -10px; background-color: #013c4c;">
-                                                                            Space: 
+                                                                            Services: 
                                                                     </div>
                                                                     <div class="text-white text-left col-md-9" style="padding: 5px 10px; color: #fff; margin-bottom: -10px; background-color: #013c4c;">
                                                                         ';
@@ -220,7 +219,7 @@
                                                             <div class="col-md-12">
                                                                 <div class="row">
                                                                     <div class="text-white text-left col-md-3" style="padding: 5px 10px; color: #fff; margin-bottom: -10px; background-color: #013c4c;">
-                                                                            List: 
+                                                                            Application: 
                                                                     </div>
                                                                     <div class="text-white text-left col-md-9" style="padding: 5px 10px; color: #fff; margin-bottom: -10px; background-color: #013c4c;">
                                                                         ';

@@ -52,7 +52,7 @@
                                 $fetch_space = mysqli_fetch_array($select_space);
                                 echo $fetch_space['space_name'];
                             ?>  
-                            <span id="id_contact" class="badge float-right mt-5" style="font-size: 13px; color: #fff; background-color: #0d7694;">Task ID: <?php echo $task_id;?></span>
+                            <!-- <span id="id_contact" class="badge float-right mt-5" style="font-size: 13px; color: #fff; background-color: #0d7694;">Task ID: <?php echo $task_id;?></span> -->
                         </small>
                     </h2>
                     <div class="row items-push">
@@ -220,9 +220,9 @@
                                             <div class="block" style="box-shadow:0px 2px 4px #b3b3b3;">
                                                 <div class="block-header block-header-default" style="height: 30px; background-color: #77979f; ">
                                                     <h3 class="block-title text-white">';
-                                                        $new_name = substr($status_name, 0, 25); // get specific character
+                                                        $new_name = substr($status_name, 0, 15); // get specific character
 
-                                                        if(strlen($status_name) > 25)
+                                                        if(strlen($status_name) > 15)
                                                         {
                                                             echo '<span data-toggle="popover" title="'.$status_name.'" data-placement="bottom">'.$new_name.'...</span>';
                                                         }
