@@ -22,7 +22,7 @@
             $text2 = "text-white";
         }
         echo '
-        <table class="table table-bordered table-striped table-vcenter js-dataTable-full table-hover'.$table.'">
+        <table class="table table-hover table-bordered table-striped table-vcenter js-dataTable-full '.$table.'">
             <thead>
                 <tr>
                     <th>NO.</th>
@@ -64,6 +64,8 @@
                             $remarks = "WHERE finance_remarks.remarks_value = '$view_by'";
                         }
 
+                        $results_total= mysqli_query($conn, "SELECT task.task_name, Sum(finance_transaction.val_usd_total) AS usd_total, Sum(finance_transaction.val_php_total) AS php_total, Sum(finance_transaction.val_client_total) AS client_total, finance_transaction.val_date FROM task INNER JOIN finance_transaction ON finance_transaction.val_assign_to = task.task_id GROUP BY task.task_name");
+
                         $results = mysqli_query($conn, "SELECT task.task_name, space.space_name, list.list_name, finance_phase.phase_name, finance_transaction.val_date, finance_transaction.val_method, finance_transaction.val_transaction_no, finance_transaction.val_currency, finance_transaction.val_charge, finance_transaction.val_amount, finance_transaction.val_initial_amount, finance_transaction.val_usd_rate, finance_transaction.val_usd_total, finance_transaction.val_php_rate, finance_transaction.val_php_total, finance_transaction.val_client_rate, finance_transaction.val_client_total, finance_remarks.remarks_value,finance_transaction.val_assign_to, finance_transaction.val_phase_id, finance_transaction.val_id FROM finance_phase INNER JOIN finance_transaction ON finance_transaction.val_phase_id = finance_phase.phase_id INNER JOIN task ON finance_transaction.val_assign_to = task.task_id LEFT JOIN finance_remarks ON finance_remarks.remarks_phase_id = finance_transaction.val_phase_id AND finance_remarks.remarks_to = finance_transaction.val_assign_to INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id $remarks ORDER BY task.task_name ASC, finance_phase.phase_name ASC, list.list_name ASC");
                     }
                     else if($filterby == "This Week")
@@ -86,7 +88,10 @@
                         }
                         $from = current($dates); // monday
                         $to = end($dates); // sunday
-                        $results = mysqli_query($conn, "SELECT task.task_name, space.space_name, list.list_name, finance_phase.phase_name, finance_transaction.val_date, finance_transaction.val_method, finance_transaction.val_transaction_no, finance_transaction.val_currency, finance_transaction.val_charge, finance_transaction.val_amount, finance_transaction.val_initial_amount, finance_transaction.val_usd_rate, finance_transaction.val_usd_total, finance_transaction.val_php_rate, finance_transaction.val_php_total, finance_transaction.val_client_rate, finance_transaction.val_client_total, finance_remarks.remarks_value,finance_transaction.val_assign_to, finance_transaction.val_phase_id, finance_transaction.val_id FROM finance_phase INNER JOIN finance_transaction ON finance_transaction.val_phase_id = finance_phase.phase_id INNER JOIN task ON finance_transaction.val_assign_to = task.task_id LEFT JOIN finance_remarks ON finance_remarks.remarks_phase_id = finance_transaction.val_phase_id AND finance_remarks.remarks_to = finance_transaction.val_assign_to INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id $remarks AND task.task_date_created BETWEEN '$from' AND '$to' ORDER BY task.task_name ASC, finance_phase.phase_name ASC, list.list_name ASC");
+
+                        $results_total= mysqli_query($conn, "SELECT task.task_name, Sum(finance_transaction.val_usd_total) AS usd_total, Sum(finance_transaction.val_php_total) AS php_total, Sum(finance_transaction.val_client_total) AS client_total, finance_transaction.val_date FROM task INNER JOIN finance_transaction ON finance_transaction.val_assign_to = task.task_id WHERE finance_transaction.val_date BETWEEN '$from' AND '$to' GROUP BY task.task_name");
+
+                        $results = mysqli_query($conn, "SELECT task.task_name, space.space_name, list.list_name, finance_phase.phase_name, finance_transaction.val_date, finance_transaction.val_method, finance_transaction.val_transaction_no, finance_transaction.val_currency, finance_transaction.val_charge, finance_transaction.val_amount, finance_transaction.val_initial_amount, finance_transaction.val_usd_rate, finance_transaction.val_usd_total, finance_transaction.val_php_rate, finance_transaction.val_php_total, finance_transaction.val_client_rate, finance_transaction.val_client_total, finance_remarks.remarks_value,finance_transaction.val_assign_to, finance_transaction.val_phase_id, finance_transaction.val_id FROM finance_phase INNER JOIN finance_transaction ON finance_transaction.val_phase_id = finance_phase.phase_id INNER JOIN task ON finance_transaction.val_assign_to = task.task_id LEFT JOIN finance_remarks ON finance_remarks.remarks_phase_id = finance_transaction.val_phase_id AND finance_remarks.remarks_to = finance_transaction.val_assign_to INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id $remarks AND finance_transaction.val_date BETWEEN '$from' AND '$to' ORDER BY task.task_name ASC, finance_phase.phase_name ASC, list.list_name ASC");
 
                     }
                     else if($filterby == "Custom Date")
@@ -101,7 +106,9 @@
                             $remarks = "AND finance_remarks.remarks_value = '$view_by'";
                         }
 
-                        $results = mysqli_query($conn, "SELECT task.task_name, space.space_name, list.list_name, finance_phase.phase_name, finance_transaction.val_date, finance_transaction.val_method, finance_transaction.val_transaction_no, finance_transaction.val_currency, finance_transaction.val_charge, finance_transaction.val_amount, finance_transaction.val_initial_amount, finance_transaction.val_usd_rate, finance_transaction.val_usd_total, finance_transaction.val_php_rate, finance_transaction.val_php_total, finance_transaction.val_client_rate, finance_transaction.val_client_total, finance_remarks.remarks_value,finance_transaction.val_assign_to, finance_transaction.val_phase_id, finance_transaction.val_id FROM finance_phase INNER JOIN finance_transaction ON finance_transaction.val_phase_id = finance_phase.phase_id INNER JOIN task ON finance_transaction.val_assign_to = task.task_id LEFT JOIN finance_remarks ON finance_remarks.remarks_phase_id = finance_transaction.val_phase_id AND finance_remarks.remarks_to = finance_transaction.val_assign_to INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id $remarks AND task.task_date_created BETWEEN '$get_from' AND '$get_to' ORDER BY task.task_name ASC, finance_phase.phase_name ASC, list.list_name ASC");
+                        $results_total= mysqli_query($conn, "SELECT task.task_name, Sum(finance_transaction.val_usd_total) AS usd_total, Sum(finance_transaction.val_php_total) AS php_total, Sum(finance_transaction.val_client_total) AS client_total, finance_transaction.val_date FROM task INNER JOIN finance_transaction ON finance_transaction.val_assign_to = task.task_id WHERE finance_transaction.val_date BETWEEN '$get_from' AND '$get_to' GROUP BY task.task_name");
+
+                        $results = mysqli_query($conn, "SELECT task.task_name, space.space_name, list.list_name, finance_phase.phase_name, finance_transaction.val_date, finance_transaction.val_method, finance_transaction.val_transaction_no, finance_transaction.val_currency, finance_transaction.val_charge, finance_transaction.val_amount, finance_transaction.val_initial_amount, finance_transaction.val_usd_rate, finance_transaction.val_usd_total, finance_transaction.val_php_rate, finance_transaction.val_php_total, finance_transaction.val_client_rate, finance_transaction.val_client_total, finance_remarks.remarks_value,finance_transaction.val_assign_to, finance_transaction.val_phase_id, finance_transaction.val_id FROM finance_phase INNER JOIN finance_transaction ON finance_transaction.val_phase_id = finance_phase.phase_id INNER JOIN task ON finance_transaction.val_assign_to = task.task_id LEFT JOIN finance_remarks ON finance_remarks.remarks_phase_id = finance_transaction.val_phase_id AND finance_remarks.remarks_to = finance_transaction.val_assign_to INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id $remarks AND finance_transaction.val_date BETWEEN '$get_from' AND '$get_to' ORDER BY task.task_name ASC, finance_phase.phase_name ASC, list.list_name ASC");
                     }
                 }
 
@@ -314,7 +321,7 @@
                         echo '
                     </tr>'; 
                 }
-                $results_total= mysqli_query($conn, "SELECT task.task_name, Sum(finance_transaction.val_usd_total) AS usd_total, Sum(finance_transaction.val_php_total) AS php_total, Sum(finance_transaction.val_client_total) AS client_total FROM task INNER JOIN finance_transaction ON finance_transaction.val_assign_to = task.task_id GROUP BY task.task_name");
+                
                 while($rows = mysqli_fetch_array($results_total))
                 { 
                     $IPASS_total_USD += $rows['usd_total'];
@@ -928,7 +935,7 @@
         $remarks_value = $_POST['remarks_value'];
 
         // echo $remarks_value;
-        $update_remarks = mysqli_query($conn, "INSERT INTO finance_remarks values ('', '$user_id', '$task_id', '$phase_id', '$remarks_value')") or die(mysqli_error());
+        $update_remarks = mysqli_query($conn, "INSERT INTO finance_remarks values ('', '$user_id', '$task_id', '$phase_id', '$remarks_value','','')") or die(mysqli_error());
 
     }
     //End add Remarks Content
@@ -1286,6 +1293,56 @@
                     </tbody>
                 </table>
             </div>
+        ';
+    }
+
+    if (isset($_POST['view_list_of_email'])) {
+        
+        echo '
+        
+        <div class="col-lg-12" style="overflow: auto; height: 877px;">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped text-white">
+                    <tr>
+                        <th class="text-right">Add Email:</th>
+                        <th class="text-center"><input type="email" class="text-center form-control" placeholder="Email Name" id="add_email_value"></input></th>
+                        <th class="text-center"><button class="btn btn-primary" onclick="add_email()">Add</button></th>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped text-white">
+                <thead>
+                    <tr>
+                        <th>NO.</th>
+                        <th class="text-center">Email</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                    <tbody>';
+                        $select_remittance = mysqli_query($conn, "SELECT * FROM tbl_list_email ORDER BY list_email_name");
+                        $count = 1;
+                        while ($data = mysqli_fetch_array($select_remittance)) {
+                            $list_email_id = $data['list_email_id'];
+                            echo '
+                                <tr style="cursor: pointer;">
+                                    <td class="text-left">'.$count++.'</td>
+                                    <td class="text-center">
+                                    <textarea rows="2" class="form-control text-center" id="list_email_name'.$list_email_id.'">'.$data['list_email_name'].'</textarea>
+                                    </td>
+                                    <td class="text-center"><button class="btn btn-success" id="'.$list_email_id.'" onclick="update_list_of_email(this.id)">Update</button>
+                                        <button class="btn btn-danger" id="'.$list_email_id.'" onclick="delete_list_of_email(this.id)">Delete</button>
+                                        <button class="btn btn-primary" id="'.$list_email_id.'" onclick="set_list_of_email(this.id)">Set Email</button>
+                                    </td>
+                                </tr>
+                            ';       
+                        }
+                    echo '
+                    </tbody>
+                </table>
+            </div>
+        </div>
         ';
     }
 

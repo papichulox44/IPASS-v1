@@ -607,6 +607,7 @@
                 </li>                       
             </ul>
         </div>
+
         <!-- END MEMBER Side Navigation -->
     <?php }
 ?>
@@ -636,3 +637,5 @@
     //             }
     //     });
 </script>
+
+

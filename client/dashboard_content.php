@@ -110,9 +110,9 @@
 
                 <div class="block block-mode-hidden shad">
                     <div class="block-header block-header-default" style="background-color: #0d7694;">
-                        <h1 class="block-title text-white">Company Information</h1>
+                        <h1 class="block-title text-white">Check the latest information here! <span class="badge badge-danger" id="count_latest_noti"></span></h1>
                         <div class="block-options">
-                            <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle"></button>
+                            <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle" onclick="latest_noti()"></button>
                         </div> 
                     </div>
                     <div class="block-content"> 
@@ -277,3 +277,41 @@
     <!-- END Page Content -->
 </main>
 <!-- END Main Container -->
+<script type="text/javascript">
+    count_latest_noti();
+
+    function count_latest_noti(){
+
+        $.ajax({
+        url: 'ajax.php',
+        type: 'POST',
+        async: false,
+        data:{
+            count_latest_noti: 1,
+        },
+            success: function(response){
+                $('#count_latest_noti').html(response);
+            }
+        });
+    }
+
+    function latest_noti(){
+        // alert('Nag alert sya');
+        $.ajax({
+        url: 'ajax.php',
+        type: 'POST',
+        async: false,
+        data:{
+            latest_noti: 1,
+        },
+            success: function(response){
+                // $('#count_latest_noti').html(response);
+                if (response == 'success') {
+                    count_latest_noti();
+                } 
+            }
+        });
+    }
+
+
+</script>

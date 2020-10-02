@@ -180,6 +180,18 @@
 
                             <div class="block-content <?php echo $md_table_body;?> mb-20" id="view_company_information"></div>
 
+                            <div class="row row-deck">
+					            <div class="col-lg-12">
+					                <div class="block block-rounded shadow bg-gray-darker">
+					                    <div class="block-header content-heading bg-gray-darker">
+					                        <h3 class="block-title text-white d-none d-sm-block" style="cursor: pointer;" id="hide_show_list_of_email">List of Email <i class="si si-arrow-down"></i> </h3>
+					                    </div>
+					                </div>
+					            </div>
+					        </div>
+
+                            <div class="block-content <?php echo $md_table_body;?> mb-20" id="list_of_email"></div>
+
                         </div>
                     </div>
                 </div>
@@ -336,6 +348,7 @@
 			display_currency();
 			view_remittance();
 			view_company_information();
+			view_list_of_email();
 			$('#create_currency').on('click', function(){
 				currency_id = document.getElementById("currency_id").value;
 				currency_name = document.getElementById("currency_name").value;
@@ -545,6 +558,12 @@
 		  });
 		});
 
+		$(document).ready(function(){
+		  $("#hide_show_list_of_email").click(function(){
+		    $("#list_of_email").slideToggle("slow");
+		  });
+		});
+
 		// VIEW ALL Remittance --------------------------
         function view_remittance()
         {
@@ -578,6 +597,20 @@
             });
         }
         
+        function view_list_of_email()
+        {
+            $.ajax({
+                url: 'ajax_transaction.php',
+                type: 'POST',
+                async: false,
+                data:{
+                    view_list_of_email: 1,
+                },
+                    success: function(response){
+                        $('#list_of_email').html(response);
+                    }
+            });
+        }
 
         function update_remittance(id)
         {   

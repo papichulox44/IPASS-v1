@@ -1722,9 +1722,7 @@ $(document).ready(function(){
                             <div class="dropdown-menu dropdown-menu-left shadow">
                                 <div data-toggle="slimscroll" data-height="350px" data-color="#42a5f5" data-opacity="1" data-always-visible="true" style="background-color: #fff; padding: 5px;">
                                     <textarea class="form-control mb-15" id="email_content" rows="12" style="display: none;"></textarea>
-                                    <span id="view_email_name">
-                                        <!-- asd -->
-                                    </span>
+                                    <span id="view_email_name"></span>
                                 </div>
                             </div>
                         </div>

@@ -1219,10 +1219,16 @@
         $phase_id = $_POST['phase_id'];
         $remarks_value = $_POST['remarks_value'];
 
+        // echo $user_id. ' '.$task_id. ' '.$phase_id. ' '.$remarks_value;
         $select_remarks = mysqli_query($conn, "SELECT * FROM finance_remarks WHERE remarks_to = '$task_id' AND remarks_phase_id = '$phase_id'");
+        // $count = mysqli_num_rows($select_remarks);
+        // echo $count;
         $fetch_remarks = mysqli_fetch_array($select_remarks);
+        // echo $fetch_remarks;
         $remarks_id = $fetch_remarks['remarks_id'];
+        // echo $remarks_id;
         $count = mysqli_num_rows($select_remarks);
+        // echo $count;
         if($count == 1)
         {
             mysqli_query($conn, "UPDATE `finance_remarks` SET `remarks_by` = '$user_id', `remarks_value` = '$remarks_value' WHERE remarks_id = '$remarks_id'") or die(mysqli_error());
@@ -1230,7 +1236,7 @@
         }
         else
         {
-            mysqli_query($conn,"INSERT INTO finance_remarks values ('','$user_id','$task_id','$phase_id','$remarks_value')") or die(mysqli_error());
+            mysqli_query($conn,"INSERT INTO finance_remarks values (' ','$user_id','$task_id','$phase_id','$remarks_value',' ',' ')") or die(mysqli_error());
             echo 'insert';
         }
     }

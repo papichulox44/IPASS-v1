@@ -1,4 +1,5 @@
 <?php
+    session_start();
     include_once '../conn.php';
     if(isset($_POST['update_profile']))
     { 
@@ -312,5 +313,25 @@
             </table>
         </div>
         ';
+    }
+
+    if (isset($_POST['count_latest_noti'])) {
+        
+        $query = mysqli_query($conn, "SELECT Count(tbl_information.info_noti) AS count FROM tbl_information WHERE info_noti = 0");
+        $count = mysqli_fetch_array($query);
+        if ($query) {
+            echo $count['count'];
+        }
+        mysqli_close($conn);
+    }
+
+    if (isset($_POST['latest_noti'])) {
+        
+        $query = mysqli_query($conn, "UPDATE tbl_information set info_noti = 1 WHERE info_noti = 0");
+        if ($query) {
+            echo 'success';
+            
+        }
+        mysqli_close($conn);
     }
 ?>
