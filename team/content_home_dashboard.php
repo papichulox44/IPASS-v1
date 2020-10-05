@@ -558,11 +558,7 @@
 		  });
 		});
 
-		$(document).ready(function(){
-		  $("#hide_show_list_of_email").click(function(){
-		    $("#list_of_email").slideToggle("slow");
-		  });
-		});
+		
 
 		// VIEW ALL Remittance --------------------------
         function view_remittance()
@@ -596,7 +592,14 @@
                     }
             });
         }
-        
+
+        //  All function list email -------------------------------------------------------------------------------------------------
+        $(document).ready(function(){
+		  $("#hide_show_list_of_email").click(function(){
+		    $("#list_of_email").slideToggle("slow");
+		  });
+		});
+
         function view_list_of_email()
         {
             $.ajax({
@@ -611,6 +614,106 @@
                     }
             });
         }
+
+        function add_email()
+        {   
+            add_email_value = document.getElementById("add_email_value").value;
+
+            if (add_email_value == '') {
+            	alert('Please inpute email!');
+            } else {
+	            if (confirm('Are you sure?')) {
+	                $.ajax({
+	                    url: 'ajax_transaction.php',
+	                    type: 'POST',
+	                    async: false,
+	                    data:{
+	                        add_email_value:add_email_value,
+	                        add_email: 1,
+	                    },
+	                        success: function(response){
+	                            if (response == 'success') {
+	                                alert('Successfully Added!');
+	                                view_list_of_email();
+	                            }
+	                        }
+	                });
+	            }
+	        }
+        }
+
+        function delete_list_of_email(id)
+        {   
+            // alert(id);
+            if (confirm('Are you sure?')) {
+                $.ajax({
+                    url: 'ajax_transaction.php',
+                    type: 'POST',
+                    async: false,
+                    data:{
+                        list_of_email_id:id,
+                        delete_list_of_email: 1,
+                    },
+                        success: function(response){
+                            // $('#view_remittance').html(response);
+                            if (response == 'success') {
+                                alert('Successfully Deleted!');
+                                view_list_of_email();
+                            }
+                        }
+                });
+            }
+        }
+
+        function update_list_of_email(id)
+        {   
+            list_email_name = document.getElementById("list_email_name" + id).value;
+
+            // alert(id);
+            if (confirm('Are you sure?')) {
+                $.ajax({
+                    url: 'ajax_transaction.php',
+                    type: 'POST',
+                    async: false,
+                    data:{
+                        list_email_id:id,
+                        list_email_name:list_email_name,
+                        update_list_of_email: 1,
+                    },
+                        success: function(response){
+                            // $('#view_remittance').html(response);
+                            if (response == 'success') {
+                                alert('Successfully Update!');
+                                view_list_of_email();
+                            }
+                        }
+                });
+            }
+        }
+
+        function set_list_of_email(id)
+        {
+        	// alert(id);
+        	if (confirm('Are you sure?')) {
+                $.ajax({
+                    url: 'ajax_transaction.php',
+                    type: 'POST',
+                    async: false,
+                    data:{
+                        set_email:id,
+                        set_list_of_email: 1,
+                    },
+                        success: function(response){
+                            // $('#view_remittance').html(response);
+                            if (response == 'success') {
+                                alert('Successfully Set!');
+                                view_list_of_email();
+                            }
+                        }
+                });
+            }
+        }
+        // END  All function list email -------------------------------------------------------------------------------------------------
 
         function update_remittance(id)
         {   
@@ -1093,6 +1196,18 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row row-deck">
+			            <div class="col-lg-12">
+			                <div class="block block-rounded shadow bg-gray-darker">
+			                    <div class="block-header content-heading bg-gray-darker">
+			                        <h3 class="block-title text-white d-none d-sm-block" style="cursor: pointer;" id="hide_show_list_of_email_member">List of Email <i class="si si-arrow-down"></i> </h3>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+
+                    <div class="block-content <?php echo $md_table_body;?> mb-20" id="list_of_email_member"></div>
 		    </div>
 		    <!-- END Page Content -->
 		</main>
@@ -1101,6 +1216,8 @@
 ?>
 
 <script type="text/javascript">
+	view_list_of_email_member();
+
     function view_task(id)
     {
         new_id = id.replace("taskid_", "");
@@ -1110,4 +1227,48 @@
 
         document.location = 'main_dashboard.php?space_name='+space_name+'&list_name='+list_name+'&list_id='+list_id+'&get_task_id='+new_id+'';
     }
+
+     $(document).ready(function(){
+		  $("#hide_show_list_of_email_member").click(function(){
+		    $("#list_of_email_member").slideToggle("slow");
+		  });
+		});
+
+        function view_list_of_email_member()
+        {
+            $.ajax({
+                url: 'ajax_transaction.php',
+                type: 'POST',
+                async: false,
+                data:{
+                    view_list_of_email_member: 1,
+                },
+                    success: function(response){
+                        $('#list_of_email_member').html(response);
+                    }
+            });
+        }
+
+       	function set_list_of_email_member(id)
+        {
+        	// alert(id);
+        	if (confirm('Are you sure?')) {
+                $.ajax({
+                    url: 'ajax_transaction.php',
+                    type: 'POST',
+                    async: false,
+                    data:{
+                        set_email:id,
+                        set_list_of_email: 1,
+                    },
+                        success: function(response){
+                            // $('#view_remittance').html(response);
+                            if (response == 'success') {
+                                alert('Successfully Set!');
+                                view_list_of_email_member();
+                            }
+                        }
+                });
+            }
+        }
 </script>

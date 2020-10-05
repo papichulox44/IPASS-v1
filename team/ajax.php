@@ -130,12 +130,12 @@
         $to = $_POST['test_email'];
         $subject = $_POST['email_subject'];
         $email_content = $_POST['email_content'];
+        $from = 'cesteam@ipassprocessing.com';
 
         // Message can be change base on template selected
         $message = '
             <div style="padding: 20px 0px 0px 0px; background-color: #00465a;" class="shadow">
-                <img src="http://ipasspmt.site/assets/media/photos/IPASS-Logo-05.png" style="height: 120px; padding: 0px 0px 30px 0px; display: block; margin-left: auto;
-              margin-right: auto;">
+              <img src="../assets/media/photos/header_email.png" style="width: 100%;">
                 <table width="100%" border="0" cellspacing="0" cellpadding="20" style="background-color: #47bcde; color: #5a5f61; font-family:verdana;">
                     <tr>
                         <td style="background-color: #fff; border-top: 20px solid #006786; border-bottom: 20px solid #006786;">

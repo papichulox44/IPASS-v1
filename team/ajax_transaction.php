@@ -1,4 +1,5 @@
 <?php
+    session_start();
     include("../conn.php");
     // ----------------------- FETCH ALL TRANSACTION -----------------------
     if(isset($_POST['view_all_transaction']))
@@ -1296,11 +1297,16 @@
         ';
     }
 
+    // All query for list of email ------------------------------------------------------------------------------------------------------
     if (isset($_POST['view_list_of_email'])) {
-        
+        if (isset($_SESSION['set_email'])) {
+            $set_email = $_SESSION['set_email'];
+        } else {
+            $set_email = '';
+        }
         echo '
-        
         <div class="col-lg-12" style="overflow: auto; height: 877px;">
+        <label>Email: '.$set_email.'</label>
             <div class="table-responsive">
                 <table class="table table-bordered table-striped text-white">
                     <tr>
@@ -1333,7 +1339,7 @@
                                     </td>
                                     <td class="text-center"><button class="btn btn-success" id="'.$list_email_id.'" onclick="update_list_of_email(this.id)">Update</button>
                                         <button class="btn btn-danger" id="'.$list_email_id.'" onclick="delete_list_of_email(this.id)">Delete</button>
-                                        <button class="btn btn-primary" id="'.$list_email_id.'" onclick="set_list_of_email(this.id)">Set Email</button>
+                                        <button class="btn btn-primary" id="'.$data['list_email_name'].'" onclick="set_list_of_email(this.id)">Set Email</button>
                                     </td>
                                 </tr>
                             ';       
@@ -1345,6 +1351,95 @@
         </div>
         ';
     }
+
+    if (isset($_POST['view_list_of_email_member'])) {
+        if (isset($_SESSION['set_email'])) {
+            $set_email = $_SESSION['set_email'];
+        } else {
+            $set_email = '';
+        }
+        echo '
+        <div class="col-lg-12" style="overflow: auto; height: 877px;">
+        <label>Email: '.$set_email.'</label>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped text-white">
+                <thead>
+                    <tr>
+                        <th>NO.</th>
+                        <th class="text-center">Email</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                    <tbody>';
+                        $select_remittance = mysqli_query($conn, "SELECT * FROM tbl_list_email ORDER BY list_email_name");
+                        $count = 1;
+                        while ($data = mysqli_fetch_array($select_remittance)) {
+                            $list_email_id = $data['list_email_id'];
+                            echo '
+                                <tr style="cursor: pointer;">
+                                    <td class="text-left">'.$count++.'</td>
+                                    <td class="text-center">
+                                    <textarea readonly rows="2" class="form-control text-center" id="list_email_name'.$list_email_id.'">'.$data['list_email_name'].'</textarea>
+                                    </td>
+                                    <td class="text-center">
+                                        <button class="btn btn-primary" id="'.$data['list_email_name'].'" onclick="set_list_of_email_member(this.id)">Set Email</button>
+                                    </td>
+                                </tr>
+                            ';       
+                        }
+                    echo '
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        ';
+    }
+
+    if (isset($_POST['add_email'])) {
+
+        $add_email_value = $_POST['add_email_value'];
+
+        $add_email = mysqli_query($conn, "INSERT INTO tbl_list_email VALUES ('', '$add_email_value')") or die(mysqli_error());
+        if ($add_email) {
+            echo 'success';
+        }
+        mysqli_close($conn);
+    }
+
+    if (isset($_POST['delete_list_of_email'])) {
+
+        $list_of_email_id = $_POST['list_of_email_id'];
+
+        $delete_email = mysqli_query($conn, "DELETE from tbl_list_email WHERE list_email_id = '$list_of_email_id'") or die(mysqli_error());
+        if ($delete_email) {
+            echo 'success';
+        }
+        mysqli_close($conn);
+    }
+
+     if (isset($_POST['update_list_of_email'])) {
+
+        $list_email_id = $_POST['list_email_id'];
+        $list_email_name = $_POST['list_email_name'];
+
+        $update_email = mysqli_query($conn, "UPDATE tbl_list_email SET list_email_name = '$list_email_name' WHERE list_email_id = '$list_email_id'") or die(mysqli_error());
+        if ($update_email) {
+            echo 'success';
+        }
+        mysqli_close($conn);
+    }
+
+    if (isset($_POST['set_list_of_email'])) {
+
+        $_SESSION['set_email'] = $_POST['set_email'];
+
+        // echo $_SESSION['set_email'];
+        if ($_SESSION['set_email']) {
+            echo 'success';
+        }
+        mysqli_close($conn);
+    }
+    //END All query for list of email ------------------------------------------------------------------------------------------------------
 
     if (isset($_POST['update_remittance'])) {
 

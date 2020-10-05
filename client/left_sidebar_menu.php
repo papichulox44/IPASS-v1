@@ -154,7 +154,7 @@
                 <a class="nav-submenu" href="#" data-toggle="nav-submenu"><?php echo $fetch_select_space['space_name'];?></a>
                 <ul>
                     <li>
-                        <a  style="background-color: #20527b; padding-left: 15px; margin-left: -15px;" href="space.php?space=<?php echo $fetch_select_space['space_id'];?>&list=<?php echo $fetch_select_list['list_id'];?>&status=<?php echo $fetch_select_status['status_id'];?>"><?php echo $fetch_select_list['list_name'];?></a>
+                        <a style="background-color: #20527b; padding-left: 15px; margin-left: -15px;" href="space.php?space=<?php echo $fetch_select_space['space_id'];?>&list=<?php echo $fetch_select_list['list_id'];?>&status=<?php echo $fetch_select_status['status_id'];?>"><?php echo $fetch_select_list['list_name'];?></a>
                     </li> 
                 </ul>
             </li> 
