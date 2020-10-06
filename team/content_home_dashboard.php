@@ -1197,7 +1197,7 @@
                         </div>
                     </div>
 
-                    <div class="row row-deck">
+                    <!-- <div class="row row-deck">
 			            <div class="col-lg-12">
 			                <div class="block block-rounded shadow bg-gray-darker">
 			                    <div class="block-header content-heading bg-gray-darker">
@@ -1207,7 +1207,7 @@
 			            </div>
 			        </div>
 
-                    <div class="block-content <?php echo $md_table_body;?> mb-20" id="list_of_email_member"></div>
+                    <div class="block-content <?php echo $md_table_body;?> mb-20" id="list_of_email_member"></div> -->
 		    </div>
 		    <!-- END Page Content -->
 		</main>

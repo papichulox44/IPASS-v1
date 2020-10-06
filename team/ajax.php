@@ -1,4 +1,5 @@
 <?php
+    session_start();
     include("../conn.php");
 
     // ----------------------- DISPLAY ASSIGN EMAIL -----------------------
@@ -374,10 +375,17 @@
 
         $select_task = mysqli_query($conn, "SELECT email_format.email_name, contact.contact_email, email_format.email_id, email_format.email_subject, email_format.email_name FROM email_assign INNER JOIN email_format ON email_assign.assign_email_id = email_format.email_id INNER JOIN task ON task.task_list_id = email_assign.assign_list_id INNER JOIN contact ON contact.contact_id = task.task_contact WHERE task.task_id = '$task_id'");
 
+        if (isset($_SESSION['set_email'])) {
+            $set_email = $_SESSION['set_email'];
+        } else {
+            $set_email = '';
+        }
+        echo '<label class="form-control">Email: '.$set_email.'</label>';
         while($result_findstatus = mysqli_fetch_array($select_task))
         {
+            $email_name = $result_findstatus['email_name'];
             echo '<button type="button" class="dropdown-item" id="'.$result_findstatus['email_id'].'" onclick="fetch_email_name(this.id)">
-                      <i class="fa fa-square mr-5" style="color: #3f9ce8;"></i>'.$result_findstatus['email_name'].'
+                      <i class="fa fa-square mr-5" style="color: #3f9ce8;"></i>'.substr($email_name, 0, 45).'...
             </button>
             <input id="contact_email'.$result_findstatus['email_id'].'" type="hidden" value="'.$result_findstatus['contact_email'].'"></input>
             <input id="email_subject'.$result_findstatus['email_id'].'" type="hidden" value="'.$result_findstatus['email_subject'].'"></input>
@@ -2963,8 +2971,7 @@
                         </td>
                         <td colspan="3">
                                 <div style="padding: 20px 0px 0px 0px; background-color: #00465a; max-height:300px; overflow:auto;" class="shadow">
-                                    <img src="http://ipasspmt.site/assets/media/photos/IPASS-Logo-05.png" style="height: 120px; padding: 0px 0px 30px 0px; display: block; margin-left: auto;
-                                  margin-right: auto;">
+                                    <img src="http://ipasspmt.site/assets/media/photos/email_header.png" style="width: 100%;">
                                     <table width="100%" border="0" cellspacing="0" cellpadding="20" style="background-color: #47bcde; color: #5a5f61; font-family:verdana;">
                                         <tr>
                                             <td style="background-color: #fff; border-top: 20px solid #006786; border-bottom: 20px solid #006786;">

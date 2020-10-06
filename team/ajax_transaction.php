@@ -1339,7 +1339,6 @@
                                     </td>
                                     <td class="text-center"><button class="btn btn-success" id="'.$list_email_id.'" onclick="update_list_of_email(this.id)">Update</button>
                                         <button class="btn btn-danger" id="'.$list_email_id.'" onclick="delete_list_of_email(this.id)">Delete</button>
-                                        <button class="btn btn-primary" id="'.$data['list_email_name'].'" onclick="set_list_of_email(this.id)">Set Email</button>
                                     </td>
                                 </tr>
                             ';       

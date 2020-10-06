@@ -701,7 +701,6 @@ $(document).ready(function(){
             display_requirement_comment();
             display_status();
             display_task_info();
-            display_email_name();
             fill_input();
             display_email_history_table();
         });
@@ -784,7 +783,7 @@ $(document).ready(function(){
             display_requirement_comment();
             display_status();
             display_task_info();
-            display_email_name();
+            
             fill_input();
             display_email_history_table();
         });
@@ -976,7 +975,8 @@ $(document).ready(function(){
     }
 
     function fetch_email_name(id)
-    {
+    {   
+        // alert ('');
         user_id = <?php echo $row['user_id']; ?>;
         var task_id = document.getElementById("task_id_when_click").value;
         var contact_email = document.getElementById("contact_email" + id).value;
@@ -1718,13 +1718,14 @@ $(document).ready(function(){
                             </div>
                         </div>
                         <div class="dropdown mr-5">
-                            <button type="button" class="btn btn-sm mb-5 dark-blue" data-toggle="dropdown"><i class="si si-envelope"></i></button>
+                            <button type="button"  data-dismiss="modal" class="btn btn-sm mb-5 dark-blue" data-toggle="modal" data-target="#modal-popout"><i class="si si-envelope"></i></button>
+                            <!-- <button type="button" class="btn btn-sm mb-5 dark-blue" data-toggle="dropdown"><i class="si si-envelope"></i></button>
                             <div class="dropdown-menu dropdown-menu-left shadow">
                                 <div data-toggle="slimscroll" data-height="350px" data-color="#42a5f5" data-opacity="1" data-always-visible="true" style="background-color: #fff; padding: 5px;">
                                     <textarea class="form-control mb-15" id="email_content" rows="12" style="display: none;"></textarea>
                                     <span id="view_email_name"></span>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="dropdown mr-5">
                             <button class="btn btn-sm dark-blue" data-toggle="dropdown"><i class="si si si-flag"></i></button>
@@ -5997,4 +5998,85 @@ function display_assign_field_phase(){
         </div>
     </div>
     <!-- END Delete Modal -->
+
+    <!-- Pop Out Modal -->
+        <div class="modal fade" id="modal-popout" tabindex="-1" role="dialog" aria-labelledby="modal-popout" aria-hidden="true" data-backdrop="static">
+            <div class="modal-dialog modal-dialog-popout" role="document">
+                <div class="modal-content">
+                    <div class="block block-themed block-transparent mb-0">
+                        <!-- <div class="block-header bg-primary-dark"> -->
+                        <div class="block-header" style="background-color: #045D71;">
+                            <h3 class="block-title"><button style="background-color: #045D71;" onclick="go_back()"><</button> Select Email Sender</h3>
+                            <div class="block-options">
+                                <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                    <i class="si si-close"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="block-content">
+                            
+                        </div>
+                    </div>
+                            <div class="col-md-12">
+                                <select class="form-control" id="email_name" onchange="email_selection(this)">
+                                    <option disabled="" selected="">Please select email</option>
+                                    <?php 
+                                    $query = mysqli_query($conn, "SELECT * FROM tbl_list_email ORDER BY list_email_name");
+
+                                    while ($data = mysqli_fetch_array($query)) {
+                                        echo '
+                                            <option value="'.$data['list_email_name'].'">'.$data['list_email_name'].'</option>
+                                        ';
+                                    }
+                                     ?>
+                                    <!-- <option value="1">Option #1</option>
+                                    <option value="2">Option #2</option>
+                                    <option value="3">Option #3</option> -->
+                                </select>
+                            </div><br>
+                            <textarea class="form-control mb-15" id="email_content" rows="12" style="display: none;"></textarea>
+                            <span id="view_email_name"></span>
+                    <div class="modal-footer">
+                        <!-- <button type="button" class="btn btn-alt-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-alt-success" data-dismiss="modal">
+                            <i class="fa fa-check"></i> Perfect
+                        </button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END Pop Out Modal -->
+
+<script>
+    function email_selection(select)
+    {   
+        email_name = (select.options[select.selectedIndex].value);
+        // alert(email_name);
+
+        $.ajax({
+        url: 'ajax_transaction.php',
+        type: 'POST',
+        async: false,
+        data:{
+            set_email:email_name,
+            set_list_of_email: 1,
+        },
+            success: function(response){
+                if (response == 'success') {
+                    // alert('Na save ang session');
+                    display_email_name();
+                    // alert('<?php echo $_SESSION['set_email']; ?>');
+                }
+            }
+        });
+    }
+
+    function go_back()
+    {
+        $('#modal-popout').modal("hide");
+        $('#modal-extra-large').modal("show");
+    }
+</script>
+
 <!-- End board view modal -->
+ 
