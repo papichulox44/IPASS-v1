@@ -371,7 +371,7 @@
 
 <div class="bs-example">
     <ul class="nav nav-tabs" id="myTab">
-        <li><a data-toggle="tab" href="#sectionA">List</a></li>
+        <li><a data-toggle="tab" href="#sectionA">List </a></li>
         <!-- <li><a data-toggle="tab" id="<?php echo $mode_type;?>,<?php echo $row['user_id'];?>,<?php echo $space_id;?>,<?php echo $status_list_id;?>" onclick="view_board_fetch_status(this.id)" href="#sectionB">Board <?php echo $filter_tag; ?></a></li> -->
         <li><a data-toggle="tab" href="#sectionB">Board</a></li>
         <li><a data-toggle="tab" href="#sectionC">Box</a></li>

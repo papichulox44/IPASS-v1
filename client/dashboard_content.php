@@ -13,7 +13,7 @@
         <div class="row">            
             <div class="col-md-12">
                 <div class="block block-mode-hidden shad">
-                    <div class="block-header block-header-default" style="background-color: #0d7694;">
+                    <div class="block-header block-header-default" style="background-color: #5CC6D0;">
                         <h1 class="block-title text-white">My contact</h1>
                         <div class="block-options">
                             <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle"></button>
@@ -21,7 +21,7 @@
                     </div>
                     <div class="block-content">    
                         <h2 class="content-heading" style="margin-top: -40px;">
-                            <span id="id_contact" class="badge float-right mt-5" style="font-size: 13px; color: #fff; background-color: #0d7694;">Contact ID: <?php echo $row['contact_id'];?></span>
+                            <!-- <span id="id_contact" class="badge float-right mt-5" style="font-size: 13px; color: #fff; background-color: #0d7694;">Contact ID: <?php echo $row['contact_id'];?></span> -->
                             Personal Details
                         </h2>
                         <div class="row items-push">
@@ -34,7 +34,7 @@
                                             <img class="prof" src="../assets/media/photos/avatar.jpg">
                                         <?php endif; ?>  
                                     </div>
-                                    <div class="block-content block-content-full block-content-sm" style="background-color: #0d7694;">
+                                    <div class="block-content block-content-full block-content-sm" style="background-color: #5CC6D0;">
                                         <div class="font-w600 text-white mb-5"><?php echo $row['contact_fname'] . " " . $row['contact_mname'] . " " . $row['contact_lname'];?></div>
                                         <div class="font-size-sm text-white-op">Contact Name</div>
                                     </div>
@@ -109,7 +109,7 @@
                 </div>
 
                 <div class="block block-mode-hidden shad">
-                    <div class="block-header block-header-default" style="background-color: #0d7694;">
+                    <div class="block-header block-header-default" style="background-color: #5CC6D0;">
                         <h1 class="block-title text-white">Check the latest information here! <span class="badge badge-danger" id="count_latest_noti"></span></h1>
                         <div class="block-options">
                             <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle" onclick="latest_noti()"></button>
@@ -193,7 +193,7 @@
                                                             </span>
                                                         </div>
                                                         <br>
-                                                        <div class="block-content-full block-content-sm" style="background-color: #0d7694;">
+                                                        <div class="block-content-full block-content-sm" style="background-color: #5CC6D0;">
                                                             <div class="font-w600 text-white" style="font-size: 70px;">'.$percentage.'%</div>
                                                             <div class="text-uppercase text-white" style="margin-top: -16px;">Complete</div>
                                                             <div class="col-md-12">

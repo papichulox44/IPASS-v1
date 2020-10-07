@@ -80,7 +80,7 @@
                                     <?php 
                                         if($percentage == 100)
                                         {
-                                            echo '<div class="block-content-full block-content-sm" style="background-color: #0d7694;">
+                                            echo '<div class="block-content-full block-content-sm" style="background-color: #5CC6D0;">
                                                     <div class="font-w600 text-white" style="font-size: 70px;">'.$percentage.'%</div>
                                                     <div class="text-uppercase text-white" style="margin-top: -16px;">Complete</div>';
                                                     $select_status = mysqli_query($conn, "SELECT * FROM status WHERE status_id ='$status_id' ORDER BY status_order_no ASC");
@@ -91,7 +91,7 @@
                                         }
                                         else
                                         {
-                                            echo '<div class="block-content-full block-content-sm" style="background-color: #0d7694;">
+                                            echo '<div class="block-content-full block-content-sm" style="background-color: #5CC6D0;">
                                                     <div class="font-w600 text-white" style="font-size: 70px;">'.$percentage.'%</div>
                                                     <div class="text-uppercase text-white" style="margin-top: -16px;">Progress</div>';
                                                     $select_status = mysqli_query($conn, "SELECT * FROM status WHERE status_id ='$status_id' ORDER BY status_order_no ASC");
@@ -103,7 +103,7 @@
                                     ?>
                                     </div>
                                 </div>
-                                <div class="block-header block-header-default" style="background-color: #0d7694;">
+                                <div class="block-header block-header-default" style="background-color: #5CC6D0;">
                                         <h1 class="block-title text-white text-left">Requirements</h1>
                                     </div>
                                 <div data-toggle="slimscroll" data-height="280px" data-color="#42a5f5" data-opacity="1" data-always-visible="true">
@@ -194,7 +194,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="block shad">
-                    <div class="block-header block-header-default" style="background-color: #0d7694;">
+                    <div class="block-header block-header-default" style="background-color: #5CC6D0;">
                         <h1 class="block-title text-white">Field</h1>
                         <div class="block-options">
                             <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle"></button>
@@ -218,7 +218,7 @@
                                     {
                                         echo '<div class="col-md-6">
                                             <div class="block" style="box-shadow:0px 2px 4px #b3b3b3;">
-                                                <div class="block-header block-header-default" style="height: 30px; background-color: #77979f; ">
+                                                <div class="block-header block-header-default" style="height: 30px; background-color: #5CC6D0; ">
                                                     <h3 class="block-title text-white">';
                                                         $new_name = substr($status_name, 0, 15); // get specific character
 
