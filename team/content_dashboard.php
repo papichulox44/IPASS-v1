@@ -6065,7 +6065,6 @@ function display_assign_field_phase(){
                 if (response == 'success') {
                     // alert('Na save ang session');
                     display_email_name();
-                    // alert('<?php echo $_SESSION['set_email']; ?>');
                 }
             }
         });

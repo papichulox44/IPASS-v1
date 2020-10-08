@@ -7,7 +7,40 @@
 		$space_id = $_POST['space_id'];
 		$user_id = $_POST['user_id'];
 		$final_status_id = $_POST['final_status_id'];
+		$md_body = $_POST['md_body'];
+		$i = $_POST['i'];
+
+		// <script src="../assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+  //       <script src="../assets/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+  //       <script src="../assets/js/pages/be_tables_datatables.min.js"></script>
+
+
+		echo '
 		
+		
+
+		<table class="table table-striped table-hover table-bordered table-vcenter js-dataTable-full '.$md_body.'">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Task</th>
+                            <th>NAME</th>
+                            <th class="d-none d-sm-table-cell">DUE</th>
+                            <th>PRIORITY</th>
+                            <th class="d-none d-sm-table-cell text-center">ASSIGN</th>
+
+		';
+		$select_db_tb_column = mysqli_query($conn, "SELECT * FROM add_column WHERE column_space_id = '$space_id' AND column_user_id = '$user_id'");
+                                while($fetch_select_column = mysqli_fetch_array($select_db_tb_column))
+                                {
+                                    $col_name = $fetch_select_column['column_name'];
+                                    $select_tb_field = mysqli_query($conn, "SELECT * FROM field WHERE field_space_id ='$space_id' AND field_col_name = '$col_name'");
+                                    $fetch_name = mysqli_fetch_array($select_tb_field);
+
+                                    $field_name = $fetch_name['field_name']; // get the name
+                                    echo '<th class="d-none d-sm-table-cell text-center">'.$field_name.'</th>';
+                                }
+                                echo '</tr>
+                    </thead> <tbody>';
 		// ------------------------------------------------ for counting total filter
     $find_space_id_in_filter = mysqli_query($conn, "SELECT * FROM filter WHERE filter_space_id='$space_id' AND filter_user_id='$user_id' AND filter_name != 'status'");
     if(mysqli_num_rows($find_space_id_in_filter) == 0)
@@ -110,7 +143,8 @@
             ORDER BY task_priority DESC");
     }
 //_______________________________ END FILTER
-
+    						$total_task = mysqli_num_rows($findtask);
+    						echo 'Total Task: '.number_format($total_task).'';
                             //$findtask = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$final_status_id' ORDER BY task_priority DESC"); 
                             if (mysqli_num_rows($findtask) == 0) 
                             {}
@@ -155,7 +189,8 @@
                                     if(mysqli_num_rows($filter_tag) == 1)
                                     {
                                         if (in_array($tag_filter_value, $assign_task_tag)) // echo if has user_id in db table "task": task_assign_to
-                                        {
+                                        {	
+
                                             include('echo_task_list.php');
                                         }
                                     }
@@ -196,5 +231,8 @@
                                     }
                                 }
                             }
+                            echo '</tbody>
+                </table>';
+                            mysqli_close($conn);
 	}
  ?>
