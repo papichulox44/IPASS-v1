@@ -1092,53 +1092,55 @@
                         <td class="text-right font-w600"><input type="hidden" value="'.$total_amount.'" id="totaldue'.$phase_id.'"> '.number_format($total_amount,2).'</td>
                     </tr>
                     <tr>';
-                            $select_remarks = mysqli_query($conn, "SELECT * FROM finance_remarks WHERE remarks_to = '$task_id' AND remarks_phase_id = '$phase_id'");
-                            $fetch_select_remarks = mysqli_fetch_array($select_remarks);
-                            $remarks_value = $fetch_select_remarks['remarks_value'];
-                            if($user_type == "Admin")
-                            {
-                                echo '
-                                <td class="text-right font-w600">Select remarks:</td>
-                                <td class="text-right font-w600">
-                                    <select class="form-control text-muted" id="select_remarks" onchange="select_remarks(this)">
-                                        <option value=""></option>
-                                        <option value="Payment received">Payment received</option>
-                                        <option value="Payment encoded">Payment encoded</option>
-                                        <option value="On hold">On hold</option>
-                                        <option value="Pending">Pending</option>
-                                        <option value="Waiting to be received">Waiting to be received</option>
-                                        <option value="Refunded">Refunded</option>
-                                    </select>
-                                </td>
-                                <td colspan="2" class="text-right font-w600">Remarks:</td>
-                                <td class="text-right font-w600">';
-                                    if($remarks_value != "")
-                                    {
-                                        echo '<input type="text" class="form-control" style="text-align: center;" value="'.$fetch_select_remarks['remarks_value'].'" readonly>';
-                                    }
-                                    else
-                                    {
-                                        echo '<input type="text" class="form-control" style="text-align: center;" value="" readonly>';
-                                    }
-                                    echo '
-                                </td>
-                                </tr>';
-                            }
-                            else
-                            {
-                                echo '
-                                <td class="text-right font-w600" colspan="4">Remarks:</td>
-                                <td class="text-right font-w600">
-                                    <input type="text" class="form-control" style="text-align: center;" value="'.$fetch_select_remarks['remarks_value'].'" readonly>
-                                </td>
-                                </tr>
-                                ';
-                            }
+                            
                             echo'
                 </tbody>
             </table>
         </div>
         ';
+        // $select_remarks = mysqli_query($conn, "SELECT * FROM finance_remarks WHERE remarks_to = '$task_id' AND remarks_phase_id = '$phase_id'");
+        //                     $fetch_select_remarks = mysqli_fetch_array($select_remarks);
+        //                     $remarks_value = $fetch_select_remarks['remarks_value'];
+        //                     if($user_type == "Admin")
+        //                     {
+        //                         echo '
+        //                         <td class="text-right font-w600">Select remarks:</td>
+        //                         <td class="text-right font-w600">
+        //                             <select class="form-control text-muted" id="select_remarks" onchange="select_remarks(this)">
+        //                                 <option value=""></option>
+        //                                 <option value="Payment received">Payment received</option>
+        //                                 <option value="Payment encoded">Payment encoded</option>
+        //                                 <option value="On hold">On hold</option>
+        //                                 <option value="Pending">Pending</option>
+        //                                 <option value="Waiting to be received">Waiting to be received</option>
+        //                                 <option value="Refunded">Refunded</option>
+        //                             </select>
+        //                         </td>
+        //                         <td colspan="2" class="text-right font-w600">Remarks:</td>
+        //                         <td class="text-right font-w600">';
+        //                             if($remarks_value != "")
+        //                             {
+        //                                 echo '<input type="text" class="form-control" style="text-align: center;" value="'.$fetch_select_remarks['remarks_value'].'" readonly>';
+        //                             }
+        //                             else
+        //                             {
+        //                                 echo '<input type="text" class="form-control" style="text-align: center;" value="" readonly>';
+        //                             }
+        //                             echo '
+        //                         </td>
+        //                         </tr>';
+        //                     }
+        //                     else
+        //                     {
+        //                         echo '
+        //                         <td class="text-right font-w600" colspan="4">Remarks:</td>
+        //                         <td class="text-right font-w600">
+        //                             <input type="text" class="form-control" style="text-align: center;" value="'.$fetch_select_remarks['remarks_value'].'" readonly>
+        //                         </td>
+        //                         </tr>
+        //                         ';
+        //                     }
+
     }
     // -----------------------  END FINANCE FETCH FIELD BY PHASE -----------------------
     // -----------------------  DISPLAY DISCOUNTED AMOUNT -----------------------
@@ -1400,6 +1402,13 @@
         }
 
         echo'
+        <span style="background-color:green;" class="badge text-white">Payment received</span>
+        <span style="background-color:#45A4AB;" class="badge text-white">Payment encoded</span>
+        <span style="background-color:#c7c10c;" class="badge text-white">On hold</span>
+        <span style="background-color:#b4c04c;" class="badge text-white">Pending</span>
+        <span style="background-color:blue;" class="badge text-white">Waiting to be received</span>
+        <span style="background-color:#1db394;" class="badge text-white">Refunded</span>
+        <span style="background-color:red;" class="badge text-white">No Remarks</span>
         <div class="table-responsive">
             <table class="js-table-sections table table-bordered table-striped table-hover table-vcenter shad">
                 <thead>
@@ -1430,8 +1439,37 @@
 
                         $val_php_total = $rows['val_php_total'];
                         $val_client_total = $rows['val_client_total'];
+                        $val_remarks = $rows['val_remarks'];
+                        if ($val_remarks == 'Payment received') {
+                            $color = 'green';
+                            $text = 'text-white';
+                        }
+                        if ($val_remarks == 'On hold') {
+                            $color = '#c7c10c';
+                            $text = 'text-white';
+                        }
+                        if ($val_remarks == 'Pending') {
+                            $color = '#b4c04c';
+                            $text = 'text-white';
+                        }
+                        if ($val_remarks == 'Waiting to be received') {
+                            $color = 'blue';
+                            $text = 'text-white';
+                        }
+                        if ($val_remarks == 'Refunded') {
+                            $color = '#1db394';
+                            $text = 'text-white';
+                        }
+                        if ($val_remarks == 'Payment encoded') {
+                            $color = '#45A4AB';
+                            $text = 'text-white';
+                        }
+                        if ($val_remarks == '') {
+                            $color = 'red';
+                            $text = 'text-white';
+                        }
                         echo '
-                        <tr>
+                        <tr style="background-color:'.$color.';" class="'.$text.'">
                             <td>'.$rows['val_date'].'</td>
                             <td>'.$rows['val_method'].'</td>
                             <td>'.$rows['val_transaction_no'].'</td>

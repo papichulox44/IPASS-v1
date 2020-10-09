@@ -1022,6 +1022,8 @@ $(document).ready(function(){
                                     email_send_history: 1,
                                 },
                                     success: function(data){
+                                        $('#modal-popout').modal("hide");
+                                        $('#modal-extra-large').modal("show");
                                         display_email_history_table();
                                         alert(data);
                                     }

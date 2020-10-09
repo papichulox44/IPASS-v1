@@ -348,9 +348,10 @@
             phase_id = array_id[0];
             task_id = array_id[1];
             remarks = array_id[2];
+            val_id = array_id[3];
             user_id = <?php echo $_SESSION['user']; ?>
 
-            // alert(remarks);
+            // alert(val_id);
             $.ajax({
                 url: 'ajax_transaction.php',
                 type: 'POST',
@@ -360,6 +361,7 @@
                     task_id: task_id,
                     remarks:remarks,
                     user_id:user_id,
+                    val_id:val_id,
                     update_remarks: 1,
                 },
                     success: function(response){
@@ -372,16 +374,16 @@
         {
 
             remarks_value = (select.options[select.selectedIndex].value);
-            phase_id = document.getElementById("phase_id").value;
-            task_id = document.getElementById("task_id").value;
+            val_id = document.getElementById("val_id").value;
+            // task_id = document.getElementById("task_id").value;
 
+            // alert(val_id);
             $.ajax({
                 url: 'ajax_transaction.php',
                 type: 'POST',
                 async: false,
                 data:{
-                    phase_id: phase_id,
-                    task_id: task_id,
+                    val_id: val_id,
                     remarks_value: remarks_value,
                     update_remarks_selected: 1,
                 },
