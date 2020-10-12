@@ -447,7 +447,7 @@
         list_name = array_id[1];
         list_id = array_id[2];
         get_task_id = array_id[3];
-        remarks_id = array_id[4];
+        val_id = array_id[4];
 
         // alert(space_name + ' ' + list_name + ' ' + list_id + ' ' + get_task_id + ' ' + remarks_id);
         $.ajax({
@@ -455,7 +455,7 @@
         type: 'POST',
         async: false,
         data:{
-            remarks_id:remarks_id,
+            val_id:val_id,
             click_remarks: 1,  
         },
             success: function(response){

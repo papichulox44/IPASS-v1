@@ -1350,7 +1350,6 @@
         }
         echo '
         <div class="col-lg-12" style="overflow: auto; height: 877px;">
-        <label>Email: '.$set_email.'</label>
             <div class="table-responsive">
                 <table class="table table-bordered table-striped text-white">
                     <tr>

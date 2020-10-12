@@ -2994,8 +2994,8 @@
             echo '
                     <tr>
                         <td colspan="1" style="width: 15%;text-align: end;">
-                        Date/Time Send:<br>
-                        Send by:<br>
+                        Date/Time Sent:<br>
+                        Sent by:<br>
                         Email Name:<br>
                         Email Subject:<br>
                         Email Address:

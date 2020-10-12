@@ -191,16 +191,17 @@
 	//------------------------------------------------------------------------------------------
 	if (isset($_POST['creating_remarks'])) {
 
-		$results = mysqli_query($conn, "SELECT task.task_name, finance_remarks.admin_notification, finance_remarks.remarks_value, finance_remarks.remarks_id, `user`.fname, `user`.mname, `user`.lname, list.list_id, list.list_name, task.task_id, space.space_name FROM finance_remarks INNER JOIN `user` ON finance_remarks.remarks_by = `user`.user_id INNER JOIN task ON finance_remarks.remarks_to = task.task_id INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id WHERE finance_remarks.admin_notification = 0 ORDER BY finance_remarks.admin_notification ASC, finance_remarks.remarks_id DESC");
+		$results = mysqli_query($conn, "SELECT finance_transaction.val_id, finance_transaction.val_remarks, finance_transaction.admin_notification, task.task_id, task.task_name, `user`.fname, `user`.mname, `user`.lname, list.list_id, list.list_name, space.space_name, finance_transaction.val_transaction_no FROM finance_transaction INNER JOIN task ON finance_transaction.val_assign_to = task.task_id INNER JOIN `user` ON finance_transaction.val_add_by = `user`.user_id INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id WHERE finance_transaction.admin_notification = 0 ORDER BY finance_transaction.admin_notification ASC, finance_transaction.val_id DESC
+");
 		$row = mysqli_num_rows($results);
 		if ($row) {
 	        while($rows = mysqli_fetch_array($results))
 	        {
 	            echo'
-		            <li style="cursor: pointer;" id="'.$rows['space_name'].','.$rows['list_name'].','.$rows['list_id'].','.$rows['task_id'].','.$rows['remarks_id'].'" onclick="click_remarks(this.id)">
+		            <li style="cursor: pointer;" id="'.$rows['space_name'].','.$rows['list_name'].','.$rows['list_id'].','.$rows['task_id'].','.$rows['val_id'].'" onclick="click_remarks(this.id)">
 		                <div class="row">
 		                    <div class="col-sm-6">
-		                        <i class="si si-pencil '; if($rows['admin_notification'] == 0){ echo 'text-danger';} else { echo 'text-success'; } echo '"></i>
+		                        <i class="si si-pencil '; if($rows['admin_notification'] == 0){ echo 'text-danger';} else { echo 'text-success'; } echo '"></i><label class="text-white">Task#: '.$rows['task_id'].' | Transaction#: '.$rows['val_transaction_no'].' </label>
 		                        <div class="font-w600 text-white">Task Name: '.$rows['task_name'].'</div>
 		                        <div class="font-w600 text-white">Remarks by: '.$rows['fname'].' '.$rows['mname'].' '.$rows['lname'].'</div>
 		                    </div>
@@ -208,26 +209,36 @@
 		                    <div class="col-sm-6">
 		                        <br>
 		                        <div class="font-w600 text-white">Remarks: <span class="badge '; 
-		                        if ($rows['remarks_value'] == 'Payment received') {
+		                        if ($rows['val_remarks'] == 'Payment received') {
 		                       		echo 'badge-success';
+		                       		$remarks = 'Payment received';
 		                        } 
-		                        if ($rows['remarks_value'] == 'On hold') {
+		                        if ($rows['val_remarks'] == 'On hold') {
 		                       		echo 'badge-warning';
+		                       		$remarks = 'On hold';
 		                        } 
-		                        if ($rows['remarks_value'] == 'Pending') {
+		                        if ($rows['val_remarks'] == 'Pending') {
 		                       		echo 'badge-warning';
+		                       		$remarks = 'Pending';
 		                        } 
-		                        if ($rows['remarks_value'] == 'Waiting to be received') {
+		                        if ($rows['val_remarks'] == 'Waiting to be received') {
 		                       		echo 'badge-primary';
+		                       		$remarks = 'Waiting to be received';
 		                        } 
-		                        if ($rows['remarks_value'] == 'Refunded') {
+		                        if ($rows['val_remarks'] == 'Refunded') {
 		                       		echo 'badge-danger';
+		                       		$remarks = 'Refunded';
 		                        } 
-		                        if ($rows['remarks_value'] == 'Payment encoded') {
+		                        if ($rows['val_remarks'] == 'Payment encoded') {
 		                       		echo 'badge-info';
+		                       		$remarks = 'Payment encoded';
+		                        } 
+		                        if ($rows['val_remarks'] == '') {
+		                       		echo 'badge-danger';
+		                       		$remarks = 'No Remarks';
 		                        } 
 
-		                        echo'">'.$rows['remarks_value'].'</span></div>
+		                        echo'">'.$remarks.'</span></div>
 		                    </div>
 		                </div>
 		            </li>';
@@ -251,7 +262,7 @@
 
 	if (isset($_POST['count_creating_remarks'])) {
 
-		$results = mysqli_query($conn, "SELECT Count(finance_remarks.admin_notification) AS count FROM finance_remarks INNER JOIN `user` ON finance_remarks.remarks_by = `user`.user_id INNER JOIN task ON finance_remarks.remarks_to = task.task_id WHERE finance_remarks.admin_notification != 1");
+		$results = mysqli_query($conn, "SELECT Count(finance_transaction.admin_notification) AS count FROM finance_transaction INNER JOIN `user` ON finance_transaction.val_add_by = `user`.user_id INNER JOIN task ON finance_transaction.val_assign_to = task.task_id WHERE finance_transaction.admin_notification != 1");
 		while($rows = mysqli_fetch_array($results))
 		{
 			echo $rows['count'];
@@ -261,7 +272,7 @@
 
 	if (isset($_POST['update_creating_remarks'])) {
 
-		$results = mysqli_query($conn, "UPDATE finance_remarks SET admin_notification = 1 WHERE admin_notification = 0");
+		$results = mysqli_query($conn, "UPDATE finance_transaction SET admin_notification = 1 WHERE admin_notification = 0");
 		if ($results) {
 			echo 'success';
 		}
@@ -422,8 +433,8 @@
 
 	//Remarks Update when clicking
 	if (isset($_POST['click_remarks'])) {
-		$remarks_id = $_POST['remarks_id'];
-		$results = mysqli_query($conn, "UPDATE finance_remarks SET admin_notification = 1 WHERE remarks_id = $remarks_id");
+		$val_id = $_POST['val_id'];
+		$results = mysqli_query($conn, "UPDATE finance_transaction SET admin_notification = 1 WHERE val_id = $val_id");
 		if ($results) {
 			echo 'success';
 		}

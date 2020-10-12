@@ -41,25 +41,25 @@
         overflow-x: hidden;
     }
 
-#style-5::-webkit-scrollbar-track
-{
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    background-color: #F5F5F5;
-}
+    #style-5::-webkit-scrollbar-track
+    {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        background-color: #F5F5F5;
+    }
 
-#style-5::-webkit-scrollbar
-{
-    width: 6px;
-    background-color: #F5F5F5;
-}
-#style-5::-webkit-scrollbar-thumb
-{
-    background-color: #abadaf;
-}
+    #style-5::-webkit-scrollbar
+    {
+        width: 6px;
+        background-color: #F5F5F5;
+    }
+    #style-5::-webkit-scrollbar-thumb
+    {
+        background-color: #abadaf;
+    }
 </style>
 <div class="row" style="margin-top: 25px;">    
     <div class="col-md-6 col-xl-3" >
-        <div class="block block-themed <?php echo $md_body; ?>" style="box-shadow: 0px 1px 3px 0px rgba(119, 119, 119, 0.34);-moz-box-shadow: 0px 1px 3px 0px rgba(119, 119, 119, 0.34);-webkit-box-shadow: 0px 1px 3px 0px rgba(119, 119, 119, 0.34);">
+        <div class="block block-themed <?php echo $md_body; ?> block-mode-hidden" style="box-shadow: 0px 1px 3px 0px rgba(119, 119, 119, 0.34);-moz-box-shadow: 0px 1px 3px 0px rgba(119, 119, 119, 0.34);-webkit-box-shadow: 0px 1px 3px 0px rgba(119, 119, 119, 0.34);">
             <div class="block-header bg-gd-aqua">
                 <h3 class="block-title">Unassign</h3>
                     <div class="block-options">
