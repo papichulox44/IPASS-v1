@@ -296,26 +296,32 @@
                         </td>';
                         //Remarks value for each transaction
                         if (!empty($remarks)) {
-                            if ($remarks == 'Payment received') {
-                                $color = 'green';
+                            $query = mysqli_query($conn, "SELECT * FROM tbl_remarks WHERE remarks_value LIKE '%$remarks%'") or die(mysqli_error());
+
+                            while($data = mysqli_fetch_array($query)) {
+                                echo '<td class="text-center" data-toggle="modal" data-target="#modal-remarks" style="background-color: '.$data['remarks_color'].'; cursor: pointer;" id="'.$phase_id.','.$task_id.','.$remarks.','.$val_id.'" onclick="update_remarks(this.id)">'.$remarks.'
+                                </td>';
                             }
-                            if ($remarks == 'On hold') {
-                                $color = '#c7c10c';
-                            }
-                            if ($remarks == 'Pending') {
-                                $color = '#b4c04c';
-                            }
-                            if ($remarks == 'Waiting to be received') {
-                                $color = 'blue';
-                            }
-                            if ($remarks == 'Refunded') {
-                                $color = '#1db394';
-                            }
-                            if ($remarks == 'Payment encoded') {
-                                $color = '#45A4AB';
-                            }
-                            echo '<td class="text-center" data-toggle="modal" data-target="#modal-remarks" style="background-color: '.$color.'; cursor: pointer;" id="'.$phase_id.','.$task_id.','.$remarks.','.$val_id.'" onclick="update_remarks(this.id)">'.$remarks.'
-                            </td>';
+                            // if ($remarks == 'Payment received') {
+                            //     $color = 'green';
+                            // }
+                            // if ($remarks == 'On hold') {
+                            //     $color = '#c7c10c';
+                            // }
+                            // if ($remarks == 'Pending') {
+                            //     $color = '#b4c04c';
+                            // }
+                            // if ($remarks == 'Waiting to be received') {
+                            //     $color = 'blue';
+                            // }
+                            // if ($remarks == 'Refunded') {
+                            //     $color = '#1db394';
+                            // }
+                            // if ($remarks == 'Payment encoded') {
+                            //     $color = '#45A4AB';
+                            // }
+                            // echo '<td class="text-center" data-toggle="modal" data-target="#modal-remarks" style="background-color: '.$color.'; cursor: pointer;" id="'.$phase_id.','.$task_id.','.$remarks.','.$val_id.'" onclick="update_remarks(this.id)">'.$remarks.'
+                            // </td>';
                         }
                         else {
                             echo '<td class="text-center" data-toggle="modal" data-target="#modal-remarks" style="background-color: red; cursor: pointer;" id="'.$phase_id.','.$task_id.',No Remarks,'.$val_id.'" onclick="update_remarks(this.id)">No Remarks</td>';
@@ -420,13 +426,19 @@
         echo '
             <p>Remark Status: <b>'.$remarks.'</b></p>
             <select class="form-control text-muted" id="update_remarks_selected" onchange="update_remarks_selected(this)">
-                <option disabled value="" selected>Select Remarks</option>
-                <option value="Payment received">Payment received</option>
-                <option value="Payment encoded">Payment encoded</option>
-                <option value="On hold">On hold</option>
-                <option value="Pending">Pending</option>
-                <option value="Waiting to be received">Waiting to be received</option>
-                <option value="Refunded">Refunded</option>
+                <option disabled value="" selected>Select Remarks</option>';
+                $query = mysqli_query($conn, "SELECT * FROM tbl_remarks") or die(mysqli_error());
+
+                while($data = mysqli_fetch_array($query)) {
+                    echo '<option value="'.$data['remarks_value'].'">'.$data['remarks_value'].'</option>';
+                }
+                // <option value="Payment received">Payment received</option>
+                // <option value="Payment encoded">Payment encoded</option>
+                // <option value="On hold">On hold</option>
+                // <option value="Pending">Pending</option>
+                // <option value="Waiting to be received">Waiting to be received</option>
+                // <option value="Refunded">Refunded</option>
+                echo '
             </select>
             <input id="val_id" type="hidden" value="'.$val_id.'"></input>
             <input id="task_id" type="hidden" value="'.$task_id.'"></input><br>
@@ -520,35 +532,50 @@
                         $val_php_total = $rows['val_php_total'];
                         $val_client_total = $rows['val_client_total'];
                         $finance_val_id = $rows['val_id'];
+                        $val_remarks = $rows['val_remarks'];
                         if ($val_id == $finance_val_id) {
+
+                            $query_remarks = mysqli_query($conn, "SELECT * FROM tbl_remarks WHERE remarks_value = '$val_remarks' OR remarks_value LIKE '%$val_remarks%'");
+                            $num = mysqli_num_rows($query_remarks);
+                            if ($num) {
+                                while($row = mysqli_fetch_array($query_remarks))
+                                {   
+                                    $color = $row["remarks_color"];
+                                    $text = 'text-white';
+                                }
+                            } else {
+                                    $color = 'red';
+                                    $text = 'text-white';
+                                
                             // $table = 'class="table-info"';
-                            if ($_POST['remarks'] == 'Payment received') {
-                                $color = 'green';
-                                $text = 'text-white';
-                            }
-                            if ($_POST['remarks'] == 'On hold') {
-                                $color = '#c7c10c';
-                                $text = 'text-white';
-                            }
-                            if ($_POST['remarks'] == 'Pending') {
-                                $color = '#b4c04c';
-                                $text = 'text-white';
-                            }
-                            if ($_POST['remarks'] == 'Waiting to be received') {
-                                $color = 'blue';
-                                $text = 'text-white';
-                            }
-                            if ($_POST['remarks'] == 'Refunded') {
-                                $color = '#1db394';
-                                $text = 'text-white';
-                            }
-                            if ($_POST['remarks'] == 'Payment encoded') {
-                                $color = '#45A4AB';
-                                $text = 'text-white';
-                            }
-                            if ($_POST['remarks'] == 'No Remarks') {
-                                $color = 'red';
-                                $text = 'text-white';
+                            // if ($_POST['remarks'] == 'Payment received') {
+                            //     $color = 'green';
+                            //     $text = 'text-white';
+                            // }
+                            // if ($_POST['remarks'] == 'On hold') {
+                            //     $color = '#c7c10c';
+                            //     $text = 'text-white';
+                            // }
+                            // if ($_POST['remarks'] == 'Pending') {
+                            //     $color = '#b4c04c';
+                            //     $text = 'text-white';
+                            // }
+                            // if ($_POST['remarks'] == 'Waiting to be received') {
+                            //     $color = 'blue';
+                            //     $text = 'text-white';
+                            // }
+                            // if ($_POST['remarks'] == 'Refunded') {
+                            //     $color = '#1db394';
+                            //     $text = 'text-white';
+                            // }
+                            // if ($_POST['remarks'] == 'Payment encoded') {
+                            //     $color = '#45A4AB';
+                            //     $text = 'text-white';
+                            // }
+                            // if ($_POST['remarks'] == 'No Remarks') {
+                            //     $color = 'red';
+                            //     $text = 'text-white';
+                            // }
                             }
                         } else {
                             $color = '';
@@ -1286,7 +1313,7 @@
     if (isset($_POST['view_company_information'])) {
         
         echo '
-            <div class="table-responsive">
+            <div class="table-responsive" style="overflow: auto; height: 250px;">
                 <table class="table table-bordered table-striped text-white">
                 <thead>
                     <tr>
@@ -1349,7 +1376,7 @@
             $set_email = '';
         }
         echo '
-        <div class="col-lg-12" style="overflow: auto; height: 877px;">
+        <div class="col-lg-12" style="overflow: auto; height: 500px;">
             <div class="table-responsive">
                 <table class="table table-bordered table-striped text-white">
                     <tr>
@@ -1401,7 +1428,7 @@
             $set_email = '';
         }
         echo '
-        <div class="col-lg-12" style="overflow: auto; height: 877px;">
+        <div class="col-lg-12" style="overflow: auto; height: 500px;">
         <label>Email: '.$set_email.'</label>
             <div class="table-responsive">
                 <table class="table table-bordered table-striped text-white">
@@ -1482,6 +1509,97 @@
         mysqli_close($conn);
     }
     //END All query for list of email ------------------------------------------------------------------------------------------------------
+
+    // All query for list of remarks --------------------------------------------------------------------------------------------------------
+    if (isset($_POST['view_list_of_remarks'])) {
+
+        echo '
+        <div class="col-lg-12" style="overflow: auto; height: 500px;">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped text-white">
+                    <tr>
+                        <th class="text-right">Add Remarks:</th>
+                        <th class="text-center"><input type="email" class="text-center form-control" placeholder="Remarks" id="add_remarks_value"></input></th>
+                        <th class="text-center"><input type="color" class="text-center form-control" id="add_color"></input></th>
+                        <th class="text-center"><button class="btn btn-primary" onclick="add_remarks_data()">Add</button></th>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped text-white">
+                <thead>
+                    <tr>
+                        <th>NO.</th>
+                        <th class="text-center">Remarks</th>
+                        <th class="text-center">Color</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                    <tbody>';
+                        $select_remittance = mysqli_query($conn, "SELECT * FROM tbl_remarks");
+                        $count = 1;
+                        while ($data = mysqli_fetch_array($select_remittance)) {
+                            $remarks_id = $data['remarks_id'];
+                            echo '
+                                <tr style="cursor: pointer;">
+                                    <td class="text-left">'.$count++.'</td>
+                                    <td class="text-center">
+                                    <textarea rows="2" class="form-control text-center" id="list_remarks_value'.$remarks_id.'">'.$data['remarks_value'].'</textarea>
+                                    </td>
+                                    <td class="text-left"><input type="color" class="form-control" id="remakrs_color'.$remarks_id.'" value="'.$data['remarks_color'].'"></input></td>
+                                    <td class="text-center"><button class="btn btn-success" id="'.$remarks_id.'" onclick="update_list_remarks_value(this.id)">Update</button>
+                                        <button class="btn btn-danger" id="'.$remarks_id.'" onclick="delete_remarks_data(this.id)">Delete</button>
+                                    </td>
+                                </tr>
+                            ';       
+                        }
+                    echo '
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        ';
+        mysqli_close($conn);
+    }
+
+    if (isset($_POST['add_remarks_data'])) {
+
+        $add_remarks_value = $_POST['add_remarks_value'];
+        $add_color = $_POST['add_color'];
+
+        $add_remarks = mysqli_query($conn, "INSERT INTO tbl_remarks VALUES ('', '$add_remarks_value','$add_color')") or die(mysqli_error());
+        if ($add_remarks) {
+            echo 'success';
+        }
+        mysqli_close($conn);
+    }
+
+    if (isset($_POST['delete_remarks_data'])) {
+
+        $remarks_id = $_POST['remarks_id'];
+
+        $delete_email = mysqli_query($conn, "DELETE from tbl_remarks WHERE remarks_id = '$remarks_id'") or die(mysqli_error());
+        if ($delete_email) {
+            echo 'success';
+        }
+        mysqli_close($conn);
+    }
+
+    if (isset($_POST['update_list_remarks_value'])) {
+
+        $remarks_id = $_POST['remarks_id'];
+        $list_remarks_value = $_POST['list_remarks_value'];
+        $remarks_color = $_POST['remarks_color'];
+
+        $update_remarks = mysqli_query($conn, "UPDATE tbl_remarks SET remarks_value = '$list_remarks_value', remarks_color = '$remarks_color' WHERE remarks_id = '$remarks_id'") or die(mysqli_error());
+        if ($update_remarks) {
+            echo 'success';
+        }
+        mysqli_close($conn);
+    }
+
+    //END All query for list of remarks --------------------------------------------------------------------------------------------------------
 
     if (isset($_POST['update_remittance'])) {
 

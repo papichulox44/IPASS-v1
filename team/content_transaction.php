@@ -93,10 +93,25 @@
                                         <span id="view_by">View</span>
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ecom-orders-overview-drop" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(96px, 31px, 0px);">
-                                        <button class="dropdown-item" onclick="view_all_remarks()">
-                                            <i class="fa fa-fw fa-check mr-5"></i>All Remarks
+                                        <button class="dropdown-item" id="All Remarks" onclick="view_remarks(this.id)">
+                                           All Remarks
+                                            <!-- <i class="fa fa-fw fa-check mr-5"></i>All Remarks -->
                                         </button>
-                                        <button class="dropdown-item" onclick="view_no_remarks()">
+                                        <button class="dropdown-item" id="No Remarks" onclick="view_remarks(this.id)">
+                                           No Remarks
+                                            <!-- <i class="fa fa-fw fa-check mr-5"></i>All Remarks -->
+                                        </button>
+                                        <?php 
+                                        $query = mysqli_query($conn, "SELECT * FROM tbl_remarks");
+
+                                        while ($data = mysqli_fetch_array($query)) {
+                                         ?>
+                                        <button class="dropdown-item" id="<?php echo $data['remarks_value']; ?>" onclick="view_remarks(this.id)">
+                                           <?php echo $data['remarks_value']; ?>
+                                            <!-- <i class="fa fa-fw fa-check mr-5"></i>All Remarks -->
+                                        </button>
+                                        <?php } ?>
+                                        <!-- <button class="dropdown-item" onclick="view_no_remarks()">
                                             <i class="fa fas fa-times mr-5"></i>No Remarks
                                         </button>
                                         <button class="dropdown-item" onclick="view_payment()">
@@ -116,7 +131,7 @@
                                         </button>
                                         <button class="dropdown-item" onclick="view_refunded()">
                                             <i class="fa fa-folder-open mr-5"></i>Refunded
-                                        </button>
+                                        </button> -->
                                     </div>
                                 </div>
 
@@ -256,62 +271,69 @@
         // END VIEW ALL TRANSACTION -------------------------
 
         // VIEW BY --------------------------
-        function view_all_remarks()
+        function view_remarks(id)
         {
-            document.getElementById("view_by").innerHTML = "All Remarks";
+            document.getElementById("view_by").innerHTML = "id";
             if(filterby == "Custom Date")
             { document.location='main_transaction.php?view=All Remarks&filter='+filterby+'&From='+get_from+'&To='+get_to+''; }
-            else { document.location='main_transaction.php?view=All Remarks&filter=' + filterby + ''; }
+            else { document.location='main_transaction.php?view='+id+'&filter=' + filterby + ''; }
         }
-        function view_no_remarks()
-        {
-            document.getElementById("view_by").innerHTML = "No Remarks";
-            if(filterby == "Custom Date")
-            { document.location='main_transaction.php?view=No Remarks&filter='+filterby+'&From='+get_from+'&To='+get_to+''; }
-            else { document.location='main_transaction.php?view=No Remarks&filter=' + filterby + ''; }
-        }
-        function view_payment()
-        {
-            document.getElementById("view_by").innerHTML = "Payment Received";
-            if(filterby == "Custom Date")
-            { document.location='main_transaction.php?view=Payment Received&filter='+filterby+'&From='+get_from+'&To='+get_to+''; }
-            else { document.location='main_transaction.php?view=Payment Received&filter=' + filterby + ''; }
-        }
-        function view_on_hold()
-        {
-            document.getElementById("view_by").innerHTML = "On Hold";
-            if(filterby == "Custom Date")
-            { document.location='main_transaction.php?view=On Hold&filter='+filterby+'&From='+get_from+'&To='+get_to+''; }
-            else { document.location='main_transaction.php?view=On Hold&filter=' + filterby + ''; }
-        }
-        function view_pending()
-        {
-            document.getElementById("view_by").innerHTML = "Pending";
-            if(filterby == "Custom Date")
-            { document.location='main_transaction.php?view=Pending&filter='+filterby+'&From='+get_from+'&To='+get_to+''; }
-            else { document.location='main_transaction.php?view=Pending&filter=' + filterby + ''; }
-        }
-        function view_waiting()
-        {
-            document.getElementById("view_by").innerHTML = "Waiting to be Received";
-            if(filterby == "Custom Date")
-            { document.location='main_transaction.php?view=Waiting to be Received&filter='+filterby+'&From='+get_from+'&To='+get_to+''; }
-            else { document.location='main_transaction.php?view=Waiting to be Received&filter=' + filterby + ''; }
-        }
-        function view_refunded()
-        {
-            document.getElementById("view_by").innerHTML = "Refunded";
-            if(filterby == "Custom Date")
-            { document.location='main_transaction.php?view=Refunded&filter='+filterby+'&From='+get_from+'&To='+get_to+''; }
-            else { document.location='main_transaction.php?view=Refunded&filter=' + filterby + ''; }
-        }
-        function view_encoded()
-        {
-            document.getElementById("view_by").innerHTML = "Payment encoded";
-            if(filterby == "Custom Date")
-            { document.location='main_transaction.php?view=Payment encoded&filter='+filterby+'&From='+get_from+'&To='+get_to+''; }
-            else { document.location='main_transaction.php?view=Payment encoded&filter=' + filterby + ''; }
-        }
+        // function view_all_remarks()
+        // {
+        //     document.getElementById("view_by").innerHTML = "All Remarks";
+        //     if(filterby == "Custom Date")
+        //     { document.location='main_transaction.php?view=All Remarks&filter='+filterby+'&From='+get_from+'&To='+get_to+''; }
+        //     else { document.location='main_transaction.php?view=All Remarks&filter=' + filterby + ''; }
+        // }
+        // function view_no_remarks()
+        // {
+        //     document.getElementById("view_by").innerHTML = "No Remarks";
+        //     if(filterby == "Custom Date")
+        //     { document.location='main_transaction.php?view=No Remarks&filter='+filterby+'&From='+get_from+'&To='+get_to+''; }
+        //     else { document.location='main_transaction.php?view=No Remarks&filter=' + filterby + ''; }
+        // }
+        // function view_payment()
+        // {
+        //     document.getElementById("view_by").innerHTML = "Payment Received";
+        //     if(filterby == "Custom Date")
+        //     { document.location='main_transaction.php?view=Payment Received&filter='+filterby+'&From='+get_from+'&To='+get_to+''; }
+        //     else { document.location='main_transaction.php?view=Payment Received&filter=' + filterby + ''; }
+        // }
+        // function view_on_hold()
+        // {
+        //     document.getElementById("view_by").innerHTML = "On Hold";
+        //     if(filterby == "Custom Date")
+        //     { document.location='main_transaction.php?view=On Hold&filter='+filterby+'&From='+get_from+'&To='+get_to+''; }
+        //     else { document.location='main_transaction.php?view=On Hold&filter=' + filterby + ''; }
+        // }
+        // function view_pending()
+        // {
+        //     document.getElementById("view_by").innerHTML = "Pending";
+        //     if(filterby == "Custom Date")
+        //     { document.location='main_transaction.php?view=Pending&filter='+filterby+'&From='+get_from+'&To='+get_to+''; }
+        //     else { document.location='main_transaction.php?view=Pending&filter=' + filterby + ''; }
+        // }
+        // function view_waiting()
+        // {
+        //     document.getElementById("view_by").innerHTML = "Waiting to be Received";
+        //     if(filterby == "Custom Date")
+        //     { document.location='main_transaction.php?view=Waiting to be Received&filter='+filterby+'&From='+get_from+'&To='+get_to+''; }
+        //     else { document.location='main_transaction.php?view=Waiting to be Received&filter=' + filterby + ''; }
+        // }
+        // function view_refunded()
+        // {
+        //     document.getElementById("view_by").innerHTML = "Refunded";
+        //     if(filterby == "Custom Date")
+        //     { document.location='main_transaction.php?view=Refunded&filter='+filterby+'&From='+get_from+'&To='+get_to+''; }
+        //     else { document.location='main_transaction.php?view=Refunded&filter=' + filterby + ''; }
+        // }
+        // function view_encoded()
+        // {
+        //     document.getElementById("view_by").innerHTML = "Payment encoded";
+        //     if(filterby == "Custom Date")
+        //     { document.location='main_transaction.php?view=Payment encoded&filter='+filterby+'&From='+get_from+'&To='+get_to+''; }
+        //     else { document.location='main_transaction.php?view=Payment encoded&filter=' + filterby + ''; }
+        // }
         // END VIEW BY --------------------------
 
         // FILTER BY --------------------------
@@ -391,6 +413,8 @@
                         // view_all_transaction();
                         alert('Update Successfully');
                         location.reload()
+                        // $('#modal-remarks').modal('hide');
+                        // view_all_transaction();
                     }
             });
         }

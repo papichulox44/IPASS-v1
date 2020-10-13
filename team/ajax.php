@@ -1345,7 +1345,7 @@
 
             $image = $date.'-'.$get_name.'.'.$ext;
             $location = "../assets/media/transaction/".$image; // upload location
-            if($attachment_size < 3000000) // Maximum 3 MB
+            if($attachment_size < 10000000) // Maximum 10 MB
             {
                 move_uploaded_file($attachment_temp, $location);
                 mysqli_query($conn,"INSERT INTO finance_transaction values ('','$user_id','$phase_id','$task_id','$tran_date','$tran_method','$tran_transaction_no','$tran_currency','$tran_amount','$charge','$tran_initial','$tran_usd_rate','$tran_usd_total','$tran_php_rate','$tran_php_total','$tran_client_rate','$tran_client_php_total','$tran_note','$image')") or die(mysqli_error());
@@ -3119,7 +3119,7 @@
                 $image = $date.'-'.$get_name.'.'.$ext;
                 $location = "../assets/media/transaction/".$image; // upload location
 
-                if($attachment_size < 3000000) // Maximum 3 MB
+                if($attachment_size < 10000000) // Maximum 10 MB
                 {
                     unlink('../assets/media/transaction/'.$val_attachment);
                     move_uploaded_file($attachment_temp, $location);

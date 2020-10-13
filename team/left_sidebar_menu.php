@@ -57,9 +57,9 @@
                             <span class="d-none d-sm-inline-block"><?php echo $row['fname'];?></span>
                         </li>
                     <li class="list-inline-item" data-toggle="popover" title="Change mode" data-placement="bottom" class="js-popover-enabled">
-                        <!-- <a class="text-dual-primary-dark" onclick="mode()" href="javascript:void(0)">
+                        <a class="text-dual-primary-dark" onclick="mode()" href="javascript:void(0)">
                             <i class="si si-drop"></i>
-                        </a> -->
+                        </a>
                         <a class="text-dark" data-toggle="theme" data-theme="../assets/css/themes/dark.min.css" id="btn_dark" style="display: none;">
                             <i class="fa fa-2x fa-circle"></i>
                         </a>

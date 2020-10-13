@@ -192,6 +192,18 @@
 
                             <div class="block-content <?php echo $md_table_body;?> mb-20" id="list_of_email"></div>
 
+                            <div class="row row-deck">
+					            <div class="col-lg-12">
+					                <div class="block block-rounded shadow bg-gray-darker">
+					                    <div class="block-header content-heading bg-gray-darker">
+					                        <h3 class="block-title text-white d-none d-sm-block" style="cursor: pointer;" id="hide_show_list_of_remarks">List of Remarks <i class="si si-arrow-down"></i> </h3>
+					                    </div>
+					                </div>
+					            </div>
+					        </div>
+
+                            <div class="block-content <?php echo $md_table_body;?> mb-20" id="list_of_remarks"></div>
+
                         </div>
                     </div>
                 </div>
@@ -349,6 +361,8 @@
 			view_remittance();
 			view_company_information();
 			view_list_of_email();
+			view_remarks();
+
 			$('#create_currency').on('click', function(){
 				currency_id = document.getElementById("currency_id").value;
 				currency_name = document.getElementById("currency_name").value;
@@ -714,6 +728,112 @@
             }
         }
         // END  All function list email -------------------------------------------------------------------------------------------------
+
+        // All fucntion for remarks ------------------------------------------------------------------------------------------------------
+        $(document).ready(function(){
+		  $("#hide_show_list_of_remarks").click(function(){
+		    $("#list_of_remarks").slideToggle("slow");
+		  });
+		});
+
+        function view_remarks()
+        {
+            $.ajax({
+                url: 'ajax_transaction.php',
+                type: 'POST',
+                async: false,
+                data:{
+                    view_list_of_remarks: 1,
+                },
+                    success: function(response){
+                        $('#list_of_remarks').html(response);
+                    }
+            });
+        }
+
+        function add_remarks_data()
+        {   
+            add_remarks_value = document.getElementById("add_remarks_value").value;
+            add_color = document.getElementById("add_color").value;
+
+            // alert(add_color);
+
+            if (add_remarks_value == '') {
+            	alert('Please input remarks!');
+            } else {
+	            if (confirm('Are you sure?')) {
+	                $.ajax({
+	                    url: 'ajax_transaction.php',
+	                    type: 'POST',
+	                    async: false,
+	                    data:{
+	                        add_remarks_value:add_remarks_value,
+	                        add_color:add_color,
+	                        add_remarks_data: 1,
+	                    },
+	                        success: function(response){
+	                            if (response == 'success') {
+	                                alert('Successfully Added!');
+	                                view_remarks();
+	                            }
+	                        }
+	                });
+	            }
+	        }
+        }
+
+        function delete_remarks_data(id)
+        {   
+            // alert(id);
+            if (confirm('Are you sure?')) {
+                $.ajax({
+                    url: 'ajax_transaction.php',
+                    type: 'POST',
+                    async: false,
+                    data:{
+                        remarks_id:id,
+                        delete_remarks_data: 1,
+                    },
+                        success: function(response){
+                            // $('#view_remittance').html(response);
+                            if (response == 'success') {
+                                alert('Successfully Deleted!');
+                                view_remarks();
+                            }
+                        }
+                });
+            }
+        }
+
+        function update_list_remarks_value(id)
+        {   
+            list_remarks_value = document.getElementById("list_remarks_value" + id).value;
+            remarks_color = document.getElementById("remakrs_color" + id).value;
+
+            // alert(id);
+            if (confirm('Are you sure?')) {
+                $.ajax({
+                    url: 'ajax_transaction.php',
+                    type: 'POST',
+                    async: false,
+                    data:{
+                        remarks_id:id,
+                        list_remarks_value:list_remarks_value,
+                        remarks_color:remarks_color,
+                        update_list_remarks_value: 1,
+                    },
+                        success: function(response){
+                            // $('#view_remittance').html(response);
+                            if (response == 'success') {
+                                alert('Successfully Update!');
+                                view_remarks();
+                            }
+                        }
+                });
+            }
+        }
+
+        //END All fucntion for remarks ------------------------------------------------------------------------------------------------------
 
         function update_remittance(id)
         {   
