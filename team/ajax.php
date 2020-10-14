@@ -85,7 +85,7 @@
     {
         $email_content = $_POST['email_content'];
         echo '
-            <td style="background-color: #fff; border-top: 20px solid #006786; border-bottom: 20px solid #006786;">
+            <td style="background-color: #fff; border-top: 10px solid #189AA7; border-bottom: 10px solid #189AA7;">
                 '.$email_content.'
             </td>
         ';
@@ -135,20 +135,20 @@
 
         // Message can be change base on template selected
         $message = '
-            <div style="padding: 20px 0px 0px 0px; background-color: #00465a;" class="shadow">
+            <div style="padding: 20px 0px 0px 0px; background-color: #189AA7;" class="shadow">
               <img src="../assets/media/photos/header_email.png" style="width: 100%;">
                 <table width="100%" border="0" cellspacing="0" cellpadding="20" style="background-color: #47bcde; color: #5a5f61; font-family:verdana;">
                     <tr>
-                        <td style="background-color: #fff; border-top: 20px solid #006786; border-bottom: 20px solid #006786;">
+                        <td style="background-color: #fff; border-top: 10px solid #189AA7; border-bottom: 10px solid #189AA7;">
                             '.$email_content.'
                         </td>
                     </tr>
                 </table>
-                <div style="text-align: center; padding: 20px 0px; color: #fff; background-color: #00465a;">
+                <div style="text-align: center; padding: 20px 0px; color: #fff; background-color: #189AA7;">
                     PROCESSING MADE EASY BY IPASS<br>
                     Rm 1, 2nd Floor, Doña Segunda Complex,<br>
                     Ponciano Street, Davao City, Philippines 8000<br><br>
-                    <a href="https://ipassprocessing.com/" style="color: #2196f3;">https://ipassprocessing.com/</a>
+                    <a href="https://ipassprocessing.com/" style="color: white;">https://ipassprocessing.com/</a>
                 </div>
             </div>
         ';
@@ -1401,13 +1401,14 @@
             }
         }
 
+        $query = mysqli_query($conn, "SELECT * FROM tbl_remarks");
+        while ($data = mysqli_fetch_array($query)) {
+            echo '
+                <span style="background-color:'.$data['remarks_color'].';" class="badge text-white">'.$data['remarks_value'].'</span>
+            ';
+        }
+
         echo'
-        <span style="background-color:green;" class="badge text-white">Payment received</span>
-        <span style="background-color:#45A4AB;" class="badge text-white">Payment encoded</span>
-        <span style="background-color:#c7c10c;" class="badge text-white">On hold</span>
-        <span style="background-color:#b4c04c;" class="badge text-white">Pending</span>
-        <span style="background-color:blue;" class="badge text-white">Waiting to be received</span>
-        <span style="background-color:#1db394;" class="badge text-white">Refunded</span>
         <span style="background-color:red;" class="badge text-white">No Remarks</span>
         <div class="table-responsive">
             <table class="js-table-sections table table-bordered table-striped table-hover table-vcenter shad">
@@ -1440,34 +1441,46 @@
                         $val_php_total = $rows['val_php_total'];
                         $val_client_total = $rows['val_client_total'];
                         $val_remarks = $rows['val_remarks'];
-                        if ($val_remarks == 'Payment received') {
-                            $color = 'green';
-                            $text = 'text-white';
+                        $query_remarks = mysqli_query($conn, "SELECT * FROM tbl_remarks WHERE remarks_value = '$val_remarks'");
+                        $num = mysqli_num_rows($query_remarks);
+                        if ($num) {
+                            while($row = mysqli_fetch_array($query_remarks))
+                            {   
+                                $color = $row["remarks_color"];
+                                $text = 'text-white';
+                            }
+                        } else {
+                                $color = 'red';
+                                $text = 'text-white';
                         }
-                        if ($val_remarks == 'On hold') {
-                            $color = '#c7c10c';
-                            $text = 'text-white';
-                        }
-                        if ($val_remarks == 'Pending') {
-                            $color = '#b4c04c';
-                            $text = 'text-white';
-                        }
-                        if ($val_remarks == 'Waiting to be received') {
-                            $color = 'blue';
-                            $text = 'text-white';
-                        }
-                        if ($val_remarks == 'Refunded') {
-                            $color = '#1db394';
-                            $text = 'text-white';
-                        }
-                        if ($val_remarks == 'Payment encoded') {
-                            $color = '#45A4AB';
-                            $text = 'text-white';
-                        }
-                        if ($val_remarks == '') {
-                            $color = 'red';
-                            $text = 'text-white';
-                        }
+                        // if ($val_remarks == 'Payment received') {
+                        //     $color = 'green';
+                        //     $text = 'text-white';
+                        // }
+                        // if ($val_remarks == 'On hold') {
+                        //     $color = '#c7c10c';
+                        //     $text = 'text-white';
+                        // }
+                        // if ($val_remarks == 'Pending') {
+                        //     $color = '#b4c04c';
+                        //     $text = 'text-white';
+                        // }
+                        // if ($val_remarks == 'Waiting to be received') {
+                        //     $color = 'blue';
+                        //     $text = 'text-white';
+                        // }
+                        // if ($val_remarks == 'Refunded') {
+                        //     $color = '#1db394';
+                        //     $text = 'text-white';
+                        // }
+                        // if ($val_remarks == 'Payment encoded') {
+                        //     $color = '#45A4AB';
+                        //     $text = 'text-white';
+                        // }
+                        // if ($val_remarks == '') {
+                        //     $color = 'red';
+                        //     $text = 'text-white';
+                        // }
                         echo '
                         <tr style="background-color:'.$color.';" class="'.$text.'">
                             <td>'.$rows['val_date'].'</td>

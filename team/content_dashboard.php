@@ -984,59 +984,62 @@ $(document).ready(function(){
         var email_id = id;
         var email_name = document.getElementById("email_name" + id).value;
 
-        $.ajax({
-            url: 'ajax.php',
-            type: 'POST',
-            async: false,
-            data:{
-                email_name:email_name,
-                get_email_content_to_be_send: 1,
-            },
-            success: function(data){
-                // get email content base on email name then paste to textarea id="email_content"
-                document.getElementById("email_content").value = data;
-                email_content = document.getElementById("email_content").value;
-                $.ajax({
-                    url: 'ajax.php',
-                    type: 'POST',
-                    async: false,
-                    data:{
-                        test_email:contact_email,
-                        email_subject:email_subject,
-                        email_content:email_content,
-                        test_send_email: 1,
-                    },
-                    success: function(data){
-                        // Send emai to specific email address
-                        if (data == 'Email sent successfully.')
-                        {
-                            $.ajax({
-                                url: 'ajax.php',
-                                type: 'POST',
-                                async: false,
-                                data:{
-                                    user_id:user_id,
-                                    task_id:task_id,
-                                    contact_email:contact_email,
-                                    email_id:email_id,
-                                    email_send_history: 1,
-                                },
-                                    success: function(data){
-                                        $('#modal-popout').modal("hide");
-                                        $('#modal-extra-large').modal("show");
-                                        display_email_history_table();
-                                        alert(data);
-                                    }
-                            });
+        if(confirm("Are you sure you want to send this email?"))
+        {
+            $.ajax({
+                url: 'ajax.php',
+                type: 'POST',
+                async: false,
+                data:{
+                    email_name:email_name,
+                    get_email_content_to_be_send: 1,
+                },
+                success: function(data){
+                    // get email content base on email name then paste to textarea id="email_content"
+                    document.getElementById("email_content").value = data;
+                    email_content = document.getElementById("email_content").value;
+                    $.ajax({
+                        url: 'ajax.php',
+                        type: 'POST',
+                        async: false,
+                        data:{
+                            test_email:contact_email,
+                            email_subject:email_subject,
+                            email_content:email_content,
+                            test_send_email: 1,
+                        },
+                        success: function(data){
+                            // Send emai to specific email address
+                            if (data == 'Email sent successfully.')
+                            {
+                                $.ajax({
+                                    url: 'ajax.php',
+                                    type: 'POST',
+                                    async: false,
+                                    data:{
+                                        user_id:user_id,
+                                        task_id:task_id,
+                                        contact_email:contact_email,
+                                        email_id:email_id,
+                                        email_send_history: 1,
+                                    },
+                                        success: function(data){
+                                            $('#modal-popout').modal("hide");
+                                            $('#modal-extra-large').modal("show");
+                                            display_email_history_table();
+                                            alert(data);
+                                        }
+                                });
+                            }
+                            else
+                            {
+                                alert(data);
+                            }
                         }
-                        else
-                        {
-                            alert(data);
-                        }
-                    }
-                });
-            }
-        });
+                    });
+                }
+            });
+        }
     }
 
     function move_task(id)

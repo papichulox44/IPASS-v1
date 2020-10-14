@@ -254,19 +254,19 @@
             <div class="block-content" style="background-color: <?php echo $md_editor; ?>;">
                 
                 <!-- Email template || Can be change depend on template selected -->
-                <div style="padding: 20px 0px 0px 0px; background-color: #00465a;" class="shadow">
+                <div style="padding: 20px 0px 0px 0px; background-color: #189AA7;" class="shadow">
                         <img src="../assets/media/photos/header_email.png" style="width: 100%;">
-                    <table width="100%" border="0" cellspacing="0" cellpadding="20" style="background-color: #47bcde; color: #5a5f61; font-family:verdana;">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="20" style="background-color: #189AA7; color: #5a5f61; font-family:verdana;">
                         <tr id="content_message">
-                            <td style="background-color: #fff; border-top: 20px solid #006786; border-bottom: 20px solid #006786;">
+                            <td style="background-color: #fff; border-top: 10px solid #189AA7; border-bottom: 10px solid #189AA7;">
                             </td>
                         </tr>
                     </table> 
-                    <div style="text-align: center; padding: 20px 0px; color: #fff; background-color: #00465a;">
+                    <div style="text-align: center; padding: 20px 0px; color: #fff; background-color: #189AA7;">
                         PROCESSING MADE EASY BY IPASS<br>
                         Rm 1, 2nd Floor, Doña Segunda Complex,<br>
                         Ponciano Street, Davao City, Philippines 8000<br><br>
-                        <a href="https://ipassprocessing.com/" style="color: #2196f3;">https://ipassprocessing.com/</a>
+                        <a href="https://ipassprocessing.com/" style="color: white;">https://ipassprocessing.com/</a>
                     </div>
                 </div>
                 <!-- END Email template || Can be change depend on template selected -->

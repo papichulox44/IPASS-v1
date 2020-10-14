@@ -535,7 +535,7 @@
                         $val_remarks = $rows['val_remarks'];
                         if ($val_id == $finance_val_id) {
 
-                            $query_remarks = mysqli_query($conn, "SELECT * FROM tbl_remarks WHERE remarks_value = '$val_remarks' OR remarks_value LIKE '%$val_remarks%'");
+                            $query_remarks = mysqli_query($conn, "SELECT * FROM tbl_remarks WHERE remarks_value = '$val_remarks'");
                             $num = mysqli_num_rows($query_remarks);
                             if ($num) {
                                 while($row = mysqli_fetch_array($query_remarks))
