@@ -131,6 +131,8 @@
         $to = $_POST['test_email'];
         $subject = $_POST['email_subject'];
         $email_content = $_POST['email_content'];
+        $FirstName = $_POST['FirstName'];
+        
         $from = 'cesteam@ipassprocessing.com';
 
         // Message can be change base on template selected
@@ -373,7 +375,7 @@
         $task_id = $_POST['task_id'];
         $status_list_id = $_POST['list_id'];
 
-        $select_task = mysqli_query($conn, "SELECT email_format.email_name, contact.contact_email, email_format.email_id, email_format.email_subject, email_format.email_name FROM email_assign INNER JOIN email_format ON email_assign.assign_email_id = email_format.email_id INNER JOIN task ON task.task_list_id = email_assign.assign_list_id INNER JOIN contact ON contact.contact_id = task.task_contact WHERE task.task_id = '$task_id'");
+        $select_task = mysqli_query($conn, "SELECT email_format.email_name, contact.contact_email, email_format.email_id, email_format.email_subject, email_format.email_name, contact.contact_fname FROM email_assign INNER JOIN email_format ON email_assign.assign_email_id = email_format.email_id INNER JOIN task ON task.task_list_id = email_assign.assign_list_id INNER JOIN contact ON contact.contact_id = task.task_contact WHERE task.task_id = '$task_id'");
 
         if (isset($_SESSION['set_email'])) {
             $set_email = $_SESSION['set_email'];
@@ -390,6 +392,7 @@
             <input id="contact_email'.$result_findstatus['email_id'].'" type="hidden" value="'.$result_findstatus['contact_email'].'"></input>
             <input id="email_subject'.$result_findstatus['email_id'].'" type="hidden" value="'.$result_findstatus['email_subject'].'"></input>
             <input id="email_name'.$result_findstatus['email_id'].'" type="hidden" value="'.$result_findstatus['email_name'].'"></input>
+            <input id="contact_fname'.$result_findstatus['email_id'].'" type="hidden" value="'.$result_findstatus['contact_fname'].'"></input>
             ';
         }
     }

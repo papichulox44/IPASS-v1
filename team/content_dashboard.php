@@ -983,7 +983,8 @@ $(document).ready(function(){
         var email_subject = document.getElementById("email_subject" + id).value;
         var email_id = id;
         var email_name = document.getElementById("email_name" + id).value;
-
+        var FirstName = document.getElementById("contact_fname" + id).value;
+        // alert(FirstName);
         if(confirm("Are you sure you want to send this email?"))
         {
             $.ajax({
@@ -1006,6 +1007,7 @@ $(document).ready(function(){
                             test_email:contact_email,
                             email_subject:email_subject,
                             email_content:email_content,
+                            FirstName:FirstName,
                             test_send_email: 1,
                         },
                         success: function(data){
@@ -6057,7 +6059,9 @@ function display_assign_field_phase(){
     {   
         email_name = (select.options[select.selectedIndex].value);
         // alert(email_name);
+        // task_id = document.getElementById("task_id_when_click").value;
 
+        // alert(task_id);
         $.ajax({
         url: 'ajax_transaction.php',
         type: 'POST',

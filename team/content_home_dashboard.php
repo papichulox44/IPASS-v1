@@ -67,7 +67,7 @@
 		        <div class="row gutters-tiny">
 		            <!-- Earnings -->
 		            <div class="col-md-6 col-xl-3">
-		                <a class="block block-rounded block-transparent <?php echo $sq_inbox; ?>" href="main_inbox.php">
+		                <a class="block block-rounded block-transparent <?php echo $sq_inbox; ?>" target="blank_" href="https://my.livechatinc.com/">
 		                    <div class="block-content block-content-full block-sticky-options">
 		                        <div class="block-options">
 		                            <div class="block-options-item">
