@@ -371,31 +371,9 @@
 
 <div class="bs-example">
     <ul class="nav nav-tabs" id="myTab">
-        <li><a data-toggle="tab" href="#sectionA">List </a></li>
-        <!-- <li><a data-toggle="tab" id="<?php echo $mode_type;?>,<?php echo $row['user_id'];?>,<?php echo $space_id;?>,<?php echo $status_list_id;?>" onclick="view_board_fetch_status(this.id)" href="#sectionB">Board <?php echo $filter_tag; ?></a></li> -->
-        <li><a target="blank_" href="./main_board.php?space_name=<?php echo $_GET['space_name']; ?>&list_name=<?php echo $_GET['list_name']; ?>&list_id=<?php echo $_GET['list_id']; ?>">Board</a></li>
-        <li><a target="blank_" href="./main_box.php?space_name=<?php echo $_GET['space_name']; ?>&list_name=<?php echo $_GET['list_name']; ?>&list_id=<?php echo $_GET['list_id']; ?>">Box</a></li>
-        <!-- <li><a data-toggle="tab" href="#sectionC">Box</a></li> -->
+        <li><a data-toggle="tab" href="#sectionB">Board</a></li>
     </ul>
     <div class="tab-content">
-        <!-- List View -->
-        <div id="sectionA" class="tab-pane fade in">
-            <?php
-                $status_list_id = $_GET['list_id'];
-                $space_name = $_GET['space_name'];
-                $list_name = $_GET['list_name'];
-                $filter_once = 0;
-                include('view_header_list.php');
-            ?>
-            <!--<div style="overflow: auto; height: 455px;">-->
-            <div>
-                <div id="accordion2" role="tablist" aria-multiselectable="true">
-                    <?php include('view_list_fetch_status.php'); ?>
-                </div>
-            </div>
-        </div>
-        <!-- END List View -->
-
         <!-- Board -->
         <div id="sectionB" class="tab-pane fade">
             <?php
@@ -403,7 +381,8 @@
                 $space_name = $_GET['space_name'];
                 $list_name = $_GET['list_name'];
                 $filter_once = 0;
-                //include('view_header_board.php');
+                $md_text = 'text-white';
+                include('view_header_board.php');
             ?>
                 <!-- Main Container -->
                 <main id="main-container" style="margin-top: -10px;">
@@ -412,7 +391,7 @@
 
                     <!-- Scrum Board -->
                     <div class="scrumboard js-scrumboard" style="overflow-y: hidden; margin: -20px 0px 0px -11px;">
-                        <?php // include('view_board_fetch_status.php'); ?>
+                        <?php  include('view_board_fetch_status.php'); ?>
                     <?php
                     if($user_type == "Admin")
                     { ?>
@@ -440,23 +419,6 @@
                 <!-- END Main Container -->
         </div>
         <!-- Board -->
-
-        <!-- Box -->
-        <div id="sectionC" class="tab-pane fade">
-            <?php
-                $status_list_id = $_GET['list_id'];
-                $space_name = $_GET['space_name'];
-                $list_name = $_GET['list_name'];
-                $filter_once = 1;
-                //include('view_header_box.php');
-            ?>
-                <!-- Main Container -->
-                <main id="main-container" style="margin-top: -30px;">
-                    <?php // include('view_box_fetch.php'); ?>
-                </main>
-                <!-- END Main Container -->
-        </div>
-        <!-- End Box -->
     </div>
 </div>
 <!-- End tab that fucos when page refresh -->

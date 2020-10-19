@@ -41,7 +41,7 @@ tbody > tr:hover {
         ?>
         <div class="block block-bordered block-rounded <?php echo $md_body; ?>" style="width: 100%; border-left: 5px solid <?php echo $result_findstatus['status_color'];?>; box-shadow: 0px 1px 1px 0px rgba(119, 119, 119, 0.35);-moz-box-shadow: 0px 1px 1px 0px rgba(119, 119, 119, 0.35);-webkit-box-shadow: 0px 1px 1px 0px rgba(119, 119, 119, 0.35);">
             <div class="block-header" role="tab" id="accordion2_h<?php echo $a++;?>">
-                <span style="background-color: <?php echo $result_findstatus['status_color'];?>; padding: 3px 10px; border-radius: 3px;"><a class="font-w600" data-toggle="collapse" data-parent="#accordion2" href="#accordion2_q<?php echo $c++;?>" aria-expanded="true" aria-controls="accordion2_q<?php echo $d++;?>" style="color: #fff;" id="<?php echo $space_id.','.$user_id.','.$final_status_id.','.$g++.','.$md_body.','.$i++; ?>" onclick="show_steps(this.id)"><?php echo $result_findstatus['status_name'];?></a>
+                <span style="background-color: <?php echo $result_findstatus['status_color'];?>; padding: 3px 10px; border-radius: 3px;"><a class="font-w600" data-toggle="collapse" data-parent="#accordion2" href="#accordion2_q<?php echo $c++;?>" aria-expanded="true" aria-controls="accordion2_q<?php echo $d++;?>" style="color: #fff;" id="<?php echo $space_id.','.$user_id.','.$final_status_id.','.$g++.','.$md_body.','.$i++; ?>" onclick="show_steps(this.id)"><?php echo $result_findstatus['status_name'];?></a>(asd)
                     <div id="steps_lods<?php echo $h++;?>" style="display: none;" class="spinner-grow spinner-grow-sm text-white" role="status">
                         <span class="sr-only">Loading...</span>
                     </div>

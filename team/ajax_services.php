@@ -10,6 +10,46 @@
 		$md_body = $_POST['md_body'];
 		$i = $_POST['i'];
 
+        // ------------------------------------------------ for counting total filter
+        $find_space_id_in_filter = mysqli_query($conn, "SELECT * FROM filter WHERE filter_space_id = '$space_id' AND filter_user_id = '$user_id'");
+
+        //--------------- status query
+        $filter_status = mysqli_query($conn, "SELECT * FROM filter WHERE filter_space_id = '$space_id' AND filter_user_id = '$user_id' AND filter_name = 'status'");
+
+        //--------------- datecreated query
+        $filter_date_created = mysqli_query($conn, "SELECT * FROM filter WHERE filter_space_id = '$space_id' AND filter_user_id = '$user_id' AND filter_name = 'datecreated'");
+        $fetch_filter_date_created = mysqli_fetch_array($filter_date_created);
+        $filter_value_created = $fetch_filter_date_created['filter_value'];
+
+        //--------------- duedate query
+        $filter_due_date = mysqli_query($conn, "SELECT * FROM filter WHERE filter_space_id = '$space_id' AND filter_user_id = '$user_id' AND filter_name = 'duedate'");
+        $fetch_filter_due_date = mysqli_fetch_array($filter_due_date);
+        $filter_value_due_date = $fetch_filter_due_date['filter_value'];
+
+        //--------------- priority query
+        $filter_priority = mysqli_query($conn, "SELECT * FROM filter WHERE filter_space_id = '$space_id' AND filter_user_id = '$user_id' AND filter_name = 'priority'");
+        $fetch_filter_priority = mysqli_fetch_array($filter_priority);
+        $filter_value_priority = $fetch_filter_priority['filter_value'];
+
+        //--------------- tag query
+        $filter_tag = mysqli_query($conn, "SELECT * FROM filter WHERE filter_space_id = '$space_id' AND filter_user_id = '$user_id' AND filter_name = 'tag'");
+        $fetch_filter_tag = mysqli_fetch_array($filter_tag);
+        $tag_filter_value = $fetch_filter_tag['filter_value'];
+        $find_tag_name = mysqli_query($conn, "SELECT * FROM tags WHERE tag_id = '$tag_filter_value'");
+        $fetch_find_tag_name = mysqli_fetch_array($find_tag_name);
+
+        //--------------- assign query
+        $filter_assign = mysqli_query($conn, "SELECT * FROM filter WHERE filter_space_id = '$space_id' AND filter_user_id = '$user_id' AND filter_name = 'assign'");
+        $fetch_filter_assign = mysqli_fetch_array($filter_assign);
+        $assign_filter_value = $fetch_filter_assign['filter_value'];
+        $find_assign_name = mysqli_query($conn, "SELECT * FROM user WHERE user_id = '$assign_filter_value'");
+        $fetch_find_assign_name = mysqli_fetch_array($find_assign_name);
+
+        //--------------- Normal field query | textarea,text,email,phone,date,number
+        $filter_field = mysqli_query($conn, "SELECT * FROM filter WHERE filter_space_id = '$space_id' AND filter_user_id = '$user_id' AND filter_name = 'field'");
+        $fetch_filter_field = mysqli_fetch_array($filter_field);
+        $field_filter_value = $fetch_filter_field['filter_value'];
+
 		// <script src="../assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
   //       <script src="../assets/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
   //       <script src="../assets/js/pages/be_tables_datatables.min.js"></script>

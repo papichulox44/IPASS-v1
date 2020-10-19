@@ -37,6 +37,36 @@
         $percentage = number_format(($z / ($count_status - 1) * 100) - $minus)."";   
     }
 ?>
+<style type="text/css">
+    .test {
+  display: inline-block;
+  padding: 20px;
+}
+.spinner-circle {
+  width: 160px;
+  height: 160px;
+  position: relative;
+  margin: 30px;
+}
+.spinner {
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+  border: 5px solid rgba(0,0,0,0.3);
+  border-right: 5px solid #42A5F5;
+  animation: rotate--spinner 1.6s linear infinite;
+  box-sizing: border-box;
+
+}
+@keyframes rotate--spinner {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+</style>
     <!-- Page Content -->
     <div class="content">  
 
@@ -60,22 +90,25 @@
                             <div class="block block-themed text-center">
                                 <div style="background: #eee; padding: 15px;">
                                     <div class="py-20 text-center" style="background-color: #fff;">
-                                        <div class="js-pie-chart pie-chart" data-percent="<?php echo $percentage; ?>" data-line-width="9" data-size="180" data-bar-color="#42a5f5" data-track-color="#e9e9e9">
+                                        <div class="test">
+                                          <div class="spinner-circle">
+                                            <div class="spinner"></div>
                                             <span>
                                                 <?php 
                                                 if($percentage == 100)
                                                 {
                                                     // echo '<i class="fa fa-4x fa-trophy text-muted"></i>';
-                                                    echo '<img style="height: 150px;" src="../assets/media/photos/logo-ipass.png">';
+                                                    echo '<img style="height: 145px; margin-top: -182px;" src="../assets/media/photos/logo-ipass.png">';
                                                 }
                                                 else
                                                 {
                                                     // echo '<i class="fa fa-4x fa-cog fa-spin text-primary"></i>';
-                                                    echo '<img class="fa fa-4x fa-cog fa-spin text-primary" style="height: 150px;" src="../assets/media/photos/logo-ipass.png">';
+                                                    echo '<img style="height: 145px; margin-top: -182px;" src="../assets/media/photos/logo-ipass.png">';
                                                 }
                                                 ?>
                                             </span>
-                                        </div>
+                                         </div>
+                                        </div> 
                                         <br>
                                     <?php 
                                         if($percentage == 100)

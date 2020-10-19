@@ -59,7 +59,7 @@
 </style>
 <div class="row" style="margin-top: 25px;">    
     <div class="col-md-6 col-xl-3" >
-        <div class="block block-themed <?php echo $md_body; ?> block-mode-hidden" style="box-shadow: 0px 1px 3px 0px rgba(119, 119, 119, 0.34);-moz-box-shadow: 0px 1px 3px 0px rgba(119, 119, 119, 0.34);-webkit-box-shadow: 0px 1px 3px 0px rgba(119, 119, 119, 0.34);">
+        <div class="block block-themed <?php echo $md_body; ?>" style="box-shadow: 0px 1px 3px 0px rgba(119, 119, 119, 0.34);-moz-box-shadow: 0px 1px 3px 0px rgba(119, 119, 119, 0.34);-webkit-box-shadow: 0px 1px 3px 0px rgba(119, 119, 119, 0.34);">
             <div class="block-header bg-gd-aqua">
                 <h3 class="block-title">Unassign</h3>
                     <div class="block-options">

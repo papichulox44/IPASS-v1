@@ -27,24 +27,28 @@
             // ADD TASK
         }
 
-        $contact_id = $_POST['contact_id']; 
+        echo '<script>alert("'.$assign_to.'");</script>';
+        $contact_id = $_POST['contact_id'];
 
-        $fname = $_POST['fname']; 
-        $mname = $_POST['mname']; 
-        $lname = $_POST['lname']; 
-        $bdate = $_POST['bdate']; 
+        $fname = $_POST['fname'];
+        $mname = $_POST['mname'];
+        $lname = $_POST['lname'];
+        $bdate = $_POST['bdate'];
         $gender = $_POST['gender'];
-        $email = $_POST['email'];  
+        $email = $_POST['email'];
         $fbname = $_POST['fbname'];
         $messenger = $_POST['messenger'];
-        $cnumber = $_POST['cnumber']; 
-        $country = $_POST['country']; 
-        $city = $_POST['city']; 
-        $zip = $_POST['zip']; 
-        $street = $_POST['street']; 
-        $location = $_POST['location']; 
-        $password = $_POST['password']; 
+        $cnumber = $_POST['cnumber'];
+        $country = $_POST['country'];
+        $city = $_POST['city'];
+        $zip = $_POST['zip'];
+        $street = $_POST['street'];
+        $location = $_POST['location'];
+        $password = $_POST['password'];
+        $nationality = $_POST['nationality'];
+        $status = $_POST['status'];
         $user_id = $row['user_id'];
+
 
         $task_name = $fname . ' ' . $mname . ' ' . $lname;
 
@@ -55,7 +59,7 @@
             $contact = mysqli_query($conn, "SELECT * FROM contact WHERE contact_fname = '$fname' AND contact_mname = '$mname' AND contact_lname = '$lname' AND contact_email = '$email'");
             if(mysqli_num_rows($contact) == 0) // check if contact details exist
             {
-                mysqli_query($conn,"INSERT into `contact` (contact_fname, contact_mname, contact_lname, contact_bdate, contact_gender, contact_email, contact_fbname, contact_messenger, contact_cpnum,contact_country, contact_city, contact_zip, contact_street, contact_location, contact_date_created, contact_created_by, contact_assign_to, contact_password) values ('$fname','$mname','$lname','$bdate','$gender','$email','$fbname','$messenger','$cnumber','$country','$city','$zip','$street','$location', NOW(), '$user_id', '$assign_to', '$random')") or die(mysqli_error());
+                mysqli_query($conn,"INSERT into `contact` (contact_fname, contact_mname, contact_lname, contact_bdate, contact_gender, contact_email, contact_fbname, contact_messenger, contact_cpnum,contact_country, contact_city, contact_zip, contact_street, contact_location, contact_date_created, contact_created_by, contact_assign_to, contact_password, contact_status, contact_nationality) values ('$fname','$mname','$lname','$bdate','$gender','$email','$fbname','$messenger','$cnumber','$country','$city','$zip','$street','$location', NOW(), '$user_id', '$assign_to', '$random', '$status', '$nationality')") or die(mysqli_error());
 
                 if($assign_to != "") // check if member click the assign to combobox specially in status
                 {
@@ -120,7 +124,7 @@
         }
         else // update contact information if exist
         {              
-            mysqli_query($conn, "UPDATE contact SET contact_fname = '$fname', contact_mname = '$mname', contact_lname = '$lname', contact_bdate = '$bdate', contact_gender = '$gender', contact_email = '$email', contact_fbname = '$fbname', contact_messenger = '$messenger', contact_cpnum = '$cnumber', contact_country = '$country', contact_city = '$city', contact_zip = '$zip', contact_street = '$street', contact_location = '$location', contact_assign_to = '$assign_to' WHERE contact_id='$contact_id'") or die(mysqli_error()); 
+            mysqli_query($conn, "UPDATE contact SET contact_fname = '$fname', contact_mname = '$mname', contact_lname = '$lname', contact_bdate = '$bdate', contact_gender = '$gender', contact_email = '$email', contact_fbname = '$fbname', contact_messenger = '$messenger', contact_cpnum = '$cnumber', contact_country = '$country', contact_city = '$city', contact_zip = '$zip', contact_street = '$street', contact_location = '$location', contact_assign_to = '$assign_to', contact_status = '$status', contact_nationality = '$nationality' WHERE contact_id='$contact_id'") or die(mysqli_error()); 
             if($assign_to != "") // check if member click the assign to combobox specially in status
             {
                 mysqli_query($conn,"INSERT into `task` (task_name, task_status_id, task_list_id, task_created_by, task_date_created, task_assign_to, task_contact) values ('$task_name', '$status_id', '$list_id', '$user_id', NOW(), '$user_id', '$contact_id')") or die(mysqli_error()); 
@@ -232,19 +236,37 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label">Status<span class="text-danger"> *</span></label>
+                                            <div class="col-lg-8">
+                                                <select class="form-control text-muted" id="status" name="status" required>
+                                                    <option></option>
+                                                    <option value="Married">Married</option>
+                                                    <option value="Single">Single</option>
+                                                    <option value="Widow">Widow</option>
+                                                    <option value="Annuled">Annuled</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label">Nationality<span class="text-danger"> *</span></label>
+                                            <div class="col-lg-8">
+                                                <input type="text" class="form-control" id="nationality" name="nationality" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
                                             <label class="col-lg-3 col-form-label">Email<span class="text-danger"> *</span></label>
                                             <div class="col-lg-8">
                                                 <input type="email" class="form-control" id="email" name="email" required>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="col-md-6">
                                         <div class="form-group row">
                                             <label class="col-lg-3 col-form-label">Fb Name<span class="text-danger"> *</span></label>
                                             <div class="col-lg-8">
                                                 <input type="email" class="form-control" id="fbname" name="fbname" required>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6">
                                         <div class="form-group row">
                                             <label class="col-lg-3 col-form-label">Messenger</label>
                                             <div class="col-lg-8">
@@ -326,7 +348,7 @@
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label>Status</label>
-                                            <select class="form-control" id="statusid" onchange="status(this)">
+                                            <select class="form-control" id="statusid" onchange="status_services(this)">
                                             </select>
                                             <input type="hidden" id="status_id_no" name="status_id" value="">
                                         </div>
@@ -622,11 +644,12 @@
         ?>
     }
 
-    function status(select)
+    function status_services(select)
     {
         status_id = (select.options[select.selectedIndex].value); // get list id
         //alert('ok');
         document.getElementById("status_id_no").value = status_id;
+        alert("Nag alert");
     }
     function edit_contact(id) 
     {
@@ -658,6 +681,8 @@
                     document.getElementById("street").value = "<?php echo $result_findcontact['contact_street'] ?>";
                     document.getElementById("location").value = "<?php echo $result_findcontact['contact_location'] ?>";
                     document.getElementById("password").value = "<?php echo $result_findcontact['contact_password'] ?>";
+                    document.getElementById("status").value = "<?php echo $result_findcontact['contact_status'] ?>";
+                    document.getElementById("nationality").value = "<?php echo $result_findcontact['contact_nationality'] ?>";
                 }
             <?php
             }

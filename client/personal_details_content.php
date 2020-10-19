@@ -19,8 +19,10 @@
         $street = $_POST['street']; 
         $cnumber = $_POST['cnumber']; 
         $location = $_POST['location'];
+        $status = $_POST['status'];
+        $nationality = $_POST['nationality'];
 
-        $update = mysqli_query($conn, "UPDATE contact SET contact_fname='$fname', contact_mname='$mname', contact_lname='$lname', contact_bdate='$bdate', contact_gender='$gender', contact_email='$email', contact_fbname='$fbname', contact_messenger='$messenger', contact_cpnum='$cnumber',  contact_country='$country', contact_city='$city', contact_zip='$zip', contact_street='$street', contact_location='$location' WHERE contact_id = '$contact_id'") or die(mysqli_error());
+        $update = mysqli_query($conn, "UPDATE contact SET contact_fname='$fname', contact_mname='$mname', contact_lname='$lname', contact_bdate='$bdate', contact_gender='$gender', contact_email='$email', contact_fbname='$fbname', contact_messenger='$messenger', contact_cpnum='$cnumber',  contact_country='$country', contact_city='$city', contact_zip='$zip', contact_street='$street', contact_location='$location', contact_status='$status', contact_nationality='$nationality' WHERE contact_id = '$contact_id'") or die(mysqli_error());
 
         if($update == true)
         {
@@ -123,15 +125,30 @@
                                     </select>
                                  </div>
                                  <div class="form-group">
+                                    <label for="crypto-settings-street-1">Status</label>
+                                    <select class="form-control text-muted" id="admin_status" name="status" required>
+                                        <option disabled="" selected=""></option>
+                                        <option value="Married" <?php if($row['contact_status'] == "Married") { echo 'selected'; } ?>>Married</option>
+                                        <option value="Single" <?php if($row['contact_status'] == "Single") { echo 'selected'; } ?>>Single</option>
+                                        <option value="Widow" <?php if($row['contact_status'] == "Widow") { echo 'selected'; } ?>>Widow</option>
+                                        <option value="Annuled" <?php if($row['contact_status'] == "Annuled") { echo 'selected'; } ?>>Annuled</option>
+                                    </select>
+                                 </div>
+                                 <div class="form-group">
+                                    <label for="crypto-settings-street-1">Nationality</label>
+                                    <input type="text" class="form-control" id="admin_nationality" name="nationality" value="<?php echo $row['contact_nationality'];?>" required>
+                                 </div>
+                                 <div class="form-group">
                                     <label for="crypto-settings-street-1">Email</label>
                                     <input type="email" class="form-control" id="crypto-settings-street-1" name="email" value="<?php echo $row['contact_email'];?>" required>
                                  </div>
-                                 <div class="form-group">
+                                 
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
                                     <label for="crypto-settings-street-1">FB Name</label>
                                     <input type="email" class="form-control" id="crypto-settings-street-1" name="fbname" value="<?php echo $row['contact_fbname'];?>" required>
                                  </div>
-                            </div>
-                            <div class="col-md-6">
                                  <div class="form-group">
                                     <label for="crypto-settings-street-1">Messenger</label>
                                     <input type="text" class="form-control" id="crypto-settings-street-1" name="messenger" value="<?php echo $row['contact_messenger'];?>">
