@@ -38,7 +38,7 @@
                         <table class="table table-bordered table-striped table-vcenter table-hover<?php echo $md_table_body?> js-dataTable-full">
                             <thead>
                                 <tr>
-                                    <th class="text-center">ID</th>
+                                    <th class="text-center">No.</th>
                                     <th class="d-none d-sm-table-cell">Created by</th>
                                     <th class="d-none d-sm-table-cell">Template #</th>
                                     <th>Email Name</th>
@@ -49,6 +49,7 @@
                             <tbody>
                                 <?php 
                                 $results = mysqli_query($conn, "SELECT * FROM email_format ORDER BY email_name ASC");
+                                $count = 1;
                                 while($rows = mysqli_fetch_array($results))
                                 {
                                     $member_id = $rows['email_created_by'];
@@ -56,7 +57,7 @@
                                     $fetch_user = mysqli_fetch_array($select_user);
                                     echo '
                                     <tr>
-                                        <td class="text-center">'.$rows['email_id'].'</td>
+                                        <td class="text-center">'.$count++.'</td>
                                         <td class="d-none d-sm-table-cell">'.$fetch_user['fname'][0].' '.$fetch_user['mname'].' '.$fetch_user['lname'].'</td>
                                         <td class="d-none d-sm-table-cell">'.$rows['email_template'].'</td>
                                         <td>'.$rows['email_name'].'</td>

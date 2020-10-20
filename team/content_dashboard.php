@@ -3182,7 +3182,7 @@ function clear_tran()
             }
         }
     </style>
-    <div class="modal fade" id="modal-status" tabindex="-1" role="dialog" aria-labelledby="modal-fadein" aria-hidden="true" data-backdrop="static">
+    <div class="modal fade" id="modal-status" tabindex="-1" role="dialog" aria-labelledby="modal-fadein" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="block block-themed block-transparent mb-0" style="background-color: #efeeee;">
@@ -5775,14 +5775,15 @@ function display_assign_field_phase(){
 </script>
 
     <!-- Custom Field -->
-    <div class="modal" id="modal-customfield" tabindex="-1" role="dialog" aria-labelledby="modal-fadein" aria-hidden="true" data-backdrop="static">
+    <div class="modal" id="modal-customfield" tabindex="-1" role="dialog" aria-labelledby="modal-fadein" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="block block-themed block-transparent mb-0">
                     <div class="block-header bg-corporate">
                         <h3 class="block-title">Custom field editor</h3>
                         <div class="block-options">
-                            <button type="button" class="btn-block-option" onClick="window.location.reload();"  data-dismiss="modal" aria-label="Close"> <i class="si si-close"></i> </button>
+                            <button type="button" class="btn-block-option"  data-dismiss="modal" aria-label="Close"> <i class="si si-close"></i> </button>
+                            <!-- <button type="button" class="btn-block-option" onClick="window.location.reload();"  data-dismiss="modal" aria-label="Close"> <i class="si si-close"></i> </button> -->
                         </div>
                     </div>
                     <div class="block-content" style="margin-bottom: 15px;">

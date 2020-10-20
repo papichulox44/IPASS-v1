@@ -21,12 +21,12 @@
             </div>
             <div class="block-content block-content-full <?php echo $md_body; ?>">
                 <!-- DataTables functionality is initialized with .js-dataTable-full class in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->
-                <table class="table table-striped table-vcenter js-dataTable-full <?php echo $md_body; ?>">
+                <table class="table table-bordered table-striped table-vcenter js-dataTable-full <?php echo $md_body; ?>">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>No.</th>
                             <th>Name</th>
-                            <th class="d-none d-sm-table-cell text-center">Task</th>
+                            <th class="d-none d-sm-table-cell text-center">Total Task</th>
                             <th class="d-none d-sm-table-cell">Email</th>
                             <th class="d-none d-sm-table-cell text-center" style="width: 15%;">Number</th>
                             <th class="text-center" style="width: 15%;">Profile</th>
@@ -44,7 +44,7 @@
                                 $count_task = mysqli_num_rows($select_task);
                                 echo '
                                 <tr>
-                                    <td>'.$result_finduser['contact_id'].'</td>
+                                    <td>'.$countuser++.'</td>
                                     <td class="font-w600 ">';
                                         echo'<a href="main_contact_details.php?contact_id='.$contact_id.'">'.$result_finduser['contact_fname'].' '.$result_finduser['contact_mname'].' '.$result_finduser['contact_lname'].'</a>';
                                         echo'

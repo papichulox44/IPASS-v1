@@ -52,7 +52,7 @@
             <table class="block table table-bordered table-striped table-hover table-vcenter js-dataTable-full <?php echo $md_body; ?>">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>No.</th>
                         <th>Name</th>
                         <th class="d-none d-sm-table-cell">Due_Date</th>
                         <th class="d-none d-sm-table-cell">Date_Created</th>
@@ -119,7 +119,7 @@
                                 $to = end($dates); // sunday
                                 $select_task = mysqli_query($conn, "SELECT * FROM task WHERE task_date_created BETWEEN '$from' AND '$to'");
                             }
-
+                        $count = 1;
                         // $select_task = mysqli_query($conn, "SELECT * FROM task");
                         while($fetch_task = mysqli_fetch_array($select_task))
                         {
@@ -132,7 +132,7 @@
 
                             echo'
                             <tr style="cursor: pointer;" id="taskid_'.$task_id.'" onclick="view_task(this.id)">
-                                <td>'.$task_id.'</td>
+                                <td>'.$count++.'</td>
                                 <td>';
                                     $task_name = $fetch_task['task_name'];
                                     $new__task_name = substr($task_name, 0, 18); // get only 10 character
