@@ -3146,4 +3146,20 @@
     }
     // -----------------------END TRANSACTION DETAILS UPDATE WITH PICTURE -----------------------
 
+    if(isset($_POST['hide_status']))
+    {
+        $list_id = $_POST['list_id'];
+
+        $results = mysqli_query($conn, "SELECT * FROM status WHERE status_list_id = $list_id ORDER BY status_order_no");
+        while($rows = mysqli_fetch_array($results))
+        {
+            echo '
+            <tr>
+                <td>'.$rows['status_name'].'</td>
+            </tr>
+            ';
+        }
+    }
+
+
 ?>

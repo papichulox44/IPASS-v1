@@ -990,6 +990,8 @@ $(document).ready(function(){
         var email_name = document.getElementById("email_name" + id).value;
         var FirstName = document.getElementById("contact_fname" + id).value;
         // alert(FirstName);
+        // modal_id = 'taskmodal'+task_id;
+        // alert(modal_id);
         if(confirm("Are you sure you want to send this email?"))
         {
             $.ajax({
@@ -1033,6 +1035,8 @@ $(document).ready(function(){
                                         success: function(data){
                                             $('#modal-popout').modal("hide");
                                             $('#modal-extra-large').modal("show");
+                                            $('#modal-extra-large').css('overflow-y', 'auto');
+                                            // $('#modal-extra-large').focus();
                                             display_email_history_table();
                                             alert(data);
                                         }
@@ -2216,6 +2220,38 @@ $(document).ready(function(){
                     </div>
                 </div>
                 <!-- END Email History -->
+
+                <!-- Hide/Show status in client Portal -->
+                <div class="block-content" style="background-color: #f0f2f5;">
+                    <div class="block block-mode-hidden">
+                        <div class="block-header block-header-default" style="margin-top: -20px; background-color: #0d7694;">
+                            <h3 class="block-title text-white">Status</h3>
+                            <div class="block-options">
+                                <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle"></button>
+                            </div>
+                        </div>
+                        <div class="block-content">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label style="text-align: center;font-weight: bold;">List of Status</label>
+                                    <div data-toggle="slimscroll" data-height="300px" data-color="#42A5F5">
+                                        <table class="table table table-hover">
+                                            <tbody class="js-table-sections-header" id="hide_status">
+                                            </tbody>
+                                        </table> 
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                6 ni nga ika duha   
+
+                                </div>
+
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                <!-- END Hide/Show status in client Portal -->
 
                 <div class="block-content"  style="background-color: #f0f2f5;">
                     <div class="row items-push">
@@ -6089,7 +6125,28 @@ function display_assign_field_phase(){
     {
         $('#modal-popout').modal("hide");
         $('#modal-extra-large').modal("show");
+        $('#modal-extra-large').css('overflow-y', 'auto');
     }
+
+    hide_status()
+    function hide_status(){
+        list_id = <?php echo $_GET['list_id']; ?>
+
+        // alert(list_id);
+        $.ajax({
+        url: 'ajax.php',
+        type: 'POST',
+        async: false,
+        data:{
+            list_id:list_id,
+            hide_status: 1,
+        },
+            success: function(response){
+                $('#hide_status').html(response);
+            }
+        });
+    }
+
 </script>
 
 <!-- End board view modal -->
