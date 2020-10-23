@@ -22,6 +22,117 @@
         $status = $_POST['status'];
         $nationality = $_POST['nationality'];
 
+        //-------------------------------------------------
+        $query = mysqli_query($conn, "SELECT * FROM contact WHERE contact_id = '$contact_id'") or die(mysqli_error());
+        $data = mysqli_fetch_array($query);
+        $fname1 = $data['contact_fname'];
+        $mname1 = $data['contact_mname'];
+        $lname1 = $data['contact_lname'];
+        $bdate1 = $data['contact_bdate'];
+        $gender1 = $data['contact_gender'];
+        $email1 = $data['contact_email']; 
+        $fbname1 = $data['contact_fbname'];
+        $messenger1 = $data['contact_messenger'];
+        $country1 = $data['contact_country'];
+        $city1 = $data['contact_city']; 
+        $zip1 = $data['contact_zip'];
+        $street1 = $data['contact_street']; 
+        $cnumber1 = $data['contact_cpnum'];
+        $location1 = $data['contact_location'];
+        $status1 = $data['contact_status'];
+        $nationality1 = $data['contact_nationality'];
+        //---------------------------------------------
+
+        if ($fname == $fname1) {
+            $fname_client = '';
+        } else {
+            $fname_client = $_POST['fname'];
+        }
+        if ($mname == $mname1) {
+            $mname_client = '';
+        } else {
+            $mname_client = $_POST['mname'];
+        }
+        if ($lname == $lname1) {
+            $lname_client = '';
+        } else {
+            $lname_client = $_POST['lname'];
+        }
+        if ($bdate == $bdate1) {
+            $bdate_client = '';
+        } else {
+            $bdate_client = $_POST['bdate'];
+        }
+        if ($gender == $gender1) {
+            $gender_client = '';
+        } else {
+            $gender_client = $_POST['gender'];
+        }
+        if ($email == $email1) {
+            $email_client = '';
+        } else {
+            $email_client = $_POST['email'];
+        }
+        if ($fbname == $fbname1) {
+            $fbname_client = '';
+        } else {
+            $fbname_client = $_POST['fbname'];
+        }
+        if ($messenger == $messenger1) {
+            $messenger_client = '';
+        } else {
+            $messenger_client = $_POST['messenger'];
+        }
+        if ($country == $country1) {
+            $country_client = '';
+        } else {
+            $country_client = $_POST['country'];
+        }
+        if ($city == $city1) {
+            $city_client = '';
+        } else {
+            $city_client = $_POST['city'];
+        }
+        if ($zip == $zip1) {
+            $zip_client = '';
+        } else {
+            $zip_client = $_POST['zip'];
+        }
+        if ($street == $street1) {
+            $street_client = '';
+        } else {
+            $street_client = $_POST['street'];
+        }
+        if ($cnumber == $cnumber1) {
+            $cnumber_client = '';
+        } else {
+            $cnumber_client = $_POST['cnumber'];
+        }
+        if ($location == $location1) {
+            $location_client = '';
+        } else {
+            $location_client = $_POST['location'];
+        }
+        if ($status == $status1) {
+            $status_client = '';
+        } else {
+            $status_client = $_POST['status'];
+        }
+        if ($nationality == $nationality1) {
+            $nationality_client = '';
+        } else {
+            $nationality_client = $_POST['nationality'];
+        }
+
+        $query1 = mysqli_query($conn, "SELECT * FROM contact_client WHERE contact_id = '$contact_id'") or die(mysqli_error());
+
+        if (mysqli_num_rows($query1)) {
+            // Update contact client
+            $update = mysqli_query($conn, "UPDATE contact_client SET  contact_fname='$fname_client', contact_mname='$mname_client', contact_lname='$lname_client', contact_bdate='$bdate_client', contact_gender='$gender_client', contact_email='$email_client', contact_fbname='$fbname_client', contact_messenger='$messenger_client', contact_cpnum='$cnumber_client',  contact_country='$country_client', contact_city='$city_client', contact_zip='$zip_client', contact_street='$street_client', contact_location='$location_client', contact_status='$status_client', contact_nationality='$nationality_client' WHERE contact_id = '$contact_id'") or die(mysqli_error());
+        } else {
+            // Add contact client
+            $query_add_contact_client = mysqli_query($conn, "INSERT INTO contact_client (contact_id, contact_fname, contact_mname, contact_lname, contact_bdate, contact_gender, contact_email, contact_fbname, contact_messenger, contact_cpnum, contact_country, contact_city, contact_zip, contact_street, contact_location, contact_status, contact_nationality) VALUES ('$contact_id', '$fname_client', '$mname_client', '$lname_client', '$bdate_client', '$gender_client', '$email_client', '$fbname_client', '$messenger_client', '$cnumber_client', '$country_client', '$city_client', '$zip_client', '$street_client', '$location_client', '$status_client', '$nationality_client')") or die(mysqli_error());
+        }
         $update = mysqli_query($conn, "UPDATE contact SET contact_fname='$fname', contact_mname='$mname', contact_lname='$lname', contact_bdate='$bdate', contact_gender='$gender', contact_email='$email', contact_fbname='$fbname', contact_messenger='$messenger', contact_cpnum='$cnumber',  contact_country='$country', contact_city='$city', contact_zip='$zip', contact_street='$street', contact_location='$location', contact_status='$status', contact_nationality='$nationality' WHERE contact_id = '$contact_id'") or die(mysqli_error());
 
         if($update == true)

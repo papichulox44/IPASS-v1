@@ -784,9 +784,11 @@ $(document).ready(function(){
             display_requirement_comment();
             display_status();
             display_task_info();
-            
             fill_input();
             display_email_history_table();
+
+            hide_status();
+            show_status();
         });
         function display_contact()
         {
@@ -2242,7 +2244,13 @@ $(document).ready(function(){
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                6 ni nga ika duha   
+                                    <label style="text-align: center;font-weight: bold;">List of Status to be Show in Client Portal</label>
+                                    <div data-toggle="slimscroll" data-height="300px" data-color="#42A5F5">
+                                        <table class="table table table-hover">
+                                            <tbody class="js-table-sections-header" id="show_status">
+                                            </tbody>
+                                        </table> 
+                                    </div> 
 
                                 </div>
 
@@ -6127,17 +6135,17 @@ function display_assign_field_phase(){
         $('#modal-extra-large').modal("show");
         $('#modal-extra-large').css('overflow-y', 'auto');
     }
-
-    hide_status()
+    // hide_status();
     function hide_status(){
         list_id = <?php echo $_GET['list_id']; ?>
-
-        // alert(list_id);
+        // task_id = document.getElementById("task_id_when_click").value; 
+        // alert(task_id);
         $.ajax({
         url: 'ajax.php',
         type: 'POST',
         async: false,
         data:{
+            task_id:task_id,
             list_id:list_id,
             hide_status: 1,
         },
@@ -6145,6 +6153,83 @@ function display_assign_field_phase(){
                 $('#hide_status').html(response);
             }
         });
+    }
+
+    function show_status(){
+        list_id = <?php echo $_GET['list_id']; ?>
+        // task_id = document.getElementById("task_id_when_click").value; 
+        // alert(task_id);
+        $.ajax({
+        url: 'ajax.php',
+        type: 'POST',
+        async: false,
+        data:{
+            task_id:task_id,
+            list_id:list_id,
+            show_status: 1,
+        },
+            success: function(response){
+                $('#show_status').html(response);
+            }
+        });
+    }
+
+    function click_hide_status(id)
+    {
+        array = id.split(',');
+        status_id = array[0];
+        contact_id = array[1];
+        statud_list_id = array[2];
+        task_id = array[3];
+
+        // alert(status_id +' '+ contact_id + ' ' + statud_list_id);
+        if(confirm("Are you sure?"))
+        {
+            $.ajax({
+            url: 'ajax.php',
+            type: 'POST',
+            async: false,
+            data:{
+                status_id:status_id,
+                contact_id:contact_id,
+                statud_list_id:statud_list_id,
+                task_id:task_id,
+                click_hide_status: 1,
+            },
+                success: function(response){
+                    // $('#hide_status').html(response);
+                    if (response == 'success') {
+                        alert('Successfully Added!!');
+                        hide_status();
+                        show_status();
+                    }
+                }
+            });
+        }
+    }
+
+    function delete_status(id)
+    {   
+        if(confirm("Are you sure?"))
+        {
+            $.ajax({
+            url: 'ajax.php',
+            type: 'POST',
+            async: false,
+            data:{
+                status_details_id:id,
+                delete_status: 1,
+            },
+                success: function(response){
+                    // $('#show_status').html(response);
+                    if (response == 'success') {
+                        alert('Successfully Hide');
+                        hide_status();
+                        show_status();
+                    }
+                }
+            });
+        }
     }
 
 </script>

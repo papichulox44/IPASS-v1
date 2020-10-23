@@ -243,7 +243,7 @@
                                 $check_if_task_exist = mysqli_query($conn, "SELECT * FROM $space_db_table WHERE task_id ='$task_id'");
                                 $fetch_input_value = mysqli_fetch_array($check_if_task_exist);
 
-                                $select_status1 = mysqli_query($conn, "SELECT * FROM status WHERE status_list_id ='$list_id' ORDER BY status_order_no ASC");
+                                $select_status1 = mysqli_query($conn, "SELECT `status`.status_id, `status`.status_order_no, `status`.status_name, `status`.status_list_id, `status`.status__date_created, `status`.status_color FROM `status` INNER JOIN tbl_status_details ON tbl_status_details.status_id = `status`.status_id WHERE tbl_status_details.status_list_id =$list_id AND tbl_status_details.contact_id = $contact_id AND tbl_status_details.task_id = $task_id ORDER BY status.status_order_no ASC");
                                 while($result_select_status1 = mysqli_fetch_array($select_status1))
                                 {
                                     $status_name = $result_select_status1['status_name'];

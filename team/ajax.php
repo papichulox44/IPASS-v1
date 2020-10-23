@@ -3149,17 +3149,75 @@
     if(isset($_POST['hide_status']))
     {
         $list_id = $_POST['list_id'];
+        $task_id = $_POST['task_id'];
+
+        $results_contact = mysqli_query($conn, "SELECT contact.contact_id FROM task INNER JOIN contact ON task.task_contact = contact.contact_id WHERE task.task_id = $task_id LIMIT 1");
+        $data = mysqli_fetch_assoc($results_contact);
+        $contact_id = $data['contact_id'];
 
         $results = mysqli_query($conn, "SELECT * FROM status WHERE status_list_id = $list_id ORDER BY status_order_no");
         while($rows = mysqli_fetch_array($results))
-        {
+        {       
+            $status_id = $rows['status_id'];    
+            $status_list_id = $rows['status_list_id'];    
+
+            $query_status_details = mysqli_query($conn, "SELECT * FROM tbl_status_details WHERE status_id = $status_id AND status_list_id = $status_list_id AND contact_id = $contact_id");
+            if (mysqli_num_rows($query_status_details)) {
+                $tr = '<tr style="background-color: beige;">';
+            } else {
+                $tr = '<tr style="cursor: pointer;" id="'.$rows['status_id'].','.$data['contact_id'].','.$list_id.','.$task_id.'" onclick="click_hide_status(this.id)">';
+            }
+
             echo '
-            <tr>
+            '.$tr.'
                 <td>'.$rows['status_name'].'</td>
             </tr>
             ';
         }
     }
 
+    if(isset($_POST['show_status']))
+    {
+        $list_id = $_POST['list_id'];
+        $task_id = $_POST['task_id'];
+
+        $results_contact = mysqli_query($conn, "SELECT contact.contact_id FROM task INNER JOIN contact ON task.task_contact = contact.contact_id WHERE task.task_id = $task_id LIMIT 1");
+        $data = mysqli_fetch_assoc($results_contact);
+        $contact_id = $data['contact_id'];
+
+        $query = mysqli_query($conn, "SELECT `status`.status_name,tbl_status_details.status_details_id FROM `status` INNER JOIN tbl_status_details ON tbl_status_details.status_id = `status`.status_id WHERE tbl_status_details.contact_id = $contact_id AND tbl_status_details.status_list_id = $list_id AND tbl_status_details.task_id = $task_id ORDER BY tbl_status_details.status_details_id DESC");
+        while($rows = mysqli_fetch_array($query))
+        {       
+            echo '
+            <tr style="cursor: pointer;" id="'.$rows['status_details_id'].'" onclick="delete_status(this.id)">
+                <td>'.$rows['status_name'].'</td>
+            </tr>
+            ';
+        }
+    }
+
+    if(isset($_POST['click_hide_status']))
+    {
+        $status_id = $_POST['status_id'];
+        $contact_id = $_POST['contact_id'];
+        $statud_list_id = $_POST['statud_list_id'];
+        $task_id = $_POST['task_id'];
+
+        $insert_status_details = mysqli_query($conn, "INSERT INTO tbl_status_details (status_id,contact_id,status_list_id,task_id) VALUES ($status_id,$contact_id,$statud_list_id,$task_id)");
+        if ($insert_status_details) {
+            echo 'success';
+        }
+    }
+
+    if(isset($_POST['delete_status']))
+    {
+        $status_details_id = $_POST['status_details_id'];
+
+        $delete_status = mysqli_query($conn, "DELETE FROM tbl_status_details WHERE status_details_id = $status_details_id");
+        if ($delete_status) {
+            echo 'success';
+        }
+    }
+        
 
 ?>
