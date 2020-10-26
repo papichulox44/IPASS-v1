@@ -242,10 +242,10 @@
     {}
     else
     {
-        echo '<div class="row">
-                <div class="col-12">
-                    <button type="button" class="btn btn-md btn-noborder btn-primary btn-block" onclick="btn_save_input_field()"><li class="fa fa-check"></li> Save</button>
-                </div>
-            </div>';
+        // echo '<div class="row">
+        //         <div class="col-12">
+        //             <button type="button" class="btn btn-md btn-noborder btn-primary btn-block" onclick="btn_save_input_field()"><li class="fa fa-check"></li> Save</button>
+        //         </div>
+        //     </div>';
     }
 ?>    

@@ -106,7 +106,7 @@
         {
             mysqli_query($conn, "UPDATE email_format SET email_created_by = '$email_created_by', email_template = '$email_template', email_name = '$email_name', email_subject = '$email_subject' WHERE email_name='$email_name'") or die(mysqli_error());
             // save email content to specific location
-            $fp = fopen("email_content/".$email_name.".txt","wb");
+            $fp = fopen("./email_content/".$email_name.".txt","wb");
             fwrite($fp,$email_content);
             fclose($fp);
 
@@ -117,7 +117,7 @@
             mysqli_query($conn, "INSERT into email_format values ('', '$email_created_by', '$email_template', '$email_name', '$email_subject')") or die(mysqli_error());
 
             // save email content to specific location
-            $fp = fopen("email_content/".$email_name.".txt","wb");
+            $fp = fopen("./email_content/".$email_name.".txt","wb");
             fwrite($fp,$email_content);
             fclose($fp);
 
@@ -3161,7 +3161,7 @@
             $status_id = $rows['status_id'];    
             $status_list_id = $rows['status_list_id'];    
 
-            $query_status_details = mysqli_query($conn, "SELECT * FROM tbl_status_details WHERE status_id = $status_id AND status_list_id = $status_list_id AND contact_id = $contact_id");
+            $query_status_details = mysqli_query($conn, "SELECT * FROM tbl_status_details WHERE status_id = $status_id AND status_list_id = $status_list_id AND contact_id = $contact_id AND task_id = $task_id");
             if (mysqli_num_rows($query_status_details)) {
                 $tr = '<tr style="background-color: beige;">';
             } else {

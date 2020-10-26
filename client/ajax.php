@@ -177,6 +177,7 @@
                         <th class="text-center">Charge</th>
                         <th class="text-center">Initial</th>
                         <th class="text-center">Rate(UPC)</th>
+                        <th class="text-right">Amount(USD)</th>
                         <th class="text-right">Amount(PAID)</th>
                     </tr>
                 </thead>
@@ -203,6 +204,7 @@
                             <td class="text-center">'.$rows['val_charge'].'</td>
                             <td class="text-center">'.number_format($rows['val_initial_amount'],2).'</td>
                             <td class="text-center">'.$rows['val_usd_rate'].'|'.$rows['val_php_rate'].'|'.$rows['val_client_rate'].'</td>
+                            <td class="text-right">$'.number_format($rows['val_usd_total'],2).'</td>
                             <td class="text-right">‭₱'.number_format($val_client_total,2).'</td>
                         </tr>
                         ';
@@ -289,10 +291,12 @@
                 </tbody>
                     <tr>
                         <td colspan="8" class="text-right font-w600">Total Amount:</td>
+                        <td class="text-right font-w600">$'.number_format($USD_paid,2).'</td>
                         <td class="text-right font-w600">₱'.number_format($PHP_paid_client,2).'</td>
                     </tr>
                     <tr>
                         <td colspan="8" class="text-right font-w600">Deposit:</td>
+                        <td class="text-right font-w600">$'.number_format($USD_depo,2).'</td>
                         <td class="text-right font-w600">₱'.number_format($PHP_depo_client,2).'</td>
                     </tr>
                     <tr class="table-success">
@@ -308,6 +312,7 @@
                         echo '
                         </td>
                         <td class="text-right font-w600 text-uppercase">Balance:</td>
+                        <td class="text-right font-w600">$'.number_format($USD_bal,2).'</td>
                         <td class="text-right font-w600">₱'.number_format($PHP_bal_client,2).'</td>
                     </tr>
             </table>

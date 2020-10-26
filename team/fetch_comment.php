@@ -101,7 +101,13 @@
 		                	
 	                    </div>	                
 		                <div class="text-muted mt-5">
-		                	<span style="font-size: 13px;"><?php echo $rows['comment_message']?></span>
+		                	<?php if ($rows['comment_type'] != 1) {
+		                		$bold = 'font-weight: bold;';
+		                	} else {
+		                		$bold = '';
+		                	}
+		                	 ?>
+		                	<span style="font-size: 13px;<?php echo $bold; ?>"><?php echo $rows['comment_message']?></span>
 		                </div>    
 		                <div class="text-muted mt-5">
 		                	<?php 

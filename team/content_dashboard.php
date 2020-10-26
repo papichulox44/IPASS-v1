@@ -2260,14 +2260,18 @@ $(document).ready(function(){
                     </div>
                 </div>
                 <!-- END Hide/Show status in client Portal -->
-
+                <div class="block-content" style="background-color: #F0F2F5; margin-top: -21px;"><hr style="border: 1px solid #0D7694;"></div>
                 <div class="block-content"  style="background-color: #f0f2f5;">
                     <div class="row items-push">
-
                         <!-- Task input field -->
                         <div class="col-md-6" style="margin: -20px 0px 40px 0px;">
                             <div  style="box-shadow:0px 2px 4px #b3b3b3;">
                                 <div data-toggle="slimscroll" data-height="480px" data-color="#42a5f5" data-opacity="1" data-always-visible="true" style="background-color: #fff; padding: 15px;" id="input_field_id">
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <button type="button" class="btn btn-md btn-noborder btn-primary btn-block" onclick="btn_save_input_field()"><li class="fa fa-check"></li> Save</button>
+                                    </div>`
                                 </div>
                             </div>
                         </div>
@@ -2583,23 +2587,26 @@ function save_field_amount_per_task(id)
 }
 
 function add_discount()
-{
-    user_id = <?php echo $id; ?>;
-    phase_id = document.getElementById("txt_select_phase").value;
-    task_id = document.getElementById("task_id_when_click").value;
-    disc_amount = document.getElementById("disc_amount").value;
-    if(phase_id == "")
+
+{   if(confirm("Are you sure you want to add this discount?"))
     {
-    	alert('Please select phase first.');
-    }
-    else if(disc_amount == "")
-    {
-        alert('Discounted amount must have a value, please input discount first.');
-    }
-    else
-    {
-	    transaction_container.innerHTML = "";
-	    save();
+        user_id = <?php echo $id; ?>;
+        phase_id = document.getElementById("txt_select_phase").value;
+        task_id = document.getElementById("task_id_when_click").value;
+        disc_amount = document.getElementById("disc_amount").value;
+        if(phase_id == "")
+        {
+        	alert('Please select phase first.');
+        }
+        else if(disc_amount == "")
+        {
+            alert('Discounted amount must have a value, please input discount first.');
+        }
+        else
+        {
+    	    transaction_container.innerHTML = "";
+    	    save();
+        }
     }
 }
 function save()
@@ -2624,93 +2631,99 @@ function save()
 
 function save_transac()
 {
-    user_id = <?php echo $id; ?>;
-    phase_id = document.getElementById("txt_select_phase").value;
-    task_id = document.getElementById("task_id_when_click").value;
-
-    tran_date = document.getElementById("tran_date").value;
-    tran_method = document.getElementById("tran_method").value;
-    tran_transaction_no = document.getElementById("tran_transaction_no").value;
-    tran_currency = document.getElementById("tran_currency").value;
-    tran_amount = document.getElementById("tran_amount").value;
-    tran_charge = document.getElementById("tran_charge").value;
-    tran_charge_type = document.getElementById("tran_charge_type").value;
-    tran_client_rate = document.getElementById("tran_client_rate").value;
-    tran_note = document.getElementById("tran_note").value;
-    tran_initial = document.getElementById("tran_initial").value;
-    tran_usd_rate = document.getElementById("tran_usd_rate").value;
-    tran_usd_total = document.getElementById("tran_usd_total").value;
-    tran_php_rate = document.getElementById("tran_php_rate").value;
-    tran_php_total = document.getElementById("tran_php_total").value;
-    tran_client_php_total = document.getElementById("tran_client_php_total").value;
-    tran_file = document.getElementById("tran_attachment").value;
-
-    tran_attachment = $('#tran_attachment');
-    file_attachment = tran_attachment.prop('files')[0];
-    formData = new FormData();
-    formData.append('user_id', user_id);
-    formData.append('phase_id', phase_id);
-    formData.append('task_id', task_id);
-    formData.append('tran_date', tran_date);
-    formData.append('tran_method', tran_method);
-    formData.append('tran_transaction_no', tran_transaction_no);
-    formData.append('tran_currency', tran_currency);
-    formData.append('tran_amount', tran_amount);
-    formData.append('tran_charge', tran_charge);
-    formData.append('tran_charge_type', tran_charge_type);
-    formData.append('tran_client_rate', tran_client_rate);
-    formData.append('tran_note', tran_note);
-    formData.append('tran_initial', tran_initial);
-    formData.append('tran_usd_rate', tran_usd_rate);
-    formData.append('tran_usd_total', tran_usd_total);
-    formData.append('tran_php_rate', tran_php_rate);
-    formData.append('tran_php_total', tran_php_total);
-    formData.append('tran_client_php_total', tran_client_php_total);
-    formData.append('file_attachment', file_attachment);
-    formData.append('save_transaction', 1);
-
-    if(tran_date == "" || tran_method == "" || tran_transaction_no == "" || tran_amount == "" ||  tran_currency == "" || tran_file == "" || tran_client_rate == "")
+    if(confirm("Are you sure you want to proceed with this transaction?"))
     {
-        alert('Please input value in require field.');
-    }
-    else if(phase_id == "")
-    {
-        alert('Please select phase in field area.');
-    }
-    else
-    {
-        $.ajax({
-            url:"ajax.php",
-            method:"post",
-            data: formData,
+        user_id = <?php echo $id; ?>;
+        phase_id = document.getElementById("txt_select_phase").value;
+        task_id = document.getElementById("task_id_when_click").value;
 
-            contentType:false,
-            cache: false,
-            processData: false,
-            success:function(data){
-                if(data == "success")
-                {
-                    alert("Transaction added successfully.");
-                    clear_finance_field();
-                    view_transaction_per_phase();
+        tran_date = document.getElementById("tran_date").value;
+        tran_method = document.getElementById("tran_method").value;
+        tran_transaction_no = document.getElementById("tran_transaction_no").value;
+        tran_currency = document.getElementById("tran_currency").value;
+        tran_amount = document.getElementById("tran_amount").value;
+        tran_charge = document.getElementById("tran_charge").value;
+        tran_charge_type = document.getElementById("tran_charge_type").value;
+        tran_client_rate = document.getElementById("tran_client_rate").value;
+        tran_note = document.getElementById("tran_note").value;
+        tran_initial = document.getElementById("tran_initial").value;
+        tran_usd_rate = document.getElementById("tran_usd_rate").value;
+        tran_usd_total = document.getElementById("tran_usd_total").value;
+        tran_php_rate = document.getElementById("tran_php_rate").value;
+        tran_php_total = document.getElementById("tran_php_total").value;
+        tran_client_php_total = document.getElementById("tran_client_php_total").value;
+        tran_file = document.getElementById("tran_attachment").value;
+
+        tran_attachment = $('#tran_attachment');
+        file_attachment = tran_attachment.prop('files')[0];
+        formData = new FormData();
+        formData.append('user_id', user_id);
+        formData.append('phase_id', phase_id);
+        formData.append('task_id', task_id);
+        formData.append('tran_date', tran_date);
+        formData.append('tran_method', tran_method);
+        formData.append('tran_transaction_no', tran_transaction_no);
+        formData.append('tran_currency', tran_currency);
+        formData.append('tran_amount', tran_amount);
+        formData.append('tran_charge', tran_charge);
+        formData.append('tran_charge_type', tran_charge_type);
+        formData.append('tran_client_rate', tran_client_rate);
+        formData.append('tran_note', tran_note);
+        formData.append('tran_initial', tran_initial);
+        formData.append('tran_usd_rate', tran_usd_rate);
+        formData.append('tran_usd_total', tran_usd_total);
+        formData.append('tran_php_rate', tran_php_rate);
+        formData.append('tran_php_total', tran_php_total);
+        formData.append('tran_client_php_total', tran_client_php_total);
+        formData.append('file_attachment', file_attachment);
+        formData.append('save_transaction', 1);
+
+        if(tran_date == "" || tran_method == "" || tran_transaction_no == "" || tran_amount == "" ||  tran_currency == "" || tran_file == "" || tran_client_rate == "")
+        {
+            alert('Please input value in require field.');
+        }
+        else if(phase_id == "")
+        {
+            alert('Please select phase in field area.');
+        }
+        else
+        {
+            $.ajax({
+                url:"ajax.php",
+                method:"post",
+                data: formData,
+
+                contentType:false,
+                cache: false,
+                processData: false,
+                success:function(data){
+                    if(data == "success")
+                    {
+                        alert("Transaction added successfully.");
+                        clear_finance_field();
+                        view_transaction_per_phase();
+                    }
+                    else if(data == "error2")
+                    {
+                        alert("Attachment extension must be; jpg, jpeg, and png only.");
+                        document.getElementById("tran_attachment").value = "";
+                    }
+                    else
+                    {
+                        alert("Upload attachment not greater than 3 MB.");
+                        document.getElementById("tran_attachment").value = "";
+                    }
                 }
-                else if(data == "error2")
-                {
-                    alert("Attachment extension must be; jpg, jpeg, and png only.");
-                    document.getElementById("tran_attachment").value = "";
-                }
-                else
-                {
-                    alert("Upload attachment not greater than 3 MB.");
-                    document.getElementById("tran_attachment").value = "";
-                }
-            }
-        });
+            });
+        }
     }
 }
 function clear_transac()
-{
-    clear_finance_field();
+{   
+    if(confirm("Are you sure you?"))
+    {
+        clear_finance_field();
+    }
 }
 function view_transaction_per_phase()
 {
@@ -2916,6 +2929,8 @@ function clear_tran()
     // For input fields -------------------------------
         function btn_save_input_field()
         {
+            if(confirm("Are you sure?"))
+            {
             var task_id = document.getElementById("task_id_when_click").value;
             var space_id = <?php echo $space_id; ?>;
             var user_id = <?php echo $id; ?>;
@@ -3069,6 +3084,7 @@ function clear_tran()
                 }
             }
         // DONE CODE in checking input field email
+            }
         }
     </script>
 
@@ -6136,6 +6152,7 @@ function display_assign_field_phase(){
         $('#modal-extra-large').css('overflow-y', 'auto');
     }
     // hide_status();
+    
     function hide_status(){
         list_id = <?php echo $_GET['list_id']; ?>
         // task_id = document.getElementById("task_id_when_click").value; 

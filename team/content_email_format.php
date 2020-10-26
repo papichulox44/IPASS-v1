@@ -535,42 +535,91 @@
             {    
                 if(confirm("Email name already exist in our directory, would you like to update that one?"))
                 {
-                    save_email();
+                    // save_email();
+                    $.ajax({
+                        url: 'ajax.php',
+                        type: 'POST', 
+                        async: false,
+                        data:{
+                            email_created_by:email_created_by,
+                            email_template:email_template,
+                            email_name:email_name,
+                            email_subject:email_subject,
+                            email_content:email_content,
+                            publish: 1,
+                        },
+                            success: function(data){
+                                if(data == "Insert")
+                                {
+                                    alert('Email save successfully.');
+                                }
+                                else
+                                {                            
+                                    alert('Email updated successfully.');
+                                }
+                                // location.reload();
+                            }
+                    });
                 }
             }
             else
             {
-                save_email();
+                // save_email();
+                 $.ajax({
+                    url: 'ajax.php',
+                    type: 'POST', 
+                    async: false,
+                    data:{
+                        email_created_by:email_created_by,
+                        email_template:email_template,
+                        email_name:email_name,
+                        email_subject:email_subject,
+                        email_content:email_content,
+                        publish: 1,
+                    },
+                        success: function(data){
+                            if(data == "Insert")
+                            {
+                                alert('Email save successfully.');
+                            }
+                            else
+                            {                            
+                                alert('Email updated successfully.');
+                            }
+                            // location.reload();
+                        }
+                });
+
             }
         }
     }
-    function save_email()
-    {
-        $.ajax({
-            url: 'ajax.php',
-            type: 'POST', 
-            async: false,
-            data:{
-                email_created_by:email_created_by,
-                email_template:email_template,
-                email_name:email_name,
-                email_subject:email_subject,
-                email_content:email_content,
-                publish: 1,
-            },
-                success: function(data){
-                    if(data == "Insert")
-                    {
-                        alert('Email save successfully.');
-                    }
-                    else
-                    {                            
-                        alert('Email updated successfully.');
-                    }
-                    location.reload();
-                }
-        });
-    }
+    // function save_email()
+    // {
+        // $.ajax({
+        //     url: 'ajax.php',
+        //     type: 'POST', 
+        //     async: false,
+        //     data:{
+        //         email_created_by:email_created_by,
+        //         email_template:email_template,
+        //         email_name:email_name,
+        //         email_subject:email_subject,
+        //         email_content:email_content,
+        //         publish: 1,
+        //     },
+        //         success: function(data){
+        //             if(data == "Insert")
+        //             {
+        //                 alert('Email save successfully.');
+        //             }
+        //             else
+        //             {                            
+        //                 alert('Email updated successfully.');
+        //             }
+        //             location.reload();
+        //         }
+        // });
+    // }
 
     function test_send_email()
     {        
