@@ -6108,7 +6108,9 @@ function display_assign_field_phase(){
                                 </select>
                             </div><br>
                             <textarea class="form-control mb-15" id="email_content" rows="12" style="display: none;"></textarea>
+                            <div data-toggle="slimscroll" data-height="300px" data-color="#42A5F5">
                             <span id="view_email_name"></span>
+                            </div>
                     <div class="modal-footer">
                         <!-- <button type="button" class="btn btn-alt-secondary" data-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-alt-success" data-dismiss="modal">
@@ -6249,7 +6251,108 @@ function display_assign_field_phase(){
         }
     }
 
+    function fetch_email_name_editable(id)
+    {
+        // alert(id);
+        user_id = <?php echo $_SESSION['user']; ?>;
+        var task_id = document.getElementById("task_id_when_click").value;
+        var contact_email = document.getElementById("contact_email" + id).value;
+        var email_subject = document.getElementById("email_subject" + id).value;
+        var email_id = id;
+        var email_name = document.getElementById("email_name" + id).value;
+        var FirstName = document.getElementById("contact_fname" + id).value;
+
+        // alert(email_name);
+        $.ajax({
+                url: 'ajax.php',
+                type: 'POST',
+                async: false,
+                data:{
+                    email_name:email_name,
+                    get_email_content_to_be_send: 1,
+                },
+                success: function(data){
+                    document.getElementById("email_content_editable").value = data;
+                }
+        });
+    }
+
+    // fetch_email_pictures();
+    function fetch_email_pictures()
+    {
+        // alert('Nag alert ang email pictures');
+        $.ajax({
+        url: './ajax.php',
+        type: 'POST',
+        async: false,
+        data:{
+            fetch_email_pictures: 1,
+        },
+            success: function(response){
+                $('#view_email_picture').html(response);
+            }
+        });
+        // document.getElementById("fetch_email_picture").value = 'Naa sya';
+    }
+
 </script>
 
+    <!-- Extra Large Modal Editable Email -->
+        <div class="modal fade" id="modal-extra-editable-email" tabindex="-1" role="dialog" aria-labelledby="modal-extra-large" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="block block-themed block-transparent mb-0">
+                        <div class="block-header" style="background-color: #045D71;">
+                            <h3 class="block-title"><button  data-dismiss="modal" data-toggle="modal" data-target="#modal-popout" style="background-color: #045D71;"><</button> Edit Email Format</h3>
+                            <div class="block-options">
+                                <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                    <i class="si si-close"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="block-content">
+                            <!-- CKEditor -->
+                                <div class="block-content" style="background-color: <?php echo $md_editor; ?>;">
+                                    <div class="form-group row">
+                                        <div class="col-md-8 mb-15">
+                                            <div class="row">                          
+                                                <div class="col-md-12">
+                                                    <textarea id="js-ckeditor" name="ckeditor"></textarea>
+                                                    <!-- <textarea id="js-ckeditor" name="samplssssse"></textarea> -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <textarea class="form-control mb-15" id="email_content_editable" rows="12" placeholder="Paste source here.."></textarea>
+                                                <button type="button" class="btn btn-block btn-primary" onclick="previewsss()">
+                                                    Send Now
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                            <!-- END CKEditor -->
+                            <!-- DataTables functionality is initialized with .js-dataTable-full class in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->
+                            <h2 class="text-center" style="margin-bottom: -30px">List of Pictures</h2>
+                            <div>
+                                <input type="file" id="email_pictures" style="margin-bottom: 5px;"><br>
+                                <button class="btn btn-primary">Submit</button>
+                            </div>
+                            <br>
+                            <div id="view_email_picture" data-toggle="slimscroll" data-height="350px" data-color="#42A5F5"></div>
+                        </div>
+                    </div>
+                    <!-- END Dynamic Table Full -->
+                    <div class="modal-footer">
+                    </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END Extra Large Modal Editable Email -->
+
+
 <!-- End board view modal -->
+
  

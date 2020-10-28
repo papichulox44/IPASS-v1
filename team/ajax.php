@@ -386,9 +386,17 @@
         while($result_findstatus = mysqli_fetch_array($select_task))
         {
             $email_name = $result_findstatus['email_name'];
-            echo '<button type="button" class="dropdown-item" id="'.$result_findstatus['email_id'].'" onclick="fetch_email_name(this.id)">
-                      <i class="fa fa-square mr-5" style="color: #3f9ce8;"></i>'.substr($email_name, 0, 45).'...
-            </button>
+            echo '
+            <div class="row">
+                <div class="col-md-10">
+                <button class="dropdown-item" id="'.$result_findstatus['email_id'].'" onclick="fetch_email_name(this.id)">
+                          <i class="fa fa-square mr-5" style="color: #3f9ce8;"></i>'.substr($email_name, 0, 45).'...
+                </button>
+                </div>
+                <div class="col-md-2">
+                <button class="btn btn-default" data-dismiss="modal" data-toggle="modal" data-target="#modal-extra-editable-email" onclick="fetch_email_pictures()"><i class="fa fa-edit" style="color: #3f9ce8; font-size:20px;" id="'.$result_findstatus['email_id'].'" onclick="fetch_email_name_editable(this.id)"></i></button>`
+                </div>
+            </div>
             <input id="contact_email'.$result_findstatus['email_id'].'" type="hidden" value="'.$result_findstatus['contact_email'].'"></input>
             <input id="email_subject'.$result_findstatus['email_id'].'" type="hidden" value="'.$result_findstatus['email_subject'].'"></input>
             <input id="email_name'.$result_findstatus['email_id'].'" type="hidden" value="'.$result_findstatus['email_name'].'"></input>
@@ -2295,7 +2303,7 @@
     if(isset($_POST['get_email_content_to_be_send']))
     {
         $email_name = $_POST['email_name'];
-        $file_loc = "email_content/".$email_name.".txt";
+        $file_loc = "./email_content/".$email_name.".txt";
 
         $myfile = fopen($file_loc, "r") or die("Unable to open file!");
         echo fread($myfile,filesize($file_loc));
@@ -3217,6 +3225,153 @@
         if ($delete_status) {
             echo 'success';
         }
+    }
+
+
+    if(isset($_POST['fetch_email_pictures']))
+    {
+        // $status_details_id = $_POST['status_details_id'];
+
+        // $delete_status = mysqli_query($conn, "DELETE FROM tbl_status_details WHERE status_details_id = $status_details_id");
+        // if ($delete_status) {
+        //     echo 'success';
+        // }
+
+        echo '
+        <table class="table table-bordered table-striped table-vcenter js-dataTable-full">
+            <thead>
+                <tr>
+                    <th class="text-center"></th>
+                    <th>Name</th>
+                    <th class="d-none d-sm-table-cell">Email</th>
+                    <th class="d-none d-sm-table-cell" style="width: 15%;">Access</th>
+                    <th class="text-center" style="width: 15%;">Profile</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-center">1</td>
+                    <td class="font-w600">Ralph Murray</td>
+                    <td class="d-none d-sm-table-cell">customer1@example.com</td>
+                    <td class="d-none d-sm-table-cell">
+                        <span class="badge badge-warning">Trial</span>
+                    </td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="View Customer">
+                            <i class="fa fa-user"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-center">1</td>
+                    <td class="font-w600">Ralph Murray</td>
+                    <td class="d-none d-sm-table-cell">customer1@example.com</td>
+                    <td class="d-none d-sm-table-cell">
+                        <span class="badge badge-warning">Trial</span>
+                    </td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="View Customer">
+                            <i class="fa fa-user"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-center">1</td>
+                    <td class="font-w600">Ralph Murray</td>
+                    <td class="d-none d-sm-table-cell">customer1@example.com</td>
+                    <td class="d-none d-sm-table-cell">
+                        <span class="badge badge-warning">Trial</span>
+                    </td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="View Customer">
+                            <i class="fa fa-user"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-center">1</td>
+                    <td class="font-w600">Ralph Murray</td>
+                    <td class="d-none d-sm-table-cell">customer1@example.com</td>
+                    <td class="d-none d-sm-table-cell">
+                        <span class="badge badge-warning">Trial</span>
+                    </td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="View Customer">
+                            <i class="fa fa-user"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-center">1</td>
+                    <td class="font-w600">Ralph Murray</td>
+                    <td class="d-none d-sm-table-cell">customer1@example.com</td>
+                    <td class="d-none d-sm-table-cell">
+                        <span class="badge badge-warning">Trial</span>
+                    </td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="View Customer">
+                            <i class="fa fa-user"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-center">1</td>
+                    <td class="font-w600">Ralph Murray</td>
+                    <td class="d-none d-sm-table-cell">customer1@example.com</td>
+                    <td class="d-none d-sm-table-cell">
+                        <span class="badge badge-warning">Trial</span>
+                    </td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="View Customer">
+                            <i class="fa fa-user"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-center">1</td>
+                    <td class="font-w600">Ralph Murray</td>
+                    <td class="d-none d-sm-table-cell">customer1@example.com</td>
+                    <td class="d-none d-sm-table-cell">
+                        <span class="badge badge-warning">Trial</span>
+                    </td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="View Customer">
+                            <i class="fa fa-user"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-center">1</td>
+                    <td class="font-w600">Ralph Murray</td>
+                    <td class="d-none d-sm-table-cell">customer1@example.com</td>
+                    <td class="d-none d-sm-table-cell">
+                        <span class="badge badge-warning">Trial</span>
+                    </td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="View Customer">
+                            <i class="fa fa-user"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-center">1</td>
+                    <td class="font-w600">Ralph Murray</td>
+                    <td class="d-none d-sm-table-cell">customer1@example.com</td>
+                    <td class="d-none d-sm-table-cell">
+                        <span class="badge badge-warning">Trial</span>
+                    </td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="View Customer">
+                            <i class="fa fa-user"></i>
+                        </button>
+                    </td>
+                </tr>
+                
+            </tbody>
+        </table>
+        ';
+
+        // echo "Nag fetch sya";
     }
         
 
