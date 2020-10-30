@@ -390,7 +390,7 @@
             <div class="row">
                 <div class="col-md-10">
                 <button class="dropdown-item" id="'.$result_findstatus['email_id'].'" onclick="fetch_email_name(this.id)">
-                          <i class="fa fa-square mr-5" style="color: #3f9ce8;"></i>'.substr($email_name, 0, 45).'...
+                          <i class="fa fa-square mr-5" style="color: #3f9ce8;"></i>'.substr($email_name, 0, 50).'...
                 </button>
                 </div>
                 <div class="col-md-2">
@@ -2318,9 +2318,10 @@
         $email_id = $_POST['email_id'];
         $task_id = $_POST['task_id'];
         $contact_email = $_POST['contact_email'];
+        $email_content = $_POST['email_content'];
 
         // Store data from db
-        $email_send_history = mysqli_query($conn, "INSERT INTO email_send_history values ('', NOW(), '$user_id', '$email_id', '$contact_email', '$task_id')") or die(mysqli_error());
+        $email_send_history = mysqli_query($conn, "INSERT INTO email_send_history values ('', NOW(), '$user_id', '$email_id', '$contact_email', '$task_id', '$email_content')") or die(mysqli_error());
         if ($email_send_history)
         {
             echo "Email sent successfully.";
@@ -3003,7 +3004,7 @@
     {
         $task_id = $_POST['task_id'];
 
-        $results = mysqli_query($conn, "SELECT `user`.fname, `user`.mname, `user`.lname, email_format.email_name, email_format.email_subject, email_format.email_id, email_send_history.`email_send_to`, email_send_history.email_send_date FROM email_send_history INNER JOIN `user` ON email_send_history.email_send_by = `user`.user_id INNER JOIN email_format ON email_send_history.email_format_id = email_format.email_id WHERE email_send_history.email_task_id = '$task_id' ORDER BY email_send_history.email_send_date DESC");
+        $results = mysqli_query($conn, "SELECT `user`.fname, `user`.mname, `user`.lname, email_format.email_name, email_format.email_subject, email_format.email_id, email_send_history.`email_send_to`, email_send_history.email_send_date, email_send_history.email_content FROM email_send_history INNER JOIN `user` ON email_send_history.email_send_by = `user`.user_id INNER JOIN email_format ON email_send_history.email_format_id = email_format.email_id WHERE email_send_history.email_task_id = '$task_id' ORDER BY email_send_history.email_send_date DESC");
         $count = 1;
 
         while($rows = mysqli_fetch_array($results))
@@ -3033,11 +3034,11 @@
                         </td>
                         <td colspan="3">
                                 <div style="padding: 20px 0px 0px 0px; background-color: #00465a; max-height:300px; overflow:auto;" class="shadow">
-                                    <img src="http://ipasspmt.site/assets/media/photos/email_header.png" style="width: 100%;">
+                                    <img src="http://ipasspmt.site/assets/media/photos/email_header.png" style="width: 100%; height: auto;">
                                     <table width="100%" border="0" cellspacing="0" cellpadding="20" style="background-color: #47bcde; color: #5a5f61; font-family:verdana;">
                                         <tr>
                                             <td style="background-color: #fff; border-top: 20px solid #006786; border-bottom: 20px solid #006786;">
-                                                '.$content.'
+                                                '.$rows["email_content"].'
                                             </td>
                                         </tr>
                                     </table>
@@ -3230,149 +3231,85 @@
 
     if(isset($_POST['fetch_email_pictures']))
     {
-        // $status_details_id = $_POST['status_details_id'];
-
-        // $delete_status = mysqli_query($conn, "DELETE FROM tbl_status_details WHERE status_details_id = $status_details_id");
-        // if ($delete_status) {
-        //     echo 'success';
-        // }
-
         echo '
         <table class="table table-bordered table-striped table-vcenter js-dataTable-full">
             <thead>
                 <tr>
-                    <th class="text-center"></th>
-                    <th>Name</th>
-                    <th class="d-none d-sm-table-cell">Email</th>
-                    <th class="d-none d-sm-table-cell" style="width: 15%;">Access</th>
-                    <th class="text-center" style="width: 15%;">Profile</th>
+                    <th class="text-center">NO.</th>
+                    <th class="text-center">Pictures</th>
+                    <th class="text-center">Links</th>
+                    <th class="text-center">Action</th>
                 </tr>
             </thead>
             <tbody>
+        ';
+        $query = mysqli_query($conn, "SELECT * FROM email_pictures ORDER BY email_picture_id DESC");
+        $count =  1;
+        while($rows = mysqli_fetch_array($query))
+        {
+            echo '
                 <tr>
-                    <td class="text-center">1</td>
-                    <td class="font-w600">Ralph Murray</td>
-                    <td class="d-none d-sm-table-cell">customer1@example.com</td>
-                    <td class="d-none d-sm-table-cell">
-                        <span class="badge badge-warning">Trial</span>
-                    </td>
+                    <td class="text-center">'.$count++.'</td>
+                    <td class="text-center"><a target="_blank" href="./email_picture/'.$rows['email_picture_name'].'"><img style="width: 120px; height: auto;" src="./email_picture/'.$rows['email_picture_name'].'"></a></td>
+                    <td class="text-center">http://localhost/ipass/team/email_picture/'.$rows['email_picture_name'].'</td>
                     <td class="text-center">
-                        <button type="button" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="View Customer">
-                            <i class="fa fa-user"></i>
+                        <button type="button" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="View Customer" id="'.$rows['email_picture_name'].'" onclick="delete_email_picture(this.id)">
+                            <i class="fa fa-trash-o"></i>
                         </button>
                     </td>
                 </tr>
-                <tr>
-                    <td class="text-center">1</td>
-                    <td class="font-w600">Ralph Murray</td>
-                    <td class="d-none d-sm-table-cell">customer1@example.com</td>
-                    <td class="d-none d-sm-table-cell">
-                        <span class="badge badge-warning">Trial</span>
-                    </td>
-                    <td class="text-center">
-                        <button type="button" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="View Customer">
-                            <i class="fa fa-user"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="text-center">1</td>
-                    <td class="font-w600">Ralph Murray</td>
-                    <td class="d-none d-sm-table-cell">customer1@example.com</td>
-                    <td class="d-none d-sm-table-cell">
-                        <span class="badge badge-warning">Trial</span>
-                    </td>
-                    <td class="text-center">
-                        <button type="button" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="View Customer">
-                            <i class="fa fa-user"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="text-center">1</td>
-                    <td class="font-w600">Ralph Murray</td>
-                    <td class="d-none d-sm-table-cell">customer1@example.com</td>
-                    <td class="d-none d-sm-table-cell">
-                        <span class="badge badge-warning">Trial</span>
-                    </td>
-                    <td class="text-center">
-                        <button type="button" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="View Customer">
-                            <i class="fa fa-user"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="text-center">1</td>
-                    <td class="font-w600">Ralph Murray</td>
-                    <td class="d-none d-sm-table-cell">customer1@example.com</td>
-                    <td class="d-none d-sm-table-cell">
-                        <span class="badge badge-warning">Trial</span>
-                    </td>
-                    <td class="text-center">
-                        <button type="button" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="View Customer">
-                            <i class="fa fa-user"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="text-center">1</td>
-                    <td class="font-w600">Ralph Murray</td>
-                    <td class="d-none d-sm-table-cell">customer1@example.com</td>
-                    <td class="d-none d-sm-table-cell">
-                        <span class="badge badge-warning">Trial</span>
-                    </td>
-                    <td class="text-center">
-                        <button type="button" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="View Customer">
-                            <i class="fa fa-user"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="text-center">1</td>
-                    <td class="font-w600">Ralph Murray</td>
-                    <td class="d-none d-sm-table-cell">customer1@example.com</td>
-                    <td class="d-none d-sm-table-cell">
-                        <span class="badge badge-warning">Trial</span>
-                    </td>
-                    <td class="text-center">
-                        <button type="button" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="View Customer">
-                            <i class="fa fa-user"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="text-center">1</td>
-                    <td class="font-w600">Ralph Murray</td>
-                    <td class="d-none d-sm-table-cell">customer1@example.com</td>
-                    <td class="d-none d-sm-table-cell">
-                        <span class="badge badge-warning">Trial</span>
-                    </td>
-                    <td class="text-center">
-                        <button type="button" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="View Customer">
-                            <i class="fa fa-user"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="text-center">1</td>
-                    <td class="font-w600">Ralph Murray</td>
-                    <td class="d-none d-sm-table-cell">customer1@example.com</td>
-                    <td class="d-none d-sm-table-cell">
-                        <span class="badge badge-warning">Trial</span>
-                    </td>
-                    <td class="text-center">
-                        <button type="button" class="btn btn-sm btn-secondary" data-toggle="tooltip" title="View Customer">
-                            <i class="fa fa-user"></i>
-                        </button>
-                    </td>
-                </tr>
-                
+            ';
+        }
+        echo '
             </tbody>
         </table>
         ';
 
         // echo "Nag fetch sya";
     }
-        
+
+    if(isset($_POST['save_email_pictures']))
+    {
+        $info_image = $_POST['email_pictures'];
+        $attachment_name = $_FILES['file_attachment']['name'];
+        $attachment_temp = $_FILES['file_attachment']['tmp_name'];
+        $attachment_size = $_FILES['file_attachment']['size'];
+        $exp = explode(".", $attachment_name);
+        $ext = end($exp);
+        $allowed_ext = array('jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG');
+            if(in_array($ext, $allowed_ext)) // check the file extension
+            {
+                date_default_timezone_set('Asia/Manila');
+                //$todays_date = date("y-m-d H:i:sa"); //  original format
+                $date = date("His"); // for unique file name
+
+                $words = explode(' ',trim($attachment_name)); // convert name to array
+                $get_name = substr($words[0], 0, 6); // get only 6 character of the name
+
+                $image = $date.'-'.$get_name.'.'.$ext;
+                $location = "./email_picture/".$image; // upload location
+
+                if($attachment_size < 10000000) // Maximum 10 MB
+                {
+                    // unlink('../assets/media/transaction/'.$info_image);
+                    move_uploaded_file($attachment_temp, $location);
+                    $save_data = mysqli_query($conn, "INSERT into email_pictures (email_picture_name) values ('$image')") or die(mysqli_error());
+                    if ($save_data) {
+                        echo "success";
+                    }
+                }
+            }
+    }
+     
+    if(isset($_POST['delete_email_picture']))
+    {
+        $email_name = $_POST['email_pictures'];
+
+        $delete_status = mysqli_query($conn, "DELETE FROM email_pictures WHERE email_picture_name = '$email_name'");
+        if ($delete_status) {
+            unlink('./email_picture/'.$email_name);
+            echo 'success';
+        }
+    }   
 
 ?>

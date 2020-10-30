@@ -1032,6 +1032,7 @@ $(document).ready(function(){
                                         task_id:task_id,
                                         contact_email:contact_email,
                                         email_id:email_id,
+                                        email_content:email_content,
                                         email_send_history: 1,
                                     },
                                         success: function(data){
@@ -6273,6 +6274,13 @@ function display_assign_field_phase(){
                 },
                 success: function(data){
                     document.getElementById("email_content_editable").value = data;
+                    document.getElementById("js-ckeditor").value = '';
+                    document.getElementById("email_user_id").value = user_id;
+                    document.getElementById("email_task_id").value = task_id;
+                    document.getElementById("email_contact_email").value = contact_email;
+                    document.getElementById("email_email_subject").value = email_subject;
+                    document.getElementById("email_email_id").value = email_id;
+                    document.getElementById("email_FirstName").value = FirstName;
                 }
         });
     }
@@ -6292,7 +6300,157 @@ function display_assign_field_phase(){
                 $('#view_email_picture').html(response);
             }
         });
-        // document.getElementById("fetch_email_picture").value = 'Naa sya';
+    }
+
+    function save_email_pictures()
+    {
+        // alert('Nag Alert sya. Yeheyyy');
+        email_pictures = document.getElementById("email_pictures").value;
+        image = email_pictures.replace(/^.*\\/, "");
+
+        tran_attachment = $('#email_pictures');
+        file_attachment = tran_attachment.prop('files')[0];
+        formData = new FormData();
+        formData.append('email_pictures', image);
+        formData.append('file_attachment', file_attachment);
+        formData.append('save_email_pictures', 1);
+        
+        $.ajax({
+            url: 'ajax.php',
+            type: 'POST', 
+            async: false,
+            data: formData,
+            contentType:false,
+            cache: false,
+            processData: false,
+                success: function(response){
+                    if (response == 'success') {
+                        alert('Image Successfully Uploaded!');
+                        fetch_email_pictures();
+                    }
+                }
+        }); 
+    }
+
+    function delete_email_picture(id)
+    {
+        // alert(id);
+        if(confirm("Are you sure you want to delete this picture?"))
+        {
+            $.ajax({
+            url: './ajax.php',
+            type: 'POST',
+            async: false,
+            data:{
+                email_pictures:id,
+                delete_email_picture: 1,
+            },
+                success: function(response){
+                    if (response == 'success') {
+                        alert('Image Successfully Deleted!');
+                        fetch_email_pictures();
+                    }
+                }
+            });
+        }
+    }
+
+    function normal_image()
+    {
+        // alert('Nag alert normal');
+        // var copyText_normal_image = '<p><img src="(Remove this and put links here)" style="height:(ChangeThisToNUmbers)px; width:auto" /></p>';
+        var copyText = document.getElementById("view_normal");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999)
+        document.execCommand("copy");
+        alert('Codes Successfully Copied!!');
+    }
+    function left_image()
+    {
+        // alert('Nag alert left');
+        var copyText = document.getElementById("view_left");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999)
+        document.execCommand("copy");
+        alert('Codes Successfully Copied!!');
+    }
+    function right_image()
+    {
+        // alert('Nag alert right');
+        var copyText = document.getElementById("view_right");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999)
+        document.execCommand("copy");
+        alert('Codes Successfully Copied!!');
+    }
+    function link()
+    {
+        // alert('link');
+        var copyText = document.getElementById("view_link");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999)
+        document.execCommand("copy");
+        alert('Codes Successfully Copied!!');
+    }
+
+    function send_editable_email()
+    {
+        user_id = document.getElementById("email_user_id").value;
+        task_id = document.getElementById("email_task_id").value;
+        contact_email = document.getElementById("email_contact_email").value;
+        email_subject = document.getElementById("email_email_subject").value;
+        email_id = document.getElementById("email_email_id").value;
+        FirstName = document.getElementById("email_FirstName").value;
+        email_content = document.getElementById("email_content_editable").value;
+
+        // alert(email_content);
+        if(confirm("Are you sure you want to send this email?"))
+        {   
+            $.ajax({
+                url: 'ajax.php',
+                type: 'POST',
+                async: false,
+                data:{
+                    test_email:contact_email,
+                    email_subject:email_subject,
+                    email_content:email_content,
+                    FirstName:FirstName,
+                    test_send_email: 1,
+                },
+                success: function(data){
+                    // Send emai to specific email address
+                    if ('Email sent successfully.' == 'Email sent successfully.')
+                    // if (data == 'Email sent successfully.')
+                    {
+                        $.ajax({
+                            url: 'ajax.php',
+                            type: 'POST',
+                            async: false,
+                            data:{
+                                user_id:user_id,
+                                task_id:task_id,
+                                contact_email:contact_email,
+                                email_id:email_id,
+                                email_content:email_content,
+                                email_send_history: 1,
+                            },
+                                success: function(data){
+                                    $('#modal-extra-editable-email').modal("hide");
+                                    $('#modal-extra-large').modal("show");
+                                    $('#modal-extra-large').css('overflow-y', 'auto');
+                                    // $('#modal-extra-large').focus();
+                                    display_email_history_table();
+                                    alert(data);
+                                }
+                        });
+                    }
+                    else
+                    {
+                        alert(data);
+                    }
+                }
+            });
+        }
     }
 
 </script>
@@ -6308,13 +6466,32 @@ function display_assign_field_phase(){
                                 <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
                                     <i class="si si-close"></i>
                                 </button>
-                            </div>
                         </div>
-                        <div class="block-content">
+                            </div>
+                        <div class="block-content" data-toggle="slimscroll" data-height="800px" data-color="#42A5F5">
+                        <label class="block-content">
+                            <button class="btn btn-primary" onclick="normal_image()">Normal Image Codes</button>
+                            <button class="btn btn-primary" onclick="left_image()">| Left Image Float Codes</button>
+                            <button class="btn btn-primary" onclick="right_image()">Right Image Float Codes |</button>
+                            <button class="btn btn-primary" onclick="link()">Link Codes</button>
+
+                            <input style="width: 9px;" readonly="" type="text" id="view_normal" value='<p><img src="(Remove this and put links here)" style="height:(ChangeThisToNumbers)px; width:auto" /></p>'>
+                            <input style="width: 9px;" readonly="" type="text" id="view_left" value='<p><img src="(Remove this and put links here)" style="float:left; height:(ChangeThisToNumbers)px; width:auto" /></p>'>
+                            <input style="width: 9px;" readonly="" type="text" id="view_right" value='<p><img src="(Remove this and put links here)" style="float:right; height:(ChangeThisToNumbers)px; width:auto" /></p>'>
+                            <input style="width: 9px;" readonly="" type="text" id="view_link" value='<p><a href="(Remove this and put link here)">(Removed this and replace name of the link)</a></p>'>
+                        </label>
+                        <label class="block-content">
+                            <input type="hidden" id="email_user_id">
+                            <input type="hidden" id="email_task_id">
+                            <input type="hidden" id="email_contact_email">
+                            <input type="hidden" id="email_email_subject">
+                            <input type="hidden" id="email_email_id">
+                            <input type="hidden" id="email_FirstName">
+                        </label>
                             <!-- CKEditor -->
                                 <div class="block-content" style="background-color: <?php echo $md_editor; ?>;">
                                     <div class="form-group row">
-                                        <div class="col-md-8 mb-15">
+                                        <div class="col-md-12 mb-15">
                                             <div class="row">                          
                                                 <div class="col-md-12">
                                                     <textarea id="js-ckeditor" name="ckeditor"></textarea>
@@ -6322,10 +6499,10 @@ function display_assign_field_phase(){
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-12">
                                             <div class="form-group">
                                                 <textarea class="form-control mb-15" id="email_content_editable" rows="12" placeholder="Paste source here.."></textarea>
-                                                <button type="button" class="btn btn-block btn-primary" onclick="previewsss()">
+                                                <button type="button" class="btn btn-block btn-primary" onclick="send_editable_email()">
                                                     Send Now
                                                 </button>
                                             </div>
@@ -6336,7 +6513,7 @@ function display_assign_field_phase(){
                             <h2 class="text-center" style="margin-bottom: -30px">List of Pictures</h2>
                             <div>
                                 <input type="file" id="email_pictures" style="margin-bottom: 5px;"><br>
-                                <button class="btn btn-primary">Submit</button>
+                                <button class="btn btn-primary" onclick="save_email_pictures()">Submit</button>
                             </div>
                             <br>
                             <div id="view_email_picture" data-toggle="slimscroll" data-height="350px" data-color="#42A5F5"></div>
