@@ -31,14 +31,14 @@
         $task_name = $_POST['task_name']; 
         $status_id = $_POST['status_id']; 
         mysqli_query($conn,"INSERT into `task` (task_name, task_status_id, task_list_id, task_created_by, task_date_created) values ('$task_name','$status_id','$status_list_id','$user_id', NOW())") or die(mysqli_error());
-        echo "<script>document.location='main_dashboard.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";         
+        echo "<script>document.location='main_board.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";         
     } 
     if(isset($_POST['btn_rename_status']))
     {
         $status_name = $_POST['status_name']; 
         $status_id = $_POST['status_ids']; 
         mysqli_query($conn, "UPDATE status SET status_name='$status_name' WHERE status_id='$status_id'") or die(mysqli_error());
-        echo "<script>document.location='main_dashboard.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";
+        echo "<script>document.location='main_board.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";
     }
     if(isset($_POST['btn_delete_status']))
     {
@@ -47,7 +47,7 @@
         if($txt_total_task == 0)
         {
             mysqli_query($conn, "DELETE FROM status WHERE status_id='$txt_delete_status_id'") or die(mysqli_error());
-            echo "<script>document.location='main_dashboard.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";
+            echo "<script>document.location='main_board.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";
         }
         else
         {
@@ -60,35 +60,35 @@
         $task_priority = $_GET['priority'];
         $task_id = $_GET['task_id'];        
         mysqli_query($conn, "UPDATE task SET task_priority='$task_priority' WHERE task_id='$task_id'") or die(mysqli_error());
-        echo "<script>document.location='main_dashboard.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";
+        echo "<script>document.location='main_board.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";
     }
     if(isset($_GET['priority']) == 'C High')
     {
         $task_priority = $_GET['priority'];
         $task_id = $_GET['task_id'];        
         mysqli_query($conn, "UPDATE task SET task_priority='$task_priority' WHERE task_id='$task_id'") or die(mysqli_error());
-        echo "<script>document.location='main_dashboard.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";
+        echo "<script>document.location='main_board.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";
     }
     if(isset($_GET['priority']) == 'B Normal')
     {
         $task_priority = $_GET['priority'];
         $task_id = $_GET['task_id'];        
         mysqli_query($conn, "UPDATE task SET task_priority='$task_priority' WHERE task_id='$task_id'") or die(mysqli_error());
-        echo "<script>document.location='main_dashboard.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";
+        echo "<script>document.location='main_board.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";
     }
     if(isset($_GET['priority']) == 'A Low')
     {
         $task_priority = $_GET['priority'];
         $task_id = $_GET['task_id'];        
         mysqli_query($conn, "UPDATE task SET task_priority='$task_priority' WHERE task_id='$task_id'") or die(mysqli_error());
-        echo "<script>document.location='main_dashboard.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";
+        echo "<script>document.location='main_board.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";
     }
     if(isset($_GET['priority']) == 'Clear')
     {
         $task_priority = $_GET['priority'];
         $task_id = $_GET['task_id'];        
         mysqli_query($conn, "UPDATE task SET task_priority='$task_priority' WHERE task_id='$task_id'") or die(mysqli_error());
-        echo "<script>document.location='main_dashboard.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";
+        echo "<script>document.location='main_board.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";
     }
 
     function get_times( $default = '19:00', $interval = '+30 minutes' )
@@ -113,7 +113,7 @@
         $due_date_and_time = "0000-00-00 00:00:00";
         //echo "<script type='text/javascript'>alert('$txt_id');</script>";
         mysqli_query($conn, "UPDATE task SET task_due_date = '$due_date_and_time' WHERE task_id='$txt_id'") or die(mysqli_error());
-        echo "<script>document.location='main_dashboard.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";
+        echo "<script>document.location='main_board.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";
     }
 
     if(isset($_POST['btn_due_date']))
@@ -123,14 +123,14 @@
         $txt_due_time = $_POST['txt_due_time'];
         $due_date_and_time = $txt_due_date. " " .$txt_due_time;
         mysqli_query($conn, "UPDATE task SET task_due_date = '$due_date_and_time' WHERE task_id='$txt_task_id'") or die(mysqli_error());
-        echo "<script>document.location='main_dashboard.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";
+        echo "<script>document.location='main_board.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";
     }
 
     if(isset($_POST['btn_add_tag']))
     {
         $txt_add_tag = $_POST['txt_add_tag']; 
         mysqli_query($conn,"INSERT into `tags` (tag_name, tag_list_id, tag_color) values ('$txt_add_tag','$status_list_id','$tagcolor')") or die(mysqli_error());
-        echo "<script>document.location='main_dashboard.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";        
+        echo "<script>document.location='main_board.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";        
     }
     if (empty($_GET['tag'])) 
     {}
@@ -145,7 +145,7 @@
         if($current_task_tag == "")
         {
             mysqli_query($conn, "UPDATE task SET task_tag='$tasktag' WHERE task_id='$task_id'") or die(mysqli_error());
-            echo "<script>document.location='main_dashboard.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";
+            echo "<script>document.location='main_board.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";
         }
         else
         {
@@ -154,13 +154,13 @@
             if(count($current_array) != count(array_unique($current_array))) // checking for existing element of array.
             {
                 echo "<script type='text/javascript'>alert('Tag already assign to that task.');</script>";
-                echo "<script>document.location='main_dashboard.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";
+                echo "<script>document.location='main_board.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";
             }
             else
             {
                 $many_tag = $current_task_tag.",".$tasktag;
                 mysqli_query($conn, "UPDATE task SET task_tag='$many_tag' WHERE task_id='$task_id'") or die(mysqli_error());
-                echo "<script>document.location='main_dashboard.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";   
+                echo "<script>document.location='main_board.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";   
             }
         }
     }
@@ -185,7 +185,7 @@
             if(count($current_array) != count(array_unique($current_array))) // checking for existing element of array.
             {
                 echo "<script type='text/javascript'>alert('Member already assign to that task.');</script>";
-                echo "<script>document.location='main_dashboard.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";
+                echo "<script>document.location='main_board.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";
             }
             else
             {
@@ -214,7 +214,7 @@
                 mysqli_query($conn, "UPDATE list SET list_assign_id='$multiple_assign' WHERE list_id='$list_id'") or die(mysqli_error());
             }
         }
-        echo "<script>document.location='main_dashboard.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";
+        echo "<script>document.location='main_board.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";
     }
 
     if(isset($_POST['btn_remove_tag']))
@@ -228,7 +228,7 @@
         $new_arr = array_diff($current_array, array($txt_tag_name));
         $final_array = implode( ",", $new_arr ); // convert array to string
         mysqli_query($conn, "UPDATE task SET task_tag='$final_array' WHERE task_id='$txt_task_id'") or die(mysqli_error());
-        echo "<script>document.location='main_dashboard.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";
+        echo "<script>document.location='main_board.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";
     }
     if(isset($_POST['btn_remove_member']))
     {
@@ -271,7 +271,7 @@
         $new_arr = array_diff($current_array, array($txt_assign_user_id));
         $final_array = implode( ",", $new_arr ); // convert array to string
         mysqli_query($conn, "UPDATE task SET task_assign_to='$final_array' WHERE task_id = '$task_id'") or die(mysqli_error());
-        echo "<script>document.location='main_dashboard.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";
+        echo "<script>document.location='main_board.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";
     }
 
     if(isset($_POST['btn_rename_task']))
@@ -279,7 +279,7 @@
         $txt_rename_task = $_POST['txt_rename_task']; 
         $txt_task_ids = $_POST['txt_task_ids']; 
         mysqli_query($conn, "UPDATE task SET task_name='$txt_rename_task' WHERE task_id = '$txt_task_ids'") or die(mysqli_error());   
-        echo "<script>document.location='main_dashboard.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";      
+        echo "<script>document.location='main_board.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";      
     }
     if (empty($_GET['delete_task'])) 
     {}
@@ -287,7 +287,7 @@
     {
         $task_id = $_GET['task_id'];       
         mysqli_query($conn, "DELETE FROM task WHERE task_id='$task_id'") or die(mysqli_error());
-        echo "<script>document.location='main_dashboard.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";
+        echo "<script>document.location='main_board.php?space_name=$space_name&list_name=$list_name&list_id=$status_list_id'</script>";
     }
         $no = 1;
         $a = array();

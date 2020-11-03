@@ -390,7 +390,7 @@
             <div class="row">
                 <div class="col-md-10">
                 <button class="dropdown-item" id="'.$result_findstatus['email_id'].'" onclick="fetch_email_name(this.id)">
-                          <i class="fa fa-square mr-5" style="color: #3f9ce8;"></i>'.substr($email_name, 0, 50).'...
+                          <i class="fa fa-square mr-5" style="color: #3f9ce8;"></i><span data-toggle="popover" title="'.$email_name.'" data-placement="bottom">'.substr($email_name, 0, 30).'...</span>
                 </button>
                 </div>
                 <div class="col-md-2">

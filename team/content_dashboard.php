@@ -384,7 +384,7 @@
                 $status_list_id = $_GET['list_id'];
                 $space_name = $_GET['space_name'];
                 $list_name = $_GET['list_name'];
-                $filter_once = 0;
+                $filter_once = 1;
                 include('view_header_list.php');
             ?>
             <!--<div style="overflow: auto; height: 455px;">-->
@@ -402,7 +402,7 @@
                 $status_list_id = $_GET['list_id'];
                 $space_name = $_GET['space_name'];
                 $list_name = $_GET['list_name'];
-                $filter_once = 0;
+                $filter_once = 1;
                 //include('view_header_board.php');
             ?>
                 <!-- Main Container -->

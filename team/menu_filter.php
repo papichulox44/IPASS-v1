@@ -66,7 +66,7 @@
         if(!empty($_GET['filter']))
         { 
             $filter = $_GET['filter'];
-            $filtered_by = $_GET[$filter]; 
+            $filtered_by = $_GET[$filter];
 
             if($filter == "status") // add filter status | multiple status selection
             {

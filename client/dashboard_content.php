@@ -148,7 +148,7 @@
 
                 <div class="block block-mode-hidden shad">
                     <div class="block-header block-header-default" style="background-color: #5CC6D0;">
-                        <h1 class="block-title text-white">Check the latest information here! <span class="badge badge-danger" id="count_latest_noti"></span></h1>
+                        <h1 class="block-title text-white">Check the latest information here! <span class="badge badge-danger" id="count_latest_noti"></span><?php echo $row['contact_id']; ?></h1>
                         <div class="block-options">
                             <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle" onclick="latest_noti()"></button>
                         </div> 
@@ -167,7 +167,7 @@
                                 <strong>
                                     <h3><?php echo $data['info_title']; ?></h3>
                                 </strong>
-                                <label><?php echo $data['info_text']; ?></label>
+                                <label align="justify"><?php echo $data['info_text']; ?></label>
                             </center>
                         <?php } ?>
                     </div>  

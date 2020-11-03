@@ -60,8 +60,8 @@
                                         <td class="text-center">'.$count++.'</td>
                                         <td class="d-none d-sm-table-cell">'.$fetch_user['fname'][0].' '.$fetch_user['mname'].' '.$fetch_user['lname'].'</td>
                                         <td class="d-none d-sm-table-cell">'.$rows['email_template'].'</td>
-                                        <td>'.substr($rows['email_name'], 0, 30).'...</td>
-                                        <td class="d-none d-sm-table-cell">'.substr($rows['email_subject'], 0, 30).'...</td>
+                                        <td><span data-toggle="popover" title="'.$rows['email_name'].'" data-placement="bottom">'.substr($rows['email_name'], 0, 40).'...</span></td>
+                                        <td class="d-none d-sm-table-cell"><span data-toggle="popover" title="'.$rows['email_subject'].'" data-placement="bottom">'.substr($rows['email_subject'], 0, 40).'...</span></td>
                                         <td class="text-center">
                                             <input type="hidden" class="form-control" value="'.$rows['email_name'].'" id="assign_email'.$rows['email_id'].'">
                                             <button class="btn btn-sm btn-noborder btn-warning" data-toggle="modal" data-target="#modal-assignemail" id="'.$rows['email_id'].'" onclick="assign_email(this.id)" title="Assign"><i class="si si-grid"></i></button>
