@@ -322,7 +322,8 @@
 
     if (isset($_POST['count_latest_noti'])) {
         
-        $query = mysqli_query($conn, "SELECT Count(tbl_information.info_noti) AS count FROM tbl_information WHERE info_noti = 0");
+        $contact_id = $_POST['contact_id'];
+        $query = mysqli_query($conn, "SELECT Count(tbl_information_noti.info_noti) AS count FROM tbl_information_noti WHERE contact_id = $contact_id AND info_noti = 0");
         $count = mysqli_fetch_array($query);
         if ($query) {
             echo $count['count'];
@@ -332,7 +333,8 @@
 
     if (isset($_POST['latest_noti'])) {
         
-        $query = mysqli_query($conn, "UPDATE tbl_information set info_noti = 1 WHERE info_noti = 0");
+        $contact_id = $_POST['contact_id'];
+        $query = mysqli_query($conn, "UPDATE tbl_information_noti set info_noti = 1 WHERE contact_id = $contact_id AND info_noti = 0");
         if ($query) {
             echo 'success';
             

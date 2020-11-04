@@ -1667,7 +1667,14 @@
                         // unlink('../assets/media/transaction/'.$info_image);
                         move_uploaded_file($attachment_temp, $location);
                         $save_data = mysqli_query($conn, "INSERT into tbl_information values ('', '$info_title', '$info_text', '$image' , '$info_status', '')") or die(mysqli_error());
+                        $info_id = $conn->insert_id;
 
+                        $query_contact = mysqli_query($conn,"SELECT * FROM contact") or die(mysqli_error());
+                            while($rows = mysqli_fetch_array($query_contact))
+                                {
+                                    $contact_id = $rows['contact_id'];
+                                    $insert_noti = mysqli_query($conn,"INSERT INTO tbl_information_noti (info_id, contact_id) VALUES ($info_id, $contact_id)") or die(mysqli_error());
+                                }
                         if ($save_data) {
                             echo "success";
                         }

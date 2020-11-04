@@ -406,69 +406,73 @@
 		});
 
 		function create_information(){
-			info_title = document.getElementById("info_title").value;
-			info_text = document.getElementById("info_text").value;
-			info_status = document.getElementById("info_status").value;
-			info_image = document.getElementById("info_image").value;
-			image = info_image.replace(/^.*\\/, "");
 
-				if (info_image) {
-					if (info_title == "" || info_text == "" || info_status == "") {
-						alert('Please fill up all the field!!');
+			if (confirm('Are you sure?')) {
+				
+				info_title = document.getElementById("info_title").value;
+				info_text = document.getElementById("info_text").value;
+				info_status = document.getElementById("info_status").value;
+				info_image = document.getElementById("info_image").value;
+				image = info_image.replace(/^.*\\/, "");
+
+					if (info_image) {
+						if (info_title == "" || info_text == "" || info_status == "") {
+							alert('Please fill up all the field!!');
+						}
+						else {
+						tran_attachment = $('#info_image');
+	                    file_attachment = tran_attachment.prop('files')[0];
+
+	                    formData = new FormData();
+	                    formData.append('info_title', info_title);
+	                    formData.append('info_text', info_text);
+	                    formData.append('info_status', info_status);
+	                    formData.append('info_image', image);
+	                    formData.append('file_attachment', file_attachment);
+	                    formData.append('save_company_information', 1);
+
+	                    $.ajax({
+			                url: 'ajax_transaction.php',
+			                type: 'POST', 
+			                async: false,
+			                data: formData,
+			                contentType:false,
+	                        cache: false,
+	                        processData: false,
+			                    success: function(response){
+			                    	if (response == 'success') {
+			                    		alert('Information Successfully Added!');
+			                    		$('#modal-information').modal('hide');
+			                    		view_company_information();
+			                    	}
+			                    }
+			            }); }
 					}
 					else {
-					tran_attachment = $('#info_image');
-                    file_attachment = tran_attachment.prop('files')[0];
-
-                    formData = new FormData();
-                    formData.append('info_title', info_title);
-                    formData.append('info_text', info_text);
-                    formData.append('info_status', info_status);
-                    formData.append('info_image', image);
-                    formData.append('file_attachment', file_attachment);
-                    formData.append('save_company_information', 1);
-
-                    $.ajax({
-		                url: 'ajax_transaction.php',
-		                type: 'POST', 
-		                async: false,
-		                data: formData,
-		                contentType:false,
-                        cache: false,
-                        processData: false,
-		                    success: function(response){
-		                    	if (response == 'success') {
-		                    		alert('Information Successfully Added!');
-		                    		$('#modal-information').modal('hide');
-		                    		view_company_information();
-		                    	}
-		                    }
-		            }); }
-				}
-				else {
-					if (info_title == "" || info_text == "" || info_status == "") {
-						alert('Please fill up all the field!!');
+						if (info_title == "" || info_text == "" || info_status == "") {
+							alert('Please fill up all the field!!');
+						}
+						else {
+						$.ajax({
+			                url: 'ajax_transaction.php',
+			                type: 'POST', 
+			                async: false,
+			                data:{
+			                	info_title:info_title,
+			                	info_text:info_text,
+			                	info_status:info_status,
+			                    save_company_information: 1,
+			                },
+			                    success: function(response){
+			                    	if (response == 'success') {
+			                    		alert('Information Successfully Added!');
+			                    		$('#modal-information').modal('hide');
+			                    		view_company_information();
+			                    	}
+			                    }
+			            }); }
 					}
-					else {
-					$.ajax({
-		                url: 'ajax_transaction.php',
-		                type: 'POST', 
-		                async: false,
-		                data:{
-		                	info_title:info_title,
-		                	info_text:info_text,
-		                	info_status:info_status,
-		                    save_company_information: 1,
-		                },
-		                    success: function(response){
-		                    	if (response == 'success') {
-		                    		alert('Information Successfully Added!');
-		                    		$('#modal-information').modal('hide');
-		                    		view_company_information();
-		                    	}
-		                    }
-		            }); }
-				}
+			}
 		}
 
 		function update_information_company(){
