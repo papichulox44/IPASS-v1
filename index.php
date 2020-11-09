@@ -1,6 +1,8 @@
 <?php
     session_start();
     include_once 'conn.php';
+    date_default_timezone_set('Asia/Manila');
+
     if(isset($_POST['btn_sign_in']))
     {
         $user = mysqli_real_escape_string($conn,$_POST['username']);
@@ -28,7 +30,13 @@
             <?php
         } 
     }
+    $date_maintenance = '2020-11-05';
+    if (date("Y-m-d") == $date_maintenance) {
+    // header("Location: http://ipasspmt.com/");
 ?>
+
+
+<?php } else { ?>
 <html lang="en" class="no-focus">
     <?php include_once 'head.php';?>
     <body>
@@ -98,3 +106,4 @@
         <!-- END Page Container -->
     </body>
 </html>
+<?php } ?>

@@ -222,7 +222,7 @@
                                         <div class="form-group row">
                                             <label class="col-lg-3 col-form-label">Birthdate<span class="text-danger"> *</span></label>
                                             <div class="col-lg-8">
-                                                <input type="date" class="form-control" id="bdate" name="bdate" required>
+                                                <input type="date" placeholder="YYYY-MM-DD" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" class="form-control" id="bdate" name="bdate" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
