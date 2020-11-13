@@ -382,27 +382,54 @@
         } else {
             $set_email = '';
         }
-        echo '<label class="form-control">Email: '.$set_email.'</label>';
+        echo '<label class="form-control">Email: '.$set_email.'</label><br>';
+
+        echo '
+        <script>
+        $(document).ready(function(){
+          $("#myInput").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function() {
+              $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+          });
+        });
+        </script>
+        ';
+
+        echo '
+            <input class="form-control" id="myInput" type="text" placeholder="Search Email...">
+            <table class="table table-bordered table-hover">
+              <thead>
+              <tr>
+                <th>Email Name</th>
+                <th>Action</th>
+              </tr>
+              </thead>
+        ';
         while($result_findstatus = mysqli_fetch_array($select_task))
         {
             $email_name = $result_findstatus['email_name'];
-            echo '
-            <div class="row">
-                <div class="col-md-10">
+            echo '            
+              <tbody id="myTable">
+              <tr>
+                <td>
                 <button class="dropdown-item" id="'.$result_findstatus['email_id'].'" onclick="fetch_email_name(this.id)">
-                          <i class="fa fa-square mr-5" style="color: #3f9ce8;"></i><span data-toggle="popover" title="'.$email_name.'" data-placement="bottom">'.substr($email_name, 0, 30).'...</span>
+                <i class="fa fa-square mr-5" style="color: #3f9ce8;"></i><span data-toggle="popover" title="'.$email_name.'" data-placement="bottom">'.substr($email_name, 0, 30).'...</span>
                 </button>
-                </div>
-                <div class="col-md-2">
-                <button class="btn btn-default" data-dismiss="modal" data-toggle="modal" data-target="#modal-extra-editable-email" onclick="fetch_email_pictures()"><i class="fa fa-edit" style="color: #3f9ce8; font-size:20px;" id="'.$result_findstatus['email_id'].'" onclick="fetch_email_name_editable(this.id)"></i></button>`
-                </div>
-            </div>
+                </td>
+                <td>
+                <button class="btn btn-default" data-dismiss="modal" data-toggle="modal" data-target="#modal-extra-editable-email" onclick="fetch_email_pictures()"><i class="fa fa-edit" style="color: #3f9ce8; font-size:20px;" id="'.$result_findstatus['email_id'].'" onclick="fetch_email_name_editable(this.id)"></i></button>
+                </td>
+              </tr>
+              </tbody>
             <input id="contact_email'.$result_findstatus['email_id'].'" type="hidden" value="'.$result_findstatus['contact_email'].'"></input>
             <input id="email_subject'.$result_findstatus['email_id'].'" type="hidden" value="'.$result_findstatus['email_subject'].'"></input>
             <input id="email_name'.$result_findstatus['email_id'].'" type="hidden" value="'.$result_findstatus['email_name'].'"></input>
             <input id="contact_fname'.$result_findstatus['email_id'].'" type="hidden" value="'.$result_findstatus['contact_fname'].'"></input>
             ';
         }
+        echo '</table>';
     }
     if(isset($_POST['move_task']))
     {
@@ -828,7 +855,7 @@
                     {
                         $msg = 'Update field name: "'.$field_name.'" value: "'.$final_input_value.'".';
                     }
-                    mysqli_query($conn,"INSERT into `comment` (comment_task_id, comment_user_id, comment_message, comment_date, comment_type) values ('$task_id', '$id', '$msg', NOW(), '1')") or die(mysqli_error());
+                    mysqli_query($conn,"INSERT into `comment` (comment_task_id, comment_user_id,    , comment_date, comment_type) values ('$task_id', '$id', '$msg', NOW(), '1')") or die(mysqli_error());
                 }
                 // END code for adding comment
 
@@ -3311,5 +3338,66 @@
             echo 'success';
         }
     }   
+
+    if(isset($_POST['save_input_field']))
+    {
+        $id = $_POST['user_id'];
+        $space_id = $_POST['space_id'];
+        $task_id = $_POST['task_id'];
+        $field_id = $_POST['field_id'];
+        $input_value = $_POST['input_value'];
+
+        //auto create row specific space db
+        $select_db = mysqli_query($conn, "SELECT * FROM space WHERE space_id ='$space_id'");
+        $fetch_select_db = mysqli_fetch_array($select_db);
+        $space_db_table = $fetch_select_db['space_db_table']; // getting the db_table name of the space
+
+        $check_if_task_exist = mysqli_query($conn, "SELECT * FROM $space_db_table WHERE task_id ='$task_id'");
+        $count1 = mysqli_num_rows($check_if_task_exist);
+        if($count1 == 0)
+        {
+            mysqli_query($conn,"INSERT INTO `$space_db_table` (task_id) values ('$task_id')") or die(mysqli_error());
+        }
+        $count = mysqli_num_rows($select_db);
+        if($count == 1)
+        {
+            $select_col_name = mysqli_query($conn, "SELECT * FROM field WHERE field_id ='$field_id'");
+            $fetch_col_name = mysqli_fetch_array($select_col_name);
+            $col_name = $fetch_col_name['field_col_name']; // get the col_name in db
+            $field_name = $fetch_col_name['field_name']; // get the field_name in db
+            $field_type = $fetch_col_name['field_type']; // get the field_name in db
+
+            // Below is code for adding comment
+            $select_if_has_value = mysqli_query($conn, "SELECT * FROM `$space_db_table` WHERE task_id = '$task_id'");
+            $result = mysqli_fetch_array($select_if_has_value);
+            $col_value = $result[''.$col_name.'']; // get current value
+
+            if ($field_type == "Dropdown")// identify if dropdown
+            {
+                // get the value if specific option
+                $select_child = mysqli_query($conn, "SELECT * FROM `child` WHERE child_id = '$input_value'");
+                $fetch_result = mysqli_fetch_array($select_child);
+                $child_name = $fetch_result['child_name']; // get the child name
+
+                $msg = 'Update field name: "'.$field_name.'" value: "'.$child_name.'".';
+            }
+            else
+            {
+                $msg = 'Update field name: "'.$field_name.'" value: "'.$input_value.'".';
+            }
+            // echo $id;
+            // echo $space_id;
+            // echo $task_id;
+            // echo $field_id;
+            // echo $input_value;
+            $insert_comment = mysqli_query($conn,"INSERT INTO comment (comment_task_id, comment_user_id, comment_message, comment_date, comment_type) VALUES ('$task_id', '$id', '$msg', NOW(), '1')") or die(mysqli_error());
+            if ($insert_comment) {
+                $update_space_db_table = mysqli_query($conn, "UPDATE `$space_db_table` SET `$col_name` = '$input_value' WHERE task_id = '$task_id'") or die(mysqli_error());
+                if ($update_space_db_table) {
+                    echo 'update';
+                }
+            }
+        }
+    } 
 
 ?>

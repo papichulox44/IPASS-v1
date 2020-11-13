@@ -638,7 +638,7 @@
             add_email_value = document.getElementById("add_email_value").value;
 
             if (add_email_value == '') {
-            	alert('Please inpute email!');
+            	alert('Please input email!');
             } else {
 	            if (confirm('Are you sure?')) {
 	                $.ajax({

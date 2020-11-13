@@ -2269,11 +2269,11 @@ $(document).ready(function(){
                             <div  style="box-shadow:0px 2px 4px #b3b3b3;">
                                 <div data-toggle="slimscroll" data-height="480px" data-color="#42a5f5" data-opacity="1" data-always-visible="true" style="background-color: #fff; padding: 15px;" id="input_field_id">
                                 </div>
-                                <div class="row">
+                               <!--  <div class="row">
                                     <div class="col-12">
                                         <button type="button" class="btn btn-md btn-noborder btn-primary btn-block" onclick="btn_save_input_field()"><li class="fa fa-check"></li> Save</button>
                                     </div>`
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                         <!-- END Task input field -->
@@ -3023,7 +3023,7 @@ function clear_tran()
                             {alert('Space id not found.');}
                             if(data == "update")
                             {alert('Task updated.'); display_input_field(); displayChat();}
-                            else {display_input_field();}
+                            else {display_input_field(); displayChat()}
                         }
                     });
                 });
@@ -3059,7 +3059,7 @@ function clear_tran()
                                         {alert('Space id not found.');}
                                         if(data == "update")
                                         {alert('Task updated.'); display_input_field(); displayChat();}
-                                        else {display_input_field();}
+                                        else {display_input_field(); displayChat()}
                                     }
                                 });
                             });
@@ -6475,9 +6475,9 @@ function display_assign_field_phase(){
                             <button class="btn btn-primary" onclick="right_image()">Right Image Float Codes |</button>
                             <button class="btn btn-primary" onclick="link()">Link Codes</button>
 
-                            <input style="width: 9px;" readonly="" type="text" id="view_normal" value='<p><img src="(Remove this and put links here)" style="height:(ChangeThisToNumbers)px; width:auto" /></p>'>
-                            <input style="width: 9px;" readonly="" type="text" id="view_left" value='<p><img src="(Remove this and put links here)" style="float:left; height:(ChangeThisToNumbers)px; width:auto" /></p>'>
-                            <input style="width: 9px;" readonly="" type="text" id="view_right" value='<p><img src="(Remove this and put links here)" style="float:right; height:(ChangeThisToNumbers)px; width:auto" /></p>'>
+                            <input style="width: 9px;" readonly="" type="text" id="view_normal" value='<p><a href="(Remove this and put links here)" target="_blank"><img src="(Remove this and put links here)" style="height:(ChangeThisToNumbers)px; width:auto" /></a></p>'>
+                            <input style="width: 9px;" readonly="" type="text" id="view_left" value='<p><a href="(Remove this and put links here)" target="_blank"><img src="(Remove this and put links here)" style="float:left; height:(ChangeThisToNumbers)px; width:auto" /></a></p>'>
+                            <input style="width: 9px;" readonly="" type="text" id="view_right" value='<p><a href="(Remove this and put links here)" target="_blank"><img src="(Remove this and put links here)" style="float:right; height:(ChangeThisToNumbers)px; width:auto" /></a></p>'>
                             <input style="width: 9px;" readonly="" type="text" id="view_link" value='<p><a href="(Remove this and put link here)">(Removed this and replace name of the link)</a></p>'>
                         </label>
                         <label class="block-content">
@@ -6532,4 +6532,291 @@ function display_assign_field_phase(){
 
 <!-- End board view modal -->
 
+<script type="text/javascript">
+    
+    function input_field_textarea(id)
+    {
+        if(confirm("Are you sure?"))
+        {
+            field_textarea = document.getElementById("field_textarea" + id).value;
+            task_id = document.getElementById("task_id_when_click").value;
+            space_id = <?php echo $space_id; ?>;
+            user_id = <?php echo $id; ?>;
+
+            // alert(field_textarea + task_id + space_id + user_id);
+
+            $.ajax({
+                url: './ajax.php',
+                type: 'POST',
+                async: false,
+                data:{
+                    user_id:user_id,
+                    space_id:space_id,
+                    task_id:task_id,
+                    field_id:id,
+                    input_value:field_textarea,
+                    save_input_field: 1,
+                },
+                success: function(data){
+                if(data == "update")
+                {
+                    alert('Task updated.'); 
+                    display_input_field(); 
+                    displayChat();
+                }
+            }
+            });
+        }
+    }
+
+    function input_field_text(id)
+    {
+        if(confirm("Are you sure?"))
+        {
+            field_text = document.getElementById("field_text" + id).value;
+            task_id = document.getElementById("task_id_when_click").value;
+            space_id = <?php echo $space_id; ?>;
+            user_id = <?php echo $id; ?>;
+
+            // alert(field_textarea + task_id + space_id + user_id);
+
+            $.ajax({
+                url: './ajax.php',
+                type: 'POST',
+                async: false,
+                data:{
+                    user_id:user_id,
+                    space_id:space_id,
+                    task_id:task_id,
+                    field_id:id,
+                    input_value:field_text,
+                    save_input_field: 1,
+                },
+                success: function(data){
+                if(data == "update")
+                {
+                    alert('Task updated.'); 
+                    display_input_field(); 
+                    displayChat();
+                }
+            }
+            });
+        }
+    }
+
+    function input_field_email(id)
+    {
+        if(confirm("Are you sure?"))
+        {
+            field_email = document.getElementById("field_email" + id).value;
+            task_id = document.getElementById("task_id_when_click").value;
+            space_id = <?php echo $space_id; ?>;
+            user_id = <?php echo $id; ?>;
+
+            // alert(field_textarea + task_id + space_id + user_id);
+
+            $.ajax({
+                url: './ajax.php',
+                type: 'POST',
+                async: false,
+                data:{
+                    user_id:user_id,
+                    space_id:space_id,
+                    task_id:task_id,
+                    field_id:id,
+                    input_value:field_email,
+                    save_input_field: 1,
+                },
+                success: function(data){
+                if(data == "update")
+                {
+                    alert('Task updated.'); 
+                    display_input_field(); 
+                    displayChat();
+                }
+            }
+            });
+        }
+    }
+
+    function input_field_dropdown(id)
+    {
+        if(confirm("Are you sure?"))
+        {
+            field_dropdown = document.getElementById("field_dropdown" + id).value;
+            task_id = document.getElementById("task_id_when_click").value;
+            space_id = <?php echo $space_id; ?>;
+            user_id = <?php echo $id; ?>;
+
+            // alert(field_textarea + task_id + space_id + user_id);
+
+            $.ajax({
+                url: './ajax.php',
+                type: 'POST',
+                async: false,
+                data:{
+                    user_id:user_id,
+                    space_id:space_id,
+                    task_id:task_id,
+                    field_id:id,
+                    input_value:field_dropdown,
+                    save_input_field: 1,
+                },
+                success: function(data){
+                if(data == "update")
+                {
+                    alert('Task updated.'); 
+                    display_input_field(); 
+                    displayChat();
+                }
+            }
+            });
+        }
+    }
+
+    function input_field_phone(id)
+    {
+        if(confirm("Are you sure?"))
+        {
+            phone_field = document.getElementById("phone_field" + id).value;
+            task_id = document.getElementById("task_id_when_click").value;
+            space_id = <?php echo $space_id; ?>;
+            user_id = <?php echo $id; ?>;
+
+            // alert(field_textarea + task_id + space_id + user_id);
+
+            $.ajax({
+                url: './ajax.php',
+                type: 'POST',
+                async: false,
+                data:{
+                    user_id:user_id,
+                    space_id:space_id,
+                    task_id:task_id,
+                    field_id:id,
+                    input_value:phone_field,
+                    save_input_field: 1,
+                },
+                success: function(data){
+                if(data == "update")
+                {
+                    alert('Task updated.'); 
+                    display_input_field(); 
+                    displayChat();
+                }
+            }
+            });
+        }
+    }
+
+    function input_field_date(id)
+    {
+        if(confirm("Are you sure?"))
+        {
+            field_date = document.getElementById("field_date" + id).value;
+            task_id = document.getElementById("task_id_when_click").value;
+            space_id = <?php echo $space_id; ?>;
+            user_id = <?php echo $id; ?>;
+
+            // alert(field_textarea + task_id + space_id + user_id);
+
+            $.ajax({
+                url: './ajax.php',
+                type: 'POST',
+                async: false,
+                data:{
+                    user_id:user_id,
+                    space_id:space_id,
+                    task_id:task_id,
+                    field_id:id,
+                    input_value:field_date,
+                    save_input_field: 1,
+                },
+                success: function(data){
+                if(data == "update")
+                {
+                    alert('Task updated.'); 
+                    display_input_field(); 
+                    displayChat();
+                }
+            }
+            });
+        }
+    }
+
+    function input_field_number(id)
+    {
+        if(confirm("Are you sure?"))
+        {
+            field_number = document.getElementById("field_number" + id).value;
+            task_id = document.getElementById("task_id_when_click").value;
+            space_id = <?php echo $space_id; ?>;
+            user_id = <?php echo $id; ?>;
+
+            // alert(field_textarea + task_id + space_id + user_id);
+
+            $.ajax({
+                url: './ajax.php',
+                type: 'POST',
+                async: false,
+                data:{
+                    user_id:user_id,
+                    space_id:space_id,
+                    task_id:task_id,
+                    field_id:id,
+                    input_value:field_number,
+                    save_input_field: 1,
+                },
+                success: function(data){
+                if(data == "update")
+                {
+                    alert('Task updated.'); 
+                    display_input_field(); 
+                    displayChat();
+                }
+            }
+            });
+        }
+    }
+
+    function input_field_radio(id)
+    {
+        if(confirm("Are you sure?"))
+        {
+            // field_radio_yes = document.getElementById("field_radio_yes" + id).value;
+            //field_radio_no = document.getElementById("field_radio_no" + id).value;
+            //field_radio_reset = document.getElementById("field_radio_reset" + id).value;
+            field_radio = $("input:radio[name=field_radio]:checked").val();
+            task_id = document.getElementById("task_id_when_click").value;
+            space_id = <?php echo $space_id; ?>;
+            user_id = <?php echo $id; ?>;
+
+            // alert(field_radio);
+            // alert(field_textarea + task_id + space_id + user_id);
+
+            $.ajax({
+                url: './ajax.php',
+                type: 'POST',
+                async: false,
+                data:{
+                    user_id:user_id,
+                    space_id:space_id,
+                    task_id:task_id,
+                    field_id:id,
+                    input_value:field_radio,
+                    save_input_field: 1,
+                },
+                success: function(data){
+                if(data == "update")
+                {
+                    alert('Task updated.'); 
+                    display_input_field(); 
+                    displayChat();
+                }
+            }
+            });
+        }
+    }
+
+</script>
  

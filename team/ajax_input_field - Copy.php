@@ -48,13 +48,8 @@
                         echo '
                         '.$rows['field_name'].'
                         </label>
-                        <div class="col-lg-7">
-                            <textarea class="form-control" rows="2" id="field_textarea'.$rows['field_id'].'">'.$fetch_input_value[''.$rows['field_col_name'].''].'</textarea>
-                        </div>
-                        <div>
-                            <button type="button" class="btn btn-sm btn-circle btn-alt-success mr-5 mb-5" id="'.$rows['field_id'].'" onclick="input_field_textarea(this.id)">
-                                <i class="fa fa-check"></i>
-                            </button>
+                        <div class="col-lg-8">
+                            <textarea class="form-control" rows="2" id="input_field'.$rows['field_id'].'">'.$fetch_input_value[''.$rows['field_col_name'].''].'</textarea>
                         </div>
                     </div>';
             }
@@ -69,13 +64,8 @@
                         echo '
                         '.$rows['field_name'].'
                         </label>
-                        <div class="col-lg-7">
-                            <input type="text" class="form-control" id="field_text'.$rows['field_id'].'" value="'.$fetch_input_value[''.$rows['field_col_name'].''].'">
-                        </div>
-                        <div>
-                            <button type="button" class="btn btn-sm btn-circle btn-alt-success mr-5 mb-5" id="'.$rows['field_id'].'" onclick="input_field_text(this.id)">
-                                <i class="fa fa-check"></i>
-                            </button>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" id="input_field'.$rows['field_id'].'" value="'.$fetch_input_value[''.$rows['field_col_name'].''].'">
                         </div>
                     </div>';
             }
@@ -90,13 +80,8 @@
                         echo '
                         '.$rows['field_name'].'
                         </label>
-                        <div class="col-lg-7">
-                            <input type="email" class="form-control" id="field_email'.$rows['field_id'].'" value="'.$fetch_input_value[''.$rows['field_col_name'].''].'">
-                        </div>
-                        <div>
-                            <button type="button" class="btn btn-sm btn-circle btn-alt-success mr-5 mb-5" id="'.$rows['field_id'].'" onclick="input_field_email(this.id)">
-                                <i class="fa fa-check"></i>
-                            </button>
+                        <div class="col-lg-8">
+                            <input type="email" class="form-control" id="input_field'.$rows['field_id'].'" value="'.$fetch_input_value[''.$rows['field_col_name'].''].'">
                         </div>
                     </div>';
             }
@@ -111,7 +96,7 @@
                         echo '
                         '.$rows['field_name'].'
                         </label>
-                        <div class="col-lg-7">';
+                        <div class="col-lg-8">';
                             $field_id = $rows['field_id'];
                             $select_col_name = $fetch_input_value[''.$rows['field_col_name'].''];
                             $select_child_color = mysqli_query($conn, "SELECT * FROM child WHERE child_id = '$select_col_name'");
@@ -121,7 +106,7 @@
                             else
                             { $color = "#ffffff"; }
                             echo'
-                            <select class="form-control" id="field_dropdown'.$rows['field_id'].'" style="color: '.$color.'; background-color: '.$color_selctor['child_color'].';">
+                            <select class="form-control" id="input_field'.$rows['field_id'].'" style="color: '.$color.'; background-color: '.$color_selctor['child_color'].';">
                                 <option value="" style="color: #848484; background-color: #ffffff;">Select...</option>
                                 ';
                                     $select_field = mysqli_query($conn, "SELECT * FROM child WHERE child_field_id = '$field_id' ORDER BY child_order ASC");
@@ -140,11 +125,6 @@
                                 echo'
                             </select>
                         </div>
-                        <div>
-                            <button type="button" class="btn btn-sm btn-circle btn-alt-success mr-5 mb-5" id="'.$rows['field_id'].'" onclick="input_field_dropdown(this.id)">
-                                <i class="fa fa-check"></i>
-                            </button>
-                        </div>
                     </div>';
             }
             else if($rows['field_type'] == "Phone")
@@ -158,13 +138,8 @@
                         echo '
                         '.$rows['field_name'].'
                         </label>
-                        <div class="col-lg-7">
-                            <input type="number" class="form-control" id="phone_field'.$rows['field_id'].'" value="'.$fetch_input_value[''.$rows['field_col_name'].''].'">
-                        </div>
-                        <div>
-                            <button type="button" class="btn btn-sm btn-circle btn-alt-success mr-5 mb-5" id="'.$rows['field_id'].'" onclick="input_field_phone(this.id)">
-                                <i class="fa fa-check"></i>
-                            </button>
+                        <div class="col-lg-8">
+                            <input type="number" class="form-control" id="input_field'.$rows['field_id'].'" value="'.$fetch_input_value[''.$rows['field_col_name'].''].'">
                         </div>
                     </div>';
             }
@@ -179,13 +154,8 @@
                         echo '
                         '.$rows['field_name'].'
                         </label>
-                        <div class="col-lg-7">
-                            <input type="date" class="form-control" id="field_date'.$rows['field_id'].'" value="'.$fetch_input_value[''.$rows['field_col_name'].''].'">
-                        </div>
-                        <div>
-                            <button type="button" class="btn btn-sm btn-circle btn-alt-success mr-5 mb-5" id="'.$rows['field_id'].'" onclick="input_field_date(this.id)">
-                                <i class="fa fa-check"></i>
-                            </button>
+                        <div class="col-lg-8">
+                            <input type="date" class="form-control" id="input_field'.$rows['field_id'].'" value="'.$fetch_input_value[''.$rows['field_col_name'].''].'">
                         </div>
                     </div>';
             }
@@ -200,13 +170,8 @@
                         echo '
                         '.$rows['field_name'].'
                         </label>
-                        <div class="col-lg-7">
-                            <input type="number" class="form-control" id="field_number'.$rows['field_id'].'" value="'.$fetch_input_value[''.$rows['field_col_name'].''].'">
-                        </div>
-                        <div>
-                            <button type="button" class="btn btn-sm btn-circle btn-alt-success mr-5 mb-5" id="'.$rows['field_id'].'" onclick="input_field_number(this.id)">
-                                <i class="fa fa-check"></i>
-                            </button>
+                        <div class="col-lg-8">
+                            <input type="number" class="form-control" id="input_field'.$rows['field_id'].'" value="'.$fetch_input_value[''.$rows['field_col_name'].''].'">
                         </div>
                     </div>';
             }
@@ -222,25 +187,52 @@
                         echo '
                         '.$rows['field_name'].'
                         </label>
-                        <div class="col-lg-3 col-form-label">
-                        <label>Status: '; if($fetch_input_value[''.$rows['field_col_name'].''] == "yes"){ echo 'Yes'; } else { echo 'No'; } echo'</label>
-                        </div>
-                        <div class="col-lg-4">';
+                        <div class="col-lg-8">';
+                            if($fetch_input_value[''.$rows['field_col_name'].''] == "yes")
+                            {
+                                echo '
+                                <label class="css-control css-control-primary css-radio">
+                                    <input type="radio" class="css-control-input" name="radio-group'.$radio_count.'" value="yes" id="input_field_yes'.$rows['field_id'].'" checked>
+                                    <span class="css-control-indicator"></span> Yes
+                                </label>
+                                <label class="css-control css-control-primary css-radio">
+                                    <input type="radio" class="css-control-input" name="radio-group'.$radio_count.'" value="no" id="input_field_no'.$rows['field_id'].'">
+                                    <span class="css-control-indicator"></span> No
+                                </label>
+                                <label class="css-control css-control-primary css-radio">
+                                    <input type="radio" class="css-control-input" name="radio-group'.$radio_count.'" value="" id="input_field_reset'.$rows['field_id'].'">
+                                    <span class="css-control-indicator"></span> Reset
+                                </label>';  
+                            }
+                            else if($fetch_input_value[''.$rows['field_col_name'].''] == "no")
+                            {
+                                echo '
+                                <label class="css-control css-control-primary css-radio">
+                                    <input type="radio" class="css-control-input" name="radio-group'.$radio_count.'" value="yes" id="input_field_yes'.$rows['field_id'].'">
+                                    <span class="css-control-indicator"></span> Yes
+                                </label>
+                                <label class="css-control css-control-primary css-radio">
+                                    <input type="radio" class="css-control-input" name="radio-group'.$radio_count.'" value="no" id="input_field_no'.$rows['field_id'].'" checked>
+                                    <span class="css-control-indicator"></span> No
+                                </label>
+                                <label class="css-control css-control-primary css-radio">
+                                    <input type="radio" class="css-control-input" name="radio-group'.$radio_count.'" value="" id="input_field_reset'.$rows['field_id'].'">
+                                    <span class="css-control-indicator"></span> Reset
+                                </label>';                                
+                            }
+                            else
+                            {
+                                echo '
+                                <label class="css-control css-control-primary css-radio">
+                                    <input type="radio" class="css-control-input" name="radio-group'.$radio_count.'" value="yes" id="input_field_yes'.$rows['field_id'].'">
+                                    <span class="css-control-indicator"></span> Yes
+                                </label>
+                                <label class="css-control css-control-primary css-radio">
+                                    <input type="radio" class="css-control-input" name="radio-group'.$radio_count.'" value="no" id="input_field_no'.$rows['field_id'].'">
+                                    <span class="css-control-indicator"></span> No
+                                </label>';      
+                            }
                             echo '
-                            <label class="css-control css-control-primary css-radio">
-                                <input type="radio" class="css-control-input" name="field_radio" value="yes" id="field_radio'.$rows['field_id'].'"'; if($fetch_input_value[''.$rows['field_col_name'].''] == "yes"){ echo 'checked'; } echo'>
-                                <span class="css-control-indicator"></span> Yes
-                            </label>
-                            <label class="css-control css-control-primary css-radio">
-                                <input type="radio" class="css-control-input" name="field_radio" value="no" id="field_radio'.$rows['field_id'].'"'; if($fetch_input_value[''.$rows['field_col_name'].''] == "no"){ echo 'checked'; } echo'>
-                                <span class="css-control-indicator"></span> No
-                            </label>';       
-                            echo '
-                        </div>
-                        <div>
-                            <button type="button" class="btn btn-sm btn-circle btn-alt-success mr-5 mb-5" id="'.$rows['field_id'].','.$radio_count.'" onclick="input_field_radio(this.id)">
-                                <i class="fa fa-check"></i>
-                            </button>
                         </div>
                     </div>';
             }
