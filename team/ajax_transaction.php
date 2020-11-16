@@ -487,7 +487,7 @@
                           echo '<td><center><input class="form-control" style="width: 90px;" type="text" id="amount_usd'.$phase_id.','.$task_id.','.$remarks.','.$data['finance_id'].','.$user_id.'" value="'.$data['finance_value'].'"></center></td>';
                         }
                         echo '
-                        <td class="text-center"><button class="btn btn-success" type="button" id="'.$phase_id.','.$task_id.','.$remarks.','.$data['finance_id'].','.$user_id.'" onclick="update_amount_usd(this.id)">Update</button</td>
+                        <td class="text-center"><button class="btn btn-success" type="button" id="'.$phase_id.','.$task_id.','.$remarks.','.$data['finance_id'].','.$user_id.'" onclick="update_amount_usd(this.id)">Update</button></td>
                     <tr
                     ';
                 }
