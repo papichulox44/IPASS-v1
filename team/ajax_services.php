@@ -8,7 +8,10 @@
 		$user_id = $_POST['user_id'];
 		$final_status_id = $_POST['final_status_id'];
 		$md_body = $_POST['md_body'];
-		$i = $_POST['i'];
+        $i = $_POST['i'];
+        $j = $_POST['j'];
+        $k = $_POST['k'];
+		$l = $_POST['l'];
 
         // ------------------------------------------------ for counting total filter
         $find_space_id_in_filter = mysqli_query($conn, "SELECT * FROM filter WHERE filter_space_id = '$space_id' AND filter_user_id = '$user_id'");
@@ -53,12 +56,25 @@
 		// <script src="../assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
   //       <script src="../assets/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
   //       <script src="../assets/js/pages/be_tables_datatables.min.js"></script>
+        echo '
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        ';
 
+        echo '
+        <script>
+            $(document).ready(function(){
+              $("#myInput'.$k.'").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#myTable'.$l.' tr").filter(function() {
+                  $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+              });
+            });
+        </script>
+        ';
 
-		echo '
-		
-		
-
+		echo '        
+        <input style="width: 200px; float: right" id="myInput'.$j.'" type="text" class="form-control" placeholder="Search.."><br>
 		<table class="table table-striped table-hover table-bordered table-vcenter js-dataTable-full '.$md_body.'">
                     <thead>
                         <tr>
@@ -80,7 +96,7 @@
                                     echo '<th class="d-none d-sm-table-cell text-center">'.$field_name.'</th>';
                                 }
                                 echo '</tr>
-                    </thead> <tbody>';
+                    </thead> <tbody id="myTable'.$i.'">';
 		// ------------------------------------------------ for counting total filter
     $find_space_id_in_filter = mysqli_query($conn, "SELECT * FROM filter WHERE filter_space_id='$space_id' AND filter_user_id='$user_id' AND filter_name != 'status'");
     if(mysqli_num_rows($find_space_id_in_filter) == 0)
@@ -276,3 +292,4 @@
                             mysqli_close($conn);
 	}
  ?>
+

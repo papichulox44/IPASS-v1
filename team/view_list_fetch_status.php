@@ -13,6 +13,9 @@ tbody > tr:hover {
     $g = 1;
     $h = 1;
     $i = 1;
+    $j = 1;
+    $k = 1;
+    $l = 1;
 
 //_______________________________ FILTER STATUS Query
     $filter_status = mysqli_query($conn, "SELECT * FROM filter WHERE filter_space_id = '$space_id' AND filter_user_id = '$user_id' AND filter_name = 'status'");
@@ -41,21 +44,23 @@ tbody > tr:hover {
         ?>
         <div class="block block-bordered block-rounded <?php echo $md_body; ?>" style="width: 100%; border-left: 5px solid <?php echo $result_findstatus['status_color'];?>; box-shadow: 0px 1px 1px 0px rgba(119, 119, 119, 0.35);-moz-box-shadow: 0px 1px 1px 0px rgba(119, 119, 119, 0.35);-webkit-box-shadow: 0px 1px 1px 0px rgba(119, 119, 119, 0.35);">
             <div class="block-header" role="tab" id="accordion2_h<?php echo $a++;?>">
-                <span style="background-color: <?php echo $result_findstatus['status_color'];?>; padding: 3px 10px; border-radius: 3px;"><a class="font-w600" data-toggle="collapse" data-parent="#accordion2" href="#accordion2_q<?php echo $c++;?>" aria-expanded="true" aria-controls="accordion2_q<?php echo $d++;?>" style="color: #fff;" id="<?php echo $space_id.','.$user_id.','.$final_status_id.','.$g++.','.$md_body.','.$i++; ?>" onclick="show_steps(this.id)"><?php echo $result_findstatus['status_name'];?></a>(asd)
+                <span style="background-color: <?php echo $result_findstatus['status_color'];?>; padding: 3px 10px; border-radius: 3px;"><a class="font-w600" data-toggle="collapse" data-parent="#accordion2" href="#accordion2_q<?php echo $c++;?>" aria-expanded="true" aria-controls="accordion2_q<?php echo $d++;?>" style="color: #fff;" id="<?php echo $space_id.','.$user_id.','.$final_status_id.','.$g++.','.$md_body.','.$i++.','.$j++.','.$k++.','.$l++; ?>" onclick="show_steps(this.id)"><?php echo $result_findstatus['status_name'];?></a>
                     <div id="steps_lods<?php echo $h++;?>" style="display: none;" class="spinner-grow spinner-grow-sm text-white" role="status">
                         <span class="sr-only">Loading...</span>
                     </div>
                 </span>
 
+                
                 <div class="block-options">
                     <!--<span class="btn btn-sm btn-secondary" style="background-color: <?php echo $result_findstatus['status_color'];?>; color: #fff;">
                         Task: <?php echo $count; ?>
                     </span>-->
 
-                    <button type="button" class="btn btn-sm btn-secondary float-right" data-toggle="modal" data-target="#modal-add_task">
-                        <i class="fa fa-plus text-success mr-5"></i>Add
-                    </button>
+                        <button type="button" class="btn btn-sm btn-secondary float-right" data-toggle="modal" data-target="#modal-add_task">
+                            <i class="fa fa-plus text-success mr-5"></i>Add
+                        </button>
                 </div>
+                
             </div>
             <div id="accordion2_q<?php echo $e++;?>" class="collapse" role="tabpanel" aria-labelledby="accordion2_h<?php echo $b++;?>" style="width: 100%; padding:0px 20px 20px 20px;"> <!-- put "show" in class if you want an active-->
                 <div id="service_list<?php echo $f++;?>"></div>
@@ -77,6 +82,9 @@ tbody > tr:hover {
         g = array[3];
         md_body = array[4];
         i = array[5];
+        j = array[6];
+        k = array[7];
+        l = array[8];
 
         x = document.getElementById("steps_lods"+g);
         x.style.display = "";
@@ -92,6 +100,9 @@ tbody > tr:hover {
                 final_status_id: final_status_id,
                 md_body: md_body,
                 i: i,
+                j: j,
+                k: k,
+                l: l,
                 show_steps:1,
             },
                 success: function(response){
@@ -99,5 +110,14 @@ tbody > tr:hover {
                 }
         });
     }    
+
+    // $(document).ready(function(){
+    //   $("#myInput").on("keyup", function() {
+    //     var value = $(this).val().toLowerCase();
+    //     $("#myTable tr").filter(function() {
+    //       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    //     });
+    //   });
+    // });
 
 </script>

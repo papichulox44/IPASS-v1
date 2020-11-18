@@ -750,6 +750,7 @@ $(document).ready(function(){
 
     function show_task_modal(id)
     {
+
         var a = id;
         var task_id = a.replace("taskmodal", ""); // Remove the string id "taskmodal";
         document.getElementById("task_id_when_click").value = task_id; // passing the task_id
@@ -803,9 +804,11 @@ $(document).ready(function(){
                 },
                 success:function(response){
                     $('#contact_id').html(response);
+                    //$("#modal-extra-large").modal("show");
                 }
            });
         }
+
     }
 
     function phase_selector()
@@ -6080,7 +6083,8 @@ function display_assign_field_phase(){
                     <div class="block block-themed block-transparent mb-0">
                         <!-- <div class="block-header bg-primary-dark"> -->
                         <div class="block-header" style="background-color: #045D71;">
-                            <h3 class="block-title"><button style="background-color: #045D71;" onclick="go_back()"><</button> Select Email Sender</h3>
+                            <h3 class="block-title"><button data-dismiss="modal" data-toggle="modal" data-target="#modal-extra-large" style="background-color: #045D71;"><</button> Select Email Sender</h3>
+                            <!-- <h3 class="block-title"><button style="background-color: #045D71;" onclick="go_back()"><</button> Select Email Sender</h3> -->
                             <div class="block-options">
                                 <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
                                     <i class="si si-close"></i>

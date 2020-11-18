@@ -1,6 +1,6 @@
 <?php
 echo'
-    <tr class"hoverme" id="taskmodal'.$result_findstatus['task_id'].'" onclick="show_task_modal(this.id)">
+    <tr class"hoverme" data-toggle="modal" data-target="#modal-extra-large" id="taskmodal'.$result_findstatus['task_id'].'" onclick="show_task_modal(this.id)">
     <input type="hidden" value="'.$result_findstatus['task_name'].'" id="rename'.$result_findstatus['task_id'].'">
         <button type="button" class="view_data" hidden="hidden" value="'.$result_findstatus['task_id'].'" id="btnStartVisit'.$result_findstatus['task_id'].'"></button>
         <td class="text-center">Task ID: '.$result_findstatus['task_id'].'</td>
