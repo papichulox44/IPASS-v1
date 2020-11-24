@@ -350,7 +350,7 @@
         phase_id = document.getElementById("phase_id").value;
 
         $("#modal-currency").modal();
-        $.ajax({
+        $.ajax({ 
         url:"ajax.php",
         method:"post",
         data:{
@@ -360,7 +360,7 @@
         success:function(response){
              $('#fetch_list_of_payment').html(response);
         }
-    });
+        });
     }
 
 </script>

@@ -21,7 +21,6 @@
                                     <img src="../assets/media/photos/logo-ipass.png" class="logo"> 
                                 </div>
                                 <!-- END Header -->
-                                <form class="js-validation-signin" action="be_pages_auth_all.html" method="post">
                                     <div class="block block-themed block-rounded block-shadow">
                                         <div class="block-header bg-corporate">
                                             <h3 class="block-title">Forgot password</h3>
@@ -30,12 +29,12 @@
                                             <div class="form-group row">
                                                 <div class="col-12">
                                                     <label for="login-username">Email</label>
-                                                    <input type="text" class="form-control" id="login-username" name="login-username">
+                                                    <input type="email" class="form-control" id="email" name="login-username">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <div class="col-12">
-                                                    <button type="submit" class="btn btn-sm btn-hero btn-noborder bg-corporate btn-block">
+                                                    <button type="submit" class="btn btn-sm btn-hero btn-noborder bg-corporate btn-block" onclick="forgot_password()">
                                                         <span class="text-white"><i class="fa fa-send mr-10"></i> Send</span>
                                                     </button>
                                                 </div>
@@ -52,7 +51,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                </form>
                                 <!-- END Sign In Form -->
                             </div>
                         </div>
@@ -69,5 +67,37 @@
         <script src="../assets/js/codebase.app.min.js"></script>
         <script src="../assets/js/plugins/jquery-validation/jquery.validate.min.js"></script>
         <script src="../assets/js/pages/op_auth_signin.min.js"></script>
+
+        <script>
+            function forgot_password()
+            {
+                email = document.getElementById("email").value;
+                if (email ==  '') {
+                    alert('Please fill up valid email address!');
+                } else {
+                    if(confirm("Are you sure you?"))
+                    {
+                        $.ajax({ 
+                        url:"ajax.php",
+                        method:"post",
+                        data:{
+                            email:email,
+                            forgot_password:1,
+                        },
+                        success:function(response){
+                             if (response == 'success') {
+                                alert('Credentials already sent to your email. Thank you!')
+                                location.replace("http://localhost/ipass/client/sign_in.php")
+                             } else {
+                                alert('Please input valid email. Thank you!');
+                             }
+                        }
+                        });
+                    }
+                }
+            }
+
+        </script>
+
     </body>
 </html>

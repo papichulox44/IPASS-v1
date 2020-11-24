@@ -109,39 +109,51 @@
             {
             	if($filter == "tag") // add/update filter tag | only one
 	            {
-	            	$select_TAF = mysqli_query($conn, "SELECT * FROM filter WHERE filter_space_id='$space_id' AND filter_user_id='$user_id' AND filter_name = 'tag' OR filter_name = 'assign' OR filter_name = 'field'");
-	            	if(mysqli_num_rows($select_TAF) == 0)
-	                { 
-                    	mysqli_query($conn,"INSERT into `filter` (filter_space_id, filter_user_id, filter_name, filter_value) values ('$space_id','$user_id','$filter','$filtered_by')") or die(mysqli_error());
-	                }
-	                else
-	                {
-                    	mysqli_query($conn, "UPDATE filter SET filter_name = '$filter' , filter_value = '$filtered_by' WHERE filter_space_id = '$space_id' AND filter_user_id = '$user_id' AND filter_name = 'tag' OR filter_name = 'assign' OR filter_name = 'field'") or die(mysqli_error());
-	                }
+                    $delete_tag = mysqli_query($conn, "DELETE FROM filter WHERE filter_name = 'tag' AND filter_user_id='$user_id'");
+                    if ($delete_tag) {
+                        mysqli_query($conn,"INSERT into `filter` (filter_space_id, filter_user_id, filter_name, filter_value) values ('$space_id','$user_id','$filter','$filtered_by')") or die(mysqli_error());
+                    }
+	            	// $select_TAF = mysqli_query($conn, "SELECT * FROM filter WHERE filter_space_id='$space_id' AND filter_user_id='$user_id' AND filter_name = 'tag' OR filter_name = 'assign' OR filter_name = 'field'");
+	            	// if(mysqli_num_rows($select_TAF) == 0)
+	             //    { 
+              //       	mysqli_query($conn,"INSERT into `filter` (filter_space_id, filter_user_id, filter_name, filter_value) values ('$space_id','$user_id','$filter','$filtered_by')") or die(mysqli_error());
+	             //    }
+	             //    else
+	             //    {
+              //       	mysqli_query($conn, "UPDATE filter SET filter_name = '$filter' , filter_value = '$filtered_by' WHERE filter_space_id = '$space_id' AND filter_user_id = '$user_id' AND filter_name = 'tag' OR filter_name = 'assign' OR filter_name = 'field'") or die(mysqli_error());
+	             //    }
 	            }
             	if($filter == "assign") // add/update filter tag | only one
 	            {
-	            	$select_TAF = mysqli_query($conn, "SELECT * FROM filter WHERE filter_space_id='$space_id' AND filter_user_id='$user_id' AND filter_name = 'tag' OR filter_name = 'assign' OR filter_name = 'field'");
-	            	if(mysqli_num_rows($select_TAF) == 0)
-	                { 
-                    	mysqli_query($conn,"INSERT into `filter` (filter_space_id, filter_user_id, filter_name, filter_value) values ('$space_id','$user_id','$filter','$filtered_by')") or die(mysqli_error());
-	                }
-	                else
-	                {
-                    	mysqli_query($conn, "UPDATE filter SET filter_name = '$filter' , filter_value = '$filtered_by' WHERE filter_space_id = '$space_id' AND filter_user_id = '$user_id' AND filter_name = 'tag' OR filter_name = 'assign' OR filter_name = 'field'") or die(mysqli_error());
-	                }
+                    $delete_assign = mysqli_query($conn, "DELETE FROM filter WHERE filter_name = 'assign' AND filter_user_id='$user_id'");
+                    if ($delete_assign) {
+                        mysqli_query($conn,"INSERT into `filter` (filter_space_id, filter_user_id, filter_name, filter_value) values ('$space_id','$user_id','$filter','$filtered_by')") or die(mysqli_error());
+                    }
+	            	// $select_TAF = mysqli_query($conn, "SELECT * FROM filter WHERE filter_space_id='$space_id' AND filter_user_id='$user_id' AND filter_name = 'tag' OR filter_name = 'assign' OR filter_name = 'field'");
+	            	// if(mysqli_num_rows($select_TAF) == 0)
+	             //    { 
+              //       	mysqli_query($conn,"INSERT into `filter` (filter_space_id, filter_user_id, filter_name, filter_value) values ('$space_id','$user_id','$filter','$filtered_by')") or die(mysqli_error());
+	             //    }
+	             //    else
+	             //    {
+              //       	mysqli_query($conn, "UPDATE filter SET filter_name = '$filter' , filter_value = '$filtered_by' WHERE filter_space_id = '$space_id' AND filter_user_id = '$user_id' AND filter_name = 'tag' OR filter_name = 'assign' OR filter_name = 'field'") or die(mysqli_error());
+	             //    }
 	            }
             	if($filter == "field") // add/update filter tag | only one
 	            {
-	            	$select_TAF = mysqli_query($conn, "SELECT * FROM filter WHERE filter_space_id='$space_id' AND filter_user_id='$user_id' AND filter_name = 'tag' OR filter_name = 'assign' OR filter_name = 'field'");
-	            	if(mysqli_num_rows($select_TAF) == 0)
-	                { 
-                    	mysqli_query($conn,"INSERT into `filter` (filter_space_id, filter_user_id, filter_name, filter_value) values ('$space_id','$user_id','$filter','$filtered_by')") or die(mysqli_error());
-	                }
-	                else
-	                {
-                    	mysqli_query($conn, "UPDATE filter SET filter_name = '$filter' , filter_value = '$filtered_by' WHERE filter_space_id = '$space_id' AND filter_user_id = '$user_id' AND filter_name = 'tag' OR filter_name = 'assign' OR filter_name = 'field'") or die(mysqli_error());
-	                }
+                    $delete_field = mysqli_query($conn, "DELETE FROM filter WHERE filter_name = 'field' AND filter_user_id='$user_id'");
+                    if ($delete_field) {
+                        mysqli_query($conn,"INSERT into `filter` (filter_space_id, filter_user_id, filter_name, filter_value) values ('$space_id','$user_id','$filter','$filtered_by')") or die(mysqli_error());
+                    }
+	            	// $select_TAF = mysqli_query($conn, "SELECT * FROM filter WHERE filter_space_id='$space_id' AND filter_user_id='$user_id' AND filter_name = 'tag' OR filter_name = 'assign' OR filter_name = 'field'");
+	            	// if(mysqli_num_rows($select_TAF) == 0)
+	             //    { 
+              //       	mysqli_query($conn,"INSERT into `filter` (filter_space_id, filter_user_id, filter_name, filter_value) values ('$space_id','$user_id','$filter','$filtered_by')") or die(mysqli_error());
+	             //    }
+	             //    else
+	             //    {
+              //       	mysqli_query($conn, "UPDATE filter SET filter_name = '$filter' , filter_value = '$filtered_by' WHERE filter_space_id = '$space_id' AND filter_user_id = '$user_id' AND filter_name = 'tag' OR filter_name = 'assign' OR filter_name = 'field'") or die(mysqli_error());
+	             //    }
 	            }
             }
             echo $echo_location;      

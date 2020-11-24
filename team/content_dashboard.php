@@ -1039,9 +1039,9 @@ $(document).ready(function(){
                                         email_send_history: 1,
                                     },
                                         success: function(data){
-                                            $('#modal-popout').modal("hide");
-                                            $('#modal-extra-large').modal("show");
-                                            $('#modal-extra-large').css('overflow-y', 'auto');
+                                            // $('#modal-popout').modal("hide");
+                                            // $('#modal-extra-large').modal("show");
+                                            // $('#modal-extra-large').css('overflow-y', 'auto');
                                             // $('#modal-extra-large').focus();
                                             display_email_history_table();
                                             alert(data);
@@ -1863,457 +1863,458 @@ $(document).ready(function(){
                 <!-- Task information -->
                 <div class="block block-themed block-transparent mb-0" id="information_id"></div>
                 <!-- END Task information -->
-
-                <!-- Task contact -->
-                <div class="block-content" style="background-color: #f0f2f5;">
-                    <div class="block block-mode-hidden">
-                        <div class="block-header block-header-default" style="background-color: #0d7694;">
-                            <h3 class="block-title text-white">Contact</h3>
-                            <div class="block-options">
-                                <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle"></button>
-                            </div>
-                        </div>
-                        <div class="block-content shad" id="contact_id">
-                        </div>
-                    </div>
-                </div>
-                <!-- END Task contact -->
-
-                <!-- Task payment -->
-                <div class="block-content" style="background-color: #f0f2f5;">
-                    <div class="block block-mode-hidden">
-                        <div class="block-header block-header-default" style="margin-top: -20px; background-color: #0d7694;">
-                            <h3 class="block-title text-white">Payment details</h3>
-                            <div class="block-options">
-                                <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle"></button>
-                            </div>
-                        </div>
-                        <div class="block-content shad">
-                            <h4 class="text-muted">Field area</h4>
-                            <div class="form-group row">
-                                <div class="col-lg-12">
-                                    <div class="form-group row">
-                                        <div class="col-md-4">
-                                            <!-- Dropdown for list of phases -->
-                                            <span id="phase_selector">
-                                            </span>
-                                            <input type="hidden" value="" id="txt_select_phase">
-                                        </div>
-                                        <div class="col-md-2">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <input type="hidden" class="form-control" id="edit_payment_id" readonly>
-                                                <div class="col-md-6">
-                                                    <input type="text" class="form-control" id="edit_payment_name" readonly>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="input-group">
-                                                        <input class="form-control" style="text-align: right;" id="field_amount_per_task" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
-                                                        <div class="input-group-prepend">
-                                                            <button type="button" class="btn btn-sm btn-danger" title="Cancel" onclick="cancel_field_amount_per_task()">
-                                                                <i class="fa fa-eraser"></i>
-                                                            </button>
-                                                            <button type="button" class="btn btn-sm btn-primary" title="Save" id="save_field_amount_per_task" onclick="save_field_amount_per_task()">
-                                                                <i class="fa fa-check"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12" id="finance_container">
-                                        </div>
-                                    </div>
+                <div data-toggle="slimscroll" data-height="700px" data-color="#42A5F5">
+                    <!-- Task contact -->
+                    <div class="block-content" style="background-color: #f0f2f5;">
+                        <div class="block block-mode-hidden">
+                            <div class="block-header block-header-default" style="background-color: #0d7694;">
+                                <h3 class="block-title text-white">Contact</h3>
+                                <div class="block-options">
+                                    <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle"></button>
                                 </div>
                             </div>
-                            <hr style="height:2px;border-width:0;color:gray;background-color:gray">
-                            <div class="form-group row">
-                                <div class="col-md-6">
-                                    <h4 class="text-muted">Transaction area</h4>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group row">
-                                        <!--<input type="text" class="form-control" id="disc_id" readonly>-->
-                                        <div class="col-md-4">
-                                            <label for="contact1-firstname">Discount ID</label>
-                                            <input type="text" class="form-control text-center" id="disc_id" readonly>
-                                            <!--<select class="form-control text-muted" style="width: 100%;" id="disc_percentage" onchange="percentage_select(this)">
-                                                <option></option>
-                                                <?php
-                                                    for($x = 1; $x <= 100; $x++)
-                                                    {
-                                                        echo '<option value="'.$x.'">'.$x.'%</option>';
-                                                    }
-                                                ?>
-                                            </select>-->
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label for="contact1-firstname">Discounted amount</label>
-                                            <input type="text" class="form-control text-center" id="disc_amount" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label for="contact1-lastname">Option</label>
-                                            <button type="button" class="btn btn-md btn-noborder btn-primary btn-block" onclick="add_discount()"><li class="fa fa-check"></li> Save</button>
-                                        </div>
-                                    </div>
-                                    <hr style="height:1px;border-width:0;color:gray;background-color:gray">
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group row">
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <label class="col-md-5 col-form-label">Transaction date: <span class="text-danger" style="font-size: 12px;">(Require)</span></label>
-                                                <div class="col-md-7">
-                                                    <input type="hidden" class="form-control" id="disc_id" readonly>
-                                                    <input type="date" class="form-control" id="tran_date" required>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-md-5 col-form-label">Remittance: <span class="text-danger" style="font-size: 12px;">(Require)</span></label>
-                                                <div class="col-md-7">
-                                                    <select class="form-control text-muted" style="width: 100%;" id="tran_method" required>
-                                                        <option disabled="" selected=""></option>
-                                                        <?php 
-                                                        $query = mysqli_query($conn, "SELECT * FROM tbl_remittance") or die(mysqli_error());
-                                                        while ($row = mysqli_fetch_array($query)) {
-                                                            echo '<option value="'.$row['remit_value'].'">'.$row['remit_name'].'</option>';
-                                                        }
-                                                         ?>
-                                                        <!-- <option value="BDO PI">BANCO DE ORO (PESO Account) - IPASS</option>
-                                                        <option value="BDO DI">BANCO DE ORO (DOLLAR Account) - IPASS</option>
-                                                        <option value="BDO PJ">BANCO DE ORO (PESO Account) - Joyce O. Parungao</option>
-                                                        <option value="BDO DJ">BANCO DE ORO (DOLLAR Account) - Joyce O. Parungao</option>
-                                                        <option value="BPI P">BPI Savings (PESO Account)</option>
-                                                        <option value="BPI D">BPI Dollar Account</option>
-                                                        <option value="PAL. PAWN.">Palawan Pawnshop</option>
-                                                        <option value="ML">MLhuillier</option>
-                                                        <option value="PP">Paypal</option> -->
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-md-5 col-form-label">Transaction No.: <span class="text-danger" style="font-size: 12px;">(Require)</span></label>
-                                                <div class="col-md-7">
-                                                    <input type="text" class="form-control" id="tran_transaction_no" required>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-md-5 col-form-label">Payment amount: <span class="text-danger" style="font-size: 12px;">(Require)</span></label>
-                                                <div class="col-md-7">
-                                                    <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_amount">
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-md-5 col-form-label">Bank charge:</label>
-                                                <div class="col-md-4">
-                                                    <?php
-                                                    if($user_type == "Admin")
-                                                    { ?>
-                                                        <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_charge">
-                                                    <?php
-                                                    }
-                                                    else
-                                                    { ?>
-                                                        <input type="text" class="form-control" readonly id="tran_charge">
-                                                    <?php
-                                                    }
-                                                    ?>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <?php
-                                                    if($user_type == "Admin")
-                                                    { ?>
-                                                    <select class="form-control text-muted" style="width: 100%;" id="tran_charge_type">
-                                                        <option value=""></option>
-                                                        <option value="PHP">Philippine peso (PHP)</option>
-                                                        <option value="USD">U.S. dollar (USD)</option>
-                                                    </select>
-                                                    <?php
-                                                    }
-                                                    else
-                                                    { ?>
-                                                        <input type="text" class="form-control" readonly id="tran_charge_type">
-                                                    <?php
-                                                    }
-                                                    ?>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-md-5 col-form-label">Client rate: <span class="text-danger" style="font-size: 12px;">(Require)</span></label>
-                                                <div class="col-md-7">
-                                                    <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_client_rate">
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-md-5 col-form-label">Currency: <span class="text-danger" style="font-size: 12px;">(Require)</span></label>
-                                                <div class="col-md-7">
-                                                    <select class="form-control text-muted" style="width: 100%;" id="tran_currency" onchange="currency_select(this)">
-                                                    <option value=""></option>
-                                                    <?php
-                                                        $currency_option = mysqli_query($conn, "SELECT * FROM finance_currency ORDER BY currency_name ASC");
-                                                        while($fetch = mysqli_fetch_array($currency_option))
-                                                        {
-                                                            echo '
-                                                            <option value="'.$fetch['currency_code'].'">'.$fetch['currency_name'].' ('.$fetch['currency_code'].')</option>
-                                                            ';
-                                                        }
-                                                    ?>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-md-5 col-form-label">Note:</label>
-                                                <div class="col-md-7">
-                                                    <input type="text" class="form-control" id="tran_note">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <label class="col-md-5 col-form-label">Initial amount:</label>
-                                                <div class="col-md-7">
-                                                    <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_initial" readonly>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-md-5 col-form-label">Rate in USD(‎$):</label>
-                                                <div class="col-md-7">
-                                                    <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_usd_rate" readonly>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-md-5 col-form-label">Amount in USD(‎$):</label>
-                                                <div class="col-md-7">
-                                                    <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_usd_total" readonly>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-md-5 col-form-label">Rate in PHP(‎₱):</label>
-                                                <div class="col-md-7">
-                                                    <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_php_rate" readonly>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-md-5 col-form-label">Amount in PHP(‎₱):</label>
-                                                <div class="col-md-7">
-                                                    <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_php_total" readonly>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-md-5 col-form-label">Client amount in PHP(‎₱):</label>
-                                                <div class="col-md-7">
-                                                    <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_client_php_total" readonly>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-md-5 col-form-label">Attachment: <span class="text-danger" style="font-size: 12px;">(Require)</span></label>
-                                                <div class="col-md-7">
-                                                    <input type="file" class="form-control bg-corporate inputlable" id="tran_attachment" style="padding: 3px 5px;" required>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-md-5 col-form-label">Option:</label>
-                                                <div class="col-md-7">
-                                                    <div class="form-group row">
-                                                        <div class="col-md-6">
-                                                            <button type="button" class="btn btn-md btn-noborder btn-danger btn-block" onclick="clear_transac()"><li class="fa fa-eraser"></li> Cancel</button>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <button type="button" class="btn btn-md btn-noborder btn-primary btn-block mb-15" onclick="save_transac()"><li class="fa fa-check"></li> Save</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <hr style="height:2px;border-width:0;color:gray;background-color:gray">
-                                    <div class="form-group row">
-                                        <!-- Transaction Table for each finance phase -->
-                                        <div class="col-md-12" id="transaction_table">
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="block-content shad" id="contact_id">
                             </div>
                         </div>
                     </div>
-                </div>
-                <!-- END Task payment -->
+                    <!-- END Task contact -->
 
-                <!-- Task requirement -->
-                <div class="block-content" style="background-color: #f0f2f5;">
-                    <div class="block block-mode-hidden">
-                        <div class="block-header block-header-default" style="margin-top: -20px; background-color: #0d7694;">
-                            <h3 class="block-title text-white">Requirements</h3>
-                            <div class="block-options">
-                                <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle"></button>
-                            </div>
-                        </div>
-                        <div class="block-content shad">
-                            <div class="form-group row">
-                                <div class="col-md-6 mb-15">
-                                    <div style="background-color: #f7f7f7; padding: 15px;" class="shad" >
-                                        <div data-toggle="slimscroll" data-height="280px" data-color="#42a5f5" data-opacity="1" data-always-visible="true" id="requirements_field_in_task">
-                                        </div>
-                                    </div>
+                    <!-- Task payment -->
+                    <div class="block-content" style="background-color: #f0f2f5;">
+                        <div class="block block-mode-hidden">
+                            <div class="block-header block-header-default" style="margin-top: -20px; background-color: #0d7694;">
+                                <h3 class="block-title text-white">Payment details</h3>
+                                <div class="block-options">
+                                    <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle"></button>
                                 </div>
-                                <div class="col-md-6">
-                                    <div style="background-color: #f7f7f7; padding: 15px;" class="shad">
+                            </div>
+                            <div class="block-content shad">
+                                <h4 class="text-muted">Field area</h4>
+                                <div class="form-group row">
+                                    <div class="col-lg-12">
                                         <div class="form-group row">
-                                            <div class="col-md-12">
-                                                <textarea type="text" class="form-control" placeholder="Comment..." style="height: 35px;" id="requirement_message" ></textarea>
+                                            <div class="col-md-4">
+                                                <!-- Dropdown for list of phases -->
+                                                <span id="phase_selector">
+                                                </span>
+                                                <input type="hidden" value="" id="txt_select_phase">
+                                            </div>
+                                            <div class="col-md-2">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <input type="hidden" class="form-control" id="edit_payment_id" readonly>
+                                                    <div class="col-md-6">
+                                                        <input type="text" class="form-control" id="edit_payment_name" readonly>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="input-group">
+                                                            <input class="form-control" style="text-align: right;" id="field_amount_per_task" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                                                            <div class="input-group-prepend">
+                                                                <button type="button" class="btn btn-sm btn-danger" title="Cancel" onclick="cancel_field_amount_per_task()">
+                                                                    <i class="fa fa-eraser"></i>
+                                                                </button>
+                                                                <button type="button" class="btn btn-sm btn-primary" title="Save" id="save_field_amount_per_task" onclick="save_field_amount_per_task()">
+                                                                    <i class="fa fa-check"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12" id="finance_container">
                                             </div>
                                         </div>
-                                        <div class="form-group row" style="margin-top: -10px; margin-bottom: -5px;">
+                                    </div>
+                                </div>
+                                <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+                                <div class="form-group row">
+                                    <div class="col-md-6">
+                                        <h4 class="text-muted">Transaction area</h4>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group row">
+                                            <!--<input type="text" class="form-control" id="disc_id" readonly>-->
+                                            <div class="col-md-4">
+                                                <label for="contact1-firstname">Discount ID</label>
+                                                <input type="text" class="form-control text-center" id="disc_id" readonly>
+                                                <!--<select class="form-control text-muted" style="width: 100%;" id="disc_percentage" onchange="percentage_select(this)">
+                                                    <option></option>
+                                                    <?php
+                                                        for($x = 1; $x <= 100; $x++)
+                                                        {
+                                                            echo '<option value="'.$x.'">'.$x.'%</option>';
+                                                        }
+                                                    ?>
+                                                </select>-->
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="contact1-firstname">Discounted amount</label>
+                                                <input type="text" class="form-control text-center" id="disc_amount" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="contact1-lastname">Option</label>
+                                                <button type="button" class="btn btn-md btn-noborder btn-primary btn-block" onclick="add_discount()"><li class="fa fa-check"></li> Save</button>
+                                            </div>
+                                        </div>
+                                        <hr style="height:1px;border-width:0;color:gray;background-color:gray">
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group row">
                                             <div class="col-md-6">
-                                                <div class="custom-file">
-                                                    <input type="file" class="form-control bg-corporate inputlable" id="requirement_attachement" style="padding: 3px 5px;">
+                                                <div class="form-group row">
+                                                    <label class="col-md-5 col-form-label">Transaction date: <span class="text-danger" style="font-size: 12px;">(Require)</span></label>
+                                                    <div class="col-md-7">
+                                                        <input type="hidden" class="form-control" id="disc_id" readonly>
+                                                        <input type="date" class="form-control" id="tran_date" required>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-5 col-form-label">Remittance: <span class="text-danger" style="font-size: 12px;">(Require)</span></label>
+                                                    <div class="col-md-7">
+                                                        <select class="form-control text-muted" style="width: 100%;" id="tran_method" required>
+                                                            <option disabled="" selected=""></option>
+                                                            <?php 
+                                                            $query = mysqli_query($conn, "SELECT * FROM tbl_remittance") or die(mysqli_error());
+                                                            while ($row = mysqli_fetch_array($query)) {
+                                                                echo '<option value="'.$row['remit_value'].'">'.$row['remit_name'].'</option>';
+                                                            }
+                                                             ?>
+                                                            <!-- <option value="BDO PI">BANCO DE ORO (PESO Account) - IPASS</option>
+                                                            <option value="BDO DI">BANCO DE ORO (DOLLAR Account) - IPASS</option>
+                                                            <option value="BDO PJ">BANCO DE ORO (PESO Account) - Joyce O. Parungao</option>
+                                                            <option value="BDO DJ">BANCO DE ORO (DOLLAR Account) - Joyce O. Parungao</option>
+                                                            <option value="BPI P">BPI Savings (PESO Account)</option>
+                                                            <option value="BPI D">BPI Dollar Account</option>
+                                                            <option value="PAL. PAWN.">Palawan Pawnshop</option>
+                                                            <option value="ML">MLhuillier</option>
+                                                            <option value="PP">Paypal</option> -->
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-5 col-form-label">Transaction No.: <span class="text-danger" style="font-size: 12px;">(Require)</span></label>
+                                                    <div class="col-md-7">
+                                                        <input type="text" class="form-control" id="tran_transaction_no" required>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-5 col-form-label">Payment amount: <span class="text-danger" style="font-size: 12px;">(Require)</span></label>
+                                                    <div class="col-md-7">
+                                                        <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_amount">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-5 col-form-label">Bank charge:</label>
+                                                    <div class="col-md-4">
+                                                        <?php
+                                                        if($user_type == "Admin")
+                                                        { ?>
+                                                            <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_charge">
+                                                        <?php
+                                                        }
+                                                        else
+                                                        { ?>
+                                                            <input type="text" class="form-control" readonly id="tran_charge">
+                                                        <?php
+                                                        }
+                                                        ?>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <?php
+                                                        if($user_type == "Admin")
+                                                        { ?>
+                                                        <select class="form-control text-muted" style="width: 100%;" id="tran_charge_type">
+                                                            <option value=""></option>
+                                                            <option value="PHP">Philippine peso (PHP)</option>
+                                                            <option value="USD">U.S. dollar (USD)</option>
+                                                        </select>
+                                                        <?php
+                                                        }
+                                                        else
+                                                        { ?>
+                                                            <input type="text" class="form-control" readonly id="tran_charge_type">
+                                                        <?php
+                                                        }
+                                                        ?>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-5 col-form-label">Client rate: <span class="text-danger" style="font-size: 12px;">(Require)</span></label>
+                                                    <div class="col-md-7">
+                                                        <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_client_rate">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-5 col-form-label">Currency: <span class="text-danger" style="font-size: 12px;">(Require)</span></label>
+                                                    <div class="col-md-7">
+                                                        <select class="form-control text-muted" style="width: 100%;" id="tran_currency" onchange="currency_select(this)">
+                                                        <option value=""></option>
+                                                        <?php
+                                                            $currency_option = mysqli_query($conn, "SELECT * FROM finance_currency ORDER BY currency_name ASC");
+                                                            while($fetch = mysqli_fetch_array($currency_option))
+                                                            {
+                                                                echo '
+                                                                <option value="'.$fetch['currency_code'].'">'.$fetch['currency_name'].' ('.$fetch['currency_code'].')</option>
+                                                                ';
+                                                            }
+                                                        ?>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-5 col-form-label">Note:</label>
+                                                    <div class="col-md-7">
+                                                        <input type="text" class="form-control" id="tran_note">
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <button type="button" class="btn btn-md btn-noborder btn-danger btn-block" onclick="cancel_requirement_comment()"><li class="fa fa-eraser"></li> Cancel</button>
+                                                <div class="form-group row">
+                                                    <label class="col-md-5 col-form-label">Initial amount:</label>
+                                                    <div class="col-md-7">
+                                                        <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_initial" readonly>
                                                     </div>
-                                                    <div class="col-md-6">
-                                                        <button type="button" class="btn btn-md btn-noborder btn-primary btn-block mb-15" onclick="send_requirement_comment()"><li class="fa fa-send"></li> Send</button>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-5 col-form-label">Rate in USD(‎$):</label>
+                                                    <div class="col-md-7">
+                                                        <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_usd_rate" readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-5 col-form-label">Amount in USD(‎$):</label>
+                                                    <div class="col-md-7">
+                                                        <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_usd_total" readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-5 col-form-label">Rate in PHP(‎₱):</label>
+                                                    <div class="col-md-7">
+                                                        <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_php_rate" readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-5 col-form-label">Amount in PHP(‎₱):</label>
+                                                    <div class="col-md-7">
+                                                        <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_php_total" readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-5 col-form-label">Client amount in PHP(‎₱):</label>
+                                                    <div class="col-md-7">
+                                                        <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_client_php_total" readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-5 col-form-label">Attachment: <span class="text-danger" style="font-size: 12px;">(Require)</span></label>
+                                                    <div class="col-md-7">
+                                                        <input type="file" class="form-control bg-corporate inputlable" id="tran_attachment" style="padding: 3px 5px;" required>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-md-5 col-form-label">Option:</label>
+                                                    <div class="col-md-7">
+                                                        <div class="form-group row">
+                                                            <div class="col-md-6">
+                                                                <button type="button" class="btn btn-md btn-noborder btn-danger btn-block" onclick="clear_transac()"><li class="fa fa-eraser"></li> Cancel</button>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <button type="button" class="btn btn-md btn-noborder btn-primary btn-block mb-15" onclick="save_transac()"><li class="fa fa-check"></li> Save</button>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div data-toggle="slimscroll" data-height="195px" data-color="#42a5f5" data-opacity="1" data-always-visible="true" style="background-color: #fff;">
-                                            <table class="js-table-checkable table table-hover table-vcenter">
-                                                <tbody id="requirement_comment_area">
-                                                </tbody>
-                                            </table>
+
+                                        <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+                                        <div class="form-group row">
+                                            <!-- Transaction Table for each finance phase -->
+                                            <div class="col-md-12" id="transaction_table">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <!-- END Task requirement -->
+                    <!-- END Task payment -->
 
-                <!-- Task Email History -->
-                <div class="block-content" style="background-color: #f0f2f5;">
-                    <div class="block block-mode-hidden">
-                        <div class="block-header block-header-default" style="margin-top: -20px; background-color: #0d7694;">
-                            <h3 class="block-title text-white">Email History</h3>
-                            <div class="block-options">
-                                <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle"></button>
+                    <!-- Task requirement -->
+                    <div class="block-content" style="background-color: #f0f2f5;">
+                        <div class="block block-mode-hidden">
+                            <div class="block-header block-header-default" style="margin-top: -20px; background-color: #0d7694;">
+                                <h3 class="block-title text-white">Requirements</h3>
+                                <div class="block-options">
+                                    <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle"></button>
+                                </div>
                             </div>
-                        </div>
-                        <div class="block-content">
-                            <div data-toggle="slimscroll" data-height="480px">
-                                <table class="js-table-sections table table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th class="d-none d-sm-table-cell" style="text-align: inherit;font-weight: bold;">Details</th>
-                                                <th></th>
-                                                <th class="d-none d-sm-table-cell"></th>
-                                                <th class="d-none d-sm-table-cell"></th>
-                                                <th class="d-none d-sm-table-cell" style="text-align: center;font-weight: bold;">Email Content</th>
-                                                <th class="d-none d-sm-table-cell"></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="js-table-sections-header" id="email_history_table">
-                                        </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- END Email History -->
-
-                <!-- Hide/Show status in client Portal -->
-                <div class="block-content" style="background-color: #f0f2f5;">
-                    <div class="block block-mode-hidden">
-                        <div class="block-header block-header-default" style="margin-top: -20px; background-color: #0d7694;">
-                            <h3 class="block-title text-white">Status</h3>
-                            <div class="block-options">
-                                <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle"></button>
-                            </div>
-                        </div>
-                        <div class="block-content">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label style="text-align: center;font-weight: bold;">List of Status</label>
-                                    <div data-toggle="slimscroll" data-height="300px" data-color="#42A5F5">
-                                        <table class="table table table-hover">
-                                            <tbody class="js-table-sections-header" id="hide_status">
-                                            </tbody>
-                                        </table> 
+                            <div class="block-content shad">
+                                <div class="form-group row">
+                                    <div class="col-md-6 mb-15">
+                                        <div style="background-color: #f7f7f7; padding: 15px;" class="shad" >
+                                            <div data-toggle="slimscroll" data-height="280px" data-color="#42a5f5" data-opacity="1" data-always-visible="true" id="requirements_field_in_task">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div style="background-color: #f7f7f7; padding: 15px;" class="shad">
+                                            <div class="form-group row">
+                                                <div class="col-md-12">
+                                                    <textarea type="text" class="form-control" placeholder="Comment..." style="height: 35px;" id="requirement_message" ></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row" style="margin-top: -10px; margin-bottom: -5px;">
+                                                <div class="col-md-6">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="form-control bg-corporate inputlable" id="requirement_attachement" style="padding: 3px 5px;">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <button type="button" class="btn btn-md btn-noborder btn-danger btn-block" onclick="cancel_requirement_comment()"><li class="fa fa-eraser"></li> Cancel</button>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <button type="button" class="btn btn-md btn-noborder btn-primary btn-block mb-15" onclick="send_requirement_comment()"><li class="fa fa-send"></li> Send</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div data-toggle="slimscroll" data-height="195px" data-color="#42a5f5" data-opacity="1" data-always-visible="true" style="background-color: #fff;">
+                                                <table class="js-table-checkable table table-hover table-vcenter">
+                                                    <tbody id="requirement_comment_area">
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <label style="text-align: center;font-weight: bold;">List of Status to be Show in Client Portal</label>
-                                    <div data-toggle="slimscroll" data-height="300px" data-color="#42A5F5">
-                                        <table class="table table table-hover">
-                                            <tbody class="js-table-sections-header" id="show_status">
-                                            </tbody>
-                                        </table> 
-                                    </div> 
-
-                                </div>
-
                             </div>
-                            
                         </div>
                     </div>
-                </div>
-                <!-- END Hide/Show status in client Portal -->
-                <div class="block-content" style="background-color: #F0F2F5; margin-top: -21px;"><hr style="border: 1px solid #0D7694;"></div>
-                <div class="block-content"  style="background-color: #f0f2f5;">
-                    <div class="row items-push">
-                        <!-- Task input field -->
-                        <div class="col-md-6" style="margin: -20px 0px 40px 0px;">
-                            <div  style="box-shadow:0px 2px 4px #b3b3b3;">
-                                <div data-toggle="slimscroll" data-height="480px" data-color="#42a5f5" data-opacity="1" data-always-visible="true" style="background-color: #fff; padding: 15px;" id="input_field_id">
-                                </div>
-                               <!--  <div class="row">
-                                    <div class="col-12">
-                                        <button type="button" class="btn btn-md btn-noborder btn-primary btn-block" onclick="btn_save_input_field()"><li class="fa fa-check"></li> Save</button>
-                                    </div>`
-                                </div> -->
-                            </div>
-                        </div>
-                        <!-- END Task input field -->
+                    <!-- END Task requirement -->
 
-                        <!-- Task comment -->
-                        <div class="col-md-6"  style="margin: -20px 0px 20px 0px;">
-                            <div style="background-color: #fff;box-shadow:0px 2px 4px #b3b3b3;">
-                                <div data-toggle="slimscroll" data-height="390px">
-                                    <table class="js-table-checkable table table-hover table-vcenter">
-                                        <tbody id="comment_area">
-                                            <?php include('fetch_comment.php'); ?>
-                                        </tbody>
+                    <!-- Task Email History -->
+                    <div class="block-content" style="background-color: #f0f2f5;">
+                        <div class="block block-mode-hidden">
+                            <div class="block-header block-header-default" style="margin-top: -20px; background-color: #0d7694;">
+                                <h3 class="block-title text-white">Email History</h3>
+                                <div class="block-options">
+                                    <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle"></button>
+                                </div>
+                            </div>
+                            <div class="block-content">
+                                <div data-toggle="slimscroll" data-height="480px">
+                                    <table class="js-table-sections table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th class="d-none d-sm-table-cell" style="text-align: inherit;font-weight: bold;">Details</th>
+                                                    <th></th>
+                                                    <th class="d-none d-sm-table-cell"></th>
+                                                    <th class="d-none d-sm-table-cell"></th>
+                                                    <th class="d-none d-sm-table-cell" style="text-align: center;font-weight: bold;">Email Content</th>
+                                                    <th class="d-none d-sm-table-cell"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="js-table-sections-header" id="email_history_table">
+                                            </tbody>
                                     </table>
                                 </div>
-                                <hr style="margin: 0px 0px -20px 0px; padding: 20px 0px 0px 0px;">
-                                <span class="parentss" id="imageparent" style="display: none; padding-top: 10px;">
-                                    <button type="button" class="bott btn-block-option btn" onclick="cancel_image()" style="margin: 0px 0px -28px 0px;">
-                                          <i class="si si-close btn-danger" style="border-radius: 10px; margin: 20px 0px 10px 0px;"></i>
-                                    </button>
-                                    <img id="blah" src="" style="width: 150px; height: auto; margin: 5px 0px 5px 10px; border-radius: 10px; box-shadow: 0 8px 6px -6px #dedede;">
-                                </span>
-                                <span class="parentss" id="fileparent" style="display: none;">
-                                    <button type="button" class="bott btn-block-option btn" onclick="cancel_file()" style="margin: 0px 0px -28px 0px;">
-                                          <i class="si si-close btn-danger" style="border-radius: 10px;"></i>
-                                    </button>
-                                    <span id="filename" style="padding-left: 20px"></span>
-                                </span>
-                                <div class="input-group block-header bg-default-lighter" style="margin-top: 20px;">
-                                    <div class="image-upload">
-                                        <label class="btn btn-square btn-success min-width-30" for="image">
-                                            <i class="si si-paper-clip"></i>
-                                        </label>
-                                        <input type="file" id="image" onchange="showname()"/>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END Email History -->
+
+                    <!-- Hide/Show status in client Portal -->
+                    <div class="block-content" style="background-color: #f0f2f5;">
+                        <div class="block block-mode-hidden">
+                            <div class="block-header block-header-default" style="margin-top: -20px; background-color: #0d7694;">
+                                <h3 class="block-title text-white">Status</h3>
+                                <div class="block-options">
+                                    <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle"></button>
+                                </div>
+                            </div>
+                            <div class="block-content">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label style="text-align: center;font-weight: bold;">List of Status</label>
+                                        <div data-toggle="slimscroll" data-height="300px" data-color="#42A5F5">
+                                            <table class="table table table-hover">
+                                                <tbody class="js-table-sections-header" id="hide_status">
+                                                </tbody>
+                                            </table> 
+                                        </div>
                                     </div>
-                                    <textarea type="text" class="form-control" placeholder="Comment..." id="commentmsg" style="margin-top: -5px; height: 35px;"></textarea>
-                                    <div class="block-options">
-                                        <button type="button" class="btn btn-rounded btn-noborder btn-primary min-width-30" id="send_comment" ><i class="fa fa-send"></i></button>
+                                    <div class="col-md-6">
+                                        <label style="text-align: center;font-weight: bold;">List of Status to be Show in Client Portal</label>
+                                        <div data-toggle="slimscroll" data-height="300px" data-color="#42A5F5">
+                                            <table class="table table table-hover">
+                                                <tbody class="js-table-sections-header" id="show_status">
+                                                </tbody>
+                                            </table> 
+                                        </div> 
+
+                                    </div>
+
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END Hide/Show status in client Portal -->
+                    <div class="block-content" style="background-color: #F0F2F5; margin-top: -21px;"><hr style="border: 1px solid #0D7694;"></div>
+                    <div class="block-content"  style="background-color: #f0f2f5;">
+                        <div class="row items-push">
+                            <!-- Task input field -->
+                            <div class="col-md-6" style="margin: -20px 0px 40px 0px;">
+                                <div  style="box-shadow:0px 2px 4px #b3b3b3;">
+                                    <div data-toggle="slimscroll" data-height="480px" data-color="#42a5f5" data-opacity="1" data-always-visible="true" style="background-color: #fff; padding: 15px;" id="input_field_id">
+                                    </div>
+                                   <!--  <div class="row">
+                                        <div class="col-12">
+                                            <button type="button" class="btn btn-md btn-noborder btn-primary btn-block" onclick="btn_save_input_field()"><li class="fa fa-check"></li> Save</button>
+                                        </div>`
+                                    </div> -->
+                                </div>
+                            </div>
+                            <!-- END Task input field -->
+
+                            <!-- Task comment -->
+                            <div class="col-md-6"  style="margin: -20px 0px 20px 0px;">
+                                <div style="background-color: #fff;box-shadow:0px 2px 4px #b3b3b3;">
+                                    <div data-toggle="slimscroll" data-height="390px">
+                                        <table class="js-table-checkable table table-hover table-vcenter">
+                                            <tbody id="comment_area">
+                                                <?php include('fetch_comment.php'); ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <hr style="margin: 0px 0px -20px 0px; padding: 20px 0px 0px 0px;">
+                                    <span class="parentss" id="imageparent" style="display: none; padding-top: 10px;">
+                                        <button type="button" class="bott btn-block-option btn" onclick="cancel_image()" style="margin: 0px 0px -28px 0px;">
+                                              <i class="si si-close btn-danger" style="border-radius: 10px; margin: 20px 0px 10px 0px;"></i>
+                                        </button>
+                                        <img id="blah" src="" style="width: 150px; height: auto; margin: 5px 0px 5px 10px; border-radius: 10px; box-shadow: 0 8px 6px -6px #dedede;">
+                                    </span>
+                                    <span class="parentss" id="fileparent" style="display: none;">
+                                        <button type="button" class="bott btn-block-option btn" onclick="cancel_file()" style="margin: 0px 0px -28px 0px;">
+                                              <i class="si si-close btn-danger" style="border-radius: 10px;"></i>
+                                        </button>
+                                        <span id="filename" style="padding-left: 20px"></span>
+                                    </span>
+                                    <div class="input-group block-header bg-default-lighter" style="margin-top: 20px;">
+                                        <div class="image-upload">
+                                            <label class="btn btn-square btn-success min-width-30" for="image">
+                                                <i class="si si-paper-clip"></i>
+                                            </label>
+                                            <input type="file" id="image" onchange="showname()"/>
+                                        </div>
+                                        <textarea type="text" class="form-control" placeholder="Comment..." id="commentmsg" style="margin-top: -5px; height: 35px;"></textarea>
+                                        <div class="block-options">
+                                            <button type="button" class="btn btn-rounded btn-noborder btn-primary min-width-30" id="send_comment" ><i class="fa fa-send"></i></button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -6083,7 +6084,7 @@ function display_assign_field_phase(){
                     <div class="block block-themed block-transparent mb-0">
                         <!-- <div class="block-header bg-primary-dark"> -->
                         <div class="block-header" style="background-color: #045D71;">
-                            <h3 class="block-title"><button data-dismiss="modal" data-toggle="modal" data-target="#modal-extra-large" style="background-color: #045D71;"><</button> Select Email Sender</h3>
+                            <h3 class="block-title"><button data-toggle="modal" data-target="#modal-extra-large" data-dismiss="modal" style="background-color: #045D71;"><</button> Select Email Sender</h3>
                             <!-- <h3 class="block-title"><button style="background-color: #045D71;" onclick="go_back()"><</button> Select Email Sender</h3> -->
                             <div class="block-options">
                                 <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
