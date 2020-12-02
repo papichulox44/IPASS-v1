@@ -24,6 +24,7 @@ echo'
             </div>
 
             <span class="fortask" id="taskmodal'.$result_findstatus['task_id'].'" onclick="show_task_modal(this.id)">
+            <input type="hidden" value="'.$result_findstatus['task_name'].'" id="rename'.$result_findstatus['task_id'].'">
 
             <form method="post">
             <div class="scrumboard-item-content" style="width:230px;">';

@@ -44,6 +44,6 @@
 		$user_id = $_POST['user_id'];
 		$code = $_POST['code'];
 		$message = $_POST['message'];
-		mysqli_query($conn,"INSERT into `message` (sender_id, message, reciever_id, chat_date, code, attachment, 	status) values ('$user_id', '$message', '$reciever_id', NOW(), '$code', '', '1')") or die(mysqli_error());
+		mysqli_query($conn,"INSERT into `message` (sender_id, message, reciever_id, chat_date, code, attachment, status) values ('$user_id', '$message', '$reciever_id', NOW(), '$code', '', '1')") or die(mysqli_error());
 	}
 ?>

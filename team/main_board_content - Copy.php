@@ -712,7 +712,6 @@ $(document).ready(function(){
 
     function show_task_modal(id)
     {
-
         var a = id;
         var task_id = a.replace("taskmodal", ""); // Remove the string id "taskmodal";
         document.getElementById("task_id_when_click").value = task_id; // passing the task_id
@@ -747,11 +746,9 @@ $(document).ready(function(){
             display_requirement_comment();
             display_status();
             display_task_info();
+            
             fill_input();
             display_email_history_table();
-
-            hide_status();
-            show_status();
         });
         function display_contact()
         {
@@ -766,11 +763,9 @@ $(document).ready(function(){
                 },
                 success:function(response){
                     $('#contact_id').html(response);
-                    //$("#modal-extra-large").modal("show");
                 }
            });
         }
-
     }
 
     function phase_selector()
@@ -957,8 +952,6 @@ $(document).ready(function(){
         var email_name = document.getElementById("email_name" + id).value;
         var FirstName = document.getElementById("contact_fname" + id).value;
         // alert(FirstName);
-        // modal_id = 'taskmodal'+task_id;
-        // alert(modal_id);
         if(confirm("Are you sure you want to send this email?"))
         {
             $.ajax({
@@ -997,14 +990,11 @@ $(document).ready(function(){
                                         task_id:task_id,
                                         contact_email:contact_email,
                                         email_id:email_id,
-                                        email_content:email_content,
                                         email_send_history: 1,
                                     },
                                         success: function(data){
-                                            // $('#modal-popout').modal("hide");
-                                            // $('#modal-extra-large').modal("show");
-                                            // $('#modal-extra-large').css('overflow-y', 'auto');
-                                            // $('#modal-extra-large').focus();
+                                            $('#modal-popout').modal("hide");
+                                            $('#modal-extra-large').modal("show");
                                             display_email_history_table();
                                             alert(data);
                                         }
@@ -1825,458 +1815,415 @@ $(document).ready(function(){
                 <!-- Task information -->
                 <div class="block block-themed block-transparent mb-0" id="information_id"></div>
                 <!-- END Task information -->
-                <div data-toggle="slimscroll" data-height="700px" data-color="#42A5F5">
-                    <!-- Task contact -->
-                    <div class="block-content" style="background-color: #f0f2f5;">
-                        <div class="block block-mode-hidden">
-                            <div class="block-header block-header-default" style="background-color: #0d7694;">
-                                <h3 class="block-title text-white">Contact</h3>
-                                <div class="block-options">
-                                    <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle"></button>
-                                </div>
-                            </div>
-                            <div class="block-content shad" id="contact_id">
+
+                <!-- Task contact -->
+                <div class="block-content" style="background-color: #f0f2f5;">
+                    <div class="block block-mode-hidden">
+                        <div class="block-header block-header-default" style="background-color: #0d7694;">
+                            <h3 class="block-title text-white">Contact</h3>
+                            <div class="block-options">
+                                <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle"></button>
                             </div>
                         </div>
+                        <div class="block-content shad" id="contact_id">
+                        </div>
                     </div>
-                    <!-- END Task contact -->
+                </div>
+                <!-- END Task contact -->
 
-                    <!-- Task payment -->
-                    <div class="block-content" style="background-color: #f0f2f5;">
-                        <div class="block block-mode-hidden">
-                            <div class="block-header block-header-default" style="margin-top: -20px; background-color: #0d7694;">
-                                <h3 class="block-title text-white">Payment details</h3>
-                                <div class="block-options">
-                                    <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle"></button>
-                                </div>
+                <!-- Task payment -->
+                <div class="block-content" style="background-color: #f0f2f5;">
+                    <div class="block block-mode-hidden">
+                        <div class="block-header block-header-default" style="margin-top: -20px; background-color: #0d7694;">
+                            <h3 class="block-title text-white">Payment details</h3>
+                            <div class="block-options">
+                                <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle"></button>
                             </div>
-                            <div class="block-content shad">
-                                <h4 class="text-muted">Field area</h4>
-                                <div class="form-group row">
-                                    <div class="col-lg-12">
-                                        <div class="form-group row">
-                                            <div class="col-md-4">
-                                                <!-- Dropdown for list of phases -->
-                                                <span id="phase_selector">
-                                                </span>
-                                                <input type="hidden" value="" id="txt_select_phase">
-                                            </div>
-                                            <div class="col-md-2">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group row">
-                                                    <input type="hidden" class="form-control" id="edit_payment_id" readonly>
-                                                    <div class="col-md-6">
-                                                        <input type="text" class="form-control" id="edit_payment_name" readonly>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="input-group">
-                                                            <input class="form-control" style="text-align: right;" id="field_amount_per_task" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
-                                                            <div class="input-group-prepend">
-                                                                <button type="button" class="btn btn-sm btn-danger" title="Cancel" onclick="cancel_field_amount_per_task()">
-                                                                    <i class="fa fa-eraser"></i>
-                                                                </button>
-                                                                <button type="button" class="btn btn-sm btn-primary" title="Save" id="save_field_amount_per_task" onclick="save_field_amount_per_task()">
-                                                                    <i class="fa fa-check"></i>
-                                                                </button>
-                                                            </div>
+                        </div>
+                        <div class="block-content shad">
+                            <h4 class="text-muted">Field area</h4>
+                            <div class="form-group row">
+                                <div class="col-lg-12">
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <!-- Dropdown for list of phases -->
+                                            <span id="phase_selector">
+                                            </span>
+                                            <input type="hidden" value="" id="txt_select_phase">
+                                        </div>
+                                        <div class="col-md-2">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <input type="hidden" class="form-control" id="edit_payment_id" readonly>
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control" id="edit_payment_name" readonly>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="input-group">
+                                                        <input class="form-control" style="text-align: right;" id="field_amount_per_task" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                                                        <div class="input-group-prepend">
+                                                            <button type="button" class="btn btn-sm btn-danger" title="Cancel" onclick="cancel_field_amount_per_task()">
+                                                                <i class="fa fa-eraser"></i>
+                                                            </button>
+                                                            <button type="button" class="btn btn-sm btn-primary" title="Save" id="save_field_amount_per_task" onclick="save_field_amount_per_task()">
+                                                                <i class="fa fa-check"></i>
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-12" id="finance_container">
-                                            </div>
+                                        </div>
+                                        <div class="col-lg-12" id="finance_container">
                                         </div>
                                     </div>
                                 </div>
-                                <hr style="height:2px;border-width:0;color:gray;background-color:gray">
-                                <div class="form-group row">
-                                    <div class="col-md-6">
-                                        <h4 class="text-muted">Transaction area</h4>
+                            </div>
+                            <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <h4 class="text-muted">Transaction area</h4>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <!--<input type="text" class="form-control" id="disc_id" readonly>-->
+                                        <div class="col-md-4">
+                                            <label for="contact1-firstname">Discount ID</label>
+                                            <input type="text" class="form-control text-center" id="disc_id" readonly>
+                                            <!--<select class="form-control text-muted" style="width: 100%;" id="disc_percentage" onchange="percentage_select(this)">
+                                                <option></option>
+                                                <?php
+                                                    for($x = 1; $x <= 100; $x++)
+                                                    {
+                                                        echo '<option value="'.$x.'">'.$x.'%</option>';
+                                                    }
+                                                ?>
+                                            </select>-->
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="contact1-firstname">Discounted amount</label>
+                                            <input type="text" class="form-control text-center" id="disc_amount" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="contact1-lastname">Option</label>
+                                            <button type="button" class="btn btn-md btn-noborder btn-primary btn-block" onclick="add_discount()"><li class="fa fa-check"></li> Save</button>
+                                        </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group row">
-                                            <!--<input type="text" class="form-control" id="disc_id" readonly>-->
-                                            <div class="col-md-4">
-                                                <label for="contact1-firstname">Discount ID</label>
-                                                <input type="text" class="form-control text-center" id="disc_id" readonly>
-                                                <!--<select class="form-control text-muted" style="width: 100%;" id="disc_percentage" onchange="percentage_select(this)">
-                                                    <option></option>
+                                    <hr style="height:1px;border-width:0;color:gray;background-color:gray">
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-md-5 col-form-label">Transaction date: <span class="text-danger" style="font-size: 12px;">(Require)</span></label>
+                                                <div class="col-md-7">
+                                                    <input type="hidden" class="form-control" id="disc_id" readonly>
+                                                    <input type="date" class="form-control" id="tran_date" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-md-5 col-form-label">Remittance: <span class="text-danger" style="font-size: 12px;">(Require)</span></label>
+                                                <div class="col-md-7">
+                                                    <select class="form-control text-muted" style="width: 100%;" id="tran_method" required>
+                                                        <option disabled="" selected=""></option>
+                                                        <?php 
+                                                        $query = mysqli_query($conn, "SELECT * FROM tbl_remittance") or die(mysqli_error());
+                                                        while ($row = mysqli_fetch_array($query)) {
+                                                            echo '<option value="'.$row['remit_value'].'">'.$row['remit_name'].'</option>';
+                                                        }
+                                                         ?>
+                                                        <!-- <option value="BDO PI">BANCO DE ORO (PESO Account) - IPASS</option>
+                                                        <option value="BDO DI">BANCO DE ORO (DOLLAR Account) - IPASS</option>
+                                                        <option value="BDO PJ">BANCO DE ORO (PESO Account) - Joyce O. Parungao</option>
+                                                        <option value="BDO DJ">BANCO DE ORO (DOLLAR Account) - Joyce O. Parungao</option>
+                                                        <option value="BPI P">BPI Savings (PESO Account)</option>
+                                                        <option value="BPI D">BPI Dollar Account</option>
+                                                        <option value="PAL. PAWN.">Palawan Pawnshop</option>
+                                                        <option value="ML">MLhuillier</option>
+                                                        <option value="PP">Paypal</option> -->
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-md-5 col-form-label">Transaction No.: <span class="text-danger" style="font-size: 12px;">(Require)</span></label>
+                                                <div class="col-md-7">
+                                                    <input type="text" class="form-control" id="tran_transaction_no" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-md-5 col-form-label">Payment amount: <span class="text-danger" style="font-size: 12px;">(Require)</span></label>
+                                                <div class="col-md-7">
+                                                    <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_amount">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-md-5 col-form-label">Bank charge:</label>
+                                                <div class="col-md-4">
                                                     <?php
-                                                        for($x = 1; $x <= 100; $x++)
+                                                    if($user_type == "Admin")
+                                                    { ?>
+                                                        <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_charge">
+                                                    <?php
+                                                    }
+                                                    else
+                                                    { ?>
+                                                        <input type="text" class="form-control" readonly id="tran_charge">
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <?php
+                                                    if($user_type == "Admin")
+                                                    { ?>
+                                                    <select class="form-control text-muted" style="width: 100%;" id="tran_charge_type">
+                                                        <option value=""></option>
+                                                        <option value="PHP">Philippine peso (PHP)</option>
+                                                        <option value="USD">U.S. dollar (USD)</option>
+                                                    </select>
+                                                    <?php
+                                                    }
+                                                    else
+                                                    { ?>
+                                                        <input type="text" class="form-control" readonly id="tran_charge_type">
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-md-5 col-form-label">Client rate: <span class="text-danger" style="font-size: 12px;">(Require)</span></label>
+                                                <div class="col-md-7">
+                                                    <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_client_rate">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-md-5 col-form-label">Currency: <span class="text-danger" style="font-size: 12px;">(Require)</span></label>
+                                                <div class="col-md-7">
+                                                    <select class="form-control text-muted" style="width: 100%;" id="tran_currency" onchange="currency_select(this)">
+                                                    <option value=""></option>
+                                                    <?php
+                                                        $currency_option = mysqli_query($conn, "SELECT * FROM finance_currency ORDER BY currency_name ASC");
+                                                        while($fetch = mysqli_fetch_array($currency_option))
                                                         {
-                                                            echo '<option value="'.$x.'">'.$x.'%</option>';
+                                                            echo '
+                                                            <option value="'.$fetch['currency_code'].'">'.$fetch['currency_name'].' ('.$fetch['currency_code'].')</option>
+                                                            ';
                                                         }
                                                     ?>
-                                                </select>-->
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="contact1-firstname">Discounted amount</label>
-                                                <input type="text" class="form-control text-center" id="disc_amount" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="contact1-lastname">Option</label>
-                                                <button type="button" class="btn btn-md btn-noborder btn-primary btn-block" onclick="add_discount()"><li class="fa fa-check"></li> Save</button>
-                                            </div>
-                                        </div>
-                                        <hr style="height:1px;border-width:0;color:gray;background-color:gray">
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="form-group row">
-                                            <div class="col-md-6">
-                                                <div class="form-group row">
-                                                    <label class="col-md-5 col-form-label">Transaction date: <span class="text-danger" style="font-size: 12px;">(Require)</span></label>
-                                                    <div class="col-md-7">
-                                                        <input type="hidden" class="form-control" id="disc_id" readonly>
-                                                        <input type="date" class="form-control" id="tran_date" required>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-md-5 col-form-label">Remittance: <span class="text-danger" style="font-size: 12px;">(Require)</span></label>
-                                                    <div class="col-md-7">
-                                                        <select class="form-control text-muted" style="width: 100%;" id="tran_method" required>
-                                                            <option disabled="" selected=""></option>
-                                                            <?php 
-                                                            $query = mysqli_query($conn, "SELECT * FROM tbl_remittance") or die(mysqli_error());
-                                                            while ($row = mysqli_fetch_array($query)) {
-                                                                echo '<option value="'.$row['remit_value'].'">'.$row['remit_name'].'</option>';
-                                                            }
-                                                             ?>
-                                                            <!-- <option value="BDO PI">BANCO DE ORO (PESO Account) - IPASS</option>
-                                                            <option value="BDO DI">BANCO DE ORO (DOLLAR Account) - IPASS</option>
-                                                            <option value="BDO PJ">BANCO DE ORO (PESO Account) - Joyce O. Parungao</option>
-                                                            <option value="BDO DJ">BANCO DE ORO (DOLLAR Account) - Joyce O. Parungao</option>
-                                                            <option value="BPI P">BPI Savings (PESO Account)</option>
-                                                            <option value="BPI D">BPI Dollar Account</option>
-                                                            <option value="PAL. PAWN.">Palawan Pawnshop</option>
-                                                            <option value="ML">MLhuillier</option>
-                                                            <option value="PP">Paypal</option> -->
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-md-5 col-form-label">Transaction No.: <span class="text-danger" style="font-size: 12px;">(Require)</span></label>
-                                                    <div class="col-md-7">
-                                                        <input type="text" class="form-control" id="tran_transaction_no" required>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-md-5 col-form-label">Payment amount: <span class="text-danger" style="font-size: 12px;">(Require)</span></label>
-                                                    <div class="col-md-7">
-                                                        <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_amount">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-md-5 col-form-label">Bank charge:</label>
-                                                    <div class="col-md-4">
-                                                        <?php
-                                                        if($user_type == "Admin")
-                                                        { ?>
-                                                            <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_charge">
-                                                        <?php
-                                                        }
-                                                        else
-                                                        { ?>
-                                                            <input type="text" class="form-control" readonly id="tran_charge">
-                                                        <?php
-                                                        }
-                                                        ?>
-                                                    </div>
-                                                    <div class="col-md-3">
-                                                        <?php
-                                                        if($user_type == "Admin")
-                                                        { ?>
-                                                        <select class="form-control text-muted" style="width: 100%;" id="tran_charge_type">
-                                                            <option value=""></option>
-                                                            <option value="PHP">Philippine peso (PHP)</option>
-                                                            <option value="USD">U.S. dollar (USD)</option>
-                                                        </select>
-                                                        <?php
-                                                        }
-                                                        else
-                                                        { ?>
-                                                            <input type="text" class="form-control" readonly id="tran_charge_type">
-                                                        <?php
-                                                        }
-                                                        ?>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-md-5 col-form-label">Client rate: <span class="text-danger" style="font-size: 12px;">(Require)</span></label>
-                                                    <div class="col-md-7">
-                                                        <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_client_rate">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-md-5 col-form-label">Currency: <span class="text-danger" style="font-size: 12px;">(Require)</span></label>
-                                                    <div class="col-md-7">
-                                                        <select class="form-control text-muted" style="width: 100%;" id="tran_currency" onchange="currency_select(this)">
-                                                        <option value=""></option>
-                                                        <?php
-                                                            $currency_option = mysqli_query($conn, "SELECT * FROM finance_currency ORDER BY currency_name ASC");
-                                                            while($fetch = mysqli_fetch_array($currency_option))
-                                                            {
-                                                                echo '
-                                                                <option value="'.$fetch['currency_code'].'">'.$fetch['currency_name'].' ('.$fetch['currency_code'].')</option>
-                                                                ';
-                                                            }
-                                                        ?>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-md-5 col-form-label">Note:</label>
-                                                    <div class="col-md-7">
-                                                        <input type="text" class="form-control" id="tran_note">
-                                                    </div>
+                                                    </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group row">
-                                                    <label class="col-md-5 col-form-label">Initial amount:</label>
-                                                    <div class="col-md-7">
-                                                        <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_initial" readonly>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-md-5 col-form-label">Rate in USD(‎$):</label>
-                                                    <div class="col-md-7">
-                                                        <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_usd_rate" readonly>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-md-5 col-form-label">Amount in USD(‎$):</label>
-                                                    <div class="col-md-7">
-                                                        <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_usd_total" readonly>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-md-5 col-form-label">Rate in PHP(‎₱):</label>
-                                                    <div class="col-md-7">
-                                                        <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_php_rate" readonly>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-md-5 col-form-label">Amount in PHP(‎₱):</label>
-                                                    <div class="col-md-7">
-                                                        <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_php_total" readonly>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-md-5 col-form-label">Client amount in PHP(‎₱):</label>
-                                                    <div class="col-md-7">
-                                                        <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_client_php_total" readonly>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-md-5 col-form-label">Attachment: <span class="text-danger" style="font-size: 12px;">(Require)</span></label>
-                                                    <div class="col-md-7">
-                                                        <input type="file" class="form-control bg-corporate inputlable" id="tran_attachment" style="padding: 3px 5px;" required>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-md-5 col-form-label">Option:</label>
-                                                    <div class="col-md-7">
-                                                        <div class="form-group row">
-                                                            <div class="col-md-6">
-                                                                <button type="button" class="btn btn-md btn-noborder btn-danger btn-block" onclick="clear_transac()"><li class="fa fa-eraser"></li> Cancel</button>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <button type="button" class="btn btn-md btn-noborder btn-primary btn-block mb-15" onclick="save_transac()"><li class="fa fa-check"></li> Save</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <hr style="height:2px;border-width:0;color:gray;background-color:gray">
-                                        <div class="form-group row">
-                                            <!-- Transaction Table for each finance phase -->
-                                            <div class="col-md-12" id="transaction_table">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- END Task payment -->
-
-                    <!-- Task requirement -->
-                    <div class="block-content" style="background-color: #f0f2f5;">
-                        <div class="block block-mode-hidden">
-                            <div class="block-header block-header-default" style="margin-top: -20px; background-color: #0d7694;">
-                                <h3 class="block-title text-white">Requirements</h3>
-                                <div class="block-options">
-                                    <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle"></button>
-                                </div>
-                            </div>
-                            <div class="block-content shad">
-                                <div class="form-group row">
-                                    <div class="col-md-6 mb-15">
-                                        <div style="background-color: #f7f7f7; padding: 15px;" class="shad" >
-                                            <div data-toggle="slimscroll" data-height="280px" data-color="#42a5f5" data-opacity="1" data-always-visible="true" id="requirements_field_in_task">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div style="background-color: #f7f7f7; padding: 15px;" class="shad">
                                             <div class="form-group row">
-                                                <div class="col-md-12">
-                                                    <textarea type="text" class="form-control" placeholder="Comment..." style="height: 35px;" id="requirement_message" ></textarea>
+                                                <label class="col-md-5 col-form-label">Note:</label>
+                                                <div class="col-md-7">
+                                                    <input type="text" class="form-control" id="tran_note">
                                                 </div>
                                             </div>
-                                            <div class="form-group row" style="margin-top: -10px; margin-bottom: -5px;">
-                                                <div class="col-md-6">
-                                                    <div class="custom-file">
-                                                        <input type="file" class="form-control bg-corporate inputlable" id="requirement_attachement" style="padding: 3px 5px;">
-                                                    </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-md-5 col-form-label">Initial amount:</label>
+                                                <div class="col-md-7">
+                                                    <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_initial" readonly>
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <div class="row">
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-md-5 col-form-label">Rate in USD(‎$):</label>
+                                                <div class="col-md-7">
+                                                    <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_usd_rate" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-md-5 col-form-label">Amount in USD(‎$):</label>
+                                                <div class="col-md-7">
+                                                    <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_usd_total" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-md-5 col-form-label">Rate in PHP(‎₱):</label>
+                                                <div class="col-md-7">
+                                                    <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_php_rate" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-md-5 col-form-label">Amount in PHP(‎₱):</label>
+                                                <div class="col-md-7">
+                                                    <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_php_total" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-md-5 col-form-label">Client amount in PHP(‎₱):</label>
+                                                <div class="col-md-7">
+                                                    <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_client_php_total" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-md-5 col-form-label">Attachment: <span class="text-danger" style="font-size: 12px;">(Require)</span></label>
+                                                <div class="col-md-7">
+                                                    <input type="file" class="form-control bg-corporate inputlable" id="tran_attachment" style="padding: 3px 5px;" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-md-5 col-form-label">Option:</label>
+                                                <div class="col-md-7">
+                                                    <div class="form-group row">
                                                         <div class="col-md-6">
-                                                            <button type="button" class="btn btn-md btn-noborder btn-danger btn-block" onclick="cancel_requirement_comment()"><li class="fa fa-eraser"></li> Cancel</button>
+                                                            <button type="button" class="btn btn-md btn-noborder btn-danger btn-block" onclick="clear_transac()"><li class="fa fa-eraser"></li> Cancel</button>
                                                         </div>
                                                         <div class="col-md-6">
-                                                            <button type="button" class="btn btn-md btn-noborder btn-primary btn-block mb-15" onclick="send_requirement_comment()"><li class="fa fa-send"></li> Send</button>
+                                                            <button type="button" class="btn btn-md btn-noborder btn-primary btn-block mb-15" onclick="save_transac()"><li class="fa fa-check"></li> Save</button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div data-toggle="slimscroll" data-height="195px" data-color="#42a5f5" data-opacity="1" data-always-visible="true" style="background-color: #fff;">
-                                                <table class="js-table-checkable table table-hover table-vcenter">
-                                                    <tbody id="requirement_comment_area">
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+                                    <div class="form-group row">
+                                        <!-- Transaction Table for each finance phase -->
+                                        <div class="col-md-12" id="transaction_table">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- END Task requirement -->
+                </div>
+                <!-- END Task payment -->
 
-                    <!-- Task Email History -->
-                    <div class="block-content" style="background-color: #f0f2f5;">
-                        <div class="block block-mode-hidden">
-                            <div class="block-header block-header-default" style="margin-top: -20px; background-color: #0d7694;">
-                                <h3 class="block-title text-white">Email History</h3>
-                                <div class="block-options">
-                                    <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle"></button>
+                <!-- Task requirement -->
+                <div class="block-content" style="background-color: #f0f2f5;">
+                    <div class="block block-mode-hidden">
+                        <div class="block-header block-header-default" style="margin-top: -20px; background-color: #0d7694;">
+                            <h3 class="block-title text-white">Requirements</h3>
+                            <div class="block-options">
+                                <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle"></button>
+                            </div>
+                        </div>
+                        <div class="block-content shad">
+                            <div class="form-group row">
+                                <div class="col-md-6 mb-15">
+                                    <div style="background-color: #f7f7f7; padding: 15px;" class="shad" >
+                                        <div data-toggle="slimscroll" data-height="280px" data-color="#42a5f5" data-opacity="1" data-always-visible="true" id="requirements_field_in_task">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div style="background-color: #f7f7f7; padding: 15px;" class="shad">
+                                        <div class="form-group row">
+                                            <div class="col-md-12">
+                                                <textarea type="text" class="form-control" placeholder="Comment..." style="height: 35px;" id="requirement_message" ></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" style="margin-top: -10px; margin-bottom: -5px;">
+                                            <div class="col-md-6">
+                                                <div class="custom-file">
+                                                    <input type="file" class="form-control bg-corporate inputlable" id="requirement_attachement" style="padding: 3px 5px;">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <button type="button" class="btn btn-md btn-noborder btn-danger btn-block" onclick="cancel_requirement_comment()"><li class="fa fa-eraser"></li> Cancel</button>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <button type="button" class="btn btn-md btn-noborder btn-primary btn-block mb-15" onclick="send_requirement_comment()"><li class="fa fa-send"></li> Send</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div data-toggle="slimscroll" data-height="195px" data-color="#42a5f5" data-opacity="1" data-always-visible="true" style="background-color: #fff;">
+                                            <table class="js-table-checkable table table-hover table-vcenter">
+                                                <tbody id="requirement_comment_area">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="block-content">
-                                <div data-toggle="slimscroll" data-height="480px">
-                                    <table class="js-table-sections table table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th class="d-none d-sm-table-cell" style="text-align: inherit;font-weight: bold;">Details</th>
-                                                    <th></th>
-                                                    <th class="d-none d-sm-table-cell"></th>
-                                                    <th class="d-none d-sm-table-cell"></th>
-                                                    <th class="d-none d-sm-table-cell" style="text-align: center;font-weight: bold;">Email Content</th>
-                                                    <th class="d-none d-sm-table-cell"></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="js-table-sections-header" id="email_history_table">
-                                            </tbody>
+                        </div>
+                    </div>
+                </div>
+                <!-- END Task requirement -->
+
+                <!-- Task Email History -->
+                <div class="block-content" style="background-color: #f0f2f5;">
+                    <div class="block block-mode-hidden">
+                        <div class="block-header block-header-default" style="margin-top: -20px; background-color: #0d7694;">
+                            <h3 class="block-title text-white">Email History</h3>
+                            <div class="block-options">
+                                <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle"></button>
+                            </div>
+                        </div>
+                        <div class="block-content">
+                            <div data-toggle="slimscroll" data-height="480px">
+                                <table class="js-table-sections table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th class="d-none d-sm-table-cell" style="text-align: inherit;font-weight: bold;">Details</th>
+                                                <th></th>
+                                                <th class="d-none d-sm-table-cell"></th>
+                                                <th class="d-none d-sm-table-cell"></th>
+                                                <th class="d-none d-sm-table-cell" style="text-align: center;font-weight: bold;">Email Content</th>
+                                                <th class="d-none d-sm-table-cell"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="js-table-sections-header" id="email_history_table">
+                                        </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END Email History -->
+
+                <div class="block-content"  style="background-color: #f0f2f5;">
+                    <div class="row items-push">
+
+                        <!-- Task input field -->
+                        <div class="col-md-6" style="margin: -20px 0px 40px 0px;">
+                            <div  style="box-shadow:0px 2px 4px #b3b3b3;">
+                                <div data-toggle="slimscroll" data-height="480px" data-color="#42a5f5" data-opacity="1" data-always-visible="true" style="background-color: #fff; padding: 15px;" id="input_field_id">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END Task input field -->
+
+                        <!-- Task comment -->
+                        <div class="col-md-6"  style="margin: -20px 0px 20px 0px;">
+                            <div style="background-color: #fff;box-shadow:0px 2px 4px #b3b3b3;">
+                                <div data-toggle="slimscroll" data-height="390px">
+                                    <table class="js-table-checkable table table-hover table-vcenter">
+                                        <tbody id="comment_area">
+                                            <?php include('fetch_comment.php'); ?>
+                                        </tbody>
                                     </table>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- END Email History -->
-
-                    <!-- Hide/Show status in client Portal -->
-                    <div class="block-content" style="background-color: #f0f2f5;">
-                        <div class="block block-mode-hidden">
-                            <div class="block-header block-header-default" style="margin-top: -20px; background-color: #0d7694;">
-                                <h3 class="block-title text-white">Status</h3>
-                                <div class="block-options">
-                                    <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle"></button>
-                                </div>
-                            </div>
-                            <div class="block-content">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label style="text-align: center;font-weight: bold;">List of Status</label>
-                                        <div data-toggle="slimscroll" data-height="300px" data-color="#42A5F5">
-                                            <table class="table table table-hover">
-                                                <tbody class="js-table-sections-header" id="hide_status">
-                                                </tbody>
-                                            </table> 
-                                        </div>
+                                <hr style="margin: 0px 0px -20px 0px; padding: 20px 0px 0px 0px;">
+                                <span class="parentss" id="imageparent" style="display: none; padding-top: 10px;">
+                                    <button type="button" class="bott btn-block-option btn" onclick="cancel_image()" style="margin: 0px 0px -28px 0px;">
+                                          <i class="si si-close btn-danger" style="border-radius: 10px; margin: 20px 0px 10px 0px;"></i>
+                                    </button>
+                                    <img id="blah" src="" style="width: 150px; height: auto; margin: 5px 0px 5px 10px; border-radius: 10px; box-shadow: 0 8px 6px -6px #dedede;">
+                                </span>
+                                <span class="parentss" id="fileparent" style="display: none;">
+                                    <button type="button" class="bott btn-block-option btn" onclick="cancel_file()" style="margin: 0px 0px -28px 0px;">
+                                          <i class="si si-close btn-danger" style="border-radius: 10px;"></i>
+                                    </button>
+                                    <span id="filename" style="padding-left: 20px"></span>
+                                </span>
+                                <div class="input-group block-header bg-default-lighter" style="margin-top: 20px;">
+                                    <div class="image-upload">
+                                        <label class="btn btn-square btn-success min-width-30" for="image">
+                                            <i class="si si-paper-clip"></i>
+                                        </label>
+                                        <input type="file" id="image" onchange="showname()"/>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label style="text-align: center;font-weight: bold;">List of Status to be Show in Client Portal</label>
-                                        <div data-toggle="slimscroll" data-height="300px" data-color="#42A5F5">
-                                            <table class="table table table-hover">
-                                                <tbody class="js-table-sections-header" id="show_status">
-                                                </tbody>
-                                            </table> 
-                                        </div> 
-
-                                    </div>
-
-                                </div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                    <!-- END Hide/Show status in client Portal -->
-                    <div class="block-content" style="background-color: #F0F2F5; margin-top: -21px;"><hr style="border: 1px solid #0D7694;"></div>
-                    <div class="block-content"  style="background-color: #f0f2f5;">
-                        <div class="row items-push">
-                            <!-- Task input field -->
-                            <div class="col-md-6" style="margin: -20px 0px 40px 0px;">
-                                <div  style="box-shadow:0px 2px 4px #b3b3b3;">
-                                    <div data-toggle="slimscroll" data-height="480px" data-color="#42a5f5" data-opacity="1" data-always-visible="true" style="background-color: #fff; padding: 15px;" id="input_field_id">
-                                    </div>
-                                   <!--  <div class="row">
-                                        <div class="col-12">
-                                            <button type="button" class="btn btn-md btn-noborder btn-primary btn-block" onclick="btn_save_input_field()"><li class="fa fa-check"></li> Save</button>
-                                        </div>`
-                                    </div> -->
-                                </div>
-                            </div>
-                            <!-- END Task input field -->
-
-                            <!-- Task comment -->
-                            <div class="col-md-6"  style="margin: -20px 0px 20px 0px;">
-                                <div style="background-color: #fff;box-shadow:0px 2px 4px #b3b3b3;">
-                                    <div data-toggle="slimscroll" data-height="390px">
-                                        <table class="js-table-checkable table table-hover table-vcenter">
-                                            <tbody id="comment_area">
-                                                <?php include('fetch_comment.php'); ?>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <hr style="margin: 0px 0px -20px 0px; padding: 20px 0px 0px 0px;">
-                                    <span class="parentss" id="imageparent" style="display: none; padding-top: 10px;">
-                                        <button type="button" class="bott btn-block-option btn" onclick="cancel_image()" style="margin: 0px 0px -28px 0px;">
-                                              <i class="si si-close btn-danger" style="border-radius: 10px; margin: 20px 0px 10px 0px;"></i>
-                                        </button>
-                                        <img id="blah" src="" style="width: 150px; height: auto; margin: 5px 0px 5px 10px; border-radius: 10px; box-shadow: 0 8px 6px -6px #dedede;">
-                                    </span>
-                                    <span class="parentss" id="fileparent" style="display: none;">
-                                        <button type="button" class="bott btn-block-option btn" onclick="cancel_file()" style="margin: 0px 0px -28px 0px;">
-                                              <i class="si si-close btn-danger" style="border-radius: 10px;"></i>
-                                        </button>
-                                        <span id="filename" style="padding-left: 20px"></span>
-                                    </span>
-                                    <div class="input-group block-header bg-default-lighter" style="margin-top: 20px;">
-                                        <div class="image-upload">
-                                            <label class="btn btn-square btn-success min-width-30" for="image">
-                                                <i class="si si-paper-clip"></i>
-                                            </label>
-                                            <input type="file" id="image" onchange="showname()"/>
-                                        </div>
-                                        <textarea type="text" class="form-control" placeholder="Comment..." id="commentmsg" style="margin-top: -5px; height: 35px;"></textarea>
-                                        <div class="block-options">
-                                            <button type="button" class="btn btn-rounded btn-noborder btn-primary min-width-30" id="send_comment" ><i class="fa fa-send"></i></button>
-                                        </div>
+                                    <textarea type="text" class="form-control" placeholder="Comment..." id="commentmsg" style="margin-top: -5px; height: 35px;"></textarea>
+                                    <div class="block-options">
+                                        <button type="button" class="btn btn-rounded btn-noborder btn-primary min-width-30" id="send_comment" ><i class="fa fa-send"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -2358,7 +2305,7 @@ function no_selected()
 }
 function status3(select)
 {
-    clear_amount_per_task();
+	clear_amount_per_task();
     var user_type = "<?php echo $user_type; ?>";
     task_id = document.getElementById("task_id_when_click").value;
     phase_id = (select.options[select.selectedIndex].value); // get phase id
@@ -2401,24 +2348,24 @@ function display_discount()
 {
     task_id2 = document.getElementById("task_id_when_click").value;
     phase_id2 = document.getElementById("txt_select_phase").value;
-    $.ajax({
-        url: 'ajax.php',
-        type: 'POST',
-        async: false,
-        data:{
-            task_id2:task_id2,
-            phase_id2:phase_id2,
-            display_discount: 1,
-        },
-            success: function(data)
-            {
-                str_to_array = data.split("|"); // string to array
-                id = str_to_array[0];
-                amount = str_to_array[1];
-                document.getElementById("disc_id").value = id;
-                document.getElementById("disc_amount").value = amount;
-            }
-    });
+	$.ajax({
+	    url: 'ajax.php',
+	    type: 'POST',
+	    async: false,
+	    data:{
+	        task_id2:task_id2,
+	        phase_id2:phase_id2,
+	        display_discount: 1,
+	    },
+	        success: function(data)
+	        {
+				str_to_array = data.split("|"); // string to array
+				id = str_to_array[0];
+				amount = str_to_array[1];
+	        	document.getElementById("disc_id").value = id;
+	        	document.getElementById("disc_amount").value = amount;
+	        }
+	});
 }
 function select_remarks(select)
 {
@@ -2510,7 +2457,7 @@ function edit_amount_per_task(id)
 }
 function cancel_field_amount_per_task(id)
 {
-    clear_amount_per_task();
+	clear_amount_per_task();
 }
 function clear_amount_per_task()
 {
@@ -2527,53 +2474,50 @@ function save_field_amount_per_task(id)
     field_amount = document.getElementById("field_amount_per_task").value;
     if(field_id == "")
     {
-        alert('Please select field first.');
+    	alert('Please select field first.');
     }
     else
     {
-        if(confirm('Are you sure you want to change the amount of "'+field_name+'" into '+field_amount+'?'))
-        {
-            $.ajax({
-                url:"ajax.php",
-                method:"post",
-                data:{
-                    user_id:user_id,
-                    task_id:task_id,
-                    field_id:field_id,
-                    field_amount:field_amount,
-                    save_field_amount_per_task: 1,},
-                success:function(data){
-                    alert(data);
-                    clear_amount_per_task();
-                    view_field_area_table();
-                    view_transaction_per_phase();
-                }
-            });
-        }
+    	if(confirm('Are you sure you want to change the amount of "'+field_name+'" into '+field_amount+'?'))
+	    {
+	        $.ajax({
+	            url:"ajax.php",
+	            method:"post",
+	            data:{
+	                user_id:user_id,
+	                task_id:task_id,
+	                field_id:field_id,
+	                field_amount:field_amount,
+	                save_field_amount_per_task: 1,},
+	            success:function(data){
+	                alert(data);
+	                clear_amount_per_task();
+	                view_field_area_table();
+	                view_transaction_per_phase();
+	            }
+	        });
+	    }
     }
 }
 
 function add_discount()
-
-{   if(confirm("Are you sure you want to add this discount?"))
+{
+    user_id = <?php echo $id; ?>;
+    phase_id = document.getElementById("txt_select_phase").value;
+    task_id = document.getElementById("task_id_when_click").value;
+    disc_amount = document.getElementById("disc_amount").value;
+    if(phase_id == "")
     {
-        user_id = <?php echo $id; ?>;
-        phase_id = document.getElementById("txt_select_phase").value;
-        task_id = document.getElementById("task_id_when_click").value;
-        disc_amount = document.getElementById("disc_amount").value;
-        if(phase_id == "")
-        {
-            alert('Please select phase first.');
-        }
-        else if(disc_amount == "")
-        {
-            alert('Discounted amount must have a value, please input discount first.');
-        }
-        else
-        {
-            transaction_container.innerHTML = "";
-            save();
-        }
+    	alert('Please select phase first.');
+    }
+    else if(disc_amount == "")
+    {
+        alert('Discounted amount must have a value, please input discount first.');
+    }
+    else
+    {
+	    transaction_container.innerHTML = "";
+	    save();
     }
 }
 function save()
@@ -2598,99 +2542,93 @@ function save()
 
 function save_transac()
 {
-    if(confirm("Are you sure you want to proceed with this transaction?"))
+    user_id = <?php echo $id; ?>;
+    phase_id = document.getElementById("txt_select_phase").value;
+    task_id = document.getElementById("task_id_when_click").value;
+
+    tran_date = document.getElementById("tran_date").value;
+    tran_method = document.getElementById("tran_method").value;
+    tran_transaction_no = document.getElementById("tran_transaction_no").value;
+    tran_currency = document.getElementById("tran_currency").value;
+    tran_amount = document.getElementById("tran_amount").value;
+    tran_charge = document.getElementById("tran_charge").value;
+    tran_charge_type = document.getElementById("tran_charge_type").value;
+    tran_client_rate = document.getElementById("tran_client_rate").value;
+    tran_note = document.getElementById("tran_note").value;
+    tran_initial = document.getElementById("tran_initial").value;
+    tran_usd_rate = document.getElementById("tran_usd_rate").value;
+    tran_usd_total = document.getElementById("tran_usd_total").value;
+    tran_php_rate = document.getElementById("tran_php_rate").value;
+    tran_php_total = document.getElementById("tran_php_total").value;
+    tran_client_php_total = document.getElementById("tran_client_php_total").value;
+    tran_file = document.getElementById("tran_attachment").value;
+
+    tran_attachment = $('#tran_attachment');
+    file_attachment = tran_attachment.prop('files')[0];
+    formData = new FormData();
+    formData.append('user_id', user_id);
+    formData.append('phase_id', phase_id);
+    formData.append('task_id', task_id);
+    formData.append('tran_date', tran_date);
+    formData.append('tran_method', tran_method);
+    formData.append('tran_transaction_no', tran_transaction_no);
+    formData.append('tran_currency', tran_currency);
+    formData.append('tran_amount', tran_amount);
+    formData.append('tran_charge', tran_charge);
+    formData.append('tran_charge_type', tran_charge_type);
+    formData.append('tran_client_rate', tran_client_rate);
+    formData.append('tran_note', tran_note);
+    formData.append('tran_initial', tran_initial);
+    formData.append('tran_usd_rate', tran_usd_rate);
+    formData.append('tran_usd_total', tran_usd_total);
+    formData.append('tran_php_rate', tran_php_rate);
+    formData.append('tran_php_total', tran_php_total);
+    formData.append('tran_client_php_total', tran_client_php_total);
+    formData.append('file_attachment', file_attachment);
+    formData.append('save_transaction', 1);
+
+    if(tran_date == "" || tran_method == "" || tran_transaction_no == "" || tran_amount == "" ||  tran_currency == "" || tran_file == "" || tran_client_rate == "")
     {
-        user_id = <?php echo $id; ?>;
-        phase_id = document.getElementById("txt_select_phase").value;
-        task_id = document.getElementById("task_id_when_click").value;
+        alert('Please input value in require field.');
+    }
+    else if(phase_id == "")
+    {
+        alert('Please select phase in field area.');
+    }
+    else
+    {
+        $.ajax({
+            url:"ajax.php",
+            method:"post",
+            data: formData,
 
-        tran_date = document.getElementById("tran_date").value;
-        tran_method = document.getElementById("tran_method").value;
-        tran_transaction_no = document.getElementById("tran_transaction_no").value;
-        tran_currency = document.getElementById("tran_currency").value;
-        tran_amount = document.getElementById("tran_amount").value;
-        tran_charge = document.getElementById("tran_charge").value;
-        tran_charge_type = document.getElementById("tran_charge_type").value;
-        tran_client_rate = document.getElementById("tran_client_rate").value;
-        tran_note = document.getElementById("tran_note").value;
-        tran_initial = document.getElementById("tran_initial").value;
-        tran_usd_rate = document.getElementById("tran_usd_rate").value;
-        tran_usd_total = document.getElementById("tran_usd_total").value;
-        tran_php_rate = document.getElementById("tran_php_rate").value;
-        tran_php_total = document.getElementById("tran_php_total").value;
-        tran_client_php_total = document.getElementById("tran_client_php_total").value;
-        tran_file = document.getElementById("tran_attachment").value;
-
-        tran_attachment = $('#tran_attachment');
-        file_attachment = tran_attachment.prop('files')[0];
-        formData = new FormData();
-        formData.append('user_id', user_id);
-        formData.append('phase_id', phase_id);
-        formData.append('task_id', task_id);
-        formData.append('tran_date', tran_date);
-        formData.append('tran_method', tran_method);
-        formData.append('tran_transaction_no', tran_transaction_no);
-        formData.append('tran_currency', tran_currency);
-        formData.append('tran_amount', tran_amount);
-        formData.append('tran_charge', tran_charge);
-        formData.append('tran_charge_type', tran_charge_type);
-        formData.append('tran_client_rate', tran_client_rate);
-        formData.append('tran_note', tran_note);
-        formData.append('tran_initial', tran_initial);
-        formData.append('tran_usd_rate', tran_usd_rate);
-        formData.append('tran_usd_total', tran_usd_total);
-        formData.append('tran_php_rate', tran_php_rate);
-        formData.append('tran_php_total', tran_php_total);
-        formData.append('tran_client_php_total', tran_client_php_total);
-        formData.append('file_attachment', file_attachment);
-        formData.append('save_transaction', 1);
-
-        if(tran_date == "" || tran_method == "" || tran_transaction_no == "" || tran_amount == "" ||  tran_currency == "" || tran_file == "" || tran_client_rate == "")
-        {
-            alert('Please input value in require field.');
-        }
-        else if(phase_id == "")
-        {
-            alert('Please select phase in field area.');
-        }
-        else
-        {
-            $.ajax({
-                url:"ajax.php",
-                method:"post",
-                data: formData,
-
-                contentType:false,
-                cache: false,
-                processData: false,
-                success:function(data){
-                    if(data == "success")
-                    {
-                        alert("Transaction added successfully.");
-                        clear_finance_field();
-                        view_transaction_per_phase();
-                    }
-                    else if(data == "error2")
-                    {
-                        alert("Attachment extension must be; jpg, jpeg, and png only.");
-                        document.getElementById("tran_attachment").value = "";
-                    }
-                    else
-                    {
-                        alert("Upload attachment not greater than 3 MB.");
-                        document.getElementById("tran_attachment").value = "";
-                    }
+            contentType:false,
+            cache: false,
+            processData: false,
+            success:function(data){
+                if(data == "success")
+                {
+                    alert("Transaction added successfully.");
+                    clear_finance_field();
+                    view_transaction_per_phase();
                 }
-            });
-        }
+                else if(data == "error2")
+                {
+                    alert("Attachment extension must be; jpg, jpeg, and png only.");
+                    document.getElementById("tran_attachment").value = "";
+                }
+                else
+                {
+                    alert("Upload attachment not greater than 3 MB.");
+                    document.getElementById("tran_attachment").value = "";
+                }
+            }
+        });
     }
 }
 function clear_transac()
-{   
-    if(confirm("Are you sure you?"))
-    {
-        clear_finance_field();
-    }
+{
+    clear_finance_field();
 }
 function view_transaction_per_phase()
 {
@@ -2812,7 +2750,7 @@ function currency_select(select)
                 clear_tran();
                 amount.readOnly = false;
                 tran_client_rate.readOnly = false;
-                tran_charge_type.disabled = false;
+    			tran_charge_type.disabled = false;
                 <?php
                 if($user_type == "Admin")
                 { ?> tran_charge.readOnly = false; <?php } ?>
@@ -2896,8 +2834,6 @@ function clear_tran()
     // For input fields -------------------------------
         function btn_save_input_field()
         {
-            if(confirm("Are you sure?"))
-            {
             var task_id = document.getElementById("task_id_when_click").value;
             var space_id = <?php echo $space_id; ?>;
             var user_id = <?php echo $id; ?>;
@@ -2989,7 +2925,7 @@ function clear_tran()
                             {alert('Space id not found.');}
                             if(data == "update")
                             {alert('Task updated.'); display_input_field(); displayChat();}
-                            else {display_input_field(); displayChat()}
+                            else {display_input_field();}
                         }
                     });
                 });
@@ -3025,7 +2961,7 @@ function clear_tran()
                                         {alert('Space id not found.');}
                                         if(data == "update")
                                         {alert('Task updated.'); display_input_field(); displayChat();}
-                                        else {display_input_field(); displayChat()}
+                                        else {display_input_field();}
                                     }
                                 });
                             });
@@ -3051,7 +2987,6 @@ function clear_tran()
                 }
             }
         // DONE CODE in checking input field email
-            }
         }
     </script>
 
@@ -3108,7 +3043,7 @@ function clear_tran()
                         space_id:space_id,
                         list_id:list_id,
                         field_id:field_id,
-                        c:1,
+                        fetch_field_dropdown:1,
                     },
                     success: function(response){
                         $('#field_dropdown').html(response);
@@ -3209,7 +3144,7 @@ function clear_tran()
             }
         }
     </style>
-    <div class="modal fade" id="modal-status" tabindex="-1" role="dialog" aria-labelledby="modal-fadein" aria-hidden="true">
+    <div class="modal fade" id="modal-status" tabindex="-1" role="dialog" aria-labelledby="modal-fadein" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="block block-themed block-transparent mb-0" style="background-color: #efeeee;">
@@ -5802,15 +5737,14 @@ function display_assign_field_phase(){
 </script>
 
     <!-- Custom Field -->
-    <div class="modal" id="modal-customfield" tabindex="-1" role="dialog" aria-labelledby="modal-fadein" aria-hidden="true">
+    <div class="modal" id="modal-customfield" tabindex="-1" role="dialog" aria-labelledby="modal-fadein" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="block block-themed block-transparent mb-0">
                     <div class="block-header bg-corporate">
                         <h3 class="block-title">Custom field editor</h3>
                         <div class="block-options">
-                            <button type="button" class="btn-block-option"  data-dismiss="modal" aria-label="Close"> <i class="si si-close"></i> </button>
-                            <!-- <button type="button" class="btn-block-option" onClick="window.location.reload();"  data-dismiss="modal" aria-label="Close"> <i class="si si-close"></i> </button> -->
+                            <button type="button" class="btn-block-option" onClick="window.location.reload();"  data-dismiss="modal" aria-label="Close"> <i class="si si-close"></i> </button>
                         </div>
                     </div>
                     <div class="block-content" style="margin-bottom: 15px;">
@@ -6046,8 +5980,7 @@ function display_assign_field_phase(){
                     <div class="block block-themed block-transparent mb-0">
                         <!-- <div class="block-header bg-primary-dark"> -->
                         <div class="block-header" style="background-color: #045D71;">
-                            <h3 class="block-title"><button data-toggle="modal" data-target="#modal-extra-large" data-dismiss="modal" style="background-color: #045D71;"><</button> Select Email Sender</h3>
-                            <!-- <h3 class="block-title"><button style="background-color: #045D71;" onclick="go_back()"><</button> Select Email Sender</h3> -->
+                            <h3 class="block-title"><button style="background-color: #045D71;" onclick="go_back()"><</button> Select Email Sender</h3>
                             <div class="block-options">
                                 <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
                                     <i class="si si-close"></i>
@@ -6076,9 +6009,7 @@ function display_assign_field_phase(){
                                 </select>
                             </div><br>
                             <textarea class="form-control mb-15" id="email_content" rows="12" style="display: none;"></textarea>
-                            <div data-toggle="slimscroll" data-height="300px" data-color="#42A5F5">
                             <span id="view_email_name"></span>
-                            </div>
                     <div class="modal-footer">
                         <!-- <button type="button" class="btn btn-alt-secondary" data-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-alt-success" data-dismiss="modal">
@@ -6119,671 +6050,8 @@ function display_assign_field_phase(){
     {
         $('#modal-popout').modal("hide");
         $('#modal-extra-large').modal("show");
-        $('#modal-extra-large').css('overflow-y', 'auto');
     }
-    // hide_status();
-    
-    function hide_status(){
-        list_id = <?php echo $_GET['list_id']; ?>
-        // task_id = document.getElementById("task_id_when_click").value; 
-        // alert(task_id);
-        $.ajax({
-        url: 'ajax.php',
-        type: 'POST',
-        async: false,
-        data:{
-            task_id:task_id,
-            list_id:list_id,
-            hide_status: 1,
-        },
-            success: function(response){
-                $('#hide_status').html(response);
-            }
-        });
-    }
-
-    function show_status(){
-        list_id = <?php echo $_GET['list_id']; ?>
-        // task_id = document.getElementById("task_id_when_click").value; 
-        // alert(task_id);
-        $.ajax({
-        url: 'ajax.php',
-        type: 'POST',
-        async: false,
-        data:{
-            task_id:task_id,
-            list_id:list_id,
-            show_status: 1,
-        },
-            success: function(response){
-                $('#show_status').html(response);
-            }
-        });
-    }
-
-    function click_hide_status(id)
-    {
-        array = id.split(',');
-        status_id = array[0];
-        contact_id = array[1];
-        statud_list_id = array[2];
-        task_id = array[3];
-
-        // alert(status_id +' '+ contact_id + ' ' + statud_list_id);
-        if(confirm("Are you sure?"))
-        {
-            $.ajax({
-            url: 'ajax.php',
-            type: 'POST',
-            async: false,
-            data:{
-                status_id:status_id,
-                contact_id:contact_id,
-                statud_list_id:statud_list_id,
-                task_id:task_id,
-                click_hide_status: 1,
-            },
-                success: function(response){
-                    // $('#hide_status').html(response);
-                    if (response == 'success') {
-                        alert('Successfully Added!!');
-                        hide_status();
-                        show_status();
-                    }
-                }
-            });
-        }
-    }
-
-    function delete_status(id)
-    {   
-        if(confirm("Are you sure?"))
-        {
-            $.ajax({
-            url: 'ajax.php',
-            type: 'POST',
-            async: false,
-            data:{
-                status_details_id:id,
-                delete_status: 1,
-            },
-                success: function(response){
-                    // $('#show_status').html(response);
-                    if (response == 'success') {
-                        alert('Successfully Hide');
-                        hide_status();
-                        show_status();
-                    }
-                }
-            });
-        }
-    }
-
-    function fetch_email_name_editable(id)
-    {
-        // alert(id);
-        user_id = <?php echo $_SESSION['user']; ?>;
-        var task_id = document.getElementById("task_id_when_click").value;
-        var contact_email = document.getElementById("contact_email" + id).value;
-        var email_subject = document.getElementById("email_subject" + id).value;
-        var email_id = id;
-        var email_name = document.getElementById("email_name" + id).value;
-        var FirstName = document.getElementById("contact_fname" + id).value;
-
-        // alert(email_name);
-        $.ajax({
-                url: 'ajax.php',
-                type: 'POST',
-                async: false,
-                data:{
-                    email_name:email_name,
-                    get_email_content_to_be_send: 1,
-                },
-                success: function(data){
-                    document.getElementById("email_content_editable").value = data;
-                    document.getElementById("js-ckeditor").value = '';
-                    document.getElementById("email_user_id").value = user_id;
-                    document.getElementById("email_task_id").value = task_id;
-                    document.getElementById("email_contact_email").value = contact_email;
-                    document.getElementById("email_email_subject").value = email_subject;
-                    document.getElementById("email_email_id").value = email_id;
-                    document.getElementById("email_FirstName").value = FirstName;
-                }
-        });
-    }
-
-    // fetch_email_pictures();
-    function fetch_email_pictures()
-    {
-        // alert('Nag alert ang email pictures');
-        $.ajax({
-        url: './ajax.php',
-        type: 'POST',
-        async: false,
-        data:{
-            fetch_email_pictures: 1,
-        },
-            success: function(response){
-                $('#view_email_picture').html(response);
-            }
-        });
-    }
-
-    function save_email_pictures()
-    {
-        // alert('Nag Alert sya. Yeheyyy');
-        email_pictures = document.getElementById("email_pictures").value;
-        image = email_pictures.replace(/^.*\\/, "");
-
-        tran_attachment = $('#email_pictures');
-        file_attachment = tran_attachment.prop('files')[0];
-        formData = new FormData();
-        formData.append('email_pictures', image);
-        formData.append('file_attachment', file_attachment);
-        formData.append('save_email_pictures', 1);
-        
-        $.ajax({
-            url: 'ajax.php',
-            type: 'POST', 
-            async: false,
-            data: formData,
-            contentType:false,
-            cache: false,
-            processData: false,
-                success: function(response){
-                    if (response == 'success') {
-                        alert('Image Successfully Uploaded!');
-                        fetch_email_pictures();
-                    }
-                }
-        }); 
-    }
-
-    function delete_email_picture(id)
-    {
-        // alert(id);
-        if(confirm("Are you sure you want to delete this picture?"))
-        {
-            $.ajax({
-            url: './ajax.php',
-            type: 'POST',
-            async: false,
-            data:{
-                email_pictures:id,
-                delete_email_picture: 1,
-            },
-                success: function(response){
-                    if (response == 'success') {
-                        alert('Image Successfully Deleted!');
-                        fetch_email_pictures();
-                    }
-                }
-            });
-        }
-    }
-
-    function normal_image()
-    {
-        // alert('Nag alert normal');
-        // var copyText_normal_image = '<p><img src="(Remove this and put links here)" style="height:(ChangeThisToNUmbers)px; width:auto" /></p>';
-        var copyText = document.getElementById("view_normal");
-        copyText.select();
-        copyText.setSelectionRange(0, 99999)
-        document.execCommand("copy");
-        alert('Codes Successfully Copied!!');
-    }
-    function left_image()
-    {
-        // alert('Nag alert left');
-        var copyText = document.getElementById("view_left");
-        copyText.select();
-        copyText.setSelectionRange(0, 99999)
-        document.execCommand("copy");
-        alert('Codes Successfully Copied!!');
-    }
-    function right_image()
-    {
-        // alert('Nag alert right');
-        var copyText = document.getElementById("view_right");
-        copyText.select();
-        copyText.setSelectionRange(0, 99999)
-        document.execCommand("copy");
-        alert('Codes Successfully Copied!!');
-    }
-    function link()
-    {
-        // alert('link');
-        var copyText = document.getElementById("view_link");
-        copyText.select();
-        copyText.setSelectionRange(0, 99999)
-        document.execCommand("copy");
-        alert('Codes Successfully Copied!!');
-    }
-
-    function send_editable_email()
-    {
-        user_id = document.getElementById("email_user_id").value;
-        task_id = document.getElementById("email_task_id").value;
-        contact_email = document.getElementById("email_contact_email").value;
-        email_subject = document.getElementById("email_email_subject").value;
-        email_id = document.getElementById("email_email_id").value;
-        FirstName = document.getElementById("email_FirstName").value;
-        email_content = document.getElementById("email_content_editable").value;
-
-        // alert(email_content);
-        if(confirm("Are you sure you want to send this email?"))
-        {   
-            $.ajax({
-                url: 'ajax.php',
-                type: 'POST',
-                async: false,
-                data:{
-                    test_email:contact_email,
-                    email_subject:email_subject,
-                    email_content:email_content,
-                    FirstName:FirstName,
-                    test_send_email: 1,
-                },
-                success: function(data){
-                    // Send emai to specific email address
-                    if ('Email sent successfully.' == 'Email sent successfully.')
-                    // if (data == 'Email sent successfully.')
-                    {
-                        $.ajax({
-                            url: 'ajax.php',
-                            type: 'POST',
-                            async: false,
-                            data:{
-                                user_id:user_id,
-                                task_id:task_id,
-                                contact_email:contact_email,
-                                email_id:email_id,
-                                email_content:email_content,
-                                email_send_history: 1,
-                            },
-                                success: function(data){
-                                    $('#modal-extra-editable-email').modal("hide");
-                                    $('#modal-extra-large').modal("show");
-                                    $('#modal-extra-large').css('overflow-y', 'auto');
-                                    // $('#modal-extra-large').focus();
-                                    display_email_history_table();
-                                    alert(data);
-                                }
-                        });
-                    }
-                    else
-                    {
-                        alert(data);
-                    }
-                }
-            });
-        }
-    }
-
 </script>
-
-    <!-- Extra Large Modal Editable Email -->
-        <div class="modal fade" id="modal-extra-editable-email" tabindex="-1" role="dialog" aria-labelledby="modal-extra-large" aria-hidden="true">
-            <div class="modal-dialog modal-xl" role="document">
-                <div class="modal-content">
-                    <div class="block block-themed block-transparent mb-0">
-                        <div class="block-header" style="background-color: #045D71;">
-                            <h3 class="block-title"><button  data-dismiss="modal" data-toggle="modal" data-target="#modal-popout" style="background-color: #045D71;"><</button> Edit Email Format</h3>
-                            <div class="block-options">
-                                <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
-                                    <i class="si si-close"></i>
-                                </button>
-                        </div>
-                            </div>
-                        <div class="block-content" data-toggle="slimscroll" data-height="800px" data-color="#42A5F5">
-                        <label class="block-content">
-                            <button class="btn btn-primary" onclick="normal_image()">Normal Image Codes</button>
-                            <button class="btn btn-primary" onclick="left_image()">| Left Image Float Codes</button>
-                            <button class="btn btn-primary" onclick="right_image()">Right Image Float Codes |</button>
-                            <button class="btn btn-primary" onclick="link()">Link Codes</button>
-
-                            <input style="width: 9px;" readonly="" type="text" id="view_normal" value='<p><a href="(Remove this and put links here)" target="_blank"><img src="(Remove this and put links here)" style="height:(ChangeThisToNumbers)px; width:auto" /></a></p>'>
-                            <input style="width: 9px;" readonly="" type="text" id="view_left" value='<p><a href="(Remove this and put links here)" target="_blank"><img src="(Remove this and put links here)" style="float:left; height:(ChangeThisToNumbers)px; width:auto" /></a></p>'>
-                            <input style="width: 9px;" readonly="" type="text" id="view_right" value='<p><a href="(Remove this and put links here)" target="_blank"><img src="(Remove this and put links here)" style="float:right; height:(ChangeThisToNumbers)px; width:auto" /></a></p>'>
-                            <input style="width: 9px;" readonly="" type="text" id="view_link" value='<p><a href="(Remove this and put link here)">(Removed this and replace name of the link)</a></p>'>
-                        </label>
-                        <label class="block-content">
-                            <input type="hidden" id="email_user_id">
-                            <input type="hidden" id="email_task_id">
-                            <input type="hidden" id="email_contact_email">
-                            <input type="hidden" id="email_email_subject">
-                            <input type="hidden" id="email_email_id">
-                            <input type="hidden" id="email_FirstName">
-                        </label>
-                            <!-- CKEditor -->
-                                <div class="block-content" style="background-color: <?php echo $md_editor; ?>;">
-                                    <div class="form-group row">
-                                        <div class="col-md-12 mb-15">
-                                            <div class="row">                          
-                                                <div class="col-md-12">
-                                                    <textarea id="js-ckeditor" name="ckeditor"></textarea>
-                                                    <!-- <textarea id="js-ckeditor" name="samplssssse"></textarea> -->
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <textarea class="form-control mb-15" id="email_content_editable" rows="12" placeholder="Paste source here.."></textarea>
-                                                <button type="button" class="btn btn-block btn-primary" onclick="send_editable_email()">
-                                                    Send Now
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                            <!-- END CKEditor -->
-                            <!-- DataTables functionality is initialized with .js-dataTable-full class in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->
-                            <h2 class="text-center" style="margin-bottom: -30px">List of Pictures</h2>
-                            <div>
-                                <input type="file" id="email_pictures" style="margin-bottom: 5px;"><br>
-                                <button class="btn btn-primary" onclick="save_email_pictures()">Submit</button>
-                            </div>
-                            <br>
-                            <div id="view_email_picture" data-toggle="slimscroll" data-height="350px" data-color="#42A5F5"></div>
-                        </div>
-                    </div>
-                    <!-- END Dynamic Table Full -->
-                    <div class="modal-footer">
-                    </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- END Extra Large Modal Editable Email -->
-
 
 <!-- End board view modal -->
-
-<script type="text/javascript">
-    
-    function input_field_textarea(id)
-    {
-        if(confirm("Are you sure?"))
-        {
-            field_textarea = document.getElementById("field_textarea" + id).value;
-            task_id = document.getElementById("task_id_when_click").value;
-            space_id = <?php echo $space_id; ?>;
-            user_id = <?php echo $id; ?>;
-
-            // alert(field_textarea + task_id + space_id + user_id);
-
-            $.ajax({
-                url: './ajax.php',
-                type: 'POST',
-                async: false,
-                data:{
-                    user_id:user_id,
-                    space_id:space_id,
-                    task_id:task_id,
-                    field_id:id,
-                    input_value:field_textarea,
-                    save_input_field: 1,
-                },
-                success: function(data){
-                if(data == "update")
-                {
-                    alert('Task updated.'); 
-                    display_input_field(); 
-                    displayChat();
-                }
-            }
-            });
-        }
-    }
-
-    function input_field_text(id)
-    {
-        if(confirm("Are you sure?"))
-        {
-            field_text = document.getElementById("field_text" + id).value;
-            task_id = document.getElementById("task_id_when_click").value;
-            space_id = <?php echo $space_id; ?>;
-            user_id = <?php echo $id; ?>;
-
-            // alert(field_textarea + task_id + space_id + user_id);
-
-            $.ajax({
-                url: './ajax.php',
-                type: 'POST',
-                async: false,
-                data:{
-                    user_id:user_id,
-                    space_id:space_id,
-                    task_id:task_id,
-                    field_id:id,
-                    input_value:field_text,
-                    save_input_field: 1,
-                },
-                success: function(data){
-                if(data == "update")
-                {
-                    alert('Task updated.'); 
-                    display_input_field(); 
-                    displayChat();
-                }
-            }
-            });
-        }
-    }
-
-    function input_field_email(id)
-    {
-        if(confirm("Are you sure?"))
-        {
-            field_email = document.getElementById("field_email" + id).value;
-            task_id = document.getElementById("task_id_when_click").value;
-            space_id = <?php echo $space_id; ?>;
-            user_id = <?php echo $id; ?>;
-
-            // alert(field_textarea + task_id + space_id + user_id);
-
-            $.ajax({
-                url: './ajax.php',
-                type: 'POST',
-                async: false,
-                data:{
-                    user_id:user_id,
-                    space_id:space_id,
-                    task_id:task_id,
-                    field_id:id,
-                    input_value:field_email,
-                    save_input_field: 1,
-                },
-                success: function(data){
-                if(data == "update")
-                {
-                    alert('Task updated.'); 
-                    display_input_field(); 
-                    displayChat();
-                }
-            }
-            });
-        }
-    }
-
-    function input_field_dropdown(id)
-    {
-        if(confirm("Are you sure?"))
-        {
-            field_dropdown = document.getElementById("field_dropdown" + id).value;
-            task_id = document.getElementById("task_id_when_click").value;
-            space_id = <?php echo $space_id; ?>;
-            user_id = <?php echo $id; ?>;
-
-            // alert(field_textarea + task_id + space_id + user_id);
-
-            $.ajax({
-                url: './ajax.php',
-                type: 'POST',
-                async: false,
-                data:{
-                    user_id:user_id,
-                    space_id:space_id,
-                    task_id:task_id,
-                    field_id:id,
-                    input_value:field_dropdown,
-                    save_input_field: 1,
-                },
-                success: function(data){
-                if(data == "update")
-                {
-                    alert('Task updated.'); 
-                    display_input_field(); 
-                    displayChat();
-                }
-            }
-            });
-        }
-    }
-
-    function input_field_phone(id)
-    {
-        if(confirm("Are you sure?"))
-        {
-            phone_field = document.getElementById("phone_field" + id).value;
-            task_id = document.getElementById("task_id_when_click").value;
-            space_id = <?php echo $space_id; ?>;
-            user_id = <?php echo $id; ?>;
-
-            // alert(field_textarea + task_id + space_id + user_id);
-
-            $.ajax({
-                url: './ajax.php',
-                type: 'POST',
-                async: false,
-                data:{
-                    user_id:user_id,
-                    space_id:space_id,
-                    task_id:task_id,
-                    field_id:id,
-                    input_value:phone_field,
-                    save_input_field: 1,
-                },
-                success: function(data){
-                if(data == "update")
-                {
-                    alert('Task updated.'); 
-                    display_input_field(); 
-                    displayChat();
-                }
-            }
-            });
-        }
-    }
-
-    function input_field_date(id)
-    {
-        if(confirm("Are you sure?"))
-        {
-            field_date = document.getElementById("field_date" + id).value;
-            task_id = document.getElementById("task_id_when_click").value;
-            space_id = <?php echo $space_id; ?>;
-            user_id = <?php echo $id; ?>;
-
-            // alert(field_textarea + task_id + space_id + user_id);
-
-            $.ajax({
-                url: './ajax.php',
-                type: 'POST',
-                async: false,
-                data:{
-                    user_id:user_id,
-                    space_id:space_id,
-                    task_id:task_id,
-                    field_id:id,
-                    input_value:field_date,
-                    save_input_field: 1,
-                },
-                success: function(data){
-                if(data == "update")
-                {
-                    alert('Task updated.'); 
-                    display_input_field(); 
-                    displayChat();
-                }
-            }
-            });
-        }
-    }
-
-    function input_field_number(id)
-    {
-        if(confirm("Are you sure?"))
-        {
-            field_number = document.getElementById("field_number" + id).value;
-            task_id = document.getElementById("task_id_when_click").value;
-            space_id = <?php echo $space_id; ?>;
-            user_id = <?php echo $id; ?>;
-
-            // alert(field_textarea + task_id + space_id + user_id);
-
-            $.ajax({
-                url: './ajax.php',
-                type: 'POST',
-                async: false,
-                data:{
-                    user_id:user_id,
-                    space_id:space_id,
-                    task_id:task_id,
-                    field_id:id,
-                    input_value:field_number,
-                    save_input_field: 1,
-                },
-                success: function(data){
-                if(data == "update")
-                {
-                    alert('Task updated.'); 
-                    display_input_field(); 
-                    displayChat();
-                }
-            }
-            });
-        }
-    }
-
-    function input_field_radio(id)
-    {
-        if(confirm("Are you sure?"))
-        {
-            // field_radio_yes = document.getElementById("field_radio_yes" + id).value;
-            //field_radio_no = document.getElementById("field_radio_no" + id).value;
-            //field_radio_reset = document.getElementById("field_radio_reset" + id).value;
-            field_radio = $("input:radio[name=field_radio]:checked").val();
-            task_id = document.getElementById("task_id_when_click").value;
-            space_id = <?php echo $space_id; ?>;
-            user_id = <?php echo $id; ?>;
-
-            // alert(field_radio);
-            // alert(field_textarea + task_id + space_id + user_id);
-
-            $.ajax({
-                url: './ajax.php',
-                type: 'POST',
-                async: false,
-                data:{
-                    user_id:user_id,
-                    space_id:space_id,
-                    task_id:task_id,
-                    field_id:id,
-                    input_value:field_radio,
-                    save_input_field: 1,
-                },
-                success: function(data){
-                if(data == "update")
-                {
-                    alert('Task updated.'); 
-                    display_input_field(); 
-                    displayChat();
-                }
-            }
-            });
-        }
-    }
-
-</script>
  

@@ -3146,7 +3146,7 @@ function clear_tran()
                         space_id:space_id,
                         list_id:list_id,
                         field_id:field_id,
-                        fetch_field_dropdown:1,
+                        c:1,
                     },
                     success: function(response){
                         $('#field_dropdown').html(response);
