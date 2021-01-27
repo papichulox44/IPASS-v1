@@ -56,13 +56,14 @@
                 $mail->isSMTP();
                 $mail->Host = 'smtp.gmail.com';
                 $mail->SMTPAuth = true;
-                $mail->Username = "dave@infinityhub.com"; // Gmail address which you want to use as SMTP server
-                $mail->Password = "david_flores"; // Gmail address Password
+                $mail->Username = 'dave@infinityhub.com'; // Gmail address which you want to use as SMTP server
+                $mail->Password = 'david_flores'; // Gmail address Password
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                 $mail->Port = '587';
+                // $mail->Port = '587';
 
                 //$mail->setFrom('test_email@ipasspmt.com'); // Gmail address which you used as SMTP server
-                $mail->setFrom("dave@infinityhub.com");
+                $mail->setFrom('dave@infinityhub.com');
                 $mail->addAddress("$contact_email"); // Email address where you want to receive emails (you can use any of your gmail address including the gmail address which you used as SMTP server)
 
                 $mail->isHTML(true);
