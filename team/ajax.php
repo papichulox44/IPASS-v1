@@ -36,7 +36,7 @@
         }
         else
         {
-            mysqli_query($conn,"INSERT into email_assign values ('', '$user_id', '$email_assign_id', '$list_id_no')") or die(mysqli_error());
+            mysqli_query($conn,"INSERT into email_assign (assign_by, assign_email_id, assign_list_id) values ('$user_id', '$email_assign_id', '$list_id_no')") or die(mysqli_error());
             echo "success";
         }
     }
@@ -128,10 +128,15 @@
     // ----------------------- SEND EMAIL -----------------------
     if(isset($_POST['test_send_email']))
     {
-        $to = $_POST['test_email'];
+        $to = $_POST['test_email']; 
         $subject = $_POST['email_subject'];
         $email_content = $_POST['email_content'];
         $FirstName = $_POST['FirstName'];
+
+        $task_id = $_POST['task_id'];
+        $user_id = $_POST['user_id'];
+        $comment = 'Send email to: "'.$to.'"| Email Subject: "'.$subject.'"';
+        $date = date('Y-m-d H:i:s');
         
         $from = 'cesteam@ipassprocessing.com';
 
@@ -161,12 +166,16 @@
 
         // More headers
         $headers .= 'From: <ipasspmt.site>' . "\r\n";
+        // $headers .= 'From: <ipasspmt.site>' . "\r\n";
         $headers .= 'Cc: ipasspmt.site' . "\r\n";
 
         $send = mail($to,$subject,$message,$headers);
         if($send)
         {
-            echo "Email sent successfully.";
+            $comment_insert = mysqli_query($conn, "INSERT INTO comment (comment_task_id, comment_user_id, comment_message, comment_date, comment_type) VALUES ('$task_id', '$user_id', '$comment', '$date', '1')") or die(mysqli_error());
+            if ($comment_insert) {
+                echo "Email sent successfully.";
+            }
         }
         else
         {
@@ -364,7 +373,7 @@
             }
             else
             {
-                echo '<button type="button" class="dropdown-item" id="move_task'.$result_findstatus['status_id'].'" onclick="move_task(this.id)">
+                echo '<button type="button" class="dropdown-item" id="'.$result_findstatus['status_id'].','.$result_findstatus['status_name'].'" onclick="move_task(this.id)">
                           <i class="fa fa-square mr-5" style="color: '.$result_findstatus['status_color'].';"></i>'.$result_findstatus['status_name'].'
                 </button>';
             }
@@ -431,10 +440,78 @@
         }
         echo '</table>';
     }
+
+    if(isset($_POST['display_email_names']))
+    {
+        $task_status_id = $_POST['task_status_id'];
+
+        $select_task = mysqli_query($conn, "SELECT email_format.email_name, email_format.email_subject, email_format.email_id FROM email_assign INNER JOIN email_format ON email_assign.assign_email_id = email_format.email_id INNER JOIN task ON email_assign.assign_list_id = task.task_list_id WHERE task.task_status_id = $task_status_id GROUP BY email_format.email_name");
+
+        if (isset($_SESSION['set_email'])) {
+            $set_email = $_SESSION['set_email'];
+        } else {
+            $set_email = '';
+        }
+        echo '<label class="form-control">Email: '.$set_email.'</label><br>';
+
+        echo '
+        <script>
+        $(document).ready(function(){
+          $("#myInput").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function() {
+              $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+          });
+        });
+        </script>
+        ';
+
+        echo '
+            <input class="form-control" id="myInput" type="text" placeholder="Search Email...">
+            <table class="table table-bordered table-hover">
+              <thead>
+              <tr>
+                <th>Email Name</th>
+                <th>Action</th>
+              </tr>
+              </thead>
+        ';
+
+        echo '
+        <input id="task_status_id" type="hidden" value="'.$task_status_id.'"></input>
+        ';
+
+        while($result_findstatus = mysqli_fetch_array($select_task))
+        {
+            $email_name = $result_findstatus['email_name'];
+            echo '            
+              <tbody id="myTable">
+              <tr>
+                <td>
+                <button class="dropdown-item" id="'.$result_findstatus['email_id'].'" onclick="send_email_blasting(this.id)">
+                <i class="fa fa-square mr-5" style="color: #3f9ce8;"></i><span data-toggle="popover" title="'.$email_name.'" data-placement="bottom">'.substr($email_name, 0, 30).'...</span>
+                </button>
+                </td>
+                <td>
+                <button class="btn btn-default" data-dismiss="modal" data-toggle="modal" data-target="#modal-extra-editable-email" onclick="fetch_email_pictures()"><i class="fa fa-edit" style="color: #3f9ce8; font-size:20px;" id="'.$result_findstatus['email_id'].'" onclick="fetch_email_name_editable_blast(this.id)"></i></button>
+                </td>
+              </tr>
+              </tbody>
+            <input id="email_subject'.$result_findstatus['email_id'].'" type="hidden" value="'.$result_findstatus['email_subject'].'"></input>
+            <input id="email_name'.$result_findstatus['email_id'].'" type="hidden" value="'.$result_findstatus['email_name'].'"></input>
+            ';
+        }
+        echo '</table>';
+    }
+
     if(isset($_POST['move_task']))
     {
         $task_id = $_POST['task_id'];
         $status_id = $_POST['status_id'];
+        $status_name = $_POST['status_name'];
+        $user_id = $_POST['user_id'];
+        $comment = 'Update Phase status to: "'.$status_name.'"';
 
         $select_task = mysqli_query($conn, "SELECT * FROM task WHERE task_id = '$task_id'");
         $fetch_select_task = mysqli_fetch_array($select_task);
@@ -452,6 +529,7 @@
             $new_array = str_replace($task_status_id,$status_id,$assign_array); // current,change_to,array
             $new_assign_to = implode(",",$new_array); // convert array to string
             mysqli_query($conn, "UPDATE contact SET contact_assign_to = '$new_assign_to' WHERE contact_id = '$contact_id'") or die(mysqli_error());
+            $comment_insert = mysqli_query($conn, "INSERT INTO comment (comment_task_id, comment_user_id, comment_message, comment_date, comment_type) VALUES ($task_id, $user_id, '$comment', NOW(), 1)") or die(mysqli_error());
             echo 'move';
         }
         else
@@ -461,13 +539,22 @@
     {
         $priority = $_POST['priority'];
         $task_id = $_POST['task_id'];
+        $user_id = $_POST['user_id'];
+        $comment = 'Update Priority to: "'.$priority.'".';
+
         mysqli_query($conn, "UPDATE task SET task_priority = '$priority' WHERE task_id='$task_id'") or die(mysqli_error());
+        mysqli_query($conn, "INSERT INTO comment (comment_task_id, comment_user_id, comment_message, comment_date, comment_type) VALUES ($task_id, $user_id, '$comment', NOW(), 1)") or die(mysqli_error());
     }
     if(isset($_POST['assign_member']))
     {
         $task_id = $_POST['task_id'];
         $member_id = $_POST['member_id'];
         $list_id = $_POST['list_id'];
+        $member_name = $_POST['member_name'];
+        $user_id = $_POST['user_id'];
+        $comment = 'Update Assign Task to: "'.$member_name.'".';
+
+        mysqli_query($conn, "INSERT INTO comment (comment_task_id, comment_user_id, comment_message, comment_date, comment_type) VALUES ($task_id, $user_id, '$comment', NOW(), 1)") or die(mysqli_error());
 
         $find_task = mysqli_query($conn, "SELECT * FROM task WHERE task_id = '$task_id'");
         $result_find_task = mysqli_fetch_array($find_task);
@@ -514,16 +601,24 @@
     }
     if(isset($_POST['add_due_date']))
     {
+        $user_id = $_POST['user_id'];
         $task_id = $_POST['task_id'];
         $txt_date = $_POST['txt_date'];
         $txt_time = $_POST['txt_time'];
         $due_date_and_time = $txt_date. " " .$txt_time;
+        $comment = 'Update Due Date to: "'.$due_date_and_time.'".';
+
+        mysqli_query($conn, "INSERT INTO comment (comment_task_id, comment_user_id, comment_message, comment_date, comment_type) VALUES ($task_id, $user_id, '$comment', NOW(), 1)") or die(mysqli_error());
         mysqli_query($conn, "UPDATE task SET task_due_date = '$due_date_and_time' WHERE task_id='$task_id'") or die(mysqli_error());
     }
     if(isset($_POST['assign_tag']))
     {
         $task_id = $_POST['task_id'];
         $tasktag = $_POST['tag_id'];
+        $user_id = $_POST['user_id'];
+        $tag_name = $_POST['tag_name'];
+        $comment = 'Update Tag to: "'.$tag_name.'".';
+        
         $find_task = mysqli_query($conn, "SELECT * FROM task WHERE task_id = '$task_id'");
         $result_find_task = mysqli_fetch_array($find_task);
         $current_task_tag = $result_find_task['task_tag'];
@@ -531,6 +626,7 @@
         if($current_task_tag == "")
         {
             mysqli_query($conn, "UPDATE task SET task_tag='$tasktag' WHERE task_id='$task_id'") or die(mysqli_error());
+            mysqli_query($conn, "INSERT INTO comment (comment_task_id, comment_user_id, comment_message, comment_date, comment_type) VALUES ($task_id, $user_id, '$comment', NOW(), 1)") or die(mysqli_error());
         }
         else
         {
@@ -544,14 +640,19 @@
             {
                 $many_tag = $current_task_tag.",".$tasktag;
                 mysqli_query($conn, "UPDATE task SET task_tag='$many_tag' WHERE task_id='$task_id'") or die(mysqli_error());
+                mysqli_query($conn, "INSERT INTO comment (comment_task_id, comment_user_id, comment_message, comment_date, comment_type) VALUES ($task_id, $user_id, '$comment', NOW(), 1)") or die(mysqli_error());
             }
         }
     }
     if(isset($_POST['rename_task']))
     {
+        $user_id = $_POST['user_id'];
         $task_id = $_POST['task_id'];
         $txt_modal_name = $_POST['txt_modal_name'];
+        $comment = 'Update Task Name to: "'.$txt_modal_name.'".';
+
         mysqli_query($conn, "UPDATE task SET task_name='$txt_modal_name' WHERE task_id = '$task_id'") or die(mysqli_error());
+        mysqli_query($conn, "INSERT INTO comment (comment_task_id, comment_user_id, comment_message, comment_date, comment_type) VALUES ($task_id, $user_id, '$comment', NOW(), 1)") or die(mysqli_error());
     }
     if(isset($_POST['delete_task']))
     {
@@ -2431,7 +2532,7 @@
                     while($fetch_space = mysqli_fetch_array($find_space))
                     {
                         $space_id = $fetch_space['space_id'];
-
+                        $space_name = $fetch_space['space_name'];
                         //query for filtering data
                         $filter = $_POST['filter'];
                         if ($filter) {
@@ -2495,6 +2596,7 @@
                             $task_list_id = $fetch_findtaskper_space['task_list_id'];
                             $select_list = mysqli_query($conn, "SELECT * FROM list WHERE list_id = '$task_list_id'");
                             $fetch_array = mysqli_fetch_array($select_list);
+                            
                             if($fetch_array['list_space_id'] == $space_id)
                             {
                                 $count_for_space++;
@@ -2526,6 +2628,7 @@
                             while($fetch_list = mysqli_fetch_array($find_list))
                             {
                                 $list_id = $fetch_list['list_id'];
+                                $list_name = $fetch_list['list_name'];
                                 //query for filtering data
                                 $filter = $_POST['filter'];
                                 if ($filter) {
@@ -2687,7 +2790,7 @@
                                                             <ul style="border-left: 3px solid '.$fetch_status['status_color'].';">';
                                                                 while($result_findtaskper_status = mysqli_fetch_array($findtaskper_status))
                                                                     {
-                                                                        echo '<li class="aaa bbb" >'.$result_findtaskper_status['task_name'].'</li>';
+                                                                        echo '<li class="aaa bbb" id="'.$result_findtaskper_status['task_id'].','.$space_name.','.$list_name.','.$list_id.'" onclick="view_task_box(this.id)">'.$result_findtaskper_status['task_name'].'</li>';
                                                                     }
                                                                 echo'
                                                             </ul>
@@ -2717,6 +2820,7 @@
                     while($fetch_space = mysqli_fetch_array($find_space))
                     {
                         $space_id = $fetch_space['space_id'];
+                        $space_name = $fetch_space['space_name'];
 
                         //query for filtering data
                         $filter = $_POST['filter'];
@@ -2818,6 +2922,7 @@
                             while($fetch_list = mysqli_fetch_array($find_list))
                             {
                                 $list_id = $fetch_list['list_id'];
+                                $list_name = $fetch_list['list_name'];
                                 //query for filtering data
                                 $filter = $_POST['filter'];
                                 if ($filter) {
@@ -3007,7 +3112,7 @@
                                                                 while($result_findtaskper_status = mysqli_fetch_array($findtaskper_status))
                                                                     {
 
-                                                                        echo '<li class="aaa bbb" >'.$result_findtaskper_status['task_name'].'</li>';
+                                                                        echo '<li class="aaa bbb" id="'.$result_findtaskper_status['task_id'].','.$space_name.','.$list_name.','.$list_id.'" onclick="view_task_box(this.id)">'.$result_findtaskper_status['task_name'].'</li>';
                                                                     }
                                                                 echo'
                                                             </ul>
@@ -3115,7 +3220,7 @@
 
             if (empty($tran_file))
             {
-                mysqli_query($conn, "UPDATE finance_transaction SET val_date = '$tran_date', val_method = '$tran_method', val_transaction_no = '$tran_transaction_no', val_amount = '$tran_amount', val_client_rate = '$tran_client_rate', val_currency = '$tran_client_rate', val_note = '$tran_note', val_charge = '$charge', val_initial_amount = '$tran_initial', val_usd_rate = '$tran_usd_rate', val_usd_total = '$tran_usd_total', val_php_rate = '$tran_php_rate', val_php_total = '$tran_php_total', val_client_total = '$tran_client_php_total'  WHERE val_id = '$val_id'") or die(mysqli_error());
+                mysqli_query($conn, "UPDATE finance_transaction SET val_date = '$tran_date', val_method = '$tran_method', val_transaction_no = '$tran_transaction_no', val_amount = '$tran_amount', val_client_rate = '$tran_client_rate', val_currency = '$tran_currency', val_note = '$tran_note', val_charge = '$charge', val_initial_amount = '$tran_initial', val_usd_rate = '$tran_usd_rate', val_usd_total = '$tran_usd_total', val_php_rate = '$tran_php_rate', val_php_total = '$tran_php_total', val_client_total = '$tran_client_php_total'  WHERE val_id = '$val_id'") or die(mysqli_error());
 
                 echo 'success';
             }
@@ -3175,7 +3280,7 @@
                 {
                     unlink('../assets/media/transaction/'.$val_attachment);
                     move_uploaded_file($attachment_temp, $location);
-                    mysqli_query($conn, "UPDATE finance_transaction SET val_date = '$tran_date', val_method = '$tran_method', val_transaction_no = '$tran_transaction_no', val_amount = '$tran_amount', val_client_rate = '$tran_client_rate', val_currency = '$tran_client_rate', val_note = '$tran_note', val_charge = '$charge', val_attachment = '$image'  WHERE val_id = '$val_id'") or die(mysqli_error());
+                    mysqli_query($conn, "UPDATE finance_transaction SET val_date = '$tran_date', val_method = '$tran_method', val_transaction_no = '$tran_transaction_no', val_amount = '$tran_amount', val_client_rate = '$tran_client_rate', val_currency = '$tran_currency', val_note = '$tran_note', val_charge = '$charge', val_attachment = '$image'  WHERE val_id = '$val_id'") or die(mysqli_error());
                     echo "success";
                 }
             }
@@ -3199,7 +3304,7 @@
 
             $query_status_details = mysqli_query($conn, "SELECT * FROM tbl_status_details WHERE status_id = $status_id AND status_list_id = $status_list_id AND contact_id = $contact_id AND task_id = $task_id");
             if (mysqli_num_rows($query_status_details)) {
-                $tr = '<tr style="background-color: beige;">';
+                $tr = '<tr style="background-color: #85b0bd;">';
             } else {
                 $tr = '<tr style="cursor: pointer;" id="'.$rows['status_id'].','.$data['contact_id'].','.$list_id.','.$task_id.'" onclick="click_hide_status(this.id)">';
             }
@@ -3345,7 +3450,7 @@
         $space_id = $_POST['space_id'];
         $task_id = $_POST['task_id'];
         $field_id = $_POST['field_id'];
-        $input_value = $_POST['input_value'];
+        $input_value  = $_POST['input_value'];
 
         //auto create row specific space db
         $select_db = mysqli_query($conn, "SELECT * FROM space WHERE space_id ='$space_id'");
@@ -3400,4 +3505,137 @@
         }
     } 
 
+    if(isset($_POST['send_email_blasting']))
+    {
+        $email_id = $_POST['email_id'];
+        $user_id = $_POST['user_id'];
+        $task_status_id = $_POST['task_status_id'];
+        $email_subject = $_POST['email_subject'];
+        $email_content = $_POST['email_content'];
+        $date = date('Y-m-d H:i:s');
+
+        if (isset($_SESSION['set_email'])) {
+            $from = $_SESSION['set_email'];
+        } else {
+            $from = '';
+        }
+        $result = mysqli_query($conn, "SELECT * FROM tbl_list_email WHERE list_email_name = '$from'") or die(mysqli_error());
+        $data = mysqli_fetch_array($result);
+        $pass = $data['list_email_password'];
+
+        $query = mysqli_query($conn, "SELECT contact.contact_fname, contact.contact_email, task.task_id FROM task INNER JOIN contact ON task.task_contact = contact.contact_id WHERE task_status_id = '$task_status_id'");
+
+        while($data = mysqli_fetch_array($query))
+        {
+            $contact_fname = $data['contact_fname'];
+            $contact_email = $data['contact_email'];
+            $task_id = $data['task_id'];
+
+            $message = '
+            <div style="padding: 20px 0px 0px 0px; background-color: #189AA7;" class="shadow">
+                <img src="https://ipasspmt.com/assets/media/photos/email_header.png" style="width: 100%;">
+                <table width="100%" border="0" cellspacing="0" cellpadding="20" style="background-color: #47bcde; color: #5a5f61; font-family:verdana;">
+                    <tr>
+                        <td style="background-color: #fff; border-top: 10px solid #189AA7; border-bottom: 10px solid #189AA7;">
+                            <p style="margin-top: -5px;">Hi '.$contact_fname.',</p>
+                            '.$email_content.'
+                        </td>
+                    </tr>
+                </table>
+                <div style="text-align: center; padding: 20px 0px; color: #fff; background-color: #189AA7;">
+                    PROCESSING MADE EASY BY IPASS<br>
+                    Rm 1, 2nd Floor, Doña Segunda Complex,<br>
+                    Ponciano Street, Davao City, Philippines 8000<br><br>
+                    <a href="https://ipassprocessing.com/" style="color: white;">https://ipassprocessing.com/</a>
+                </div>
+            </div>
+            ';
+            
+            try{
+                $mail->isSMTP();
+                $mail->Host = 'smtp.gmail.com';
+                $mail->SMTPAuth = true;
+                $mail->Username = "$from"; // Gmail address which you want to use as SMTP server
+                $mail->Password = "$pass"; // Gmail address Password
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                $mail->Port = '587';
+
+                //$mail->setFrom('test_email@ipasspmt.com'); // Gmail address which you used as SMTP server
+                $mail->setFrom("$from");
+                $mail->addAddress("$contact_email"); // Email address where you want to receive emails (you can use any of your gmail address including the gmail address which you used as SMTP server)
+
+                $mail->isHTML(true);
+                $mail->Subject = "$email_subject";
+                $mail->Body = "$message";
+                $mail->send();
+                mysqli_query($conn, "INSERT INTO email_send_history (email_send_date, email_send_by, email_format_id, email_send_to, email_task_id, email_content) values ('$date', '$user_id', '$email_id', '$contact_email', '$task_id', '$email_content')") or die(mysqli_error());
+              } catch (Exception $e){
+                
+              }
+        }
+        echo "success";
+    }
+
+    if(isset($_POST['unset_email_blast']))
+    {
+        unset($_SESSION['email_blasting']);
+    } 
+
+    if(isset($_POST['email_blasting_details']))
+    {
+        // echo "Naa";
+        $task_id = $_POST['task_id'];
+
+        $results = mysqli_query($conn, "SELECT `user`.fname, `user`.mname, `user`.lname, email_format.email_name, email_format.email_subject, email_format.email_id, email_send_history.email_send_to, email_send_history.email_send_date, email_send_history.email_content, `status`.status_name FROM email_send_history INNER JOIN `user` ON email_send_history.email_send_by = `user`.user_id INNER JOIN email_format ON email_send_history.email_format_id = email_format.email_id INNER JOIN `status` ON email_send_history.email_status_id = `status`.status_id WHERE email_send_history.email_task_id = $task_id AND email_send_history.email_blast = 1 ORDER BY email_send_history.email_send_date DESC");
+        $count = 1;
+
+        while($rows = mysqli_fetch_array($results))
+        {
+            $email_name = $rows['email_name'];
+            $file_loc = "email_content/".$email_name.".txt";
+
+            $myfile = fopen($file_loc, "r") or die("Unable to open file!");
+            $content = fread($myfile,filesize($file_loc));
+            // fclose($myfile);
+
+            echo '
+                    <tr>
+                        <td colspan="1" style="width: 15%;text-align: end;"><br>
+                        Date/Time Sent:<br>
+                        Sent by:<br>
+                        Email Name:<br>
+                        Email Subject:<br>
+                        Email Address:
+                        Status:         
+                        </td>
+                        <td colspan="2" style="width: 25%;"><br>
+                        '.$rows["email_send_date"].' <br>
+                        '.$rows["fname"].' '.$rows["mname"].' '.$rows["lname"].'<br>
+                        '.$rows["email_name"].' <br>
+                        '.$rows["email_subject"].' <br>
+                        '.$rows["email_send_to"].'<br>
+                        '.$rows["status_name"].'
+                        </td>
+                        <td colspan="3">
+                                <div style="padding: 20px 0px 0px 0px; data-toggle="slimscroll" data-height="300px" data-color="#42A5F5 class="shadow">
+                                    <img src="https://ipasspmt.com/assets/media/photos/email_header.png" style="width: 100%; height: auto;">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="20" style="background-color: #47bcde; color: #5a5f61; font-family:verdana;">
+                                        <tr>
+                                            <td style="background-color: #fff; border-top: 20px solid #006786; border-bottom: 20px solid #006786;">
+                                                '.$rows["email_content"].'
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div style="text-align: center; padding: 20px 0px; color: #fff; background-color: #00465a;">
+                                        PROCESSING MADE EASY BY IPASS<br>
+                                        Rm 1, 2nd Floor, Doña Segunda Complex,<br>
+                                        Ponciano Street, Davao City, Philippines 8000<br><br>
+                                        <a href="https://ipassprocessing.com/" style="color: #2196f3;">https://ipassprocessing.com/</a>
+                                    </div>
+                                </div>
+                        <td>
+                    </tr>
+            ';
+        }
+    } 
 ?>

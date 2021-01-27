@@ -243,6 +243,7 @@
                                         <option value="Single" <?php if($row['contact_status'] == "Single") { echo 'selected'; } ?>>Single</option>
                                         <option value="Widow" <?php if($row['contact_status'] == "Widow") { echo 'selected'; } ?>>Widow</option>
                                         <option value="Annuled" <?php if($row['contact_status'] == "Annuled") { echo 'selected'; } ?>>Annuled</option>
+                                        <option value="Divorced" <?php if($row['contact_status'] == "Divorced") { echo 'selected'; } ?>>Divorced</option>
                                     </select>
                                  </div>
                                  <div class="form-group">

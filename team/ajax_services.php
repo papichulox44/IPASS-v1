@@ -82,6 +82,7 @@
                             <th>NAME</th>
                             <th class="d-none d-sm-table-cell">DUE</th>
                             <th>PRIORITY</th>
+                            <th class="d-none d-sm-table-cell text-center">Date Updated</th>
                             <th class="d-none d-sm-table-cell text-center">ASSIGN</th>
 
 		';
@@ -160,8 +161,11 @@
             }
             else
             {
-                $cur = date("Y-m");
-                $duedate = "AND task_due_date LIKE '%".$cur."%'";
+                // $cur = date("Y-m");
+                // $duedate = "AND task_due_date LIKE '%".$cur."%'";
+                $from = substr($filter_value_due_date, -21, 10);
+                $to = substr($filter_value_due_date, -10, 10);
+                $duedate = "AND task_due_date BETWEEN '".$from."' AND '".$to."'";
             }
         }
         if(mysqli_num_rows($filter_priority) == 1)

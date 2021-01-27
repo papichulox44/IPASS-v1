@@ -40,7 +40,7 @@ echo'
             {}
             else
             {
-                echo''.$month_avv.' '.$get_date.'';
+                echo''.$due_date_time.'';
             }
         echo'
         </td>
@@ -63,7 +63,13 @@ echo'
         }
         else
         {}
+        $comment_query = mysqli_query($conn, "SELECT `comment`.comment_date FROM `comment` WHERE `comment`.comment_task_id = '$task_id' ORDER BY `comment`.comment_date DESC LIMIT 1");
+        $data = mysqli_fetch_assoc($comment_query);
+        $date_updated = $data['comment_date'];
         echo'
+        <td class="text-center">
+            '.$date_updated.'
+        </td>
         </td>
         <td class="d-none d-sm-table-cell text-center">';
         if ($total_assign_to == 0) 
@@ -132,6 +138,4 @@ echo'
 //_______________________________ END auto create td
         echo'
     </tr>';
-
-
 ?>

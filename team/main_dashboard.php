@@ -109,6 +109,6 @@
         <script src="../assets/js/plugins/simplemde/simplemde.min.js"></script>
 
         <!-- Page JS Helpers (Summernote + CKEditor + SimpleMDE plugins) -->
-        <script>jQuery(function(){ Codebase.helpers(['summernote', 'ckeditor', 'simplemde']); });</script>
+        <script>jQuery(function(){ Codebase.helpers(['summernote', 'ckeditor', 'ckeditor', 'simplemde']); });</script>
     </body>
 </html>

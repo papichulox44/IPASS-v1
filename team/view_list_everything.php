@@ -7,6 +7,50 @@
             <!-- DataTables functionality is initialized with .js-dataTable-full class in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->
             <div class="block-header content-heading">
                 <h3 class="block-title" style="color: white;">All Record(s)</h3>
+
+                <!-- <h5 class="float-right" style="color: white;">All Record(s)</h5> -->
+                <div class="dropdown float-right">
+                    <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" id="ecom-orders-overview-drop" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span>Due Date</span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ecom-orders-overview-drop" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(96px, 31px, 0px);">  
+                        <button class="dropdown-item" onclick="tran_all_due_date()">
+                            <i class="fa fa-fw fa-circle-o mr-5"></i>All
+                        </button>
+                        <button class="dropdown-item" onclick="tran_today_due_date()">
+                            <i class="fa fa-fw fa-calendar mr-5"></i>Today
+                        </button>
+                        <button class="dropdown-item" onclick="tran_week_due_date()">
+                            <i class="fa fa-fw fa-calendar mr-5"></i>This Week
+                        </button>
+                        <button class="dropdown-item" onclick="tran_month_due_date()">
+                            <i class="fa fa-fw fa-calendar mr-5"></i>This Month
+                        </button>
+                        <button class="dropdown-item" onclick="tran_year_due_date()">
+                            <i class="fa fa-fw fa-calendar mr-5"></i>This Year
+                        </button>
+                        <span class="filterparent">
+                            <form class="dropdown-item filterparent">
+                                <i class="fa fa-fw fa-calendar mr-5"></i>Custom Date
+                            </form>
+                            <div class="dropdown-menu dropdown-menu-right shadow filterchild" style="position: absolute; top: 185px; right: 120px;">
+                                <label for="example-datepicker4">Custom date</label>
+                                <div class="form-material">
+                                    <input type="date" class="js-datepicker form-control" id="txt_date_from_due_date" data-week-start="1" data-today-highlight="true" data-date-format="mm/dd/yy" placeholder="mm/dd/yy" required>
+                                    <label for="example-datepicker4">From:</label>
+                                </div>
+                                <div class="form-material">
+                                    <input type="date" class="js-datepicker form-control" id="txt_date_to_due_date" data-week-start="1" data-today-highlight="true" data-date-format="mm/dd/yy" placeholder="mm/dd/yy" required>
+                                    <label for="example-datepicker4">To:</label>
+                                </div>
+                                <div class="form-material">
+                                    <button class="btn btn-sm btn-noborder btn-alt-primary btn-block" onclick="tran_custom_due_date()"><i class="fa fa-check-square-o"></i>Go</button>
+                                </div>
+                            </div>
+                        </span> 
+                    </div>
+                </div>
+                     |
                 <div class="dropdown float-right">
                     <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" id="ecom-orders-overview-drop" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span><?php if (isset($_GET['filter'])) {echo $_GET['filter'];} else { echo "This Week";} ?></span>
@@ -65,18 +109,67 @@
                 </thead>
                 <tbody>
                     <?php
+                        date_default_timezone_set('Asia/Manila');
 
-                        if (isset($_GET['filter']) or isset($get_from)) {
+                        if (isset($_GET['filter']) or isset($_GET['due_date'])) {
                                 $filterby = $_GET['filter'];
-                                
+                                $due_date = $_GET['due_date'];
+                                $due_date_filter = '';
+
+                                if($due_date == "All")
+                                {                    
+                                    $due_date_filter = '';
+                                }
+                                else if($due_date == "Today")
+                                {   
+                                    $filter_due = date("Y-m-d");
+                                    $due_date_filter = "LIKE '%".$filter_due."%'";
+                                }
+                                else if($due_date == "This Week")
+                                {
+                                    $dt = new DateTime();
+                                    $dates = []; 
+                                    for ($d = 1; $d <= 7; $d++) {
+                                        $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
+                                        $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
+                                    }
+                                    $from_due = current($dates); // monday
+                                    $to_due = end($dates); // sunday
+
+                                    $due_date_filter = "BETWEEN '".$from_due."' AND '".$to_due."'";
+                                }
+                                else if($due_date == "This Month")
+                                {
+                                    $filter_due = date("Y-m");
+                                    $due_date_filter = "LIKE '%".$filter_due."%'";
+                                }
+                                else if($due_date == "This Year")
+                                {
+                                    $filter_due = date("Y");
+                                    $due_date_filter = "LIKE '%".$filter_due."%'";
+                                }
+                                else if($due_date == "Custom Date")
+                                {                    
+                                    $get_from_due = $_GET['From_due'];
+                                    $get_to_due = $_GET['To_due'];
+                                    $due_date_filter = "BETWEEN '".$get_from_due."' AND '".$get_to_due."'";
+                                }
+
+
                                 if($filterby == "All")
                                 {                    
-                                    $select_task = mysqli_query($conn, "SELECT * FROM task");
+                                    if($due_date == "All")
+                                    {                    
+                                        $select_task = mysqli_query($conn, "SELECT * FROM task ORDER BY task_date_created DESC");                                    }
+                                    else
+                                    {
+                                        $select_task = mysqli_query($conn, "SELECT * FROM task WHERE task_due_date $due_date_filter ORDER BY task_date_created DESC");
+                                    }
                                 }
                                 else if($filterby == "Today")
                                 {   
                                     $filter = date("Y-m-d");
-                                    $select_task = mysqli_query($conn, "SELECT * FROM task WHERE task_date_created LIKE '%$filter%'");
+                                    $select_task = mysqli_query($conn, "SELECT * FROM task WHERE task_date_created LIKE '%$filter%' AND task_due_date $due_date_filter");
                                 }
                                 else if($filterby == "This Week")
                                 {
@@ -88,37 +181,26 @@
                                     }
                                     $from = current($dates); // monday
                                     $to = end($dates); // sunday
-                                    $select_task = mysqli_query($conn, "SELECT * FROM task WHERE task_date_created BETWEEN '$from' AND '$to'");
+                                    $select_task = mysqli_query($conn, "SELECT * FROM task WHERE task_date_created BETWEEN '$from' AND '$to' AND task_due_date $due_date_filter ORDER BY task_date_created DESC");
                                 }
                                 else if($filterby == "This Month")
                                 {
                                     $filter = date("Y-m");
-                                    $select_task = mysqli_query($conn, "SELECT * FROM task WHERE task_date_created LIKE '%$filter%'");
+                                    $select_task = mysqli_query($conn, "SELECT * FROM task WHERE task_date_created LIKE '%$filter%' AND task_due_date $due_date_filter ORDER BY task_date_created DESC");
                                 }
                                 else if($filterby == "This Year")
                                 {
                                     $filter = date("Y");
-                                    $select_task = mysqli_query($conn, "SELECT * FROM task WHERE task_date_created LIKE '%$filter%'");
+                                    $select_task = mysqli_query($conn, "SELECT * FROM task WHERE task_date_created LIKE '%$filter%' AND task_due_date $due_date_filter ORDER BY task_date_created DESC");
                                 }
                                 else if($filterby == "Custom Date")
                                 {                    
                                     $get_from = $_GET['From'];
                                     $get_to = $_GET['To'];
-                                    $select_task = mysqli_query($conn, "SELECT * FROM task WHERE task_date_created BETWEEN '$get_from' AND '$get_to'");
+                                    $select_task = mysqli_query($conn, "SELECT * FROM task WHERE task_date_created BETWEEN '$get_from' AND '$get_to' AND task_due_date $due_date_filter ORDER BY task_date_created DESC");
                                 }
                             }
-                            else
-                            {
-                                $dt = new DateTime();
-                                $dates = []; 
-                                for ($d = 1; $d <= 7; $d++) {
-                                    $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
-                                    $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
-                                }
-                                $from = current($dates); // monday
-                                $to = end($dates); // sunday
-                                $select_task = mysqli_query($conn, "SELECT * FROM task WHERE task_date_created BETWEEN '$from' AND '$to'");
-                            }
+
                         $count = 1;
                         // $select_task = mysqli_query($conn, "SELECT * FROM task");
                         while($fetch_task = mysqli_fetch_array($select_task))
@@ -312,6 +394,6 @@
         list_name = document.getElementById("listname" + new_id).value;
         list_id = document.getElementById("listid" + new_id).value;
 
-        document.location = 'main_dashboard.php?space_name='+space_name+'&list_name='+list_name+'&list_id='+list_id+'&get_task_id='+new_id+'';
+        document.location = 'main_dashboard.php?space_name='+space_name+'&list_name='+list_name+'&list_id='+list_id+'&get_task_id='+new_id+'&b=1';
     }
 </script>

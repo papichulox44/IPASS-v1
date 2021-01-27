@@ -1181,10 +1181,52 @@
                             <div class="block block-rounded shadow">
                                 <div class="block-header block-header-default <?php echo $md_table_header; ?>">
                                     <h3 class="block-title <?php echo $md_text; ?>">Assigned task</h3>
-                                    <div class="block-options">
+
+                                    <!-- <div class="block-options"> -->
                                         <!-- To toggle block's content, just add the following properties to your button: data-toggle="block-option" data-action="content_toggle" -->
-                                        <button type="button" class="btn-block-option <?php echo $md_text; ?>" data-toggle="block-option" data-action="content_toggle"></button>
-                                    </div>
+                                       <!--  <button type="button" class="btn-block-option <?php echo $md_text; ?>" data-toggle="block-option" data-action="content_toggle"></button>
+                                    </div> -->
+                                    <div class="dropdown float-right">
+					                    <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" id="ecom-orders-overview-drop" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					                        <span><?php if (isset($_GET['filter'])) {echo $_GET['filter'];} else { echo "This Week";} ?></span>
+					                    </button>
+					                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ecom-orders-overview-drop" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(96px, 31px, 0px);">                                        
+					                        <button class="dropdown-item" onclick="tran_all()">
+					                            <i class="fa fa-fw fa-circle-o mr-5"></i>All
+					                        </button>
+					                        <button class="dropdown-item" onclick="tran_today()">
+					                            <i class="fa fa-fw fa-calendar mr-5"></i>Today
+					                        </button>
+					                        <button class="dropdown-item" onclick="tran_week()">
+					                            <i class="fa fa-fw fa-calendar mr-5"></i>This Week
+					                        </button>
+					                        <button class="dropdown-item" onclick="tran_month()">
+					                            <i class="fa fa-fw fa-calendar mr-5"></i>This Month
+					                        </button>
+					                        <button class="dropdown-item" onclick="tran_year()">
+					                            <i class="fa fa-fw fa-calendar mr-5"></i>This Year
+					                        </button>
+					                        <span class="filterparent">
+					                            <form class="dropdown-item filterparent">
+					                                <i class="fa fa-fw fa-calendar mr-5"></i>Custom Date
+					                            </form>
+					                            <div class="dropdown-menu dropdown-menu-right shadow filterchild" style="position: absolute; top: 185px; right: 120px;">
+					                                <label for="example-datepicker4">Custom date</label>
+					                                <div class="form-material">
+					                                    <input type="date" class="js-datepicker form-control" id="txt_date_from" data-week-start="1" data-today-highlight="true" data-date-format="mm/dd/yy" placeholder="mm/dd/yy" required>
+					                                    <label for="example-datepicker4">From:</label>
+					                                </div>
+					                                <div class="form-material">
+					                                    <input type="date" class="js-datepicker form-control" id="txt_date_to" data-week-start="1" data-today-highlight="true" data-date-format="mm/dd/yy" placeholder="mm/dd/yy" required>
+					                                    <label for="example-datepicker4">To:</label>
+					                                </div>
+					                                <div class="form-material">
+					                                    <button class="btn btn-sm btn-noborder btn-alt-primary btn-block" onclick="tran_custom()"><i class="fa fa-check-square-o"></i>Go</button>
+					                                </div>
+					                            </div>
+					                        </span> 
+					                    </div>
+					                </div>
                                 </div>
                                 <div class="block-content block-content-full <?php echo $md_table_body; ?>">
                                 	<table class="table table-bordered table-striped table-vcenter js-dataTable-full <?php echo $table; ?>">
@@ -1201,7 +1243,62 @@
 		                                </thead>
 		                                <tbody>
 		                                	<?php
-		                                		$select_task_assign = mysqli_query($conn, "SELECT * FROM task");
+
+		                                		if (isset($_GET['filter'])) {
+					                                $filterby = $_GET['filter'];
+					                                
+					                                if($filterby == "All")
+					                                {                    
+					                                    $select_task_assign = mysqli_query($conn, "SELECT * FROM task");
+					                                }
+					                                else if($filterby == "Today")
+					                                {   
+					                                    $filter = date("Y-m-d");
+					                                    $select_task_assign = mysqli_query($conn, "SELECT * FROM task WHERE task_due_date LIKE '%$filter%'");
+					                                }
+					                                else if($filterby == "This Week")
+					                                {
+					                                    $dt = new DateTime();
+					                                    $dates = []; 
+					                                    for ($d = 1; $d <= 7; $d++) {
+					                                        $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
+					                                        $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
+					                                    }
+					                                    $from = current($dates); // monday
+					                                    $to = end($dates); // sunday
+					                                    $select_task_assign = mysqli_query($conn, "SELECT * FROM task WHERE task_due_date BETWEEN '$from' AND '$to'");
+					                                }
+					                                else if($filterby == "This Month")
+					                                {
+					                                    $filter = date("Y-m");
+					                                    $select_task_assign = mysqli_query($conn, "SELECT * FROM task WHERE task_due_date LIKE '%$filter%'");
+					                                }
+					                                else if($filterby == "This Year")
+					                                {
+					                                    $filter = date("Y");
+					                                    $select_task_assign = mysqli_query($conn, "SELECT * FROM task WHERE task_due_date LIKE '%$filter%'");
+					                                }
+					                                else if($filterby == "Custom Date")
+					                                {                    
+					                                    $get_from = $_GET['From'];
+					                                    $get_to = $_GET['To'];
+					                                    $select_task_assign = mysqli_query($conn, "SELECT * FROM task WHERE task_due_date BETWEEN '$get_from' AND '$get_to'");
+					                                }
+					                            }
+					                            else
+					                            {
+					                                $dt = new DateTime();
+					                                $dates = []; 
+					                                for ($d = 1; $d <= 7; $d++) {
+					                                    $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
+					                                    $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
+					                                }
+					                                $from = current($dates); // monday
+					                                $to = end($dates); // sunday
+					                                $select_task_assign = mysqli_query($conn, "SELECT * FROM task WHERE task_due_date BETWEEN '$from' AND '$to'");
+					                                // $select_task_assign = mysqli_query($conn, "SELECT * FROM task");
+					                            }
+		                                		
 		                                		while($fetct_task_assign = mysqli_fetch_array($select_task_assign))
 												{
 													$task_status_id = $fetct_task_assign['task_status_id'];
@@ -1395,4 +1492,43 @@
                 });
             }
         }
+
+        function tran_all()
+        {
+            document.location='dashboard.php?filter=All';
+        }
+        function tran_today()
+        {
+            document.location='dashboard.php?filter=Today';
+        }
+        function tran_week()
+        {
+            document.location='dashboard.php?filter=This Week';
+        }
+        function tran_month()
+        {
+            document.location='dashboard.php?filter=This Month';
+        }
+        function tran_year()
+        {
+            document.location='dashboard.php?filter=This Year';
+        }
+        function tran_custom()
+        {   
+	        var date_from = document.getElementById('txt_date_from').value;
+	        var date_to = document.getElementById('txt_date_to').value;
+	        if(date_from == "")
+	        {
+	          alert("Please select date range from.");
+	        }
+	        else if(date_to == "")
+	        {
+	          alert("Please select date range to.");
+	        }
+	        else
+	        {
+
+	          document.location='dashboard.php?filter=Custom Date&From='+date_from+'&To='+date_to;
+	        }
+	    }
 </script>

@@ -121,6 +121,10 @@
                         $email_style = "background-color: #20527b; color: #eee;";
                         $ico10 = "text-white-op";
                     }
+                    else if($highlight == "email_blasting.php")
+                    {
+                        $blasting_style = "background-color: #20527b; color: #eee;";
+                    }
                     else if($highlight == "main_transaction.php")
                     {
                         $transaction_style = "background-color: #20527b; color: #eee;";
@@ -174,7 +178,10 @@
                 </li>
                 <li>
                     <a href="main_email_format.php" style="<?php echo $email_style; ?>"><i class="fa fa-send-o <?php echo $ico10; ?>"></i><span class="sidebar-mini-hide">Email format</span>   
-                        <small id="new_message"></small>
+                    </a>                        
+                </li>
+                <li>
+                    <a href="email_blasting.php" style="<?php echo $blasting_style; ?>"><i class="fa fa-send text-white-op"></i><span class="sidebar-mini-hide">Email Blasting</span>   
                     </a>                        
                 </li>
                 <li>
@@ -227,7 +234,7 @@
                             <a href="main_add_space.php" style="<?php echo $children_add_space;?>">Space</a>
                         </li>
                         <li>
-                            <a href="main_everything.php" style="<?php echo $children_everything;?>">Everything</a>
+                            <a href="main_everything.php?filter=This Week&due_date=This Week" style="<?php echo $children_everything;?>">Everything</a>
                         </li>
                         <?php
                         if (empty($_GET['space_name'])) 
@@ -501,7 +508,7 @@
                     <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-grid"></i><span class="sidebar-mini-hide">Services</span></a>
                     <ul>
                         <li>
-                            <a href="main_everything.php" style="<?php echo $children_everything;?>">Everything</a>
+                            <a href="main_everything.php?filter=This Week&due_date=This Week" style="<?php echo $children_everything;?>">Everything</a>
                         </li>
                         <?php
                         if (empty($_GET['space_name'])) 

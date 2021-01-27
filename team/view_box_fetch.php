@@ -158,7 +158,9 @@
                                             <ul style="border-left: 3px solid '.$result_findstatus['status_color'].';">';
                                                 while($result_findtaskper_status = mysqli_fetch_array($findtaskper_status))
                                                     {
-                                                        echo '<li class="aaa bbb" id="taskmodal'.$result_findtaskper_status['task_id'].'" onclick="show_task_modal(this.id)">'.$result_findtaskper_status['task_name'].'</li>';
+                                                        echo '<li class="aaa bbb" id="taskmodal'.$result_findtaskper_status['task_id'].'" onclick="show_task_modal(this.id)">'.$result_findtaskper_status['task_name'].'</li>
+                                                            <input type="hidden" value="'.$result_findtaskper_status['task_name'].'" id="rename'.$result_findtaskper_status['task_id'].'">
+                                                        ';
                                                     }                                                    
                                                 echo'                                                
                                             </ul>
@@ -384,7 +386,9 @@
                                                                     {
                                                                         $ddd ++;
                                                                         $task_num++;
-                                                                        echo '<li class="aaa bbb" id="taskmodal'.$result_findtaskper_status['task_id'].'" onclick="show_task_modal(this.id)">'.$result_findtaskper_status['task_name'].'</li>';
+                                                                        echo '<li class="aaa bbb" id="taskmodal'.$result_findtaskper_status['task_id'].'" onclick="show_task_modal(this.id)">'.$result_findtaskper_status['task_name'].'</li>
+                                                                            <input type="hidden" value="'.$result_findtaskper_status['task_name'].'" id="rename'.$result_findtaskper_status['task_id'].'">
+                                                                        ';
                                                                     }
                                                                     else
                                                                     {}

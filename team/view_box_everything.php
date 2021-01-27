@@ -463,4 +463,16 @@
                 }
         });
     }
+
+    function view_task_box(id)
+    {
+        // alert(id);
+        array = id.split(',');
+        task_id = array[0];
+        space_name = array[1];
+        list_name = array[2];
+        list_id = array[3];
+
+        document.location = 'main_dashboard.php?space_name='+space_name+'&list_name='+list_name+'&list_id='+list_id+'&get_task_id='+task_id+'&b=1';
+    }
 </script>

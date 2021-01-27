@@ -20,8 +20,8 @@
           $con = mysqli_query($conn, "SELECT * FROM user WHERE username='$username'");
           if(mysqli_num_rows($con) == 0)
           {
-              $insert = mysqli_query($conn, "INSERT INTO user(fname,mname,lname,bdate,address,contact_number,email,username,password,user_type,user_color)
-                VALUES('$fname','$mname','$lname','$bdate','$address','$contact_number','$email','$username','$password','member','$user_color')") or die(mysqli_error());
+              $insert = mysqli_query($conn, "INSERT INTO user(fname,mname,lname,bdate,address,contact_number,email,username,password,user_color)
+                VALUES('$fname','$mname','$lname','$bdate','$address','$contact_number','$email','$username','$password','$user_color')") or die(mysqli_error());
               if($insert)
               {
                 echo "<script type='text/javascript'>alert('Data successfully added!!!');</script>";
@@ -61,7 +61,7 @@
                                     <img src="assets/media/photos/logo-ipass.png" class="logo"> 
                                 </div>
                                 <!-- END Header -->
-                                <form class="js-validation-signin" method="post" onsubmit="return checkForm(this);">
+                                <form class="js-validation-signin" method="POST" action="./signup.php" onsubmit="return checkForm(this);">
                                     <div class="block block-themed block-rounded block-shadow shadow">
                                         <div class="block-header bg-corporate">
                                             <h3 class="block-title">Create account</h3>

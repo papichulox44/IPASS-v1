@@ -1,4 +1,5 @@
 <?php
+    // session_start();
     include("../conn.php");
 
     if(empty($_GET))
@@ -290,7 +291,6 @@
         }
     }
 ?>
-
 
 <?php
     if(isset($_POST["btn_modal_add_tag"]))
@@ -651,17 +651,32 @@ $(document).ready(function(){
         }
     </script>
 <script>
+    // display_email_history_table();
     function close_task()
     {
         var space_name = "<?php echo $space_name; ?>";
         var list_name = "<?php echo $list_name; ?>";
         var status_list_id = <?php echo $status_list_id; ?>;
         var user_type = "<?php echo $_SESSION['user_type']; ?>";
+        b = "<?php if(isset($_GET['b'])) { echo $_GET['b']; } ?>";
 
-        if (user_type == "Admin") {
-            document.location = 'main_dashboard.php?space_name='+space_name+'&list_name='+list_name+'&list_id='+status_list_id+'';
+        if (b == 1) {
+            document.location = 'main_everything.php?filter=This%20Week&due_date=All';
+            // document.location = 'main_dashboard.php?space_name='+space_name+'&list_name='+list_name+'&list_id='+status_list_id+'';
         } else {
             document.location = 'dashboard.php';
+        }
+    }
+
+    function close_task_admin()
+    {
+        b = "<?php if(isset($_GET['b'])) { echo $_GET['b']; } ?>";
+
+        if (b == 1) {
+            document.location = 'main_everything.php?filter=This%20Week&due_date=All';
+            // document.location = 'main_dashboard.php?space_name='+space_name+'&list_name='+list_name+'&list_id='+status_list_id+'';
+        } else {
+            
         }
     }
 
@@ -978,7 +993,6 @@ $(document).ready(function(){
                 fetch_email_name: 1,
             },
             success: function(response){
-                // display_email_history_table();
                 $('#view_email_name').html(response);
             }
         });
@@ -1016,6 +1030,8 @@ $(document).ready(function(){
                         type: 'POST',
                         async: false,
                         data:{
+                            user_id:user_id,
+                            task_id:task_id,
                             test_email:contact_email,
                             email_subject:email_subject,
                             email_content:email_content,
@@ -1044,6 +1060,7 @@ $(document).ready(function(){
                                             // $('#modal-extra-large').css('overflow-y', 'auto');
                                             // $('#modal-extra-large').focus();
                                             display_email_history_table();
+                                            displayChat();
                                             alert(data);
                                         }
                                 });
@@ -1061,10 +1078,15 @@ $(document).ready(function(){
 
     function move_task(id)
     {
-        var status_id = id.replace("move_task", "");
+        // var status_id = id.replace("move_task", "");
+        array_id = id.split(",");
+        status_id = array_id[0];
+        status_name = array_id[1];
         if(confirm("Are you sure you want to move this task?"))
         {
             var task_id = document.getElementById("task_id_when_click").value;
+            user_id = '<?php echo $_SESSION['user']; ?>';
+            // alert(status_id);
             $(document).ready(function(){
                 $.ajax({
                     type: "POST",
@@ -1072,6 +1094,8 @@ $(document).ready(function(){
                     data: {
                         task_id:task_id,
                         status_id:status_id,
+                        status_name:status_name,
+                        user_id:user_id,
                         move_task: 1,
                     },
                     success: function(data){
@@ -1079,6 +1103,7 @@ $(document).ready(function(){
                         {
                             alert("Task move successfully.");
                             display_status();
+                            displayChat();
                         }
                         else
                         {
@@ -1097,17 +1122,20 @@ $(document).ready(function(){
         if(confirm("Are you sure you want to make this urgent?"))
         {
             var task_id = document.getElementById("task_id_when_click").value;
+            user_id = '<?php echo $_SESSION['user'] ?>';
             $(document).ready(function(){
                 $.ajax({
                     type: "POST",
                     url: "ajax.php",
                     data: {
+                        user_id:user_id,
                         priority:priority,
                         task_id:task_id,
                         add_priority: 1,
                     },
                     success: function(){
                         display_task_info();
+                        displayChat();
                     }
                 });
             });
@@ -1121,17 +1149,20 @@ $(document).ready(function(){
         if(confirm("Are you sure you want to make this high?"))
         {
             var task_id = document.getElementById("task_id_when_click").value;
+            user_id = '<?php echo $_SESSION['user'] ?>';
             $(document).ready(function(){
                 $.ajax({
                     type: "POST",
                     url: "ajax.php",
                     data: {
+                        user_id:user_id,
                         priority:priority,
                         task_id:task_id,
                         add_priority: 1,
                     },
                     success: function(){
                         display_task_info();
+                        displayChat();
                     }
                 });
             });
@@ -1145,17 +1176,20 @@ $(document).ready(function(){
         if(confirm("Are you sure you want to make this normal?"))
         {
             var task_id = document.getElementById("task_id_when_click").value;
+            user_id = '<?php echo $_SESSION['user'] ?>';
             $(document).ready(function(){
                 $.ajax({
                     type: "POST",
                     url: "ajax.php",
                     data: {
+                        user_id:user_id,
                         priority:priority,
                         task_id:task_id,
                         add_priority: 1,
                     },
                     success: function(){
                         display_task_info();
+                        displayChat();
                     }
                 });
             });
@@ -1169,17 +1203,20 @@ $(document).ready(function(){
         if(confirm("Are you sure you want to make this low?"))
         {
             var task_id = document.getElementById("task_id_when_click").value;
+            user_id = '<?php echo $_SESSION['user'] ?>';
             $(document).ready(function(){
                 $.ajax({
                     type: "POST",
                     url: "ajax.php",
                     data: {
+                        user_id:user_id,
                         priority:priority,
                         task_id:task_id,
                         add_priority: 1,
                     },
                     success: function(){
                         display_task_info();
+                        displayChat();
                     }
                 });
             });
@@ -1193,17 +1230,20 @@ $(document).ready(function(){
         if(confirm("Are you sure you want to clear the priority?"))
         {
             var task_id = document.getElementById("task_id_when_click").value;
+            user_id = '<?php echo $_SESSION['user'] ?>';
             $(document).ready(function(){
                 $.ajax({
                     type: "POST",
                     url: "ajax.php",
                     data: {
+                        user_id:user_id,
                         priority:priority,
                         task_id:task_id,
                         add_priority: 1,
                     },
                     success: function(){
                         display_task_info();
+                        displayChat();
                     }
                 });
             });
@@ -1213,16 +1253,21 @@ $(document).ready(function(){
     }
     function assign_member(id)
     {
-        var member_id = id.replace("assign_member", "");
+        array_id = id.split(",");
+        member_id = array_id[0];
+        member_name = array_id[1];
         list_id = <?php echo $status_list_id; ?>;
         if(confirm("Are you sure you want to assign that member in this task?"))
         {
             var task_id = document.getElementById("task_id_when_click").value;
+            user_id = '<?php echo $_SESSION['user'] ?>';
             $(document).ready(function(){
                 $.ajax({
                     type: "POST",
                     url: "ajax.php",
                     data: {
+                        user_id:user_id,
+                        member_name:member_name,
                         member_id:member_id,
                         list_id:list_id,
                         task_id:task_id,
@@ -1231,7 +1276,7 @@ $(document).ready(function(){
                     success: function(data){
                         if(data == "error1")
                         {alert('Member already assign to that task.');}
-                        else { display_task_info(); }
+                        else { display_task_info(); displayChat(); }
                     }
                 });
             });
@@ -1246,11 +1291,13 @@ $(document).ready(function(){
         if(confirm("Are you sure you want to add due date in this task?"))
         {
             var task_id = document.getElementById("task_id_when_click").value;
+            user_id = '<?php echo $_SESSION['user'] ?>';
             $(document).ready(function(){
                 $.ajax({
                     type: "POST",
                     url: "ajax.php",
                     data: {
+                        user_id:user_id,
                         task_id:task_id,
                         txt_date:txt_date,
                         txt_time:txt_time,
@@ -1258,6 +1305,7 @@ $(document).ready(function(){
                     },
                     success: function(){
                         display_task_info();
+                        displayChat();
                     }
                 });
             });
@@ -1267,15 +1315,22 @@ $(document).ready(function(){
     }
     function assign_tag(id)
     {
-        var tag_id = id.replace("assign_tag", "");
+        // var tag_id = id.replace("assign_tag", "");
+        array_id = id.split(",");
+        tag_id = array_id[0];
+        tag_name = array_id[1];
+        // alert(tag_id);
         if(confirm("Are you sure you want to add tag in this task?"))
         {
             var task_id = document.getElementById("task_id_when_click").value;
+            var user_id = '<?php echo $_SESSION['user'] ?>';
             $(document).ready(function(){
                 $.ajax({
                     type: "POST",
                     url: "ajax.php",
                     data: {
+                        user_id:user_id,
+                        tag_name:tag_name,
                         tag_id:tag_id,
                         task_id:task_id,
                         assign_tag: 1,
@@ -1283,13 +1338,11 @@ $(document).ready(function(){
                     success: function(data){
                         if(data == "error1")
                         {alert('Tag already assign to that task.');}
-                        else { display_task_info(); }
+                        else { display_task_info(); displayChat(); }
                     }
                 });
             });
         }
-        else
-        {}
     }
     function rename_task(id)
     {
@@ -1304,17 +1357,20 @@ $(document).ready(function(){
             {
                 var task_id = document.getElementById("task_id_when_click").value;
                 var txt_modal_name = document.getElementById("modal_txt_task_name").value;
+                user_id = '<?php echo $_SESSION['user'] ?>';
                 $(document).ready(function(){
                     $.ajax({
                         type: "POST",
                         url: "ajax.php",
                         data: {
+                            user_id:user_id,
                             task_id:task_id,
                             txt_modal_name:txt_modal_name,
                             rename_task: 1,
                         },
                         success: function(){
                             display_task_info();
+                            displayChat();
                         }
                     });
                 });
@@ -1785,7 +1841,7 @@ $(document).ready(function(){
                                                 echo'
                                                 <input type="hidden" name="txt_modal_assign_task_id" id="modal_assign'.$assign_num++.'" value="">
                                                 <input type="hidden" name="txt_modal_user_id" value="'.$find_search_member['user_id'].'">
-                                                <button type="button" class="dropdown-item" style="border-radius: 50px;" id="assign_member'.$find_search_member['user_id'].'" onclick="assign_member(this.id)">';
+                                                <button type="button" class="dropdown-item" style="border-radius: 50px;" id="'.$find_search_member['user_id'].','.$get_first_letter_in_fname.' '.$get_first_letter_in_lname.'" onclick="assign_member(this.id)">';
                                                     if($find_search_member['profile_pic'] != "")
                                                     {
                                                         echo'<img style="width:28px; height:28px; border-radius:50px; margin: 0px 10px 0px 0px;" src="../assets/media/upload/'.$find_search_member['profile_pic'].'">';
@@ -1834,7 +1890,7 @@ $(document).ready(function(){
                                     {
                                         echo'<input type="hidden" name="txt_modal_tag_task_id" id="modal_tag'.$tag_num++.'" value="">
                                             <input type="hidden" name="txt_modal_tag_id" value="'.$find_tag['tag_id'].'">
-                                            <button type="button" class="dropdown-item" style="background-color: '.$find_tag['tag_color'].'; color:#fff; border-radius: 50px;" id="assign_tag'.$find_tag['tag_id'].'" onclick="assign_tag(this.id)">'.$find_tag['tag_name'].'</button>
+                                            <button type="button" class="dropdown-item" style="background-color: '.$find_tag['tag_color'].'; color:#fff; border-radius: 50px;" id="'.$find_tag['tag_id'].','.$find_tag['tag_name'].'" onclick="assign_tag(this.id)">'.$find_tag['tag_name'].'</button>
                                             ';
                                     }
                                 ?>
@@ -2091,13 +2147,15 @@ $(document).ready(function(){
                                                 <div class="form-group row">
                                                     <label class="col-md-5 col-form-label">Rate in PHP(‎₱):</label>
                                                     <div class="col-md-7">
-                                                        <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_php_rate" readonly>
+                                                        <input type="number" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_php_rate">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-md-5 col-form-label">Amount in PHP(‎₱):</label>
                                                     <div class="col-md-7">
                                                         <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_php_total" readonly>
+                                                        <!-- <input type="text" class="form-control" id="sam"> -->
+                                                        <div id="sam"></div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -2331,6 +2389,20 @@ $(document).ready(function(){
 
 
 <script type="text/javascript">
+
+document.getElementById("tran_php_rate").onkeypress = function(event){
+    if (event.keyCode == 13 || event.which == 13){
+        var x = document.getElementById("tran_php_rate").value;
+        var y = document.getElementById("tran_initial").value;
+        // var z = document.getElementById("tran_php_total").value;
+        tran_php_rate = parseFloat(x);
+        tran_initial = parseFloat(y);
+
+        total = tran_php_rate * tran_initial;
+        document.getElementById("tran_php_total").value = total;
+    }
+};
+
 phase_id = document.getElementById("txt_select_phase").value;
 transaction_container = document.getElementById('transaction_table');
 finance_container = document.getElementById('finance_container');
@@ -6116,7 +6188,7 @@ function display_assign_field_phase(){
                             <textarea class="form-control mb-15" id="email_content" rows="12" style="display: none;"></textarea>
                             <div data-toggle="slimscroll" data-height="300px" data-color="#42A5F5">
                             <span id="view_email_name"></span>
-                            </div>
+                            </div>  
                     <div class="modal-footer">
                         <!-- <button type="button" class="btn btn-alt-secondary" data-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-alt-success" data-dismiss="modal">
@@ -6128,7 +6200,147 @@ function display_assign_field_phase(){
         </div>
         <!-- END Pop Out Modal -->
 
+        <div class="modal fade" id="modal-blast" tabindex="-1" role="dialog" aria-labelledby="modal-blast" aria-hidden="true" data-backdrop="static">
+            <div class="modal-dialog modal-dialog-popout" role="document">
+                <div class="modal-content">
+                    <div class="block block-themed block-transparent mb-0">
+                        <!-- <div class="block-header bg-primary-dark"> -->
+                        <div class="block-header" style="background-color: #045D71;">
+                            <h3 class="block-title"> Select Email Sender For Blasting</h3>
+                            <!-- <h3 class="block-title"><button style="background-color: #045D71;" onclick="go_back()"><</button> Select Email Sender</h3> -->
+                            <div class="block-options">
+                                <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                    <i class="si si-close"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="block-content">
+                            
+                        </div>
+                    </div>
+                            <div class="col-md-12">
+                                <select class="form-control" id="email_name" onchange="email_selection_blasting(this)">
+                                    <option disabled="" selected="">Please select email</option>
+                                    <?php 
+                                    $query = mysqli_query($conn, "SELECT * FROM tbl_list_email ORDER BY list_email_name");
+
+                                    while ($data = mysqli_fetch_array($query)) {
+                                        echo '
+                                            <option value="'.$data['list_email_name'].'">'.$data['list_email_name'].'</option>
+                                        ';
+                                    }
+                                     ?>
+                                    <!-- <option value="1">Option #1</option>
+                                    <option value="2">Option #2</option>
+                                    <option value="3">Option #3</option> -->
+                                </select>
+                            </div><br>
+                            <textarea class="form-control mb-15" id="email_content" rows="12" style="display: none;"></textarea>
+                            <div data-toggle="slimscroll" data-height="300px" data-color="#42A5F5">
+                            <input type="hidden" class="form-control" id="task_status_id">
+                            <span id="view_email_names"></span>
+                            </div>  
+                    <div class="modal-footer">
+                        <!-- <button type="button" class="btn btn-alt-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-alt-success" data-dismiss="modal">
+                            <i class="fa fa-check"></i> Perfect
+                        </button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
 <script>
+    function email_selection_blasting(select)
+    {   
+        email_name = (select.options[select.selectedIndex].value);
+        // alert(email_name);
+        // task_id = document.getElementById("task_id_when_click").value;
+
+        // alert(email_name);
+        $.ajax({
+        url: 'ajax_transaction.php',
+        type: 'POST',
+        async: false,
+        data:{
+            set_email:email_name,
+            set_list_of_email: 1,
+        },
+            success: function(response){
+                if (response == 'success') {
+                    // alert('Na save ang session');
+                    display_email_names();
+                }
+            }
+        });
+    }
+
+    function display_email_names()
+    {
+        var task_status_id = document.getElementById("task_status_id").value;
+        // alert(status_list_id);
+        $.ajax({
+            url: 'ajax.php',
+            type: 'POST',
+            async: false,
+            data:{
+                task_status_id:task_status_id,
+                display_email_names: 1,
+            },
+            success: function(response){
+                $('#view_email_names').html(response);
+            }
+        });
+    }
+
+    function send_email_blasting(id)
+    {   
+        email_id = id;
+        user_id = <?php echo $_SESSION['user']; ?>;
+        task_status_id = document.getElementById("task_status_id").value;
+        email_name = document.getElementById("email_name" + id).value;
+        email_subject = document.getElementById("email_subject" + id).value;
+
+        if(confirm("Are you sure you want to send this email?"))
+        {
+            $.ajax({
+                url: 'ajax.php',
+                type: 'POST',
+                async: false,
+                data:{
+                    email_name:email_name,
+                    get_email_content_to_be_send: 1,
+                },
+                success: function(data){
+                    document.getElementById("email_content").value = data;
+                    email_content = document.getElementById("email_content").value;
+                    // alert(email_content);
+                    $.ajax({
+                        url: 'ajax.php',
+                        type: 'POST',
+                        async: false,
+                        data:{
+                            email_id:email_id,
+                            user_id:user_id,
+                            task_status_id:task_status_id,
+                            email_content:email_content,
+                            email_subject:email_subject,
+                            send_email_blasting: 1,
+                        },
+                        success: function(data){
+                            if (data == 'success') 
+                            {
+                                alert('Email Blasting Successfully Sent!');
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+    }
+
+
     function email_selection(select)
     {   
         email_name = (select.options[select.selectedIndex].value);
@@ -6290,6 +6502,35 @@ function display_assign_field_phase(){
         });
     }
 
+    function fetch_email_name_editable_blast(id)
+    {
+        // alert(id);
+        user_id = <?php echo $_SESSION['user']; ?>;
+        var email_subject = document.getElementById("email_subject" + id).value;
+        var email_id = id;
+        var email_name = document.getElementById("email_name" + id).value;
+        var task_status_id = document.getElementById("task_status_id").value;
+
+        // alert(email_name);
+        $.ajax({
+                url: 'ajax.php',
+                type: 'POST',
+                async: false,
+                data:{
+                    email_name:email_name,
+                    get_email_content_to_be_send: 1,
+                },
+                success: function(data){
+                    document.getElementById("email_content_editable").value = data;
+                    document.getElementById("email_user_id").value = user_id;
+                    document.getElementById("email_email_subject").value = email_subject;
+                    document.getElementById("email_email_id").value = email_id;
+                    document.getElementById("email_blasting").value = 1;
+                    document.getElementById("email_task_status_id").value = task_status_id;
+                }
+        });
+    }
+
     // fetch_email_pictures();
     function fetch_email_pictures()
     {
@@ -6400,73 +6641,111 @@ function display_assign_field_phase(){
 
     function send_editable_email()
     {
-        user_id = document.getElementById("email_user_id").value;
-        task_id = document.getElementById("email_task_id").value;
-        contact_email = document.getElementById("email_contact_email").value;
-        email_subject = document.getElementById("email_email_subject").value;
-        email_id = document.getElementById("email_email_id").value;
-        FirstName = document.getElementById("email_FirstName").value;
-        email_content = document.getElementById("email_content_editable").value;
+        email_blasting = document.getElementById("email_blasting").value;
+        if (email_blasting == 1) 
+        {
+            user_id = <?php echo $_SESSION['user']; ?>;
+            email_id = document.getElementById("email_email_id").value;
+            task_status_id = document.getElementById("email_task_status_id").value;
+            email_subject = document.getElementById("email_email_subject").value;
+            email_content = document.getElementById("email_content_editable").value;
 
-        // alert(email_content);
-        if(confirm("Are you sure you want to send this email?"))
-        {   
-            $.ajax({
-                url: 'ajax.php',
-                type: 'POST',
-                async: false,
-                data:{
-                    test_email:contact_email,
-                    email_subject:email_subject,
-                    email_content:email_content,
-                    FirstName:FirstName,
-                    test_send_email: 1,
-                },
-                success: function(data){
-                    // Send emai to specific email address
-                    if ('Email sent successfully.' == 'Email sent successfully.')
-                    // if (data == 'Email sent successfully.')
-                    {
-                        $.ajax({
-                            url: 'ajax.php',
-                            type: 'POST',
-                            async: false,
-                            data:{
-                                user_id:user_id,
-                                task_id:task_id,
-                                contact_email:contact_email,
-                                email_id:email_id,
-                                email_content:email_content,
-                                email_send_history: 1,
-                            },
-                                success: function(data){
-                                    $('#modal-extra-editable-email').modal("hide");
-                                    $('#modal-extra-large').modal("show");
-                                    $('#modal-extra-large').css('overflow-y', 'auto');
-                                    // $('#modal-extra-large').focus();
-                                    display_email_history_table();
-                                    alert(data);
-                                }
-                        });
+            if(confirm("Are you sure you want to send this email?"))
+            {
+                $.ajax({
+                    url: 'ajax.php',
+                    type: 'POST',
+                    async: false,
+                    data:{
+                        email_id:email_id,
+                        user_id:user_id,
+                        task_status_id:task_status_id,
+                        email_content:email_content,
+                        email_subject:email_subject,
+                        send_email_blasting: 1,
+                    },
+                    success: function(data){
+                        if (data == 'success') 
+                        {
+                            alert('Email Blasting Successfully Sent!');
+                        }
                     }
-                    else
-                    {
-                        alert(data);
+                });
+            }
+        }
+        else {
+
+            user_id = document.getElementById("email_user_id").value;
+            task_id = document.getElementById("email_task_id").value;
+            contact_email = document.getElementById("email_contact_email").value;
+            email_subject = document.getElementById("email_email_subject").value;
+            email_id = document.getElementById("email_email_id").value;
+            FirstName = document.getElementById("email_FirstName").value;
+            email_content = document.getElementById("email_content_editable").value;
+
+            // alert(email_content);
+            if(confirm("Are you sure you want to send this email?"))
+            {   
+                $.ajax({
+                    url: 'ajax.php',
+                    type: 'POST',
+                    async: false,
+                    data:{
+                        user_id:user_id,
+                        task_id:task_id,
+                        test_email:contact_email,
+                        email_subject:email_subject,
+                        email_content:email_content,
+                        FirstName:FirstName,
+                        test_send_email: 1,
+                    },
+                    success: function(data){
+                        // Send emai to specific email address
+                        if ('Email sent successfully.' == 'Email sent successfully.')
+                        // if (data == 'Email sent successfully.')
+                        {
+                            $.ajax({
+                                url: 'ajax.php',
+                                type: 'POST',
+                                async: false,
+                                data:{
+                                    user_id:user_id,
+                                    task_id:task_id,
+                                    contact_email:contact_email,
+                                    email_id:email_id,
+                                    email_content:email_content,
+                                    email_send_history: 1,
+                                },
+                                    success: function(data){
+                                        // $('#modal-extra-editable-email').modal("hide");
+                                        // $('#modal-extra-large').modal("show");
+                                        // $('#modal-extra-large').css('overflow-y', 'auto');
+                                        // $('#modal-extra-large').focus();
+                                        display_email_history_table();
+                                        displayChat();
+                                        alert(data);
+                                    }
+                            });
+                        }
+                        else
+                        {
+                            alert(data);
+                        }
                     }
-                }
-            });
+                });
+            }
         }
     }
 
 </script>
 
     <!-- Extra Large Modal Editable Email -->
-        <div class="modal fade" id="modal-extra-editable-email" tabindex="-1" role="dialog" aria-labelledby="modal-extra-large" aria-hidden="true">
+        <div class="modal fade" id="modal-extra-editable-email" tabindex="-1" role="dialog" aria-labelledby="modal-extra-large" aria-hidden="true" data-backdrop="static">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="block block-themed block-transparent mb-0">
                         <div class="block-header" style="background-color: #045D71;">
-                            <h3 class="block-title"><button  data-dismiss="modal" data-toggle="modal" data-target="#modal-popout" style="background-color: #045D71;"><</button> Edit Email Format</h3>
+                            <h3 class="block-title"><button data-dismiss="modal" data-toggle="modal" data-target="#modal-popout" style="background-color: #045D71;">< Client Modal</button> | <button data-dismiss="modal" data-toggle="modal" data-target="#modal-blast" style="background-color: #045D71;">< Email Blasting</button> Edit Email Format</h3>
                             <div class="block-options">
                                 <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
                                     <i class="si si-close"></i>
@@ -6492,6 +6771,8 @@ function display_assign_field_phase(){
                             <input type="hidden" id="email_email_subject">
                             <input type="hidden" id="email_email_id">
                             <input type="hidden" id="email_FirstName">
+                            <input type="hidden" id="email_blasting">
+                            <input type="hidden" id="email_task_status_id">
                         </label>
                             <!-- CKEditor -->
                                 <div class="block-content" style="background-color: <?php echo $md_editor; ?>;">
@@ -6507,7 +6788,7 @@ function display_assign_field_phase(){
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <textarea class="form-control mb-15" id="email_content_editable" rows="12" placeholder="Paste source here.."></textarea>
-                                                <button type="button" class="btn btn-block btn-primary" onclick="send_editable_email()">
+                                                <button type="button" class="btn btn-block btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#modal-extra-large" onclick="send_editable_email()">
                                                     Send Now
                                                 </button>
                                             </div>
@@ -6538,6 +6819,7 @@ function display_assign_field_phase(){
 <!-- End board view modal -->
 
 <script type="text/javascript">
+
     
     function input_field_textarea(id)
     {

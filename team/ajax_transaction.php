@@ -296,7 +296,7 @@
                         </td>';
                         //Remarks value for each transaction
                         if (!empty($remarks)) {
-                            $query = mysqli_query($conn, "SELECT * FROM tbl_remarks WHERE remarks_value LIKE '%$remarks%'") or die(mysqli_error());
+                            $query = mysqli_query($conn, "SELECT * FROM tbl_remarks WHERE remarks_value = '$remarks'") or die(mysqli_error());
 
                             while($data = mysqli_fetch_array($query)) {
                                 echo '<td class="text-center" data-toggle="modal" data-target="#modal-remarks" style="background-color: '.$data['remarks_color'].'; cursor: pointer;" id="'.$phase_id.','.$task_id.','.$remarks.','.$val_id.'" onclick="update_remarks(this.id)">'.$remarks.'
@@ -1204,7 +1204,7 @@
                             <div class="form-group row">
                                 <label class="col-md-5 col-form-label">Rate in PHP(‎₱):</label>
                                 <div class="col-md-7">
-                                    <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_php_rate" readonly value="<?php echo $fetch_col_name['val_php_rate']; ?>">
+                                    <input type="number" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" id="tran_php_rate" value="<?php echo $fetch_col_name['val_php_rate']; ?>">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -1253,6 +1253,20 @@
                 </div>
             </div>
             <script type="text/javascript" src="https://cdn.rawgit.com/asvd/dragscroll/master/dragscroll.js">   
+            </script>
+            <script>
+                document.getElementById("tran_php_rate").onkeypress = function(event){
+                    if (event.keyCode == 13 || event.which == 13){
+                        var x = document.getElementById("tran_php_rate").value;
+                        var y = document.getElementById("tran_initial").value;
+                        // var z = document.getElementById("tran_php_total").value;
+                        tran_php_rate = parseFloat(x);
+                        tran_initial = parseFloat(y);
+
+                        total = tran_php_rate * tran_initial;
+                        document.getElementById("tran_php_total").value = total;
+                    }
+                };
             </script>
         <?php
     }

@@ -30,7 +30,7 @@ session_start();
                             <span id="id_contact" class="badge float-right mt-5" style="font-size: 13px; color: #fff;">Task ID: '.$taskid["task_id"].'</span>
                             '.$taskid["task_name"].'</h3>   
                             <div class="block-options">
-                                <button type="button" class="btn-block-option"'; if($_SESSION['user_type'] == 'Admin'){} else { echo 'onClick="close_task()"'; }  echo 'data-dismiss="modal"> <i class="si si-close"></i> </button>
+                                <button type="button" class="btn-block-option"'; if($_SESSION['user_type'] == 'Admin'){ echo 'onClick="close_task_admin()"'; } else { echo 'onClick="close_task()"'; }  echo 'data-dismiss="modal"> <i class="si si-close"></i> </button>
                             </div>
                         </div>
                       <div class="block block-content">

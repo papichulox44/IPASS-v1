@@ -89,30 +89,86 @@
     }
     // Get the element with id="active_tab" and click on it
     //document.getElementById("active_tab").click();
-    function tran_all()
-        {
-            document.location='main_everything.php?filter=All';
+        function tran_all()
+        {   
+            due_date = '<?php echo $_GET['due_date']; ?>';
+            if (due_date == 'Custom Date') 
+            {
+                due_date_custom = '<?php echo $_GET['due_date']; ?>&From_due=<?php if(isset($_GET['From_due'])) { echo $_GET['From_due']; } ?>&To_due=<?php if(isset($_GET['To_due'])) { echo $_GET['To_due']; } ?>';
+            }
+            else
+            {
+                due_date_custom = due_date;
+            }
+            document.location='main_everything.php?filter=All&due_date='+due_date_custom;
         }
         function tran_today()
-        {
-            document.location='main_everything.php?filter=Today';
+        {   
+            due_date = '<?php echo $_GET['due_date']; ?>';
+            if (due_date == 'Custom Date') 
+            {
+                due_date_custom = '<?php echo $_GET['due_date']; ?>&From_due=<?php if(isset($_GET['From_due'])) { echo $_GET['From_due']; } ?>&To_due=<?php if(isset($_GET['To_due'])) { echo $_GET['To_due']; } ?>';
+            }
+            else
+            {
+                due_date_custom = due_date;
+            }
+            document.location='main_everything.php?filter=Today&due_date='+due_date_custom;
         }
         function tran_week()
         {
-            document.location='main_everything.php?filter=This Week';
+            due_date = '<?php echo $_GET['due_date']; ?>';
+            if (due_date == 'Custom Date') 
+            {
+                due_date_custom = '<?php echo $_GET['due_date']; ?>&From_due=<?php if(isset($_GET['From_due'])) { echo $_GET['From_due']; } ?>&To_due=<?php if(isset($_GET['To_due'])) { echo $_GET['To_due']; } ?>';
+            }
+            else
+            {
+                due_date_custom = due_date;
+            }
+            document.location='main_everything.php?filter=This Week&due_date='+due_date_custom;
         }
         function tran_month()
         {
-            document.location='main_everything.php?filter=This Month';
+            due_date = '<?php echo $_GET['due_date']; ?>';
+            if (due_date == 'Custom Date') 
+            {
+                due_date_custom = '<?php echo $_GET['due_date']; ?>&From_due=<?php if(isset($_GET['From_due'])) { echo $_GET['From_due']; } ?>&To_due=<?php if(isset($_GET['To_due'])) { echo $_GET['To_due']; } ?>';
+            }
+            else
+            {
+                due_date_custom = due_date;
+            }
+            document.location='main_everything.php?filter=This Month&due_date='+due_date_custom;
         }
         function tran_year()
-        {
-            document.location='main_everything.php?filter=This Year';
+        {   
+            due_date = '<?php echo $_GET['due_date']; ?>';
+            if (due_date == 'Custom Date') 
+            {
+                due_date_custom = '<?php echo $_GET['due_date']; ?>&From_due=<?php if(isset($_GET['From_due'])) { echo $_GET['From_due']; } ?>&To_due=<?php if(isset($_GET['To_due'])) { echo $_GET['To_due']; } ?>';
+            }
+            else
+            {
+                due_date_custom = due_date;
+            }
+            document.location='main_everything.php?filter=This Year&due_date='+due_date_custom;
+            // document.location='main_everything.php?filter=This Year&due_date=<?php echo $_GET['due_date']; ?>';
         }
         function tran_custom()
         {   
             var date_from = document.getElementById('txt_date_from').value;
             var date_to = document.getElementById('txt_date_to').value;
+            due_date = '<?php echo $_GET['due_date']; ?>';
+            if (due_date == 'Custom Date') 
+            {
+                due_date_custom = '<?php echo $_GET['due_date']; ?>&From_due=<?php if(isset($_GET['From_due'])) { echo $_GET['From_due']; } ?>&To_due=<?php if(isset($_GET['To_due'])) { echo $_GET['To_due']; } ?>';
+            }
+            else
+            {
+                due_date_custom = due_date;
+            }
+
             if(date_from == "")
             {
               alert("Please select date range from.");
@@ -124,9 +180,97 @@
             else
             {
 
-              document.location='main_everything.php?filter=Custom Date&From='+date_from+'&To='+date_to;
+              document.location='main_everything.php?filter=Custom Date&From='+date_from+'&To='+date_to+'&due_date='+due_date_custom;
             }
         }
+
+        function tran_all_due_date()
+        {
+            filter = '<?php echo $_GET['filter']; ?>';
+            if (filter == 'Custom Date') 
+            {
+                created_date_custom = '<?php echo $_GET['filter']; ?>&From=<?php if(isset($_GET['From'])) { echo $_GET['From']; } ?>&To=<?php if(isset($_GET['To'])) { echo $_GET['To']; } ?>';
+            }
+            else
+            {
+                created_date_custom = filter;
+            }
+            document.location='main_everything.php?filter='+created_date_custom+'&due_date=All';
+        }
+        function tran_today_due_date()
+        {
+            filter = '<?php echo $_GET['filter']; ?>';
+            if (filter == 'Custom Date') 
+            {
+                created_date_custom = '<?php echo $_GET['filter']; ?>&From=<?php if(isset($_GET['From'])) { echo $_GET['From']; } ?>&To=<?php if(isset($_GET['To'])) { echo $_GET['To']; } ?>';
+            }
+            else
+            {
+                created_date_custom = filter;
+            }
+            document.location='main_everything.php?filter='+created_date_custom+'&due_date=Today';
+        }
+        function tran_week_due_date()
+        {
+            filter = '<?php echo $_GET['filter']; ?>';
+            if (filter == 'Custom Date') 
+            {
+                created_date_custom = '<?php echo $_GET['filter']; ?>&From=<?php if(isset($_GET['From'])) { echo $_GET['From']; } ?>&To=<?php if(isset($_GET['To'])) { echo $_GET['To']; } ?>';
+            }
+            else
+            {
+                created_date_custom = filter;
+            }
+            document.location='main_everything.php?filter='+created_date_custom+'&due_date=This Week';
+        }
+        function tran_month_due_date()
+        {   
+            filter = '<?php echo $_GET['filter']; ?>';
+            if (filter == 'Custom Date') 
+            {
+                created_date_custom = '<?php echo $_GET['filter']; ?>&From=<?php if(isset($_GET['From'])) { echo $_GET['From']; } ?>&To=<?php if(isset($_GET['To'])) { echo $_GET['To']; } ?>';
+            }
+            else
+            {
+                created_date_custom = filter;
+            }
+            document.location='main_everything.php?filter='+created_date_custom+'&due_date=This Month';
+            document.location='main_everything.php?filter=<?php echo $_GET['filter']; ?>&due_date=This Month';
+        }
+        function tran_year_due_date()
+        {
+            document.location='main_everything.php?filter=<?php echo $_GET['filter']; ?>&due_date=This Year';
+        }
+        function tran_custom_due_date()
+        {   
+            var date_from_due = document.getElementById('txt_date_from_due_date').value;
+            var date_to_due = document.getElementById('txt_date_from_due_date').value;
+            filter = '<?php echo $_GET['filter']; ?>';
+            if (filter == 'Custom Date') 
+            {
+                created_date_custom = '<?php echo $_GET['filter']; ?>&From=<?php if(isset($_GET['From'])) { echo $_GET['From']; } ?>&To=<?php if(isset($_GET['To'])) { echo $_GET['To']; } ?>';
+            }
+            else
+            {
+                created_date_custom = filter;
+            }
+
+            if(date_from_due == "")
+            {
+              alert("Please select date range from.");
+            }
+            else if(date_to_due == "")
+            {
+              alert("Please select date range to.");
+            }
+            else
+            {
+
+              document.location='main_everything.php?filter='+created_date_custom+'&due_date=Custom Date&From_due='+date_from_due+'&To_due='+date_to_due;
+            }
+        }
+
+
         function tran_custom_box()
         {   
             var date_from = document.getElementById('date_from').value;

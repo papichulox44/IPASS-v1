@@ -63,6 +63,23 @@
             echo $echo_location;
         }
 
+        if(isset($_POST['btn_filter_due_date'])) // add/update filter custom range date create  only one
+        {
+            $txt_due_date_from = $_POST['txt_due_date_from']; 
+            $txt_due_date_to = $_POST['txt_due_date_to']; 
+            $filter = "duedate";
+            $filtered_by = $txt_due_date_from .','. $txt_due_date_to;
+            if(mysqli_num_rows($filter_date_created) == 0)
+            {  
+                mysqli_query($conn,"INSERT into `filter` (filter_space_id, filter_user_id, filter_name, filter_value) values ('$space_id','$user_id','$filter','$filtered_by')") or die(mysqli_error());
+            }
+            else
+            {
+                mysqli_query($conn, "UPDATE filter SET filter_name = '$filter' , filter_value = '$filtered_by' WHERE filter_space_id = '$space_id' AND filter_user_id = '$user_id' AND filter_name = 'datecreated'") or die(mysqli_error());
+            }   
+            echo $echo_location;
+        }
+
         if(!empty($_GET['filter']))
         { 
             $filter = $_GET['filter'];
@@ -372,6 +389,20 @@
                         <i class="fa fa-calendar-check-o mr-5"></i> Due Date
                     </form>
                     <div class="dropdown-menu dropdown-menu-right shadow filterchild" style="position: absolute; top: 75px; right: 130px;">
+                        <label for="example-datepicker4">Custom date</label>
+                        <form method="post">
+                            <div class="form-material">
+                                <input type="date" class="js-datepicker form-control" id="example-datepicker4" name="txt_due_date_from" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="mm/dd/yy" placeholder="mm/dd/yy" required>
+                                <label for="example-datepicker4">From:</label>
+                            </div>
+                            <div class="form-material">
+                                <input type="date" class="js-datepicker form-control" id="example-datepicker4" name="txt_due_date_to" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="mm/dd/yy" placeholder="mm/dd/yy" required>
+                                <label for="example-datepicker4">To:</label>
+                            </div>
+                            <div class="form-material">
+                                <button class="btn btn-sm btn-noborder btn-alt-primary btn-block" name="btn_filter_due_date"><i class="fa fa-check-square-o"></i> Save</button>
+                            </div>
+                        </form>
                         <a class="dropdown-item" href="main_dashboard.php?space_name=<?php echo $space_name?>&list_name=<?php echo $list_name ?>&list_id=<?php echo $status_list_id?>&filter=duedate&duedate=Today">
                             <i class="si si-calendar mr-5"></i> Today
                         </a>

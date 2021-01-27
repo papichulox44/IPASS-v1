@@ -55,7 +55,10 @@ tbody > tr:hover {
                     <!--<span class="btn btn-sm btn-secondary" style="background-color: <?php echo $result_findstatus['status_color'];?>; color: #fff;">
                         Task: <?php echo $count; ?>
                     </span>-->
-
+                        <!-- <button style="margin-right: 5px;" id="<?php echo $final_status_id; ?>" type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modal-blast" onclick="get_status_id(this.id)"> -->
+                        <button style="margin-right: 5px;" id="<?php echo $final_status_id; ?>" type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modal-blast" onclick="get_status_id(this.id)">
+                            Email Blast
+                        </button>
                         <button type="button" class="btn btn-sm btn-secondary float-right" data-toggle="modal" data-target="#modal-add_task">
                             <i class="fa fa-plus text-success mr-5"></i>Add
                         </button>
@@ -109,7 +112,13 @@ tbody > tr:hover {
                     $('#service_list'+g).html(response);
                 }
         });
-    }    
+    }
+
+    function get_status_id(id)
+    {
+        // alert(id);
+        document.getElementById("task_status_id").value = id;
+    }
 
     // $(document).ready(function(){
     //   $("#myInput").on("keyup", function() {

@@ -2,6 +2,36 @@
 <!doctype html>
 <html lang="en" class="no-focus">
     <?php include 'head.php'; ?>
+    <style>
+    a{color:#575757;text-decoration:none}
+    .bs-example li:hover {background-color: #fff;color: #3f9ce8;}
+    .bs-example li.active {color: #fff;background-color: #abadaf;}
+    .nav{padding-left:0;margin-bottom:0;list-style:none; background-color: #dedede;}
+    .nav>li>a{position:relative;display:block;padding: 14px 16px;transition: 0.3s;font-size: 17px;}
+    .bs-example a.active {
+        color: #fff;
+        background-color: #abadaf;
+    }
+    .tab-content {
+      padding: 6px 12px;
+      border-top: none;
+    }
+    </style>
+    <style type="text/css">
+        .filterchild{
+            display: none;
+        }
+        .filterparent
+        {
+          cursor: pointer;
+        }
+        .filterparent:hover .filterchild {
+            display: block;
+        }
+        .hov_row:hover{
+            cursor: pointer;
+        }
+    </style>
     <body class="<?php echo $body; ?>">
         <div id="page-container" class="sidebar-o <?php echo $inverse; ?> enable-page-overlay side-scroll page-header-glass page-header-inverse">
             <?php 

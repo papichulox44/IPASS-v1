@@ -157,6 +157,9 @@
                     <div class="block-content"> 
                         <?php 
                         $query = mysqli_query($conn, "SELECT * FROM tbl_information WHERE info_status = 1");
+                        $count1 = 1;
+                        $count2 = 1;
+                        $count3 = 1;
                         foreach ($query as $data) {
                          ?>
                         <hr>
@@ -168,7 +171,8 @@
                                 <strong>
                                     <h3><?php echo $data['info_title']; ?></h3>
                                 </strong>
-                                <label align="justify"><?php echo $data['info_text']; ?></label>
+                                <label align="justify" id="display1<?php echo $count1++; ?>"><?php echo substr($data['info_text'], 0, 700); ?><a id="<?php echo $count2++; ?>" onclick="see_more(this.id)" style="color: blue; cursor: pointer;"><u>see more..</u></a></label>
+                                <label align="justify" id="display2<?php echo $count3++; ?>" style="display: none;"><?php echo $data['info_text']; ?></label>
                             </center>
                         <?php } ?>
                     </div>  
@@ -361,6 +365,19 @@
             }
         });
     }
+
+    function see_more(id)
+    {
+      // alert('Nag alert sya');
+      var display1 = document.getElementById("display1" + id);
+      var display2 = document.getElementById("display2" + id);
+
+      display1.style.display = "none";
+      display2.style.display = "";
+      // alert(display1);
+
+    }
+
 
 
 </script>

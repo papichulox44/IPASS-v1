@@ -1,7 +1,10 @@
 <?php  
+ session_start();
+ // unset($_SESSION['set_email']);
  include_once '../conn.php';
  if(isset($_POST["task_id"]))  
- {
+ {  
+
       $user_type = $_POST["user_type"];
       $select_task = mysqli_query($conn, "SELECT * FROM task WHERE task_id = '".$_POST["task_id"]."'");  
       $fetch_select_task = mysqli_fetch_array($select_task);
@@ -91,9 +94,6 @@
                 </div>
             </div>                                   
         </div>
-        <?php
-            if($user_type == "Admin")
-            { ?>
                 <div class="col-lg-7 offset-lg-1">
                     <div class="form-group row">
                         <div class="col-md-6">
@@ -146,6 +146,8 @@
                                     <option value="Single" <?php if($fetch_select_contact['contact_status'] == "Single") { echo 'selected'; } ?>>Single</option>
                                     <option value="Widow" <?php if($fetch_select_contact['contact_status'] == "Widow") { echo 'selected'; } ?>>Widow</option>
                                     <option value="Annuled" <?php if($fetch_select_contact['contact_status'] == "Annuled") { echo 'selected'; } ?>>Annuled</option>
+                                    <option value="Divorced" <?php if($fetch_select_contact['contact_status'] == "Divorced") { echo 'selected'; } ?>>Divorced</option>
+                                    <option value="Separated" <?php if($fetch_select_contact['contact_status'] == "Separated") { echo 'selected'; } ?>>Separated</option>
                                 </select>
                              </div>
                              <div class="form-group">
@@ -213,85 +215,4 @@
                     </div>
                 </div>
             </div>
-            <?php
-            }
-            else
-            { ?>
-                <div class="col-lg-7 offset-lg-1">
-                    <div class="form-group row">
-                        <div class="col-md-6">
-                             <div class="form-group">
-                                <label for="crypto-settings-street-1">First Name</label>
-                                <input style="<?php if(!empty($fname1)){ echo 'background-color: beige;'; } ?>" type="text" class="form-control form-control-lg" id="crypto-settings-street-1" name="fname" value="<?php echo $fetch_select_contact['contact_fname'];?>" readonly>
-                             </div>
-                             <div class="form-group">
-                                <label for="crypto-settings-street-1">Middle Name</label>
-                                <input style="<?php if(!empty($mname1)){ echo 'background-color: beige;'; } ?>" type="text" class="form-control form-control-lg" id="crypto-settings-street-1" name="fname" value="<?php echo $fetch_select_contact['contact_mname'];?>" readonly>
-                             </div>
-                             <div class="form-group">
-                                <label for="crypto-settings-street-1">Last Name</label>
-                                <input style="<?php if(!empty($lname1)){ echo 'background-color: beige;'; } ?>" type="text" class="form-control form-control-lg" id="crypto-settings-street-1" name="fname" value="<?php echo $fetch_select_contact['contact_lname'];?>" readonly>
-                             </div>
-                             <div class="form-group">
-                                <label for="crypto-settings-street-1">Birthdate</label>
-                                <input style="<?php if(!empty($bdate1)){ echo 'background-color: beige;'; } ?>" type="text" class="form-control form-control-lg" id="crypto-settings-street-1" name="fname" value="<?php echo $fetch_select_contact['contact_bdate'];?>" readonly>
-                             </div>
-                             <div class="form-group">
-                                <label for="crypto-settings-street-1">Gender</label>
-                                <input style="<?php if(!empty($gender1)){ echo 'background-color: beige;'; } ?>" type="text" class="form-control form-control-lg" id="crypto-settings-street-1" name="fname" value="<?php echo $fetch_select_contact['contact_gender'];?>" readonly>
-                             </div>
-                             <div class="form-group">
-                                <label for="crypto-settings-street-1">Status</label>
-                                <input style="<?php if(!empty($status1)){ echo 'background-color: beige;'; } ?>" type="text" class="form-control" id="admin_nationality" value="<?php echo $fetch_select_contact['contact_status'];?>" readonly>
-                             </div>
-                             <div class="form-group">
-                                <label for="crypto-settings-street-1">Nationality</label>
-                                <input style="<?php if(!empty($nationality1)){ echo 'background-color: beige;'; } ?>" type="email" class="form-control" id="admin_nationality" value="<?php echo $fetch_select_contact['contact_nationality'];?>" readonly>
-                             </div>
-                             <div class="form-group">
-                                <label for="crypto-settings-street-1">Email</label>
-                                <input style="<?php if(!empty($email1)){ echo 'background-color: beige;'; } ?>" type="email" class="form-control" id="admin_email" value="<?php echo $fetch_select_contact['contact_email'];?>" readonly>
-                             </div>
-                             
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="crypto-settings-street-1">FB Name</label>
-                                <input style="<?php if(!empty($fbname1)){ echo 'background-color: beige;'; } ?>" type="text" class="form-control form-control-lg" id="crypto-settings-street-1" name="fname" value="<?php echo $fetch_select_contact['contact_fbname'];?>" readonly>
-                             </div>
-                             <div class="form-group">
-                                <label for="crypto-settings-street-1">Messenger</label>
-                                <input style="<?php if(!empty($messenger1)){ echo 'background-color: beige;'; } ?>" type="text" class="form-control form-control-lg" id="crypto-settings-street-1" name="fname" value="<?php echo $fetch_select_contact['contact_messenger'];?>" readonly>
-                             </div>
-                             <div class="form-group">
-                                <label for="crypto-settings-street-1">Country</label>
-                                <input style="<?php if(!empty($country1)){ echo 'background-color: beige;'; } ?>" type="text" class="form-control form-control-lg" id="crypto-settings-street-1" name="fname" value="<?php echo $fetch_select_contact['contact_country'];?>" readonly>
-                             </div>
-                             <div class="form-group">
-                                <label for="crypto-settings-street-1">City</label>
-                                <input style="<?php if(!empty($city1)){ echo 'background-color: beige;'; } ?>" type="text" class="form-control form-control-lg" id="crypto-settings-street-1" name="fname" value="<?php echo $fetch_select_contact['contact_city'];?>" readonly>
-                             </div>
-                             <div class="form-group">
-                                <label for="crypto-settings-street-1">Zip Code</label>
-                                <input style="<?php if(!empty($zip1)){ echo 'background-color: beige;'; } ?>" type="text" class="form-control form-control-lg" id="crypto-settings-street-1" name="fname" value="<?php echo $fetch_select_contact['contact_zip'];?>" readonly>
-                             </div>
-                             <div class="form-group">
-                                <label for="crypto-settings-street-1">Street</label>
-                                <input style="<?php if(!empty($street1)){ echo 'background-color: beige;'; } ?>" type="text" class="form-control form-control-lg" id="crypto-settings-street-1" name="fname" value="<?php echo $fetch_select_contact['contact_street'];?>" readonly>
-                             </div>
-                             <div class="form-group">
-                                <label for="crypto-settings-street-1">Contact #</label>
-                                <input style="<?php if(!empty($cnumber1)){ echo 'background-color: beige;'; } ?>" type="text" class="form-control form-control-lg" id="crypto-settings-street-1" name="fname" value="<?php echo $fetch_select_contact['contact_cpnum'];?>" readonly>
-                             </div>
-                             <div class="form-group">
-                                <label for="crypto-settings-street-1">Location</label>
-                                <input style="<?php if(!empty($location1)){ echo 'background-color: beige;'; } ?>" type="text" class="form-control form-control-lg" id="crypto-settings-street-1" name="fname" value="<?php echo $fetch_select_contact['contact_location'];?>" readonly>
-                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>                        
-            <?php
-            }
-        ?>
-        
+            
