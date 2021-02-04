@@ -671,13 +671,15 @@ $(document).ready(function(){
     function close_task_admin()
     {
         b = "<?php if(isset($_GET['b'])) { echo $_GET['b']; } ?>";
+        email = "<?php if(isset($_GET['email'])) { echo $_GET['email']; } ?>";
 
         if (b == 1) {
             document.location = 'main_everything.php?filter=This%20Week&due_date=All';
             // document.location = 'main_dashboard.php?space_name='+space_name+'&list_name='+list_name+'&list_id='+status_list_id+'';
-        } else {
-            
+        } else if (email == 1) {
+            document.location = 'email_blasting.php';
         }
+
     }
 
     gettask_id = <?php echo $gettask_id; ?>;

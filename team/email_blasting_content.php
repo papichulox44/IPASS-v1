@@ -94,12 +94,12 @@
                                 
                                 if($filterby == "All")
                                 {                    
-                                    $select_task = mysqli_query($conn, "SELECT task.task_id, task.task_name, list.list_name, space.space_name, task.task_date_created FROM task INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id INNER JOIN email_send_history ON email_send_history.email_task_id = task.task_id GROUP BY task.task_id");
+                                    $select_task = mysqli_query($conn, "SELECT task.task_id, task.task_name, list.list_name, space.space_name, task.task_date_created, task.task_list_id FROM task INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id INNER JOIN email_send_history ON email_send_history.email_task_id = task.task_id WHERE email_send_history.email_blast = 1 GROUP BY task.task_id");
                                 }
                                 else if($filterby == "Today")
                                 {   
                                     $filter = date("Y-m-d");
-                                    $select_task = mysqli_query($conn, "SELECT task.task_id, task.task_name, list.list_name, space.space_name, task.task_date_created FROM task INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id INNER JOIN email_send_history ON email_send_history.email_task_id = task.task_id WHERE task.task_date_created LIKE '%$filter%' GROUP BY task.task_id");
+                                    $select_task = mysqli_query($conn, "SELECT task.task_id, task.task_name, list.list_name, space.space_name, task.task_date_created, task.task_list_id FROM task INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id INNER JOIN email_send_history ON email_send_history.email_task_id = task.task_id WHERE task.task_date_created LIKE '%$filter%' AND email_send_history.email_blast = 1 GROUP BY task.task_id");
                                 }
                                 else if($filterby == "This Week")
                                 {
@@ -111,23 +111,23 @@
                                     }
                                     $from = current($dates); // monday
                                     $to = end($dates); // sunday
-                                    $select_task = mysqli_query($conn, "SELECT task.task_id, task.task_name, list.list_name, space.space_name, task.task_date_created FROM task INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id INNER JOIN email_send_history ON email_send_history.email_task_id = task.task_id WHERE task.task_date_created BETWEEN '$from' AND '$to' GROUP BY task.task_id");
+                                    $select_task = mysqli_query($conn, "SELECT task.task_id, task.task_name, list.list_name, space.space_name, task.task_date_created, task.task_list_id FROM task INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id INNER JOIN email_send_history ON email_send_history.email_task_id = task.task_id WHERE task.task_date_created BETWEEN '$from' AND '$to' AND email_send_history.email_blast = 1 GROUP BY task.task_id");
                                 }
                                 else if($filterby == "This Month")
                                 {
                                     $filter = date("Y-m");
-                                    $select_task = mysqli_query($conn, "SELECT task.task_id, task.task_name, list.list_name, space.space_name, task.task_date_created FROM task INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id INNER JOIN email_send_history ON email_send_history.email_task_id = task.task_id WHERE task.task_date_created LIKE '%$filter%' GROUP BY task.task_id");
+                                    $select_task = mysqli_query($conn, "SELECT task.task_id, task.task_name, list.list_name, space.space_name, task.task_date_created, task.task_list_id FROM task INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id INNER JOIN email_send_history ON email_send_history.email_task_id = task.task_id WHERE task.task_date_created LIKE '%$filter%' AND email_send_history.email_blast = 1 GROUP BY task.task_id");
                                 }
                                 else if($filterby == "This Year")
                                 {
                                     $filter = date("Y");
-                                    $select_task = mysqli_query($conn, "SELECT task.task_id, task.task_name, list.list_name, space.space_name, task.task_date_created FROM task INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id INNER JOIN email_send_history ON email_send_history.email_task_id = task.task_id WHERE task.task_date_created LIKE '%$filter%' GROUP BY task.task_id");
+                                    $select_task = mysqli_query($conn, "SELECT task.task_id, task.task_name, list.list_name, space.space_name, task.task_date_created, task.task_list_id FROM task INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id INNER JOIN email_send_history ON email_send_history.email_task_id = task.task_id WHERE task.task_date_created LIKE '%$filter%' AND email_send_history.email_blast = 1 GROUP BY task.task_id");
                                 }
                                 else if($filterby == "Custom Date")
                                 {                    
                                     $get_from = $_GET['From'];
                                     $get_to = $_GET['To'];
-                                    $select_task = mysqli_query($conn, "SELECT task.task_id, task.task_name, list.list_name, space.space_name, task.task_date_created FROM task INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id INNER JOIN email_send_history ON email_send_history.email_task_id = task.task_id WHERE task.task_date_created BETWEEN '$get_from' AND '$get_to' GROUP BY task.task_id");
+                                    $select_task = mysqli_query($conn, "SELECT task.task_id, task.task_name, list.list_name, space.space_name, task.task_date_created, task.task_list_id FROM task INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id INNER JOIN email_send_history ON email_send_history.email_task_id = task.task_id WHERE task.task_date_created BETWEEN '$get_from' AND '$get_to' AND email_send_history.email_blast = 1 GROUP BY task.task_id");
                                 }
                             }
                             else
@@ -140,14 +140,17 @@
                                 }
                                 $from = current($dates); // monday
                                 $to = end($dates); // sunday
-                                $select_task = mysqli_query($conn, "SELECT task.task_id, task.task_name, list.list_name, space.space_name, task.task_date_created FROM task INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id INNER JOIN email_send_history ON email_send_history.email_task_id = task.task_id WHERE task.task_date_created BETWEEN '$from' AND '$to' GROUP BY task.task_id");
+                                $select_task = mysqli_query($conn, "SELECT task.task_id, task.task_name, list.list_name, space.space_name, task.task_date_created, task.task_list_id FROM task INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id INNER JOIN email_send_history ON email_send_history.email_task_id = task.task_id WHERE task.task_date_created BETWEEN '$from' AND '$to' AND email_send_history.email_blast = 1 GROUP BY task.task_id");
                             }
                             $count = 1;
                             while($fetch_task = mysqli_fetch_array($select_task))
                             {
                                 $task_id = $fetch_task['task_id'];
+                                $space_name = $fetch_task['space_name'];
+                                $list_name = $fetch_task['list_name'];
+                                $list_id = $fetch_task['task_list_id'];
                                 echo '
-                                    <tr style="cursor: pointer;" id="'.$task_id.'" onclick="email_blasting_details(this.id)" data-toggle="modal" data-target="#modal-extra-large">
+                                    <tr style="cursor: pointer;" id="'.$task_id.','.$space_name.','.$list_name.','.$list_id.'" onclick="view_task_email(this.id)">
                                         <td class="text-center">'.$count++.'</td>
                                         <td>'.$fetch_task['task_name'].'</td>
                                         <td>'.$fetch_task['space_name'].'</td>
@@ -235,20 +238,31 @@
     </div>
 
 <script type="text/javascript">
-    function email_blasting_details(id)
+    // function email_blasting_details(id)
+    // {
+    //     // alert(id);
+    //     $.ajax({
+    //         url:"ajax.php",
+    //         method:"post",
+    //         data:{
+    //             task_id:id,
+    //             email_blasting_details: 1,
+    //         },
+    //         success:function(response){
+    //              $('#show_email_blasting_details').html(response);
+    //         }
+    //     });
+    // }
+
+    function view_task_email(id)
     {
-        // alert(id);
-        $.ajax({
-            url:"ajax.php",
-            method:"post",
-            data:{
-                task_id:id,
-                email_blasting_details: 1,
-            },
-            success:function(response){
-                 $('#show_email_blasting_details').html(response);
-            }
-        });
+        array_id = id.split(",");
+        task_id = array_id[0];
+        space_name = array_id[1];
+        list_name = array_id[2];
+        list_id = array_id[3];
+
+        document.location = 'main_dashboard.php?space_name='+space_name+'&list_name='+list_name+'&list_id='+list_id+'&get_task_id='+task_id+'&email=1';
     }
 
     function tran_all()

@@ -3617,20 +3617,20 @@
                         '.$rows["status_name"].'
                         </td>
                         <td colspan="3">
-                                <div style="padding: 20px 0px 0px 0px; data-toggle="slimscroll" data-height="300px" data-color="#42A5F5 class="shadow">
-                                    <img src="https://ipasspmt.com/assets/media/photos/email_header.png" style="width: 100%; height: auto;">
+                                <div style="padding: 20px 0px 0px 0px; background-color: #189AA7;" class="shadow">
+                                    <img src="https://ipasspmt.com/assets/media/photos/email_header.png" style="width: 100%;">
                                     <table width="100%" border="0" cellspacing="0" cellpadding="20" style="background-color: #47bcde; color: #5a5f61; font-family:verdana;">
                                         <tr>
-                                            <td style="background-color: #fff; border-top: 20px solid #006786; border-bottom: 20px solid #006786;">
+                                            <td style="background-color: #fff; border-top: 10px solid #189AA7; border-bottom: 10px solid #189AA7;">
                                                 '.$rows["email_content"].'
                                             </td>
                                         </tr>
                                     </table>
-                                    <div style="text-align: center; padding: 20px 0px; color: #fff; background-color: #00465a;">
+                                    <div style="text-align: center; padding: 20px 0px; color: #fff; background-color: #189AA7;">
                                         PROCESSING MADE EASY BY IPASS<br>
                                         Rm 1, 2nd Floor, Doña Segunda Complex,<br>
                                         Ponciano Street, Davao City, Philippines 8000<br><br>
-                                        <a href="https://ipassprocessing.com/" style="color: #2196f3;">https://ipassprocessing.com/</a>
+                                        <a href="https://ipassprocessing.com/" style="color: white;">https://ipassprocessing.com/</a>
                                     </div>
                                 </div>
                         <td>
@@ -3638,4 +3638,28 @@
             ';
         }
     } 
+
+    if(isset($_POST['save_department']))
+    {
+        $user_id = $_POST['user_id'];
+        $department = $_POST['department'];
+
+        $result = mysqli_query($conn, "UPDATE user SET department = '$department' WHERE user_id = '$user_id'") or die(mysqli_error());
+        if ($result) {
+            echo 'success';
+        }
+    } 
+
+    if(isset($_POST['save_category']))
+    {
+        $user_id = $_POST['user_id'];
+        $category = $_POST['category'];
+
+        $result = mysqli_query($conn, "UPDATE user SET category = '$category' WHERE user_id = '$user_id'") or die(mysqli_error());
+        if ($result) {
+            echo 'success';
+        }
+    } 
 ?>
+
+            

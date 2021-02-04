@@ -217,6 +217,7 @@
                                     $assign_to_array = explode(",", $total_assign_to); // eleminate the ","/ comma sign and insert to array ex. [1,2,3,4,5]
                                     $count_assign_to =  count($assign_to_array);
 
+                                    $date_today = date('Y-m-d');
                                     $due_date_time = $result_findstatus['task_due_date']; // ex: 2020-12-10 00:00:00
                                     $ymd = substr($due_date_time, -19, 10); // 2020-12-10 00:00:00 // Y-m-d = 2020-12-10 00
                                     $get_month = substr($due_date_time, -14, 2); // 2020-12-10 00:00:00 // get only month = 12

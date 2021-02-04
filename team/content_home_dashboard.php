@@ -1305,6 +1305,12 @@
 						                            $task_list_id = $fetct_task_assign['task_list_id']; // get list id
 						                            $task_id = $fetct_task_assign['task_id'];
 
+						                            $date_today = date('Y-m-d');
+						                            $today = date("Y-m-d"); // Get current date
+                                    				$tomorrow = date('Y-m-d', strtotime(' +1 day')); // Get tomorrow date
+                                    				$due_date_time = $fetct_task_assign['task_due_date']; // ex: 2020-12-10 00:00:00
+                                    				$ymd = substr($due_date_time, -19, 10); // 2020-12-10 00:00:00 // Y-m-d = 2020-12-10 00
+
 													$select_list = mysqli_query($conn, "SELECT * FROM list WHERE list_id = '$task_list_id'");
                             						$list_name = mysqli_fetch_array($select_list);
 
@@ -1333,7 +1339,36 @@
 														        }
 															    echo '
 															</td>
-					                                        <td class="d-none d-sm-table-cell">'.$fetct_task_assign['task_due_date'].'</td>
+
+					                                        <td class="d-none d-sm-table-cell">';
+					                                        	if($ymd == $today)
+													            {
+													                $task_priority = "D Urgent";
+													                mysqli_query($conn, "UPDATE task SET task_priority='$task_priority' WHERE task_id='$task_id'") or die(mysqli_error());
+													                echo'<span class="badge badge-danger">Today</span>';
+													            }
+													            else if($ymd == $tomorrow)
+													            {   
+													                $task_priority = "C High";
+													                mysqli_query($conn, "UPDATE task SET task_priority='$task_priority' WHERE task_id='$task_id'") or die(mysqli_error());
+													                echo'<span class="badge badge-warning">Tomorrow</span>';
+													            }
+													            else if($due_date_time == "" or $due_date_time == '0000-00-00')
+													            {
+													                echo'<span class="badge badge-primary">No Due Date yet!!</span>';
+													            }
+													            else if($due_date_time < $date_today)
+													            {
+													                echo'<span class="badge badge-info">Overdue</span>';
+													            }
+													            else
+													            {
+													                // echo'<span class="badge badge-info">Overdue</span>';
+													                echo''.$due_date_time.'';
+													            }
+					                                        echo'
+					                                        </td>
+
 					                                        <td class="d-none d-sm-table-cell">';
 					                                        if($fetct_task_assign['task_priority'] == "D Urgent")
 					                                        {
