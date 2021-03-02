@@ -8,30 +8,30 @@ echo'
             $total_tag_per_task = $result_findstatus['task_tag'];
             $tag_array = explode(",", $total_tag_per_task); // convert string to array
             $count_tag = count($tag_array);
-            if ($total_tag_per_task === "") 
+            if ($total_tag_per_task === "")
             {}
             else
-            {                
+            {
                 for ($x = 1; $x <= $count_tag; $x++)
                 {
                     $y = $x - 1;
                     $final_tag_name = $tag_array[$y];
                     $get_tag_color = mysqli_query($conn, "SELECT * FROM tags WHERE tag_id = '$final_tag_name'");
                     $result_get_tag_color = mysqli_fetch_array($get_tag_color);
-                    echo'<span style="background-color: '.$result_get_tag_color['tag_color'].'; color:#fff; padding:2px 7px 2px 5px; border-top-right-radius: 25px; border-bottom-right-radius: 25px; font-size: 11px; margin: 0px 0px 0px 5px;">'.$result_get_tag_color['tag_name'].' </span>'; 
-                }                                                        
-            }  
+                    echo'<span style="background-color: '.$result_get_tag_color['tag_color'].'; color:#fff; padding:2px 7px 2px 5px; border-top-right-radius: 25px; border-bottom-right-radius: 25px; font-size: 11px; margin: 0px 0px 0px 5px;">'.$result_get_tag_color['tag_name'].' </span>';
+                }
+            }
         echo'
         </td>
         <td class="d-none d-sm-table-cell">';
-            if($ymd === $today) 
+            if($ymd === $today)
             {
                 $task_priority = "D Urgent";
                 mysqli_query($conn, "UPDATE task SET task_priority='$task_priority' WHERE task_id='$task_id'") or die(mysqli_error());
                 echo'<span class="badge badge-danger">Today</span>';
             }
             else if($ymd === $tomorrow)
-            {   
+            {
                 $task_priority = "C High";
                 mysqli_query($conn, "UPDATE task SET task_priority='$task_priority' WHERE task_id='$task_id'") or die(mysqli_error());
                 echo'<span class="badge badge-warning">Tomorrow</span>';
@@ -39,15 +39,35 @@ echo'
             else if($due_date_time === "" or $due_date_time === '0000-00-00')
             {
                 echo'<span class="badge badge-primary">No Due Date yet!!</span>';
+                // echo date("l");
             }
             else if($due_date_time < $date_today)
             {
-                echo'<span class="badge badge-info">Overdue</span>';
+                echo'<span class="badge badge-danger">Overdue</span>';
+            }
+            else if($ymd === $tomorrow2)
+            {
+                echo'<span class="badge badge-info">'.date("l", strtotime($due_date_time)).'</span>';
+            }
+            else if($ymd === $tomorrow3)
+            {
+                echo'<span class="badge badge-info">'.date("l", strtotime($due_date_time)).'</span>';
+            }
+            else if($ymd === $tomorrow4)
+            {
+                echo'<span class="badge badge-info">'.date("l", strtotime($due_date_time)).'</span>';
+            }
+            else if($ymd === $tomorrow5)
+            {
+                echo'<span class="badge badge-info">'.date("l", strtotime($due_date_time)).'</span>';
+            }
+            else if($ymd === $tomorrow6)
+            {
+                echo'<span class="badge badge-info">'.date("l", strtotime($due_date_time)).'</span>';
             }
             else
             {
-                // echo'<span class="badge badge-info">Overdue</span>';
-                echo''.$due_date_time.'';
+              echo'<span class="badge badge-success">'.$due_date_time.'</span>';
             }
         echo'
         </td>
@@ -59,7 +79,7 @@ echo'
         else if($result_findstatus['task_priority'] === "C High")
         {
             echo '<span style="display: none;">C</span><span class="badge badge-warning">High</span>';
-        }   
+        }
         else if($result_findstatus['task_priority'] === "B Normal")
         {
             echo '<span style="display: none;">B</span><span class="badge badge-primary">Normal</span>';
@@ -79,7 +99,7 @@ echo'
         </td>
         </td>
         <td class="d-none d-sm-table-cell text-center">';
-        if ($total_assign_to === 0) 
+        if ($total_assign_to === 0)
         {
             echo 'Unassign';
         }
@@ -92,7 +112,7 @@ echo'
                 $get_user_profile = mysqli_query($conn, "SELECT * FROM user WHERE user_id = '$final_assign_to_name'");
                 $result_get_user_profile = mysqli_fetch_array($get_user_profile);
 
-                $get_first_letter_in_fname = $result_get_user_profile['fname'];     
+                $get_first_letter_in_fname = $result_get_user_profile['fname'];
                 $get_first_letter_in_lname = $result_get_user_profile['lname'];
 
                 if($result_get_user_profile['profile_pic'] != "")
@@ -107,7 +127,7 @@ echo'
                             </span>
                             </span><span style="display: none;">'.$result_get_user_profile['fname'].' '.$result_get_user_profile['lname'].'</span>';
                 }
-            }   
+            }
         }
         echo'
         </td>';

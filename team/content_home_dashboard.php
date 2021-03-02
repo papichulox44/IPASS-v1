@@ -1,24 +1,24 @@
 <?php
 	$user_type = $row['user_type'];
     if($mode_type == "Dark") //insert
-	{ 
+	{
 		$md_content = "bg-primary-darker";
 		$md_text = "text-white";
-    	$sq_inbox = "bg-black-op text-body-color-light"; 
-    	$sq_member = "bg-black-op text-body-color-light"; 
-    	$sq_contact = "bg-black-op text-body-color-light"; 
-    	$sq_task = "bg-black-op text-body-color-light"; 
+    	$sq_inbox = "bg-black-op text-body-color-light";
+    	$sq_member = "bg-black-op text-body-color-light";
+    	$sq_contact = "bg-black-op text-body-color-light";
+    	$sq_task = "bg-black-op text-body-color-light";
 		$md_modal_body = "bg-primary-darker text-body-color-light";
 		$md_modal_footer = "bg-dark";
 		$md_table_header = "bg-gray-darker";
 		$md_table_body = "bg-gray-darker text-body-color-light";
 		$md_table_title = "text-white";
-		$table = "bg-gray-darker text-body-color-light"; 
+		$table = "bg-gray-darker text-body-color-light";
         $graph_bg = "block-transparent bg-black-op text-white";
         $canvas = "dark";
 	}
 	else
-	{ 
+	{
 		$md_content = "";
 		$md_text = "text_muted";
     	$sq_inbox = "bg-gd-elegance";
@@ -151,7 +151,7 @@
                             </div>
                             <div class="block-content <?php echo $md_table_body; ?> mb-20" id="fetch_currency"></div>
 
-                            
+
 					        <div class="row row-deck">
 					            <div class="col-lg-12">
 					                <div class="block block-rounded shadow bg-gray-darker">
@@ -208,7 +208,7 @@
                     </div>
                 </div>
                 <!-- END Currency -->
-                
+
 
                 <!-- Fade In Modal -->
 		        <div class="modal fade" id="modal-currency" tabindex="-1" role="dialog" aria-labelledby="modal-fadein" aria-hidden="true">
@@ -342,12 +342,12 @@
 		                            </div>
 		                        </div>
 		                        <div class="block-content <?php echo $md_modal_body; ?>" id="view_update_information">
-									
+
 		                    </div>
 		                </div>
 		            </div>
 		        </div>
-		        
+
 		    </div>
 		    <!-- END Page Content -->
 		</main>
@@ -379,7 +379,7 @@
 					$.ajax({
                         type: "POST",
                         url: "ajax.php",
-                        data: {	
+                        data: {
                         	currency_id:currency_id,
                             currency_name: currency_name,
                             currency_code: currency_code,
@@ -398,7 +398,7 @@
                         	}
                             clear_input();
                             $('#modal-currency').modal("hide");
-                            display_currency(); 
+                            display_currency();
                         }
                     });
 				}
@@ -408,7 +408,7 @@
 		function create_information(){
 
 			if (confirm('Are you sure?')) {
-				
+
 				info_title = document.getElementById("info_title").value;
 				info_text = document.getElementById("info_text").value;
 				info_status = document.getElementById("info_status").value;
@@ -433,7 +433,7 @@
 
 	                    $.ajax({
 			                url: 'ajax_transaction.php',
-			                type: 'POST', 
+			                type: 'POST',
 			                async: false,
 			                data: formData,
 			                contentType:false,
@@ -455,7 +455,7 @@
 						else {
 						$.ajax({
 			                url: 'ajax_transaction.php',
-			                type: 'POST', 
+			                type: 'POST',
 			                async: false,
 			                data:{
 			                	info_title:info_title,
@@ -505,7 +505,7 @@
 
                     $.ajax({
 		                url: 'ajax_transaction.php',
-		                type: 'POST', 
+		                type: 'POST',
 		                async: false,
 		                data: formData,
 		                contentType:false,
@@ -526,7 +526,7 @@
 					else {
 					$.ajax({
 		                url: 'ajax_transaction.php',
-		                type: 'POST', 
+		                type: 'POST',
 		                async: false,
 		                data:{
 		                	info_id:info_id,
@@ -551,7 +551,7 @@
 			md_mode = "<?php echo $mode_type; ?>";
             $.ajax({
                 url: 'ajax.php',
-                type: 'POST', 
+                type: 'POST',
                 async: false,
                 data:{
                 	md_mode:md_mode,
@@ -576,7 +576,7 @@
 		  });
 		});
 
-		
+
 
 		// VIEW ALL Remittance --------------------------
         function view_remittance()
@@ -634,7 +634,7 @@
         }
 
         function add_email()
-        {   
+        {
             add_email_value = document.getElementById("add_email_value").value;
 
             if (add_email_value == '') {
@@ -661,7 +661,7 @@
         }
 
         function delete_list_of_email(id)
-        {   
+        {
             // alert(id);
             if (confirm('Are you sure?')) {
                 $.ajax({
@@ -684,7 +684,7 @@
         }
 
         function update_list_of_email(id)
-        {   
+        {
             list_email_name = document.getElementById("list_email_name" + id).value;
 
             // alert(id);
@@ -756,7 +756,7 @@
         }
 
         function add_remarks_data()
-        {   
+        {
             add_remarks_value = document.getElementById("add_remarks_value").value;
             add_color = document.getElementById("add_color").value;
 
@@ -787,7 +787,7 @@
         }
 
         function delete_remarks_data(id)
-        {   
+        {
             // alert(id);
             if (confirm('Are you sure?')) {
                 $.ajax({
@@ -810,7 +810,7 @@
         }
 
         function update_list_remarks_value(id)
-        {   
+        {
             list_remarks_value = document.getElementById("list_remarks_value" + id).value;
             remarks_color = document.getElementById("remakrs_color" + id).value;
 
@@ -840,7 +840,7 @@
         //END All fucntion for remarks ------------------------------------------------------------------------------------------------------
 
         function update_remittance(id)
-        {   
+        {
             // remit_value = document.getElementById("remit_value" + id).value;
             remit_name = document.getElementById("remit_name" + id).value;
 
@@ -867,7 +867,7 @@
         }
 
         function delete_remittance(id)
-        {   
+        {
             // alert(remit_name);
             if (confirm('Are you sure?')) {
                 $.ajax({
@@ -890,7 +890,7 @@
         }
 
         function update_information(id)
-        {   
+        {
             // alert(id);
             $.ajax({
                 url: 'ajax_transaction.php',
@@ -907,7 +907,7 @@
         }
 
         function delete_information(id)
-        {   
+        {
             // alert(remit_name);
             if (confirm('Are you sure?')) {
                 $.ajax({
@@ -930,7 +930,7 @@
         }
 
         function add_remittance()
-        {   
+        {
             add_remittance_value = document.getElementById("add_remittance_value").value;
             add_remittance_name = document.getElementById("add_remittance_name").value;
             // alert(add_remittance_value + ' ' + add_remittance_name);
@@ -970,16 +970,16 @@
             var currency_id = id.replace("edit_currency", ""); // Remove the string id "edit_currency";
 			document.getElementById("currency_id").value = currency_id;
             var currency_name = document.getElementById("currency_name" + currency_id).value;
-            document.getElementById("currency_name").value = currency_name; 
+            document.getElementById("currency_name").value = currency_name;
             var currency_code = document.getElementById("currency_code" + currency_id).value;
-            document.getElementById("currency_code").value = currency_code; 
+            document.getElementById("currency_code").value = currency_code;
             var currency_val_usd = document.getElementById("currency_val_usd" + currency_id).value;
-            document.getElementById("currency_val_usd").value = currency_val_usd; 
+            document.getElementById("currency_val_usd").value = currency_val_usd;
             var currency_val_php = document.getElementById("currency_val_php" + currency_id).value;
-            document.getElementById("currency_val_php").value = currency_val_php; 
+            document.getElementById("currency_val_php").value = currency_val_php;
         }
         function delete_currency(id)
-        {        	
+        {
             var currency_id = id.replace("delete_currency", ""); // Remove the string id "edit_currency";
             if(confirm("Are you sure you want to delete this currency?"))
             {
@@ -995,13 +995,13 @@
                             alert('Currency deleted.');
                             display_currency();
                         }
-                    });                
-                }); 
-            } 
-            else  
-            {  
-                return false;  
-            } 
+                    });
+                });
+            }
+            else
+            {
+                return false;
+            }
         }
 	</script>
 	<?php }
@@ -1016,13 +1016,13 @@
 			$assign = 0;
 			$finish = 0;
 			while($fetct_assign = mysqli_fetch_array($select_assign))
-			{				
+			{
 				$str_to_array = explode(",",$fetct_assign['task_assign_to']);
 				if(in_array($user_id,$str_to_array))
 				{
 					$assign++; // end of counting task assign to user
 					$list_id = $fetct_assign['task_list_id']; // get list id
-					$select_list = mysqli_query($conn, "SELECT * FROM status WHERE status_list_id = '$list_id' ORDER BY status_order_no DESC LIMIT 1");	
+					$select_list = mysqli_query($conn, "SELECT * FROM status WHERE status_list_id = '$list_id' ORDER BY status_order_no DESC LIMIT 1");
 					$last = mysqli_fetch_array($select_list);
 					$last_id = $last['status_id'];
 					if($last_id == $fetct_assign['task_status_id']) // identify if task is done
@@ -1149,7 +1149,7 @@
 		                                	<?php
 		                                		while($fetch_contact = mysqli_fetch_array($select_contact))
 		                                		{
-		                                			echo '		                                			
+		                                			echo '
 				                                    <tr>
 				                                        <td class="text-center">'.$fetch_contact['contact_id'].'</td>
 				                                        <td class="font-w600">
@@ -1190,7 +1190,7 @@
 					                    <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" id="ecom-orders-overview-drop" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 					                        <span><?php if (isset($_GET['filter'])) {echo $_GET['filter'];} else { echo "All";} ?></span>
 					                    </button>
-					                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ecom-orders-overview-drop" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(96px, 31px, 0px);">                                        
+					                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ecom-orders-overview-drop" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(96px, 31px, 0px);">
 					                        <button class="dropdown-item" onclick="tran_all()">
 					                            <i class="fa fa-fw fa-circle-o mr-5"></i>All
 					                        </button>
@@ -1224,7 +1224,7 @@
 					                                    <button class="btn btn-sm btn-noborder btn-alt-primary btn-block" onclick="tran_custom()"><i class="fa fa-check-square-o"></i>Go</button>
 					                                </div>
 					                            </div>
-					                        </span> 
+					                        </span>
 					                    </div>
 					                </div>
                                 </div>
@@ -1246,20 +1246,20 @@
 
 		                                		if (isset($_GET['filter'])) {
 					                                $filterby = $_GET['filter'];
-					                                
+
 					                                if($filterby == "All")
-					                                {                    
+					                                {
 					                                    $select_task_assign = mysqli_query($conn, "SELECT * FROM task");
 					                                }
 					                                else if($filterby == "Today")
-					                                {   
+					                                {
 					                                    $filter = date("Y-m-d");
 					                                    $select_task_assign = mysqli_query($conn, "SELECT * FROM task WHERE task_due_date LIKE '%$filter%'");
 					                                }
 					                                else if($filterby == "This Week")
 					                                {
 					                                    $dt = new DateTime();
-					                                    $dates = []; 
+					                                    $dates = [];
 					                                    for ($d = 1; $d <= 7; $d++) {
 					                                        $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
 					                                        $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
@@ -1279,7 +1279,7 @@
 					                                    $select_task_assign = mysqli_query($conn, "SELECT * FROM task WHERE task_due_date LIKE '%$filter%'");
 					                                }
 					                                else if($filterby == "Custom Date")
-					                                {                    
+					                                {
 					                                    $get_from = $_GET['From'];
 					                                    $get_to = $_GET['To'];
 					                                    $select_task_assign = mysqli_query($conn, "SELECT * FROM task WHERE task_due_date BETWEEN '$get_from' AND '$get_to'");
@@ -1288,7 +1288,7 @@
 					                            else
 					                            {
 					                                // $dt = new DateTime();
-					                                // $dates = []; 
+					                                // $dates = [];
 					                                // for ($d = 1; $d <= 7; $d++) {
 					                                //     $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
 					                                //     $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
@@ -1299,7 +1299,7 @@
 					                                $select_task_assign = mysqli_query($conn, "SELECT * FROM task");
 					                                // $select_task_assign = mysqli_query($conn, "SELECT * FROM task");
 					                            }
-		                                		
+
 		                                		while($fetct_task_assign = mysqli_fetch_array($select_task_assign))
 												{
 													$task_status_id = $fetct_task_assign['task_status_id'];
@@ -1309,6 +1309,11 @@
 						                            $date_today = date('Y-m-d');
 						                            $today = date("Y-m-d"); // Get current date
                                     				$tomorrow = date('Y-m-d', strtotime(' +1 day')); // Get tomorrow date
+																						$tomorrow2 = date('Y-m-d', strtotime(' +2 day'));
+																						$tomorrow3 = date('Y-m-d', strtotime(' +3 day'));
+																						$tomorrow4 = date('Y-m-d', strtotime(' +4 day'));
+																						$tomorrow5 = date('Y-m-d', strtotime(' +5 day'));
+						                                $tomorrow6 = date('Y-m-d', strtotime(' +6 day'));
                                     				$due_date_time = $fetct_task_assign['task_due_date']; // ex: 2020-12-10 00:00:00
                                     				$ymd = substr($due_date_time, -19, 10); // 2020-12-10 00:00:00 // Y-m-d = 2020-12-10 00
 
@@ -1318,25 +1323,25 @@
 													$str_to_array = explode(",",$fetct_task_assign['task_assign_to']);
 													if(in_array($user_id,$str_to_array))
 													{
-			                                			echo '		                                			
+			                                			echo '
 					                                    <tr style="cursor: pointer;" id="taskid_'.$fetct_task_assign['task_id'].'" onclick="view_task(this.id)">
 					                                        <td class="text-center">'.$fetct_task_assign['task_id'].'</td>
 					                                        <td class="font-w600">'.$fetct_task_assign['task_name'].'';
 														    	$total_tag_per_task = $fetct_task_assign['task_tag'];
 														        $tag_array = explode(",", $total_tag_per_task); // convert string to array
 														        $count_tag = count($tag_array);
-														        if ($total_tag_per_task == "") 
+														        if ($total_tag_per_task == "")
 														        {}
 														        else
-														        {                
+														        {
 														            for ($x = 1; $x <= $count_tag; $x++)
 														            {
 														                $y = $x - 1;
 														                $final_tag_name = $tag_array[$y];
 														                $get_tag_color = mysqli_query($conn, "SELECT * FROM tags WHERE tag_id = '$final_tag_name'");
 														                $result_get_tag_color = mysqli_fetch_array($get_tag_color);
-														                echo'<span style="background-color: '.$result_get_tag_color['tag_color'].'; color:#fff; padding:2px 7px 2px 5px; border-top-right-radius: 25px; border-bottom-right-radius: 25px; font-size: 11px; margin: 0px 0px 0px 5px;">'.$result_get_tag_color['tag_name'].' </span>'; 
-														            }                                                        
+														                echo'<span style="background-color: '.$result_get_tag_color['tag_color'].'; color:#fff; padding:2px 7px 2px 5px; border-top-right-radius: 25px; border-bottom-right-radius: 25px; font-size: 11px; margin: 0px 0px 0px 5px;">'.$result_get_tag_color['tag_name'].' </span>';
+														            }
 														        }
 															    echo '
 															</td>
@@ -1349,7 +1354,7 @@
 													                echo'<span class="badge badge-danger">Today</span>';
 													            }
 													            else if($ymd == $tomorrow)
-													            {   
+													            {
 													                $task_priority = "C High";
 													                mysqli_query($conn, "UPDATE task SET task_priority='$task_priority' WHERE task_id='$task_id'") or die(mysqli_error());
 													                echo'<span class="badge badge-warning">Tomorrow</span>';
@@ -1362,10 +1367,29 @@
 													            {
 													                echo'<span class="badge badge-danger">Overdue</span>';
 													            }
+																			else if($ymd === $tomorrow2)
+													            {
+													                echo'<span class="badge badge-info">'.date("l", strtotime($due_date_time)).'</span>';
+													            }
+													            else if($ymd === $tomorrow3)
+													            {
+													                echo'<span class="badge badge-info">'.date("l", strtotime($due_date_time)).'</span>';
+													            }
+													            else if($ymd === $tomorrow4)
+													            {
+													                echo'<span class="badge badge-info">'.date("l", strtotime($due_date_time)).'</span>';
+													            }
+													            else if($ymd === $tomorrow5)
+													            {
+													                echo'<span class="badge badge-info">'.date("l", strtotime($due_date_time)).'</span>';
+													            }
+													            else if($ymd === $tomorrow6)
+													            {
+													                echo'<span class="badge badge-info">'.date("l", strtotime($due_date_time)).'</span>';
+													            }
 													            else
 													            {
-													                // echo'<span class="badge badge-info">Overdue</span>';
-													                echo''.$due_date_time.'';
+													              echo'<span class="badge badge-success">'.$due_date_time.'</span>';
 													            }
 					                                        echo'
 					                                        </td>
@@ -1378,7 +1402,7 @@
 					                                        else if($fetct_task_assign['task_priority'] == "C High")
 					                                        {
 					                                        	echo '<span style="display: none;">C</span><span class="badge badge-warning">High</span>';
-					                                        }	
+					                                        }
 					                                        else if($fetct_task_assign['task_priority'] == "B Normal")
 					                                        {
 					                                        	echo '<span style="display: none;">B</span><span class="badge badge-primary">Normal</span>';
@@ -1430,7 +1454,7 @@
 															$fetch_status_name = mysqli_fetch_array($select_status);
 
 															$task_list_id = $fetct_task_assign['task_list_id']; // get list id
-															$select_task_list_id = mysqli_query($conn, "SELECT * FROM status WHERE status_list_id = '$task_list_id' ORDER BY status_order_no DESC LIMIT 1");	
+															$select_task_list_id = mysqli_query($conn, "SELECT * FROM status WHERE status_list_id = '$task_list_id' ORDER BY status_order_no DESC LIMIT 1");
 															$last_status = mysqli_fetch_array($select_task_list_id);
 															$last_status_id = $last_status['status_id'];
 															if($last_status_id == $fetct_task_assign['task_status_id']) // identify if task is done
@@ -1448,7 +1472,7 @@
 		                                		}
 		                                	?>
 		                                </tbody>
-		                            </table>                                	
+		                            </table>
                                 </div>
                             </div>
                         </div>
@@ -1550,7 +1574,7 @@
             document.location='dashboard.php?filter=This Year';
         }
         function tran_custom()
-        {   
+        {
 	        var date_from = document.getElementById('txt_date_from').value;
 	        var date_to = document.getElementById('txt_date_to').value;
 	        if(date_from == "")

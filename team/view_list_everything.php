@@ -13,7 +13,7 @@
                     <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" id="ecom-orders-overview-drop" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span>Due Date</span>
                     </button>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ecom-orders-overview-drop" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(96px, 31px, 0px);">  
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ecom-orders-overview-drop" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(96px, 31px, 0px);">
                         <button class="dropdown-item" onclick="tran_all_due_date()">
                             <i class="fa fa-fw fa-circle-o mr-5"></i>All
                         </button>
@@ -47,7 +47,7 @@
                                     <button class="btn btn-sm btn-noborder btn-alt-primary btn-block" onclick="tran_custom_due_date()"><i class="fa fa-check-square-o"></i>Go</button>
                                 </div>
                             </div>
-                        </span> 
+                        </span>
                     </div>
                 </div>
                      |
@@ -55,7 +55,7 @@
                     <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" id="ecom-orders-overview-drop" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span><?php if (isset($_GET['filter'])) {echo $_GET['filter'];} else { echo "This Week";} ?></span>
                     </button>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ecom-orders-overview-drop" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(96px, 31px, 0px);">                                        
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ecom-orders-overview-drop" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(96px, 31px, 0px);">
                         <button class="dropdown-item" onclick="tran_all()">
                             <i class="fa fa-fw fa-circle-o mr-5"></i>All
                         </button>
@@ -89,7 +89,7 @@
                                     <button class="btn btn-sm btn-noborder btn-alt-primary btn-block" onclick="tran_custom()"><i class="fa fa-check-square-o"></i>Go</button>
                                 </div>
                             </div>
-                        </span> 
+                        </span>
                     </div>
                 </div>
             </div>
@@ -117,18 +117,18 @@
                                 $due_date_filter = '';
 
                                 if($due_date == "All")
-                                {                    
+                                {
                                     $due_date_filter = '';
                                 }
                                 else if($due_date == "Today")
-                                {   
+                                {
                                     $filter_due = date("Y-m-d");
                                     $due_date_filter = "LIKE '%".$filter_due."%'";
                                 }
                                 else if($due_date == "This Week")
                                 {
                                     $dt = new DateTime();
-                                    $dates = []; 
+                                    $dates = [];
                                     for ($d = 1; $d <= 7; $d++) {
                                         $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
                                         $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
@@ -149,7 +149,7 @@
                                     $due_date_filter = "LIKE '%".$filter_due."%'";
                                 }
                                 else if($due_date == "Custom Date")
-                                {                    
+                                {
                                     $get_from_due = $_GET['From_due'];
                                     $get_to_due = $_GET['To_due'];
                                     $due_date_filter = "BETWEEN '".$get_from_due."' AND '".$get_to_due."'";
@@ -157,9 +157,9 @@
 
 
                                 if($filterby == "All")
-                                {                    
+                                {
                                     if($due_date == "All")
-                                    {                    
+                                    {
                                         $select_task = mysqli_query($conn, "SELECT * FROM task ORDER BY task_date_created DESC");                                    }
                                     else
                                     {
@@ -167,14 +167,14 @@
                                     }
                                 }
                                 else if($filterby == "Today")
-                                {   
+                                {
                                     $filter = date("Y-m-d");
                                     $select_task = mysqli_query($conn, "SELECT * FROM task WHERE task_date_created LIKE '%$filter%' AND task_due_date $due_date_filter");
                                 }
                                 else if($filterby == "This Week")
                                 {
                                     $dt = new DateTime();
-                                    $dates = []; 
+                                    $dates = [];
                                     for ($d = 1; $d <= 7; $d++) {
                                         $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
                                         $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
@@ -194,7 +194,7 @@
                                     $select_task = mysqli_query($conn, "SELECT * FROM task WHERE task_date_created LIKE '%$filter%' AND task_due_date $due_date_filter ORDER BY task_date_created DESC");
                                 }
                                 else if($filterby == "Custom Date")
-                                {                    
+                                {
                                     $get_from = $_GET['From'];
                                     $get_to = $_GET['To'];
                                     $select_task = mysqli_query($conn, "SELECT * FROM task WHERE task_date_created BETWEEN '$get_from' AND '$get_to' AND task_due_date $due_date_filter ORDER BY task_date_created DESC");
@@ -212,6 +212,11 @@
                             $date_today = date('Y-m-d');
                             $today = date("Y-m-d"); // Get current date
                             $tomorrow = date('Y-m-d', strtotime(' +1 day')); // Get tomorrow date
+                            $tomorrow2 = date('Y-m-d', strtotime(' +2 day'));
+                            $tomorrow3 = date('Y-m-d', strtotime(' +3 day'));
+                            $tomorrow4 = date('Y-m-d', strtotime(' +4 day'));
+                            $tomorrow5 = date('Y-m-d', strtotime(' +5 day'));
+                            $tomorrow6 = date('Y-m-d', strtotime(' +6 day'));
                             $due_date_time = $fetch_task['task_due_date']; // ex: 2020-12-10 00:00:00
                             $ymd = substr($due_date_time, -19, 10); // 2020-12-10 00:00:00 // Y-m-d = 2020-12-10 00
 
@@ -235,10 +240,10 @@
                                         $total_tag_per_task = $fetch_task['task_tag'];
                                         $tag_array = explode(",", $total_tag_per_task); // convert string to array
                                         $count_tag = count($tag_array);
-                                        if ($total_tag_per_task == "") 
+                                        if ($total_tag_per_task == "")
                                         {}
                                         else
-                                        {                
+                                        {
                                             for ($x = 1; $x <= $count_tag; $x++)
                                             {
                                                 $y = $x - 1;
@@ -250,14 +255,14 @@
                                                 echo '<span style="background-color: '.$result_get_tag_color['tag_color'].'; color:#fff; padding:2px 7px 2px 5px; border-top-right-radius: 25px; border-bottom-right-radius: 25px; font-size: 11px; margin: 0px 0px 0px 5px;" data-toggle="popover" title="'.$tag_name.'" data-placement="bottom">';
                                                 if(strlen($tag_name) > 5)
                                                 {
-                                                    echo''.$new__tag_name.'..'; 
+                                                    echo''.$new__tag_name.'..';
                                                 }
                                                 else
                                                 {
-                                                    echo''.$new__tag_name.''; 
+                                                    echo''.$new__tag_name.'';
                                                 }
                                                 echo '</span>';
-                                            }                                                        
+                                            }
                                         }
                                     echo '
                                 </td>
@@ -269,7 +274,7 @@
                                         echo'<span class="badge badge-danger">Today</span>';
                                     }
                                     else if($ymd == $tomorrow)
-                                    {   
+                                    {
                                         $task_priority = "C High";
                                         mysqli_query($conn, "UPDATE task SET task_priority='$task_priority' WHERE task_id='$task_id'") or die(mysqli_error());
                                         echo'<span class="badge badge-warning">Tomorrow</span>';
@@ -282,10 +287,29 @@
                                     {
                                         echo'<span class="badge badge-info">Overdue</span>';
                                     }
+                                    else if($ymd === $tomorrow2)
+                                    {
+                                        echo'<span class="badge badge-info">'.date("l", strtotime($due_date_time)).'</span>';
+                                    }
+                                    else if($ymd === $tomorrow3)
+                                    {
+                                        echo'<span class="badge badge-info">'.date("l", strtotime($due_date_time)).'</span>';
+                                    }
+                                    else if($ymd === $tomorrow4)
+                                    {
+                                        echo'<span class="badge badge-info">'.date("l", strtotime($due_date_time)).'</span>';
+                                    }
+                                    else if($ymd === $tomorrow5)
+                                    {
+                                        echo'<span class="badge badge-info">'.date("l", strtotime($due_date_time)).'</span>';
+                                    }
+                                    else if($ymd === $tomorrow6)
+                                    {
+                                        echo'<span class="badge badge-info">'.date("l", strtotime($due_date_time)).'</span>';
+                                    }
                                     else
-                                    { 
-                                        // echo'<span class="badge badge-info">Overdue</span>';
-                                        echo''.$due_date_time.'';
+                                    {
+                                      echo'<span class="badge badge-success">'.$due_date_time.'</span>';
                                     }
                                 echo'
                                 </td>
@@ -300,7 +324,7 @@
                                 else if($fetch_task['task_priority'] == "C High")
                                 {
                                     echo '<span style="display: none;">C</span><span class="badge badge-warning">High</span>';
-                                }   
+                                }
                                 else if($fetch_task['task_priority'] == "B Normal")
                                 {
                                     echo '<span style="display: none;">B</span><span class="badge badge-primary">Normal</span>';
@@ -315,7 +339,7 @@
                                 </td>
                                 <td class="d-none d-sm-table-cell text-center">';
                                 $total_assign_to = $fetch_task['task_assign_to']; // get the assign id
-                                if ($total_assign_to == 0) 
+                                if ($total_assign_to == 0)
                                 {
                                     echo 'Unassign';
                                 }
@@ -328,7 +352,7 @@
                                         $assign_id = $assign_array[$c];
                                         $select_user = mysqli_query($conn, "SELECT * FROM user WHERE user_id = '$assign_id'");
                                         $fetch_user = mysqli_fetch_array($select_user);
-                                        $get_first_letter_in_fname = $fetch_user['fname'];     
+                                        $get_first_letter_in_fname = $fetch_user['fname'];
                                         $get_first_letter_in_lname = $fetch_user['lname'];
                                         if($fetch_user['profile_pic'] != "")
                                         {
@@ -343,7 +367,7 @@
                                                 </span><span style="display: none;">'.$fetch_user['fname'].' '.$fetch_user['lname'].'</span>';
                                         }
                                     }
-                                }                                        
+                                }
                                 echo'
                                 </td>
                                 <td class="d-none d-sm-table-cell text-center">';
@@ -385,7 +409,7 @@
                                 $select_status = mysqli_query($conn, "SELECT * FROM status WHERE status_id = '$task_status_id'");
                                 $fetch_status_name = mysqli_fetch_array($select_status);
 
-                                $select_task_list_id = mysqli_query($conn, "SELECT * FROM status WHERE status_list_id = '$task_list_id' ORDER BY status_order_no DESC LIMIT 1");    
+                                $select_task_list_id = mysqli_query($conn, "SELECT * FROM status WHERE status_list_id = '$task_list_id' ORDER BY status_order_no DESC LIMIT 1");
                                 $last_status = mysqli_fetch_array($select_task_list_id);
                                 $last_status_id = $last_status['status_id'];
                                 if($last_status_id == $fetch_task['task_status_id']) // identify if task is done
@@ -408,7 +432,7 @@
                                     </td>';
                                 }
                                 echo'
-                            </tr>  
+                            </tr>
                             ';
                         }
                     ?>
