@@ -36,7 +36,6 @@
     if(mysqli_num_rows($find_space_id_in_filter) === 0)
     {
         $findtask = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$final_status_id' LIMIT $start, $limit");
-        $total_task = mysqli_num_rows($findtask);
         $count_task = mysqli_query($conn, "SELECT Count(task.task_id) AS final_total_task FROM task WHERE task_status_id = '$final_status_id'");
         $data = mysqli_fetch_assoc($count_task);
         $final_total_task = $data['final_total_task'];
@@ -144,7 +143,6 @@
             $duedate
             $priority
             LIMIT $start, $limit");
-        $total_task = mysqli_num_rows($findtask);
 
         $count_task = mysqli_query($conn, "SELECT Count(task.task_id) AS final_total_task FROM task WHERE task_status_id = '$final_status_id'
             $datecreated
@@ -268,7 +266,7 @@
             $(document).ready(function(){
               $("#myInput'.$k.'").on("keyup", function() {
                 var inputlength = this.value.length;
-                var value = $(this).val().toLowerCase();
+                var value = $(this).val();
                 $("#service_list'.$l.' tr").filter(function() {
                     var rowCount = $("#service_list'.$l.' tr:visible").length;
                     if(inputlength == "0"){
@@ -290,7 +288,7 @@
                     } else {
                         document.getElementById("total_search'.$j.'").innerHTML = rowCount;
                     }
-                  $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                  $(this).toggle($(this).text().indexOf(value) > -1)
 
                 });
               });
@@ -299,6 +297,7 @@
 
         document.getElementById("myInput'.$k.'").onkeypress = function(event){
             if (event.keyCode == 13 || event.which == 13){
+								var custom_field = document.getElementById("custom_field'.$k.'").value;
                 var myInput = document.getElementById("myInput'.$k.'").value;
                 var search_value = document.getElementById("search_value'.$k.'").value;
                 array = search_value.split(",")
@@ -319,6 +318,7 @@
                         md_body: md_body,
                         t: t,
                         myInput: myInput,
+												custom_field: custom_field,
                         show_search:1,
                     },
                     cache:false,
@@ -331,7 +331,6 @@
         };
         </script>
         ';
-                            mysqli_close($conn);
 	}
 
     if (isset($_POST['show_search'])) {
@@ -341,7 +340,8 @@
         $final_status_id = $_POST['final_status_id'];
         $md_body = $_POST['md_body'];
         $t = $_POST['t'];
-        $myInput = $_POST['myInput'];
+				$myInput = $_POST['myInput'];
+        $custom_field = $_POST['custom_field'];
 
         //--------------- datecreated query
         $filter_date_created = mysqli_query($conn, "SELECT * FROM filter WHERE filter_space_id = '$space_id' AND filter_user_id = '$user_id' AND filter_name = 'datecreated'");
@@ -362,8 +362,25 @@
     $find_space_id_in_filter = mysqli_query($conn, "SELECT * FROM filter WHERE filter_space_id='$space_id' AND filter_user_id='$user_id' AND filter_name != 'status'");
     if(mysqli_num_rows($find_space_id_in_filter) === 0)
     {
-        $findtask = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$final_status_id' AND task_name LIKE '%$myInput%'");
-        $total_task = mysqli_num_rows($findtask);
+			if ($custom_field === '') {
+				$findtask = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$final_status_id' AND task_name LIKE '%$myInput%'");
+			} else {
+				$select_space = mysqli_query($conn, "SELECT * FROM space WHERE space_id = '$space_id'");
+				$fetch_tb_name = mysqli_fetch_array($select_space);
+				$space_tb_name = $fetch_tb_name['space_db_table']; // get the table name of the space
+
+				$select_field = mysqli_query($conn, "SELECT * FROM field WHERE field_col_name = '$custom_field'");
+				$result_field = mysqli_fetch_array($select_field);
+				$field_type = $result_field['field_type'];
+				if ($field_type === 'Dropdown') {
+					$select_child_id = mysqli_query($conn, "SELECT child.child_id FROM field INNER JOIN child ON child.child_field_id = field.field_id WHERE field.field_col_name = '$custom_field' AND child.child_name LIKE '%$myInput%'");
+					$data =  mysqli_fetch_assoc($select_child_id);
+					$input = $data['child_id'];
+					$findtask = mysqli_query($conn, "SELECT * FROM task INNER JOIN $space_tb_name ON $space_tb_name.task_id = task.task_id WHERE task.task_status_id = '$final_status_id' AND $space_tb_name.$custom_field = $input");
+				} else {
+					$findtask = mysqli_query($conn, "SELECT * FROM task INNER JOIN $space_tb_name ON $space_tb_name.task_id = task.task_id WHERE task.task_status_id = '$final_status_id' AND $space_tb_name.$custom_field LIKE '%$myInput%'");
+				}
+			}
     }
     else
     {
@@ -462,13 +479,25 @@
 
 
         // get task base on filter cobination
+				if ($custom_field === '') {
+					$findtask = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$final_status_id' $datecreated $duedate $priority AND task_name LIKE '%$myInput%'");
+				} else {
+					$select_space = mysqli_query($conn, "SELECT * FROM space WHERE space_id = '$space_id'");
+					$fetch_tb_name = mysqli_fetch_array($select_space);
+					$space_tb_name = $fetch_tb_name['space_db_table']; // get the table name of the space
 
-        $findtask = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$final_status_id'
-            $datecreated
-            $duedate
-            $priority AND task_name LIKE '%$myInput%'");
-        $total_task = mysqli_num_rows($findtask);
-
+					$select_field = mysqli_query($conn, "SELECT * FROM field WHERE field_col_name = '$custom_field'");
+					$result_field = mysqli_fetch_array($select_field);
+					$field_type = $result_field['field_type'];
+					if ($field_type === 'Dropdown') {
+						$select_child_id = mysqli_query($conn, "SELECT child.child_id FROM field INNER JOIN child ON child.child_field_id = field.field_id WHERE field.field_col_name = '$custom_field' AND child.child_name LIKE '%$myInput%'");
+						$data =  mysqli_fetch_assoc($select_child_id);
+						$input = $data['child_id'];
+						$findtask = mysqli_query($conn, "SELECT * FROM task INNER JOIN $space_tb_name ON $space_tb_name.task_id = task.task_id WHERE task.task_status_id = '$final_status_id' $datecreated $duedate $priority AND $space_tb_name.$custom_field = $input");
+					} else {
+						$findtask = mysqli_query($conn, "SELECT * FROM task INNER JOIN $space_tb_name ON $space_tb_name.task_id = task.task_id WHERE task.task_status_id = '$final_status_id' $datecreated $duedate $priority AND $space_tb_name.$custom_field LIKE '%$myInput%'");
+					}
+				}
     }
 //_______________________________ END FILTER
         while($result_findstatus = mysqli_fetch_array($findtask))
@@ -556,4 +585,5 @@
             }
         }
     }
+		mysqli_close($conn);
  ?>
