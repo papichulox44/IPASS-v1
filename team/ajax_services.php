@@ -363,7 +363,25 @@
     if(mysqli_num_rows($find_space_id_in_filter) === 0)
     {
 			if ($custom_field === '') {
-				$findtask = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$final_status_id' AND task_name LIKE '%$myInput%'");
+				if ($myInput === 'No Due Date') {
+					$findtask = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$final_status_id' AND task_due_date is null");
+						}
+				else if ($myInput === 'Overdue'){
+					$overdue = date('Y-m-d', strtotime(' -1 day'));
+					$start = '2020-01-01';
+					$findtask = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$final_status_id' AND task_due_date BETWEEN '".$start."' AND '".$overdue."'");
+				}
+				else if ($myInput === 'Today'){
+					$today = date('Y-m-d');
+					$findtask = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$final_status_id' AND task_due_date = '$today'");
+				}
+				else if ($myInput === 'Tomorrow'){
+					$tomorrow = date('Y-m-d', strtotime(' +1 day'));
+					$findtask = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$final_status_id' AND task_due_date = '$tomorrow'");
+				}
+				else {
+					$findtask = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$final_status_id' AND task_name LIKE '%$myInput%'");
+				}
 			} else {
 				$select_space = mysqli_query($conn, "SELECT * FROM space WHERE space_id = '$space_id'");
 				$fetch_tb_name = mysqli_fetch_array($select_space);

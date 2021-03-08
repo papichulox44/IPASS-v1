@@ -36,7 +36,7 @@ echo'
                 mysqli_query($conn, "UPDATE task SET task_priority='$task_priority' WHERE task_id='$task_id'") or die(mysqli_error());
                 echo'<span class="badge badge-warning">Tomorrow</span>';
             }
-            else if($due_date_time === "" or $due_date_time === '0000-00-00')
+            else if(is_null($due_date_time) or $due_date_time === '0000-00-00')
             {
                 echo'<span class="badge badge-primary">No Due Date yet!!</span>';
                 // echo date("l");
