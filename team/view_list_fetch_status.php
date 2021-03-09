@@ -93,7 +93,6 @@ tbody > tr:hover {
                     </div>
                 </span>
 
-
                 <div class="block-options">
                     <!--<span class="btn btn-sm btn-secondary" style="background-color: <?php echo $result_findstatus['status_color'];?>; color: #fff;">
                         Task: <?php echo $count; ?>
