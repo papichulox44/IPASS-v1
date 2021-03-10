@@ -26,6 +26,7 @@ tbody > tr:hover {
     $t = 1;
     $u = 1;
     $v = 1;
+    $w = 1;
 
     $limit = 'limit';
     $limit1 = 1;
@@ -92,7 +93,9 @@ tbody > tr:hover {
                         <span class="sr-only">Loading...</span>
                     </div>
                 </span>
-
+                <div id="search<?php echo $w++;?>" style="display: none;" class="spinner-border text-primary" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
                 <div class="block-options">
                     <!--<span class="btn btn-sm btn-secondary" style="background-color: <?php echo $result_findstatus['status_color'];?>; color: #fff;">
                         Task: <?php echo $count; ?>

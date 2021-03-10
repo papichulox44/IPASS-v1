@@ -294,7 +294,7 @@
               });
             });
 
-				var limit = 5;
+				var limit = 10;
 				var start = 0;
         document.getElementById("myInput'.$k.'").onkeypress = function(event){
             if (event.keyCode == 13 || event.which == 13){
@@ -331,7 +331,11 @@
 												if (data === "") {
 													alert("No Task Found!!");
 												} else {
-													limit_start(space_id, user_id, final_status_id, md_body, t, myInput, custom_field);
+													x = document.getElementById("search'.$i.'");
+					                x.style.display = "";
+													setTimeout(function(){
+											    limit_start(space_id, user_id, final_status_id, md_body, t, myInput, custom_field);
+											   }, 1000);
 												}
                     }
                 });
@@ -364,12 +368,22 @@
 							success: function(data){
 									$("#service_list'.$k.'").append(data);
 									if (data === "") {
-										alert("Task Successfully Extract from the Database!! Thank you for the patient..");
+										x = document.getElementById("search'.$i.'");
+										x.style.display = "none";
+										alert("Task Successfully Extract from the Database!! Thank you for the Patience..");
+										reset_start();
 									} else {
+										var rowCountTotal = $("#service_list'.$l.' tr:visible").length;
+										document.getElementById("total_search'.$j.'").innerHTML = rowCountTotal;
+										setTimeout(function(){
 										limit_start(space_id, user_id, final_status_id, md_body, t, myInput, custom_field);
+									 }, 1000);
 									}
 							}
 					});
+				}
+				function reset_start(){
+					start = 0;
 				}
         </script>
         ';
@@ -412,8 +426,8 @@
 						}
 				else if ($myInput === 'Overdue'){
 					$overdue = date('Y-m-d', strtotime(' -1 day'));
-					$start = '2020-01-01';
-					$findtask = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$final_status_id' AND task_due_date BETWEEN '".$start."' AND '".$overdue."' LIMIT $start, $limit ");
+					$start_date = '2020-01-01';
+					$findtask = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = $final_status_id AND task_due_date BETWEEN '$start_date' AND '$overdue' LIMIT $start, $limit");
 				}
 				else if ($myInput === 'Today'){
 					$today = date('Y-m-d');
@@ -451,10 +465,14 @@
 				$result_field = mysqli_fetch_array($select_field);
 				$field_type = $result_field['field_type'];
 				if ($field_type === 'Dropdown') {
-					$select_child_id = mysqli_query($conn, "SELECT child.child_id FROM field INNER JOIN child ON child.child_field_id = field.field_id WHERE field.field_col_name = '$custom_field' AND child.child_name LIKE '%$myInput%'");
+					$select_child_id = mysqli_query($conn, "SELECT child.child_id FROM field INNER JOIN child ON child.child_field_id = field.field_id WHERE field.field_col_name = '$custom_field' AND child.child_name = '$myInput'");
 					$data =  mysqli_fetch_assoc($select_child_id);
 					$input = $data['child_id'];
-					$findtask = mysqli_query($conn, "SELECT * FROM task INNER JOIN $space_tb_name ON $space_tb_name.task_id = task.task_id WHERE task.task_status_id = '$final_status_id' AND $space_tb_name.$custom_field = $input LIMIT $start, $limit");
+					if (mysqli_num_rows($select_child_id)) {
+						$findtask = mysqli_query($conn, "SELECT * FROM task INNER JOIN $space_tb_name ON $space_tb_name.task_id = task.task_id WHERE task.task_status_id = '$final_status_id' AND $space_tb_name.$custom_field = $input LIMIT $start, $limit");
+					} else {
+						$findtask = mysqli_query($conn, "SELECT * FROM task INNER JOIN $space_tb_name ON $space_tb_name.task_id = task.task_id WHERE task.task_status_id = '$final_status_id' AND $space_tb_name.$custom_field LIKE '%$myInput%' LIMIT $start, $limit");
+					}
 				} else {
 					$findtask = mysqli_query($conn, "SELECT * FROM task INNER JOIN $space_tb_name ON $space_tb_name.task_id = task.task_id WHERE task.task_status_id = '$final_status_id' AND $space_tb_name.$custom_field LIKE '%$myInput%' LIMIT $start, $limit");
 				}
@@ -564,8 +582,8 @@
 							}
 					else if ($myInput === 'Overdue'){
 						$overdue = date('Y-m-d', strtotime(' -1 day'));
-						$start = '2020-01-01';
-						$findtask = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$final_status_id' $datecreated $duedate $priority AND task_due_date BETWEEN '$start' AND '$overdue' LIMIT $start, $limit");
+						$start_date = '2020-01-01';
+						$findtask = mysqli_query($conn, "SELECT * FROM task WHERE task_status_id = '$final_status_id' $datecreated $duedate $priority AND task_due_date BETWEEN '$start_date' AND '$overdue' LIMIT $start, $limit");
 					}
 					else if ($myInput === 'Today'){
 						$today = date('Y-m-d');
@@ -603,10 +621,14 @@
 					$result_field = mysqli_fetch_array($select_field);
 					$field_type = $result_field['field_type'];
 					if ($field_type === 'Dropdown') {
-						$select_child_id = mysqli_query($conn, "SELECT child.child_id FROM field INNER JOIN child ON child.child_field_id = field.field_id WHERE field.field_col_name = '$custom_field' AND child.child_name LIKE '%$myInput%'");
+						$select_child_id = mysqli_query($conn, "SELECT child.child_id FROM field INNER JOIN child ON child.child_field_id = field.field_id WHERE field.field_col_name = '$custom_field' AND child.child_name = '$myInput'");
 						$data =  mysqli_fetch_assoc($select_child_id);
 						$input = $data['child_id'];
-						$findtask = mysqli_query($conn, "SELECT * FROM task INNER JOIN $space_tb_name ON $space_tb_name.task_id = task.task_id WHERE task.task_status_id = '$final_status_id' $datecreated $duedate $priority AND $space_tb_name.$custom_field = $input LIMIT $start, $limit");
+						if (mysqli_num_rows($select_child_id)) {
+							$findtask = mysqli_query($conn, "SELECT * FROM task INNER JOIN $space_tb_name ON $space_tb_name.task_id = task.task_id WHERE task.task_status_id = '$final_status_id' $datecreated $duedate $priority AND $space_tb_name.$custom_field = $input LIMIT $start, $limit");
+						} else {
+							$findtask = mysqli_query($conn, "SELECT * FROM task INNER JOIN $space_tb_name ON $space_tb_name.task_id = task.task_id WHERE task.task_status_id = '$final_status_id' $datecreated $duedate $priority AND $space_tb_name.$custom_field LIKE '%$myInput%' LIMIT $start, $limit");
+						}
 					} else {
 						$findtask = mysqli_query($conn, "SELECT * FROM task INNER JOIN $space_tb_name ON $space_tb_name.task_id = task.task_id WHERE task.task_status_id = '$final_status_id' $datecreated $duedate $priority AND $space_tb_name.$custom_field LIKE '%$myInput%' LIMIT $start, $limit");
 					}
