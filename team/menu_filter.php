@@ -48,43 +48,47 @@
     {
         if(isset($_POST['btn_filter_date_created'])) // add/update filter custom range date create  only one
         {
-            $txt_date_created_from = $_POST['txt_date_created_from']; 
-            $txt_date_created_to = $_POST['txt_date_created_to']; 
+            $txt_date_created_from = $_POST['txt_date_created_from'];
+            $txt_date_created_to = $_POST['txt_date_created_to'];
             $filter = "datecreated";
             $filtered_by = $txt_date_created_from .','. $txt_date_created_to;
             if(mysqli_num_rows($filter_date_created) == 0)
-            {  
+            {
                 mysqli_query($conn,"INSERT into `filter` (filter_space_id, filter_user_id, filter_name, filter_value) values ('$space_id','$user_id','$filter','$filtered_by')") or die(mysqli_error());
             }
             else
             {
                 mysqli_query($conn, "UPDATE filter SET filter_name = '$filter' , filter_value = '$filtered_by' WHERE filter_space_id = '$space_id' AND filter_user_id = '$user_id' AND filter_name = 'datecreated'") or die(mysqli_error());
-            }   
+            }
             echo $echo_location;
         }
 
         if(isset($_POST['btn_filter_due_date'])) // add/update filter custom range date create  only one
         {
-            $txt_due_date_from = $_POST['txt_due_date_from']; 
-            $txt_due_date_to = $_POST['txt_due_date_to']; 
+            $txt_due_date_from = $_POST['txt_due_date_from'];
+            $txt_due_date_to = $_POST['txt_due_date_to'];
             $filter = "duedate";
             $filtered_by = $txt_due_date_from .','. $txt_due_date_to;
             if(mysqli_num_rows($filter_date_created) == 0)
-            {  
+            {
                 mysqli_query($conn,"INSERT into `filter` (filter_space_id, filter_user_id, filter_name, filter_value) values ('$space_id','$user_id','$filter','$filtered_by')") or die(mysqli_error());
             }
             else
             {
                 mysqli_query($conn, "UPDATE filter SET filter_name = '$filter' , filter_value = '$filtered_by' WHERE filter_space_id = '$space_id' AND filter_user_id = '$user_id' AND filter_name = 'datecreated'") or die(mysqli_error());
-            }   
+            }
             echo $echo_location;
         }
 
         if(!empty($_GET['filter']))
-        { 
+        {
             $filter = $_GET['filter'];
-            $filtered_by = $_GET[$filter];
-            $user_id + $_SESSION['user'];
+            if (isset($_GET['field_from'])) {
+              $filtered_by = $_GET['field_from'].',,'.$_GET['field_to'].',,'.$_GET['field'];
+            } else {
+              $filtered_by = $_GET[$filter];
+            }
+            $user_id = $_SESSION['user'];
 
             if($filter == "status") // add filter status | multiple status selection
             {
@@ -94,7 +98,7 @@
             else if($filter == "datecreated") // add/update filter datecreated | only one
             {
                 if(mysqli_num_rows($filter_date_created) == 0)
-                {  
+                {
                     mysqli_query($conn,"INSERT into `filter` (filter_space_id, filter_user_id, filter_name, filter_value) values ('$space_id','$user_id','$filter','$filtered_by')") or die(mysqli_error());
                 }
                 else
@@ -105,7 +109,7 @@
             else if($filter == "duedate") // add/update filter duedate | only one
             {
                 if(mysqli_num_rows($filter_due_date) == 0)
-                {  
+                {
                     mysqli_query($conn,"INSERT into `filter` (filter_space_id, filter_user_id, filter_name, filter_value) values ('$space_id','$user_id','$filter','$filtered_by')") or die(mysqli_error());
                 }
                 else
@@ -116,7 +120,7 @@
             else if($filter == "priority") // add/update filter priority | only one
             {
                 if(mysqli_num_rows($filter_priority) == 0)
-                {  
+                {
                     mysqli_query($conn,"INSERT into `filter` (filter_space_id, filter_user_id, filter_name, filter_value) values ('$space_id','$user_id','$filter','$filtered_by')") or die(mysqli_error());
                 }
                 else
@@ -134,7 +138,7 @@
                     }
 	            	// $select_TAF = mysqli_query($conn, "SELECT * FROM filter WHERE filter_space_id='$space_id' AND filter_user_id='$user_id' AND filter_name = 'tag' OR filter_name = 'assign' OR filter_name = 'field'");
 	            	// if(mysqli_num_rows($select_TAF) == 0)
-	             //    { 
+	             //    {
               //       	mysqli_query($conn,"INSERT into `filter` (filter_space_id, filter_user_id, filter_name, filter_value) values ('$space_id','$user_id','$filter','$filtered_by')") or die(mysqli_error());
 	             //    }
 	             //    else
@@ -150,7 +154,7 @@
                     }
 	            	// $select_TAF = mysqli_query($conn, "SELECT * FROM filter WHERE filter_space_id='$space_id' AND filter_user_id='$user_id' AND filter_name = 'tag' OR filter_name = 'assign' OR filter_name = 'field'");
 	            	// if(mysqli_num_rows($select_TAF) == 0)
-	             //    { 
+	             //    {
               //       	mysqli_query($conn,"INSERT into `filter` (filter_space_id, filter_user_id, filter_name, filter_value) values ('$space_id','$user_id','$filter','$filtered_by')") or die(mysqli_error());
 	             //    }
 	             //    else
@@ -166,7 +170,7 @@
                     }
 	            	// $select_TAF = mysqli_query($conn, "SELECT * FROM filter WHERE filter_space_id='$space_id' AND filter_user_id='$user_id' AND filter_name = 'tag' OR filter_name = 'assign' OR filter_name = 'field'");
 	            	// if(mysqli_num_rows($select_TAF) == 0)
-	             //    { 
+	             //    {
               //       	mysqli_query($conn,"INSERT into `filter` (filter_space_id, filter_user_id, filter_name, filter_value) values ('$space_id','$user_id','$filter','$filtered_by')") or die(mysqli_error());
 	             //    }
 	             //    else
@@ -175,13 +179,13 @@
 	             //    }
 	            }
             }
-            echo $echo_location;      
+            echo $echo_location;
         }
 
-        if(!empty($_GET['delete_filter'])) 
-        { 
+        if(!empty($_GET['delete_filter']))
+        {
             $delete_filter = $_GET['delete_filter'];
-            $delete_filter_id = $_GET[$delete_filter]; 
+            $delete_filter_id = $_GET[$delete_filter];
 
             if($delete_filter == "status") // delete filter status 1 by 1
             {
@@ -189,13 +193,13 @@
             }
             else if($delete_filter == "status_all") // delete filter all status
             {
-                mysqli_query($conn, "DELETE FROM filter WHERE filter_space_id = '$space_id' AND filter_user_id = '$user_id' AND filter_name = 'status'") or die(mysqli_error());    
+                mysqli_query($conn, "DELETE FROM filter WHERE filter_space_id = '$space_id' AND filter_user_id = '$user_id' AND filter_name = 'status'") or die(mysqli_error());
             }
             else // delete filter datecreated, duedate, priority, tag, assign, field
             {
-                mysqli_query($conn, "DELETE FROM filter WHERE filter_space_id = '$space_id' AND filter_user_id = '$user_id' AND filter_name = '$delete_filter'") or die(mysqli_error());   
+                mysqli_query($conn, "DELETE FROM filter WHERE filter_space_id = '$space_id' AND filter_user_id = '$user_id' AND filter_name = '$delete_filter'") or die(mysqli_error());
             }
-            echo $echo_location;  
+            echo $echo_location;
         }
     }
 ?>
@@ -203,14 +207,14 @@
     <div class="dropdown">
         <button type="button" class="btn btn-rounded btn-dual-secondary <?php echo $md_text; ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Filter">
             <i class="fa fa-filter"></i>
-            <?php 
+            <?php
                 if(mysqli_num_rows($find_space_id_in_filter) == 0){}
                 else{echo'<span class="badge badge-primary badge-pill">'.mysqli_num_rows($find_space_id_in_filter).'</span>';}
             ?>
         </button>
         <div class="dropdown-menu dropdown-menu-right shadow">
             Filter By:
-            <?php 
+            <?php
                     if(mysqli_num_rows($filter_status) != 0)
                     {
                         echo '
@@ -274,7 +278,7 @@
                             echo '<span style="background-color:#3f9ce8; color: #fff; padding: 3px 10px 3px 10px; border-radius: 50px;">Field = '.$field_name.'</span>';
                         }
                         else
-                        {   
+                        {
                             $field_value = $value_array[0]; // get only the id
                             $field_col_name = $value_array[1]; // get field column name
                             $field_type = $value_array[2]; // get field type
@@ -299,8 +303,8 @@
                                 $fetch_find_field_name = mysqli_fetch_array($find_field_name);
                                 $field_name = $fetch_find_field_name['field_name'];
 
-                                if($field_value == "yes"){ $bg_color = "#00ad1d"; } 
-                                else { $bg_color = "#ef5350"; }   
+                                if($field_value == "yes"){ $bg_color = "#00ad1d"; }
+                                else { $bg_color = "#ef5350"; }
 
                                 echo '<span style="background-color:#3f9ce8; color: #fff; padding: 3px 10px 3px 10px; border-radius: 50px;">Field = '.$field_name.' |
                                         <span style="color: #fff; padding: 1px 5px; border-radius: 5px; background-color: '.$bg_color.';">'.$field_value.'</span>
@@ -318,19 +322,19 @@
                     </form>
                     <div class="dropdown-menu dropdown-menu-right shadow filterchild" style="position: absolute; top: 5px; right: 130px;">
                         <label for="example-datepicker4">Select step</label>
-                        <div class="dropdown-divider"></div>                        
+                        <div class="dropdown-divider"></div>
                             <div data-toggle="slimscroll" data-height="350px" data-color="#42a5f5" data-opacity="1" data-always-visible="true" style="background-color: #fff; padding: 5px;">
                             <?php
                                 $status_array = array();
                                 while($fetch_filter_status = mysqli_fetch_array($filter_status))
-                                {  
+                                {
                                     array_push($status_array,$fetch_filter_status['filter_value']);
-                                } 
+                                }
                                 // echo ''.implode(",", $status_array).''; //tester
 
                                 $findstatus = mysqli_query($conn, "SELECT * FROM status WHERE status_list_id = '$status_list_id' ORDER BY status_order_no ASC");
                                 while($result_findstatus = mysqli_fetch_array($findstatus))
-                                {   
+                                {
                                     if (in_array($result_findstatus['status_id'], $status_array))
                                     {
                                         $filter_status_value = $result_findstatus['status_id'];
@@ -346,8 +350,8 @@
                                     {
                                         echo '<a class="dropdown-item" href="main_dashboard.php?space_name='.$space_name.'&list_name='.$list_name.'&list_id='.$status_list_id.'&filter=status&status='.$result_findstatus['status_id'].'">
                                                 <i class="fa fa-square mr-5" style="color: '.$result_findstatus['status_color'].';"></i>'.$result_findstatus['status_name'].'
-                                            </a>'; 
-                                    }                               
+                                            </a>';
+                                    }
                                 }
                             ?>
                         </div>
@@ -470,7 +474,7 @@
                                 </span>
                             </div>
                             <input type="text" class="form-control border-0" placeholder="Search.." id="search" onkeyup="filterFunction()">
-                        </div>  
+                        </div>
 
                         <div id="myDropdown">
                             <div data-toggle="slimscroll" data-height="350px" data-color="#42a5f5" data-opacity="1" data-always-visible="true" style="background-color: #fff; padding: 5px;">
@@ -478,8 +482,8 @@
                                     $search_member = mysqli_query($conn, "SELECT * FROM user ORDER BY fname ASC");
                                     while($find_search_member = mysqli_fetch_array($search_member))
                                     {
-                                        $get_first_letter_in_fname = $find_search_member['fname'];                                                               
-                                        $get_first_letter_in_lname = $find_search_member['lname'];                                                            
+                                        $get_first_letter_in_fname = $find_search_member['fname'];
+                                        $get_first_letter_in_lname = $find_search_member['lname'];
                                         $id_of_user = $find_search_member['user_id'];
                                         echo'
                                         <a href="main_dashboard.php?space_name='.$space_name.'&list_name='.$list_name.'&list_id='.$status_list_id.'&filter=assign&assign='.$find_search_member['user_id'].'" class="dropdown-item">';
@@ -495,13 +499,13 @@
                                         else
                                         {
                                             //echo'<img style="width:25px; border-radius:50px; margin: 0px 10px 0px 0px;" src="../assets/media/upload/avatar.jpg">';
-                                            echo'<span class="btn btn-sm btn-circle" style="font-size: 11px; width:25px; border-radius:50px; margin: 0px 10px 0px 0px; padding: 8px 0px 0px 0px; color:#fff; background-color: '.$find_search_member['user_color'].'">'.$get_first_letter_in_fname[0].''.$get_first_letter_in_lname[0].'</span>'; 
+                                            echo'<span class="btn btn-sm btn-circle" style="font-size: 11px; width:25px; border-radius:50px; margin: 0px 10px 0px 0px; padding: 8px 0px 0px 0px; color:#fff; background-color: '.$find_search_member['user_color'].'">'.$get_first_letter_in_fname[0].''.$get_first_letter_in_lname[0].'</span>';
                                             if($user_id == $id_of_user)
                                             {echo "<span class='text-danger'>Me</span>";}
                                             else
                                             {echo''.$find_search_member['fname'].' '.$find_search_member['mname'].' '.$find_search_member['lname'].'';}
                                         }
-                                        echo'</a>'; 
+                                        echo'</a>';
                                     }
                                 ?>
                             </div>
@@ -553,9 +557,27 @@
                                         }
                                         else if($fetch_field['field_type'] == "Date")
                                         {
-                                            echo '<a class="dropdown-item" href="main_dashboard.php?space_name='.$space_name.'&list_name='.$list_name.'&list_id='.$status_list_id.'&filter=field&field='.$fetch_field['field_col_name'].'">
-                                                    <i class="fa fa-calendar-o mr-5"></i> '.$fetch_field['field_name'] .'
-                                            </a>';
+                                            echo '<hr>
+                                            <i class="fa fa-calendar-o mr-5"></i> '.$fetch_field['field_name'] .'
+                                            <form action="main_dashboard.php" method="GET">
+                                                <input type="hidden" name="space_name" value="'.$space_name.'">
+                                                <input type="hidden" name="list_name" value="'.$list_name.'">
+                                                <input type="hidden" name="list_id" value="'.$status_list_id.'">
+                                                <input type="hidden" name="filter" value="field">
+                                                <input type="hidden" name="field" value="'.$fetch_field['field_col_name'].'">
+                                                <div class="form-material">
+                                                    <input type="date" class="js-datepicker form-control" name="field_from" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="mm/dd/yy" placeholder="mm/dd/yy" required>
+                                                    <label for="example-datepicker4">From:</label>
+                                                </div>
+                                                <div class="form-material">
+                                                    <input type="date" class="js-datepicker form-control" name="field_to" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="mm/dd/yy" placeholder="mm/dd/yy" required>
+                                                    <label for="example-datepicker4">To:</label>
+                                                </div>
+                                                <div class="form-material">
+                                                    <button class="btn btn-sm btn-noborder btn-alt-primary btn-block"><i class="fa fa-check-square-o"></i> Save Date Filter</button>
+                                                </div>
+                                            </form><hr>
+                                            ';
                                         }
                                         else if($fetch_field['field_type'] == "Number")
                                         {

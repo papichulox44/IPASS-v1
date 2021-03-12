@@ -1002,7 +1002,7 @@ $(document).ready(function(){
     }
 
     function fetch_email_name(id)
-    {   
+    {
         // alert ('');
         user_id = <?php echo $row['user_id']; ?>;
         var task_id = document.getElementById("task_id_when_click").value;
@@ -2033,7 +2033,7 @@ $(document).ready(function(){
                                                     <div class="col-md-7">
                                                         <select class="form-control text-muted" style="width: 100%;" id="tran_method" required>
                                                             <option disabled="" selected=""></option>
-                                                            <?php 
+                                                            <?php
                                                             $query = mysqli_query($conn, "SELECT * FROM tbl_remittance") or die(mysqli_error());
                                                             while ($row = mysqli_fetch_array($query)) {
                                                                 echo '<option value="'.$row['remit_value'].'">'.$row['remit_name'].'</option>';
@@ -2305,7 +2305,7 @@ $(document).ready(function(){
                                             <table class="table table table-hover">
                                                 <tbody class="js-table-sections-header" id="hide_status">
                                                 </tbody>
-                                            </table> 
+                                            </table>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -2314,13 +2314,13 @@ $(document).ready(function(){
                                             <table class="table table table-hover">
                                                 <tbody class="js-table-sections-header" id="show_status">
                                                 </tbody>
-                                            </table> 
-                                        </div> 
+                                            </table>
+                                        </div>
 
                                     </div>
 
                                 </div>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -2799,7 +2799,7 @@ function save_transac()
     }
 }
 function clear_transac()
-{   
+{
     if(confirm("Are you sure you?"))
     {
         clear_finance_field();
@@ -3221,7 +3221,7 @@ function clear_tran()
                         space_id:space_id,
                         list_id:list_id,
                         field_id:field_id,
-                        c:1,
+                        fetch_field_dropdown:1,
                     },
                     success: function(response){
                         $('#field_dropdown').html(response);
@@ -6168,13 +6168,13 @@ function display_assign_field_phase(){
                             </div>
                         </div>
                         <div class="block-content">
-                            
+
                         </div>
                     </div>
                             <div class="col-md-12">
                                 <select class="form-control" id="email_name" onchange="email_selection(this)">
                                     <option disabled="" selected="">Please select email</option>
-                                    <?php 
+                                    <?php
                                     $query = mysqli_query($conn, "SELECT * FROM tbl_list_email ORDER BY list_email_name");
 
                                     while ($data = mysqli_fetch_array($query)) {
@@ -6191,7 +6191,7 @@ function display_assign_field_phase(){
                             <textarea class="form-control mb-15" id="email_content" rows="12" style="display: none;"></textarea>
                             <div data-toggle="slimscroll" data-height="300px" data-color="#42A5F5">
                             <span id="view_email_name"></span>
-                            </div>  
+                            </div>
                     <div class="modal-footer">
                         <!-- <button type="button" class="btn btn-alt-secondary" data-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-alt-success" data-dismiss="modal">
@@ -6218,13 +6218,13 @@ function display_assign_field_phase(){
                             </div>
                         </div>
                         <div class="block-content">
-                            
+
                         </div>
                     </div>
                             <div class="col-md-12">
                                 <select class="form-control" id="email_name" onchange="email_selection_blasting(this)">
                                     <option disabled="" selected="">Please select email</option>
-                                    <?php 
+                                    <?php
                                     $query = mysqli_query($conn, "SELECT * FROM tbl_list_email ORDER BY list_email_name");
 
                                     while ($data = mysqli_fetch_array($query)) {
@@ -6242,7 +6242,7 @@ function display_assign_field_phase(){
                             <div data-toggle="slimscroll" data-height="300px" data-color="#42A5F5">
                             <input type="hidden" class="form-control" id="task_status_id">
                             <span id="view_email_names"></span>
-                            </div>  
+                            </div>
                     <div class="modal-footer">
                         <!-- <button type="button" class="btn btn-alt-secondary" data-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-alt-success" data-dismiss="modal">
@@ -6255,7 +6255,7 @@ function display_assign_field_phase(){
 
 <script>
     function email_selection_blasting(select)
-    {   
+    {
         email_name = (select.options[select.selectedIndex].value);
         // alert(email_name);
         // task_id = document.getElementById("task_id_when_click").value;
@@ -6297,7 +6297,7 @@ function display_assign_field_phase(){
     }
 
     function send_email_blasting(id)
-    {   
+    {
         email_id = id;
         user_id = <?php echo $_SESSION['user']; ?>;
         task_status_id = document.getElementById("task_status_id").value;
@@ -6331,7 +6331,7 @@ function display_assign_field_phase(){
                             send_email_blasting: 1,
                         },
                         success: function(data){
-                            if (data == 'success') 
+                            if (data == 'success')
                             {
                                 alert('Email Blasting Successfully Sent!');
                             }
@@ -6345,7 +6345,7 @@ function display_assign_field_phase(){
 
 
     function email_selection(select)
-    {   
+    {
         email_name = (select.options[select.selectedIndex].value);
         // alert(email_name);
         // task_id = document.getElementById("task_id_when_click").value;
@@ -6375,10 +6375,10 @@ function display_assign_field_phase(){
         $('#modal-extra-large').css('overflow-y', 'auto');
     }
     // hide_status();
-    
+
     function hide_status(){
         list_id = <?php echo $_GET['list_id']; ?>
-        // task_id = document.getElementById("task_id_when_click").value; 
+        // task_id = document.getElementById("task_id_when_click").value;
         // alert(task_id);
         $.ajax({
         url: 'ajax.php',
@@ -6397,7 +6397,7 @@ function display_assign_field_phase(){
 
     function show_status(){
         list_id = <?php echo $_GET['list_id']; ?>
-        // task_id = document.getElementById("task_id_when_click").value; 
+        // task_id = document.getElementById("task_id_when_click").value;
         // alert(task_id);
         $.ajax({
         url: 'ajax.php',
@@ -6449,7 +6449,7 @@ function display_assign_field_phase(){
     }
 
     function delete_status(id)
-    {   
+    {
         if(confirm("Are you sure?"))
         {
             $.ajax({
@@ -6563,10 +6563,10 @@ function display_assign_field_phase(){
         formData.append('email_pictures', image);
         formData.append('file_attachment', file_attachment);
         formData.append('save_email_pictures', 1);
-        
+
         $.ajax({
             url: 'ajax.php',
-            type: 'POST', 
+            type: 'POST',
             async: false,
             data: formData,
             contentType:false,
@@ -6578,7 +6578,7 @@ function display_assign_field_phase(){
                         fetch_email_pictures();
                     }
                 }
-        }); 
+        });
     }
 
     function delete_email_picture(id)
@@ -6645,7 +6645,7 @@ function display_assign_field_phase(){
     function send_editable_email()
     {
         email_blasting = document.getElementById("email_blasting").value;
-        if (email_blasting == 1) 
+        if (email_blasting == 1)
         {
             user_id = <?php echo $_SESSION['user']; ?>;
             email_id = document.getElementById("email_email_id").value;
@@ -6668,7 +6668,7 @@ function display_assign_field_phase(){
                         send_email_blasting: 1,
                     },
                     success: function(data){
-                        if (data == 'success') 
+                        if (data == 'success')
                         {
                             alert('Email Blasting Successfully Sent!');
                         }
@@ -6688,7 +6688,7 @@ function display_assign_field_phase(){
 
             // alert(email_content);
             if(confirm("Are you sure you want to send this email?"))
-            {   
+            {
                 $.ajax({
                     url: 'ajax.php',
                     type: 'POST',
@@ -6781,7 +6781,7 @@ function display_assign_field_phase(){
                                 <div class="block-content" style="background-color: <?php echo $md_editor; ?>;">
                                     <div class="form-group row">
                                         <div class="col-md-12 mb-15">
-                                            <div class="row">                          
+                                            <div class="row">
                                                 <div class="col-md-12">
                                                     <textarea id="js-ckeditor" name="ckeditor"></textarea>
                                                     <!-- <textarea id="js-ckeditor" name="samplssssse"></textarea> -->
@@ -6823,7 +6823,7 @@ function display_assign_field_phase(){
 
 <script type="text/javascript">
 
-    
+
     function input_field_textarea(id)
     {
         if(confirm("Are you sure?"))
@@ -6850,8 +6850,8 @@ function display_assign_field_phase(){
                 success: function(data){
                 if(data == "update")
                 {
-                    alert('Task updated.'); 
-                    display_input_field(); 
+                    alert('Task updated.');
+                    display_input_field();
                     displayChat();
                 }
             }
@@ -6885,8 +6885,8 @@ function display_assign_field_phase(){
                 success: function(data){
                 if(data == "update")
                 {
-                    alert('Task updated.'); 
-                    display_input_field(); 
+                    alert('Task updated.');
+                    display_input_field();
                     displayChat();
                 }
             }
@@ -6920,8 +6920,8 @@ function display_assign_field_phase(){
                 success: function(data){
                 if(data == "update")
                 {
-                    alert('Task updated.'); 
-                    display_input_field(); 
+                    alert('Task updated.');
+                    display_input_field();
                     displayChat();
                 }
             }
@@ -6955,8 +6955,8 @@ function display_assign_field_phase(){
                 success: function(data){
                 if(data == "update")
                 {
-                    alert('Task updated.'); 
-                    display_input_field(); 
+                    alert('Task updated.');
+                    display_input_field();
                     displayChat();
                 }
             }
@@ -6990,8 +6990,8 @@ function display_assign_field_phase(){
                 success: function(data){
                 if(data == "update")
                 {
-                    alert('Task updated.'); 
-                    display_input_field(); 
+                    alert('Task updated.');
+                    display_input_field();
                     displayChat();
                 }
             }
@@ -7025,8 +7025,8 @@ function display_assign_field_phase(){
                 success: function(data){
                 if(data == "update")
                 {
-                    alert('Task updated.'); 
-                    display_input_field(); 
+                    alert('Task updated.');
+                    display_input_field();
                     displayChat();
                 }
             }
@@ -7060,8 +7060,8 @@ function display_assign_field_phase(){
                 success: function(data){
                 if(data == "update")
                 {
-                    alert('Task updated.'); 
-                    display_input_field(); 
+                    alert('Task updated.');
+                    display_input_field();
                     displayChat();
                 }
             }
@@ -7099,8 +7099,8 @@ function display_assign_field_phase(){
                 success: function(data){
                 if(data == "update")
                 {
-                    alert('Task updated.'); 
-                    display_input_field(); 
+                    alert('Task updated.');
+                    display_input_field();
                     displayChat();
                 }
             }
@@ -7109,4 +7109,3 @@ function display_assign_field_phase(){
     }
 
 </script>
- 

@@ -213,7 +213,7 @@
                                 else if(mysqli_num_rows($filter_field) === 1)
                                 {
                                     $value_array = explode(",,", $field_filter_value); // convert string to array
-                                    if(count($value_array) == 1) // Normal field | textarea,text,email,phone,date,number
+                                    if(count($value_array) === 1) // Normal field | textarea,text,email,phone,date,number
                                     {
                                         if($fetch_col_in_space_db[''.$field_filter_value.''] === "" || $fetch_col_in_space_db[''.$field_filter_value.''] === "0000-00-00") // check if task has no value in specific column OR a default value "0000-00-00" which is a date
                                         {}
@@ -693,7 +693,7 @@
             else if(mysqli_num_rows($filter_field) === 1)
             {
                 $value_array = explode(",,", $field_filter_value); // convert string to array
-                if(count($value_array) == 1) // Normal field | textarea,text,email,phone,date,number
+                if(count($value_array) === 1) // Normal field | textarea,text,email,phone,date,number
                 {
                     if($fetch_col_in_space_db[''.$field_filter_value.''] === "" || $fetch_col_in_space_db[''.$field_filter_value.''] === "0000-00-00") // check if task has no value in specific column OR a default value "0000-00-00" which is a date
                     {}
