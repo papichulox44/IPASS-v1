@@ -84,7 +84,7 @@
         {
             $filter = $_GET['filter'];
             if (isset($_GET['field_from'])) {
-              $filtered_by = $_GET['field_from'].',,'.$_GET['field_to'].',,'.$_GET['field'];
+              $filtered_by = $_GET['field_from'].',,'.$_GET['field_to'].',,date_field,,'.$_GET['field'];
             } else {
               $filtered_by = $_GET[$filter];
             }
@@ -266,7 +266,6 @@
                     if(mysqli_num_rows($filter_field) != 0)
                     {
                         $value_array = explode(",,", $field_filter_value); // convert string to array
-
                         echo '
                             <form class="dropdown-item">
                                 <a href="main_dashboard.php?space_name='.$space_name.'&list_name='.$list_name.'&list_id='.$status_list_id.'&delete_filter=field"><i class="fa fa-times-rectangle text-danger mr-5"></i></a>';
@@ -282,6 +281,7 @@
                             $field_value = $value_array[0]; // get only the id
                             $field_col_name = $value_array[1]; // get field column name
                             $field_type = $value_array[2]; // get field type
+
 
                             if($field_type == "dropdown") // Dropdown
                             {
@@ -309,6 +309,13 @@
                                 echo '<span style="background-color:#3f9ce8; color: #fff; padding: 3px 10px 3px 10px; border-radius: 50px;">Field = '.$field_name.' |
                                         <span style="color: #fff; padding: 1px 5px; border-radius: 5px; background-color: '.$bg_color.';">'.$field_value.'</span>
                                       </span>';
+                            }
+                            if($field_type == "date_field") {
+                              $field_name_filter = $value_array[3]; // get field type`
+                              $find_field_name = mysqli_query($conn, "SELECT * FROM field WHERE field_space_id = '$space_id' AND field_col_name = '$field_name_filter'");
+                              $fetch_find_field_name = mysqli_fetch_array($find_field_name);
+                              $field_name = $fetch_find_field_name['field_name'];
+                              echo '<span style="background-color:#3f9ce8; color: #fff; padding: 3px 10px 3px 10px; border-radius: 50px;">'.$field_name.'('.$field_value.'||'.$field_col_name.')</span>';
                             }
                         }
                         echo '</form>';

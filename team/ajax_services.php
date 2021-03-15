@@ -222,6 +222,18 @@
                                             include('echo_task_list.php');
                                         }
                                     }
+																		else if(count($value_array) === 4)
+																		{
+																			$field_from = $value_array[0];
+																			$field_to = $value_array[1];
+																			$field_type = $value_array[2];
+																			$field_col_name = $value_array[3];
+
+																			if($fetch_col_in_space_db[''.$field_col_name.''] >= $field_from AND $fetch_col_in_space_db[''.$field_col_name.''] <= $field_to)
+																			{
+																					include('echo_task_list.php');
+																			}
+																		}
                                     else // If field_type = dropdown || radio
                                     {
                                         $field_value = $value_array[0]; // get only the id
@@ -702,6 +714,18 @@
                         include('echo_task_list.php');
                     }
                 }
+								else if(count($value_array) === 4)
+								{
+									$field_from = $value_array[0];
+									$field_to = $value_array[1];
+									$field_type = $value_array[2];
+									$field_col_name = $value_array[3];
+
+									if($fetch_col_in_space_db[''.$field_col_name.''] >= $field_from AND $fetch_col_in_space_db[''.$field_col_name.''] <= $field_to)
+									{
+											include('echo_task_list.php');
+									}
+								}
                 else // If field_type = dropdown || radio
                 {
                     $field_value = $value_array[0]; // get only the id
