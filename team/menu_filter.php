@@ -1,3 +1,19 @@
+<style media="screen">
+.dropdown-content {
+  position: absolute;
+  top: 10px;
+  margin-top: 10px;
+  right: 10px;
+  display: none;
+  background-color: #f1f1f1;
+  min-width: 200px;
+  min-height: 300px;;
+  padding: 10px;
+  border-radius: 25px;
+  z-index: 1;
+}
+.date_dropdown:hover .dropdown-content {display: block;}
+</style>
 <?php
     $user_id = $row['user_id'];
 
@@ -564,26 +580,51 @@
                                         }
                                         else if($fetch_field['field_type'] == "Date")
                                         {
-                                            echo '<hr>
-                                            <i class="fa fa-calendar-o mr-5"></i> '.$fetch_field['field_name'] .'
-                                            <form action="main_dashboard.php" method="GET">
-                                                <input type="hidden" name="space_name" value="'.$space_name.'">
-                                                <input type="hidden" name="list_name" value="'.$list_name.'">
-                                                <input type="hidden" name="list_id" value="'.$status_list_id.'">
-                                                <input type="hidden" name="filter" value="field">
-                                                <input type="hidden" name="field" value="'.$fetch_field['field_col_name'].'">
-                                                <div class="form-material">
-                                                    <input type="date" class="js-datepicker form-control" name="field_from" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="mm/dd/yy" placeholder="mm/dd/yy" required>
-                                                    <label for="example-datepicker4">From:</label>
+                                            // echo '<hr>
+                                            // <i class="fa fa-calendar-o mr-5"></i> '.$fetch_field['field_name'] .'
+                                            // <form action="main_dashboard.php" method="GET">
+                                            //     <input type="hidden" name="space_name" value="'.$space_name.'">
+                                            //     <input type="hidden" name="list_name" value="'.$list_name.'">
+                                            //     <input type="hidden" name="list_id" value="'.$status_list_id.'">
+                                            //     <input type="hidden" name="filter" value="field">
+                                            //     <input type="hidden" name="field" value="'.$fetch_field['field_col_name'].'">
+                                            //     <div class="form-material">
+                                            //         <input type="date" class="js-datepicker form-control" name="field_from" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="mm/dd/yy" placeholder="mm/dd/yy" required>
+                                            //         <label for="example-datepicker4">From:</label>
+                                            //     </div>
+                                            //     <div class="form-material">
+                                            //         <input type="date" class="js-datepicker form-control" name="field_to" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="mm/dd/yy" placeholder="mm/dd/yy" required>
+                                            //         <label for="example-datepicker4">To:</label>
+                                            //     </div>
+                                            //     <div class="form-material">
+                                            //         <button class="btn btn-sm btn-noborder btn-alt-primary btn-block"><i class="fa fa-check-square-o"></i> Save Date Filter</button>
+                                            //     </div>
+                                            // </form><hr>
+                                            // ';
+                                            echo '
+                                                <div class="dropdown-item date_dropdown">
+                                                  <i class="fa fa-calendar-o mr-5"></i> '.$fetch_field['field_name'] .'
+                                                  <div class="dropdown-content">
+                                                  <form action="main_dashboard.php" method="GET">
+                                                     <input type="hidden" name="space_name" value="'.$space_name.'">
+                                                     <input type="hidden" name="list_name" value="'.$list_name.'">
+                                                     <input type="hidden" name="list_id" value="'.$status_list_id.'">
+                                                     <input type="hidden" name="filter" value="field">
+                                                     <input type="hidden" name="field" value="'.$fetch_field['field_col_name'].'">
+                                                     <div class="form-material">
+                                                         <input type="date" class="js-datepicker form-control" name="field_from" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="mm/dd/yy" placeholder="mm/dd/yy" required>
+                                                         <label for="example-datepicker4">From:</label>
+                                                     </div>
+                                                     <div class="form-material">
+                                                         <input type="date" class="js-datepicker form-control" name="field_to" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="mm/dd/yy" placeholder="mm/dd/yy" required>
+                                                         <label for="example-datepicker4">To:</label>
+                                                     </div>
+                                                     <div class="form-material">
+                                                         <button class="btn btn-sm btn-noborder btn-alt-primary btn-block"><i class="fa fa-check-square-o"></i> Save Date Filter</button>
+                                                     </div>
+                                                 </form>
+                                                  </div>
                                                 </div>
-                                                <div class="form-material">
-                                                    <input type="date" class="js-datepicker form-control" name="field_to" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="mm/dd/yy" placeholder="mm/dd/yy" required>
-                                                    <label for="example-datepicker4">To:</label>
-                                                </div>
-                                                <div class="form-material">
-                                                    <button class="btn btn-sm btn-noborder btn-alt-primary btn-block"><i class="fa fa-check-square-o"></i> Save Date Filter</button>
-                                                </div>
-                                            </form><hr>
                                             ';
                                         }
                                         else if($fetch_field['field_type'] == "Number")
