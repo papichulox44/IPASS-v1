@@ -1,16 +1,17 @@
-<?php include ("session.php"); ?> 
+<?php include ("session.php"); ?>
 <!doctype html>
 <html lang="en" class="no-focus">
     <?php include 'head.php'; ?>
+    <link rel="stylesheet" href="../assets/w3.css">
     <body style="background-color: #eeeeee;">
         <!--<div id="page-container" class="sidebar-o sidebar-inverse enable-page-overlay side-scroll page-header-modern main-content-boxed">-->
         <div id="page-container" class="sidebar-o sidebar-inverse enable-page-overlay side-scroll">
-            <?php 
+            <?php
                 $highlight = "dashboard.php";
                 include 'left_sidebar_menu.php';
             ?>
-            <?php include 'header.php'; ?>  
-            <?php include 'dashboard_content.php'; ?> 
+            <?php include 'header.php'; ?>
+            <?php include 'dashboard_content.php'; ?>
         </div>
         <!-- END Page Container -->
 

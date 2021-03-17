@@ -37,9 +37,9 @@
 <!-- Main Container -->
 <main id="main-container">
     <!-- Page Content -->
-    <div class="content">  
+    <div class="content">
 
-        <div class="row">            
+        <div class="row">
             <div class="col-md-12">
                 <div class="block block-mode-hidden shad">
                     <div class="block-header block-header-default" style="background-color: #5CC6D0;">
@@ -48,7 +48,7 @@
                             <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle"></button>
                         </div>
                     </div>
-                    <div class="block-content">    
+                    <div class="block-content">
                         <h2 class="content-heading" style="margin-top: -40px;">
                             <!-- <span id="id_contact" class="badge float-right mt-5" style="font-size: 13px; color: #fff; background-color: #0d7694;">Contact ID: <?php echo $row['contact_id'];?></span> -->
                             Personal Details
@@ -61,13 +61,13 @@
                                             <img class="prof" src="client_profile/<?php echo $row['contact_profile']; ?>">
                                         <?php else: ?>
                                             <img class="prof" src="../assets/media/photos/avatar.jpg">
-                                        <?php endif; ?>  
+                                        <?php endif; ?>
                                     </div>
                                     <div class="block-content block-content-full block-content-sm" style="background-color: #5CC6D0;">
                                         <div class="font-w600 text-white mb-5"><?php echo $row['contact_fname'] . " " . $row['contact_mname'] . " " . $row['contact_lname'];?></div>
                                         <div class="font-size-sm text-white-op">Contact Name</div>
                                     </div>
-                                </div>                                   
+                                </div>
                             </div>
                             <div class="col-lg-8">
                                 <div class="form-group row">
@@ -104,7 +104,7 @@
                                             <label for="crypto-settings-street-1">Nationality</label>
                                             <input type="text" class="form-control form-control-lg" id="crypto-settings-street-1" name="fname" value="<?php echo $row['contact_nationality'];?>" readonly>
                                          </div>
-                                         
+
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -142,7 +142,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>                          
+                        </div>
                     </div>
                 </div>
 
@@ -152,10 +152,10 @@
                         <input type="hidden" id="contact_id" value="<?php echo $row['contact_id']; ?>">
                         <div class="block-options">
                             <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle" onclick="latest_noti()"></button>
-                        </div> 
+                        </div>
                     </div>
-                    <div class="block-content"> 
-                        <?php 
+                    <div class="block-content">
+                        <?php
                         $query = mysqli_query($conn, "SELECT * FROM tbl_information WHERE info_status = 1");
                         $count1 = 1;
                         $count2 = 1;
@@ -166,7 +166,7 @@
                             <center>
                                 <?php if (!empty($data['info_image'])) {
                                  ?>
-                                <img style="width: 50%; height: auto;" src="../assets/media/information/<?php echo $data['info_image']; ?>">
+                                <img style="width: 50%; height: auto;" src="../assets/media/information/<?php echo $data['info_image']; ?>" onclick="onClick(this)">
                                 <?php } ?>
                                 <strong>
                                     <h3><?php echo $data['info_title']; ?></h3>
@@ -175,15 +175,15 @@
                                 <label align="justify" id="display2<?php echo $count3++; ?>" style="display: none;"><?php echo $data['info_text']; ?></label>
                             </center>
                         <?php } ?>
-                    </div>  
+                    </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-12">
                         <div class="block block-content shadow">
-                            <!-- Progress Details -->      
+                            <!-- Progress Details -->
                             <h2 class="content-heading" style="margin-top: -40px;">
-                                Application Progress 
+                                Application Progress
                             </h2>
                             <div class="row items-push">
                                 <?php
@@ -218,9 +218,9 @@
                                         else
                                         {
                                             $minus = 1 / ($count_status - 1) * 100;
-                                            $percentage = number_format(($z / ($count_status - 1) * 100) - $minus)."";   
+                                            $percentage = number_format(($z / ($count_status - 1) * 100) - $minus)."";
                                         }
- 
+
                                         echo '
                                         <div class="col-md-6">
                                             <div class="block block-themed text-center ribbon ribbon-bookmark ribbon-primary">
@@ -246,7 +246,7 @@
                                                             <div class="col-md-12">
                                                                 <div class="row">
                                                                     <div class="text-white text-left col-md-3" style="padding: 5px 10px; color: #fff; margin-bottom: -10px; background-color: #013c4c;">
-                                                                            Services: 
+                                                                            Services:
                                                                     </div>
                                                                     <div class="text-white text-left col-md-9" style="padding: 5px 10px; color: #fff; margin-bottom: -10px; background-color: #013c4c;">
                                                                         ';
@@ -266,7 +266,7 @@
                                                             <div class="col-md-12">
                                                                 <div class="row">
                                                                     <div class="text-white text-left col-md-3" style="padding: 5px 10px; color: #fff; margin-bottom: -10px; background-color: #013c4c;">
-                                                                            Application: 
+                                                                            Application:
                                                                     </div>
                                                                     <div class="text-white text-left col-md-9" style="padding: 5px 10px; color: #fff; margin-bottom: -10px; background-color: #013c4c;">
                                                                         ';
@@ -286,7 +286,7 @@
                                                             <div class="col-md-12">
                                                                 <div class="row">
                                                                     <div class="text-white text-left col-md-3" style="padding: 5px 10px; color: #fff; margin-bottom: -10px; background-color: #013c4c;">
-                                                                            Status: 
+                                                                            Status:
                                                                     </div>
                                                                     <div class="text-white text-left col-md-9" style="padding: 5px 10px; color: #fff; margin-bottom: -10px; background-color: #013c4c;">
                                                                         ';
@@ -302,17 +302,17 @@
                                                                         {
                                                                             echo '<span>'.$status_name.'</span>';
                                                                         }
-                                                                        echo' 
+                                                                        echo'
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>                                   
+                                            </div>
                                         </div>';
                                     }
-                                ?> 
+                                ?>
                             </div>
                         </div>
                     </div>
@@ -323,6 +323,19 @@
     </div>
     <!-- END Page Content -->
 </main>
+<div id="modal01" class="w3-modal" onclick="this.style.display='none'">
+  <span class="w3-button w3-hover-red w3-xlarge w3-display-topright">&times;</span>
+  <div class="w3-modal-content w3-animate-zoom">
+    <img id="img01" style="width:100%">
+  </div>
+</div>
+<script>
+function onClick(element) {
+  // alert(element.src);
+  document.getElementById("img01").src = element.src;
+  document.getElementById("modal01").style.display = "block";
+}
+</script>
 <!-- END Main Container -->
 <script type="text/javascript">
     count_latest_noti();
@@ -361,7 +374,7 @@
                 // $('#count_latest_noti').html(response);
                 if (response == 'success') {
                     count_latest_noti();
-                } 
+                }
             }
         });
     }

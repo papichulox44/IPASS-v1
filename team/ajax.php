@@ -128,7 +128,7 @@
     // ----------------------- SEND EMAIL -----------------------
     if(isset($_POST['test_send_email']))
     {
-        $to = $_POST['test_email']; 
+        $to = $_POST['test_email'];
         $subject = $_POST['email_subject'];
         $email_content = $_POST['email_content'];
         $FirstName = $_POST['FirstName'];
@@ -137,7 +137,7 @@
         $user_id = $_POST['user_id'];
         $comment = 'Send email to: "'.$to.'"| Email Subject: "'.$subject.'"';
         $date = date('Y-m-d H:i:s');
-        
+
         $from = 'cesteam@ipassprocessing.com';
 
         // Message can be change base on template selected
@@ -419,7 +419,7 @@
         while($result_findstatus = mysqli_fetch_array($select_task))
         {
             $email_name = $result_findstatus['email_name'];
-            echo '            
+            echo '
               <tbody id="myTable">
               <tr>
                 <td>
@@ -485,7 +485,7 @@
         while($result_findstatus = mysqli_fetch_array($select_task))
         {
             $email_name = $result_findstatus['email_name'];
-            echo '            
+            echo '
               <tbody id="myTable">
               <tr>
                 <td>
@@ -618,7 +618,7 @@
         $user_id = $_POST['user_id'];
         $tag_name = $_POST['tag_name'];
         $comment = 'Update Tag to: "'.$tag_name.'".';
-        
+
         $find_task = mysqli_query($conn, "SELECT * FROM task WHERE task_id = '$task_id'");
         $result_find_task = mysqli_fetch_array($find_task);
         $current_task_tag = $result_find_task['task_tag'];
@@ -1231,7 +1231,7 @@
                         <td class="text-right font-w600"><input type="hidden" value="'.$total_amount.'" id="totaldue'.$phase_id.'"> '.number_format($total_amount,2).'</td>
                     </tr>
                     <tr>';
-                            
+
                             echo'
                 </tbody>
             </table>
@@ -1584,7 +1584,7 @@
                         $num = mysqli_num_rows($query_remarks);
                         if ($num) {
                             while($row = mysqli_fetch_array($query_remarks))
-                            {   
+                            {
                                 $color = $row["remarks_color"];
                                 $text = 'text-white';
                             }
@@ -2596,7 +2596,7 @@
                             $task_list_id = $fetch_findtaskper_space['task_list_id'];
                             $select_list = mysqli_query($conn, "SELECT * FROM list WHERE list_id = '$task_list_id'");
                             $fetch_array = mysqli_fetch_array($select_list);
-                            
+
                             if($fetch_array['list_space_id'] == $space_id)
                             {
                                 $count_for_space++;
@@ -3298,9 +3298,9 @@
 
         $results = mysqli_query($conn, "SELECT * FROM status WHERE status_list_id = $list_id ORDER BY status_order_no");
         while($rows = mysqli_fetch_array($results))
-        {       
-            $status_id = $rows['status_id'];    
-            $status_list_id = $rows['status_list_id'];    
+        {
+            $status_id = $rows['status_id'];
+            $status_list_id = $rows['status_list_id'];
 
             $query_status_details = mysqli_query($conn, "SELECT * FROM tbl_status_details WHERE status_id = $status_id AND status_list_id = $status_list_id AND contact_id = $contact_id AND task_id = $task_id");
             if (mysqli_num_rows($query_status_details)) {
@@ -3328,7 +3328,7 @@
 
         $query = mysqli_query($conn, "SELECT `status`.status_name,tbl_status_details.status_details_id FROM `status` INNER JOIN tbl_status_details ON tbl_status_details.status_id = `status`.status_id WHERE tbl_status_details.contact_id = $contact_id AND tbl_status_details.status_list_id = $list_id AND tbl_status_details.task_id = $task_id ORDER BY tbl_status_details.status_details_id DESC");
         while($rows = mysqli_fetch_array($query))
-        {       
+        {
             echo '
             <tr style="cursor: pointer;" id="'.$rows['status_details_id'].'" onclick="delete_status(this.id)">
                 <td>'.$rows['status_name'].'</td>
@@ -3432,7 +3432,7 @@
                 }
             }
     }
-     
+
     if(isset($_POST['delete_email_picture']))
     {
         $email_name = $_POST['email_pictures'];
@@ -3442,7 +3442,7 @@
             unlink('./email_picture/'.$email_name);
             echo 'success';
         }
-    }   
+    }
 
     if(isset($_POST['save_input_field']))
     {
@@ -3503,7 +3503,7 @@
                 }
             }
         }
-    } 
+    }
 
     if(isset($_POST['send_email_blasting']))
     {
@@ -3550,7 +3550,7 @@
                 </div>
             </div>
             ';
-            
+
             try{
                 $mail->isSMTP();
                 $mail->Host = 'smtp.gmail.com';
@@ -3570,7 +3570,7 @@
                 $mail->send();
                 mysqli_query($conn, "INSERT INTO email_send_history (email_send_date, email_send_by, email_format_id, email_send_to, email_task_id, email_content) values ('$date', '$user_id', '$email_id', '$contact_email', '$task_id', '$email_content')") or die(mysqli_error());
               } catch (Exception $e){
-                
+
               }
         }
         echo "success";
@@ -3579,7 +3579,7 @@
     if(isset($_POST['unset_email_blast']))
     {
         unset($_SESSION['email_blasting']);
-    } 
+    }
 
     if(isset($_POST['email_blasting_details']))
     {
@@ -3606,7 +3606,7 @@
                         Email Name:<br>
                         Email Subject:<br>
                         Email Address:
-                        Status:         
+                        Status:
                         </td>
                         <td colspan="2" style="width: 25%;"><br>
                         '.$rows["email_send_date"].' <br>
@@ -3637,7 +3637,7 @@
                     </tr>
             ';
         }
-    } 
+    }
 
     if(isset($_POST['save_department']))
     {
@@ -3648,7 +3648,7 @@
         if ($result) {
             echo 'success';
         }
-    } 
+    }
 
     if(isset($_POST['save_category']))
     {
@@ -3659,7 +3659,5 @@
         if ($result) {
             echo 'success';
         }
-    } 
+    }
 ?>
-
-            

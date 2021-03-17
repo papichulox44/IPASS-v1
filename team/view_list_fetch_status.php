@@ -3,6 +3,7 @@ tbody > tr:hover {
     cursor: pointer;
 }
 </style>
+<script src = '../assets/table-sort.js'></script>
 <?php
     $a = 1;
     $b = 1;
@@ -132,7 +133,7 @@ tbody > tr:hover {
                     </select>
                     <br>
                     <div style="overflow: scroll; width: 100%; height: 1000px;" >
-                    <table class="table table-striped table-hover table-bordered table-vcenter <?php echo $md_body; ?>" id="remove_duplicate<?php echo $u++; ?>">
+                    <table class="table table-sort table-arrows table-striped table-hover table-bordered table-vcenter <?php echo $md_body; ?>" id="remove_duplicate<?php echo $u++; ?>">
                     <thead>
                         <tr>
                             <th class="text-center">Task</th>
