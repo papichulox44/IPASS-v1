@@ -35,7 +35,7 @@
                     <th class="text-center">TRANSACTION NO</th>
                     <th class="text-center">CURRENCY</th>
                     <th class="text-center">CHARGE</th>
-                    <th class="text-center">RATE UPC</th> 
+                    <th class="text-center">RATE UPC</th>
                     <th class="text-center">AMOUNT (USD)</th>
                     <th class="text-center">AMOUNT (PHP)</th>
                     <th class="text-center">AMOUNT (PAID)</th>
@@ -50,17 +50,17 @@
                 $IPASS_total_USD = 0;
                 $IPASS_total_PHP = 0;
                 $CLIENT_total_PHP = 0;
-                
-            if (isset($filterby) or isset($get_from)) 
+
+            if (isset($filterby) or isset($get_from))
                 {
                     if($filterby == "All")
-                    {               
+                    {
                         if ($view_by == 'All Remarks') {
                             $remarks = "";
-                        }  
+                        }
                         else if ($view_by == 'No Remarks') {
                             $remarks = "WHERE finance_transaction.val_remarks = ''";
-                        }  
+                        }
                         else {
                             $remarks = "WHERE finance_transaction.val_remarks = '$view_by'";
                         }
@@ -76,13 +76,13 @@
                         }
                         else if ($view_by == 'No Remarks') {
                             $remarks = "WHERE finance_transaction.val_remarks = ''";
-                        }  
+                        }
                         else {
                             $remarks = "WHERE finance_transaction.val_remarks = '$view_by'";
                         }
 
                         $dt = new DateTime();
-                        $dates = []; 
+                        $dates = [];
                         for ($d = 1; $d <= 7; $d++) {
                             $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
                             $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
@@ -96,13 +96,13 @@
 
                     }
                     else if($filterby == "Custom Date")
-                    {          
+                    {
                         if ($view_by == 'All Remarks') {
                             $remarks = "";
-                        }  
+                        }
                         else if ($view_by == 'No Remarks') {
                             $remarks = "WHERE finance_transaction.val_remarks = ''";
-                        }  
+                        }
                         else {
                             $remarks = "WHERE finance_transaction.val_remarks = '$view_by'";
                         }
@@ -117,12 +117,12 @@
 
                 $counts = '1';
                 while($rows = mysqli_fetch_array($results))
-                {   
+                {
                     $count = $counts++;
                     $task_id = $rows['val_assign_to'];
                     $phase_id = $rows['val_phase_id'];
-                    // $remarks = $rows['remarks_value'];  
-                    $remarks = $rows['val_remarks'];  
+                    // $remarks = $rows['remarks_value'];
+                    $remarks = $rows['val_remarks'];
                     $val_id = $rows['val_id'];
                     echo '
                     <tr>
@@ -327,11 +327,11 @@
                             echo '<td class="text-center" data-toggle="modal" data-target="#modal-remarks" style="background-color: red; cursor: pointer;" id="'.$phase_id.','.$task_id.',No Remarks,'.$val_id.'" onclick="update_remarks(this.id)">No Remarks</td>';
                         }
                         echo '
-                    </tr>'; 
+                    </tr>';
                 }
-                
+
                 while($rows = mysqli_fetch_array($results_total))
-                { 
+                {
                     $IPASS_total_USD += $rows['usd_total'];
                     $IPASS_total_PHP += $rows['php_total'];
                     $CLIENT_total_PHP += $rows['client_total'];
@@ -539,14 +539,14 @@
                             $num = mysqli_num_rows($query_remarks);
                             if ($num) {
                                 while($row = mysqli_fetch_array($query_remarks))
-                                {   
+                                {
                                     $color = $row["remarks_color"];
                                     $text = 'text-white';
                                 }
                             } else {
                                     $color = 'red';
                                     $text = 'text-white';
-                                
+
                             // $table = 'class="table-info"';
                             // if ($_POST['remarks'] == 'Payment received') {
                             //     $color = 'green';
@@ -1107,7 +1107,7 @@
                                 <label class="col-md-5 col-form-label">Remittance: <span class="text-danger" style="font-size: 12px;">(Require)</span></label>
                                 <div class="col-md-7">
                                     <select class="form-control text-muted" style="width: 100%;" id="tran_method" required>
-                                        <?php 
+                                        <?php
                                         $select_remittance = mysqli_query($conn, "SELECT * FROM tbl_remittance");
                                         while ($data = mysqli_fetch_array($select_remittance)) {
                                             echo '<option value="'.$data['remit_value'].'"'; if($fetch_col_name['val_method'] == $data['remit_value']) { echo 'selected="selected"'; } echo '>'.$data['remit_name'].'</option>';
@@ -1258,7 +1258,7 @@
                       </div>
                 </div>
             </div>
-            <script type="text/javascript" src="https://cdn.rawgit.com/asvd/dragscroll/master/dragscroll.js">   
+            <script type="text/javascript" src="https://cdn.rawgit.com/asvd/dragscroll/master/dragscroll.js">
             </script>
             <script>
                 document.getElementById("tran_php_rate").onkeypress = function(event){
@@ -1279,9 +1279,9 @@
     // ----------------------- END MODAL PER TRANSACTION --------------------------
 
     if (isset($_POST['view_remittance'])) {
-        
+
         echo '
-        
+
         <div class="col-lg-12" style="overflow: auto; height: 877px;">
             <div class="table-responsive">
                 <table class="table table-bordered table-striped text-white">
@@ -1320,7 +1320,7 @@
                                         <button class="btn btn-danger" id="'.$remit_id.'" onclick="delete_remittance(this.id)">Delete</button>
                                     </td>
                                 </tr>
-                            ';       
+                            ';
                         }
                     echo '
                     </tbody>
@@ -1331,7 +1331,7 @@
     }
 
     if (isset($_POST['view_company_information'])) {
-        
+
         echo '
             <div class="table-responsive" style="overflow: auto; height: 250px;">
                 <table class="table table-bordered table-striped text-white">
@@ -1370,7 +1370,7 @@
                                             <button class="btn btn-danger" id="'.$info_id.'" onclick="delete_information(this.id)">Delete</button>
                                         </td>
                                     </tr>
-                                ';       
+                                ';
                             }
                         }
                         else
@@ -1431,7 +1431,7 @@
                                         <button class="btn btn-danger" id="'.$list_email_id.'" onclick="delete_list_of_email(this.id)">Delete</button>
                                     </td>
                                 </tr>
-                            ';       
+                            ';
                         }
                     echo '
                     </tbody>
@@ -1474,7 +1474,7 @@
                                         <button class="btn btn-primary" id="'.$data['list_email_name'].'" onclick="set_list_of_email_member(this.id)">Set Email</button>
                                     </td>
                                 </tr>
-                            ';       
+                            ';
                         }
                     echo '
                     </tbody>
@@ -1572,7 +1572,7 @@
                                         <button class="btn btn-danger" id="'.$remarks_id.'" onclick="delete_remarks_data(this.id)">Delete</button>
                                     </td>
                                 </tr>
-                            ';       
+                            ';
                         }
                     echo '
                     </tbody>
@@ -1717,7 +1717,7 @@
                 echo "success";
                 // echo $info_id;
             }
-            
+
         }
     }
 
@@ -1749,7 +1749,7 @@
                     $get_name = substr($words[0], 0, 6); // get only 6 character of the name
 
                     $image = $date.'-'.$get_name.'.'.$ext;
-                    
+
                     $location = "../assets/media/information/".$image; // upload location
 
                     if($attachment_size < 3000000) // Maximum 3 MB
@@ -1800,6 +1800,12 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label for="wizard-simple-firstname">Content:</label>
+                            <label> For the link(s):
+                            ';
+                            $link = '<a target="_blank" style="color: blue;" href="http://www.sample.com">Sample</a>';
+                            echo htmlentities($link);
+                            echo '
+                            </label>
                             <textarea rows="15" class="form-control" id="info_text_update">'.$data['info_text'].'</textarea>
                         </div>
                     </div>

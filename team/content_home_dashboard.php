@@ -291,6 +291,12 @@
 			                            <div class="col-md-12">
 			                                <div class="form-group">
 			                                    <label for="wizard-simple-firstname">Content:</label>
+																					<label> For the link(s):
+																					<?php
+																					$link = '<a target="_blank" style="color: blue;" href="http://www.sample.com">Sample</a>';
+																					echo htmlentities($link);
+																					?>
+																					</label>
 			                                    <textarea rows="15" class="form-control" id="info_text"></textarea>
 			                                    <!-- <input type="text" rows="15" class="form-control" id="info_text"> -->
 			                                </div>
