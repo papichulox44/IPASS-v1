@@ -148,8 +148,8 @@
             $datecreated
             $duedate
             $priority");
-        $data = mysqli_fetch_assoc($count_task);
-        $final_total_task = $data['final_total_task'];
+				$data = mysqli_fetch_assoc($count_task);
+				$final_total_task = $data['final_total_task'];
     }
 //_______________________________ END FILTER
 

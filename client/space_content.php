@@ -4,10 +4,11 @@
     $status_id = $_GET['status'];
 
     $contact_id = $row['contact_id'];
+    mysqli_query($conn, "UPDATE tbl_movement SET status = 1 WHERE contact_id = $contact_id");
     $select_task = mysqli_query($conn, "SELECT * FROM task WHERE task_contact ='$contact_id' and task_list_id = '$list_id'");
     $fetch_select_task = mysqli_fetch_array($select_task);
     $task_id = $fetch_select_task['task_id'];
-    
+
     $select_status_order_no = mysqli_query($conn, "SELECT * FROM status WHERE status_id ='$status_id'");
     $fetch_order_no = mysqli_fetch_array($select_status_order_no);
     $status_order = $fetch_order_no['status_order_no'];
@@ -34,7 +35,7 @@
     else
     {
         $minus = 1 / ($count_status - 1) * 100;
-        $percentage = number_format(($z / ($count_status - 1) * 100) - $minus)."";   
+        $percentage = number_format(($z / ($count_status - 1) * 100) - $minus)."";
     }
 ?>
 <style type="text/css">
@@ -68,20 +69,20 @@
 }
 </style>
     <!-- Page Content -->
-    <div class="content">  
+    <div class="content">
 
         <div class="row">
             <div class="col-md-12">
                 <div class="block block-content shad">
-                    <!-- Progress Details -->      
+                    <!-- Progress Details -->
                     <h2 class="content-heading" style="margin-top: -40px;">
-                        Progress 
-                        <small>in 
+                        Progress
+                        <small>in
                             <?php
                                 $select_space = mysqli_query($conn, "SELECT * FROM space WHERE space_id ='$space_id'");
                                 $fetch_space = mysqli_fetch_array($select_space);
                                 echo $fetch_space['space_name'];
-                            ?>  
+                            ?>
                             <!-- <span id="id_contact" class="badge float-right mt-5" style="font-size: 13px; color: #fff; background-color: #0d7694;">Task ID: <?php echo $task_id;?></span> -->
                         </small>
                     </h2>
@@ -94,7 +95,7 @@
                                           <div class="spinner-circle">
                                             <div class="spinner"></div>
                                             <span>
-                                                <?php 
+                                                <?php
                                                 if($percentage == 100)
                                                 {
                                                     // echo '<i class="fa fa-4x fa-trophy text-muted"></i>';
@@ -108,9 +109,9 @@
                                                 ?>
                                             </span>
                                          </div>
-                                        </div> 
+                                        </div>
                                         <br>
-                                    <?php 
+                                    <?php
                                         if($percentage == 100)
                                         {
                                             echo '<div class="block-content-full block-content-sm" style="background-color: #5CC6D0;">
@@ -141,7 +142,7 @@
                                     </div>
                                 <div data-toggle="slimscroll" data-height="280px" data-color="#42a5f5" data-opacity="1" data-always-visible="true">
                                     <br>
-                                    <?php 
+                                    <?php
                                     $space_id = $_GET['space'];
                                     $task_id = $task_id;
                                     $select_db = mysqli_query($conn, "SELECT * FROM requirement_field WHERE requirement_space_id ='$space_id' ORDER BY requirement_order_no ASC");
@@ -202,12 +203,12 @@
                                      ?>
                                 </div>
 
-                            </div>                                   
-                        </div> 
+                            </div>
+                        </div>
                         <div class="col-md-7">
                             <select class="form-control text-muted mb-10" id="phase_id" onchange="show_list_of_payment()" style="width: 100%;">
                             <option disabled="disabled" selected="selected">Select phase...</option>
-                            <?php 
+                            <?php
                             $space_id = $_GET['space'];
 
                                 $select_phase = mysqli_query($conn, "SELECT * FROM finance_phase WHERE phase_space_id ='$space_id' ORDER BY phase_id ASC");
@@ -233,9 +234,9 @@
                             <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle"></button>
                         </div>
                     </div>
-                    <div class="block-content"> 
+                    <div class="block-content">
                         <div class="row items-push">
-                            <?php                          
+                            <?php
 
                                 $select_db = mysqli_query($conn, "SELECT * FROM space WHERE space_id ='$space_id'");
                                 $fetch_select_db = mysqli_fetch_array($select_db);
@@ -321,9 +322,9 @@
                             <table class="table table-bordered table-striped table-hover table-vcenter shad">
                                 <tr>
                                     <th class="text-center">VALUE (PHP)</th>
-                                </tr>   
+                                </tr>
                                 <tbody>
-                                    <?php 
+                                    <?php
                                     $select_currency = mysqli_query($conn, "SELECT * FROM finance_currency WHERE currency_code = 'USD'");
                                     foreach ($select_currency as $data) {
                                         echo '
@@ -333,7 +334,7 @@
                                         ';
                                     }
                                      ?>
-                                </tbody>                             
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -350,7 +351,7 @@
         phase_id = document.getElementById("phase_id").value;
 
         $("#modal-currency").modal();
-        $.ajax({ 
+        $.ajax({
         url:"ajax.php",
         method:"post",
         data:{

@@ -35,7 +35,7 @@
                         <img class="img-avatar" src="client_profile/<?php echo $row['contact_profile']; ?>">
                     <?php else: ?>
                         <img class="img-avatar" src="../assets/media/photos/avatarpic.jpg">
-                    <?php endif; ?>                               
+                    <?php endif; ?>
                 </a>
                 <ul class="list-inline mt-10">
                     <li class="list-inline-item">
@@ -50,14 +50,14 @@
         <!-- Side Navigation -->
         <div class="content-side content-side-full">
             <ul class="nav-main">
-                <?php 
+                <?php
                     $user_id = $row['contact_id'];
 
                     $findcontact = mysqli_query($conn, "SELECT * FROM contact WHERE contact_assign_to = ''");
                     $total_unassign = mysqli_num_rows($findcontact);
                     if($highlight == "dashboard.php")
                     {
-                        if (empty($_GET['space_name'])) 
+                        if (empty($_GET['space_name']))
                         {
                             $dashboard_style = "background-color: #20527b;";
                         }
@@ -81,12 +81,12 @@
                     }
                     else if($highlight == "personal_details.php")
                     {
-                        $opencontact = "open"; 
+                        $opencontact = "open";
                         $add = "background-color: #20527b; padding-left: 15px; margin-left: -15px;";
                     }
                     else if($highlight == "change_password.php")
                     {
-                        $opencontact = "open"; 
+                        $opencontact = "open";
                         $assign = "background-color: #20527b; padding-left: 15px; margin-left: -15px;";
                     }
                     else if($highlight == "space.php")
@@ -100,25 +100,34 @@
 
                 <li>
                     <a href="dashboard.php" style="<?php echo $dashboard_style; ?>"><i class="si si-cup"></i>Dashboard</a>
-                </li>  
+                </li>
                 <li class="nav-main-heading"><span class="sidebar-mini-visible">MG</span><span class="sidebar-mini-hidden">Manage</span>
-                </li> 
+                </li>
                 <li class="<?php echo $opencontact;?>">
                     <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-settings"></i><span class="sidebar-mini-hide">Account</span>
                     </a>
                     <ul>
                         <li>
-                            <a href="personal_details.php" style="<?php echo $add;?>">Personal details 
+                            <a href="personal_details.php" style="<?php echo $add;?>">Personal details
                             </a>
                         </li>
                         <li>
                             <a href="change_password.php" style="<?php echo $assign;?>">Change password</a>
                         </li>
                     </ul>
-                </li>  
+                </li>
 
                 <li class="<?php echo $openspaces;?>">
-                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-grid"></i><span class="sidebar-mini-hide">Services</span></a>
+                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-grid"></i><span class="sidebar-mini-hide">Services </span>
+                      <small style="color: green; font-size: 14px;">
+                        <?php
+                        $contact_id = $row['contact_id'];
+                        $select_movement = mysqli_query($conn, "SELECT Count(tbl_movement.contact_id) AS movement FROM tbl_movement WHERE contact_id = $contact_id AND status = 0");
+                        $data = mysqli_fetch_assoc($select_movement);
+                        echo $data['movement'];
+                         ?>
+                      </small>
+                    </a>
                     <ul>
 <?php
     $contact_assign_to = $row['contact_assign_to'];
@@ -138,49 +147,49 @@
         $select_status = mysqli_query($conn, "SELECT * FROM status WHERE status_id = '$status_id'");
         $fetch_select_status = mysqli_fetch_array($select_status);
 
-        if (empty($_GET['space'])) 
-        { 
+        if (empty($_GET['space']))
+        {
             $space_id = "";
             $list_id = "";
         }
         else
-        {            
+        {
             $space_id = $_GET['space'];
             $list_id = $_GET['list'];
         }
         if($fetch_select_list['list_id'] == $list_id)
-        { ?>            
+        { ?>
             <li class="open">
                 <a class="nav-submenu" href="#" data-toggle="nav-submenu"><?php echo $fetch_select_space['space_name'];?></a>
                 <ul>
                     <li>
                         <a style="background-color: #20527b; padding-left: 15px; margin-left: -15px;" href="space.php?space=<?php echo $fetch_select_space['space_id'];?>&list=<?php echo $fetch_select_list['list_id'];?>&status=<?php echo $fetch_select_status['status_id'];?>"><?php echo $fetch_select_list['list_name'];?></a>
-                    </li> 
+                    </li>
                 </ul>
-            </li> 
+            </li>
         <?php }
         else
-        { ?>                      
+        { ?>
             <li>
                 <a class="nav-submenu" href="#" data-toggle="nav-submenu"><?php echo $fetch_select_space['space_name'];?></a>
                 <ul>
                     <li>
                         <a href="space.php?space=<?php echo $fetch_select_space['space_id'];?>&list=<?php echo $fetch_select_list['list_id'];?>&status=<?php echo $fetch_select_status['status_id'];?>"><?php echo $fetch_select_list['list_name'];?></a>
-                    </li> 
+                    </li>
                 </ul>
-            </li> 
+            </li>
         <?php }
         ?>
     <?php
     }
-?>                                                                              
+?>
                     </ul>
                 </li>
 
 
                 <li>
                     <a href="logout.php?logout"><i class="si si-logout"></i><span class="sidebar-mini-hide">Sign Out</span></a>
-                </li>                            
+                </li>
             </ul>
         </div>
         <!-- END Side Navigation -->

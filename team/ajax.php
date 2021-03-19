@@ -517,6 +517,7 @@
         $fetch_select_task = mysqli_fetch_array($select_task);
         $task_status_id = $fetch_select_task['task_status_id'];
         $contact_id = $fetch_select_task['task_contact'];
+        mysqli_query($conn, "INSERT INTO tbl_movement (contact_id) VALUES ($contact_id)") or die(mysqli_error());
 
         $move = mysqli_query($conn, "UPDATE task SET task_status_id = '$status_id' WHERE task_id='$task_id'") or die(mysqli_error());
 
