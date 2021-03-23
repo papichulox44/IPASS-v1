@@ -1,3 +1,60 @@
+<script type="text/javascript">
+/// some script
+
+// jquery ready start
+$(document).ready(function() {
+	// jQuery code
+
+	//////////////////////// Prevent closing from click inside dropdown
+    $(document).on('click', '.dropdown-menu', function (e) {
+      e.stopPropagation();
+    });
+
+    // make it as accordion for smaller screens
+    if ($(window).width() < 992) {
+	  	$('.dropdown-menu a').click(function(e){
+	  		e.preventDefault();
+	        if($(this).next('.submenu').length){
+	        	$(this).next('.submenu').toggle();
+	        }
+	        $('.dropdown').on('hide.bs.dropdown', function () {
+			   $(this).find('.submenu').hide();
+			})
+	  	});
+	}
+
+}); // jquery end
+</script>
+<style media="screen">
+  .dropdown-menu .dropdown-toggle:after{
+    border-top: .3em solid transparent;
+      border-right: 0;
+      border-bottom: .3em solid transparent;
+      border-left: .3em solid;
+  }
+
+  .dropdown-menu .dropdown-menu{
+    margin-left:0; margin-right: 0;
+  }
+
+  .dropdown-menu li{
+    position: relative;
+  }
+  .nav-item .submenu{
+    display: none;
+    position: absolute;
+    left:100%; top:-7px;
+  }
+  .nav-item .submenu-left{
+    right:100%; left:auto;
+  }
+
+  .dropdown-menu > li:hover{ background-color: #f1f1f1 }
+  .dropdown-menu > li:hover > .submenu{
+    display: block;
+  }
+</style>
+
 <!-- Main Container -->
 <main id="main-container" style="margin: -5px -10px 0px -10px;">
     <!-- Page Content -->
@@ -6,9 +63,38 @@
         <div class="block block-content block-content-full shadow <?php echo $md_body; ?>">
             <!-- DataTables functionality is initialized with .js-dataTable-full class in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->
             <div class="block-header content-heading">
-                <h3 class="block-title" style="color: white;">All Record(s)</h3>
+                <h3 class="block-title" style="color: white;">All Record(s)
+                  <div class="nav-item dropdown">
+                		<!-- <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">  Treeview menu  </a> -->
+                    <button type="button" class="btn btn-sm btn-secondary nav-link dropdown-toggle" data-toggle="dropdown">
+                        <span>Filter Services</span>
+                    </button>
+                	    <ul class="dropdown-menu" style="height: 300px; overflow: scroll;">
+                      <?php
+                      $select_services = mysqli_query($conn, "SELECT * FROM space ORDER BY space_name");
+                      while($fetch_services = mysqli_fetch_array($select_services))
+                      {
+                        echo '
+                        <li><a class="dropdown-item" href="#">'.$fetch_services['space_name'].'</a>
+                        <ul class="submenu dropdown-menu">
+                         <li><a class="dropdown-item" href="">Submenu item 3 &raquo </a>
+                           <ul class="submenu dropdown-menu">
+                             <li><a class="dropdown-item" href="">Multi level 1</a></li>
+                         </ul>
+                         </li>
+                      </ul>
+                     </li>
+                        ';
+                      }
+                       ?>
+                		  <!-- <li><a class="dropdown-item" href="#"> Dropdown item 2 &raquo </a> -->
+
+                	    </ul>
+                	</div>
+                </h3>
 
                 <!-- <h5 class="float-right" style="color: white;">All Record(s)</h5> -->
+
                 <div class="dropdown float-right">
                     <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" id="ecom-orders-overview-drop" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span>Due Date</span>
