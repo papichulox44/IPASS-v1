@@ -1,60 +1,3 @@
-<script type="text/javascript">
-/// some script
-
-// jquery ready start
-$(document).ready(function() {
-	// jQuery code
-
-	//////////////////////// Prevent closing from click inside dropdown
-    $(document).on('click', '.dropdown-menu', function (e) {
-      e.stopPropagation();
-    });
-
-    // make it as accordion for smaller screens
-    if ($(window).width() < 992) {
-	  	$('.dropdown-menu a').click(function(e){
-	  		e.preventDefault();
-	        if($(this).next('.submenu').length){
-	        	$(this).next('.submenu').toggle();
-	        }
-	        $('.dropdown').on('hide.bs.dropdown', function () {
-			   $(this).find('.submenu').hide();
-			})
-	  	});
-	}
-
-}); // jquery end
-</script>
-<style media="screen">
-  .dropdown-menu .dropdown-toggle:after{
-    border-top: .3em solid transparent;
-      border-right: 0;
-      border-bottom: .3em solid transparent;
-      border-left: .3em solid;
-  }
-
-  .dropdown-menu .dropdown-menu{
-    margin-left:0; margin-right: 0;
-  }
-
-  .dropdown-menu li{
-    position: relative;
-  }
-  .nav-item .submenu{
-    display: none;
-    position: absolute;
-    left:100%; top:-7px;
-  }
-  .nav-item .submenu-left{
-    right:100%; left:auto;
-  }
-
-  .dropdown-menu > li:hover{ background-color: #f1f1f1 }
-  .dropdown-menu > li:hover > .submenu{
-    display: block;
-  }
-</style>
-
 <!-- Main Container -->
 <main id="main-container" style="margin: -5px -10px 0px -10px;">
     <!-- Page Content -->
@@ -64,33 +7,6 @@ $(document).ready(function() {
             <!-- DataTables functionality is initialized with .js-dataTable-full class in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->
             <div class="block-header content-heading">
                 <h3 class="block-title" style="color: white;">All Record(s)
-                  <div class="nav-item dropdown">
-                		<!-- <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">  Treeview menu  </a> -->
-                    <button type="button" class="btn btn-sm btn-secondary nav-link dropdown-toggle" data-toggle="dropdown">
-                        <span>Filter Services</span>
-                    </button>
-                	    <ul class="dropdown-menu" style="height: 300px; overflow: scroll;">
-                      <?php
-                      $select_services = mysqli_query($conn, "SELECT * FROM space ORDER BY space_name");
-                      while($fetch_services = mysqli_fetch_array($select_services))
-                      {
-                        echo '
-                        <li><a class="dropdown-item" href="#">'.$fetch_services['space_name'].'</a>
-                        <ul class="submenu dropdown-menu">
-                         <li><a class="dropdown-item" href="">Submenu item 3 &raquo </a>
-                           <ul class="submenu dropdown-menu">
-                             <li><a class="dropdown-item" href="">Multi level 1</a></li>
-                         </ul>
-                         </li>
-                      </ul>
-                     </li>
-                        ';
-                      }
-                       ?>
-                		  <!-- <li><a class="dropdown-item" href="#"> Dropdown item 2 &raquo </a> -->
-
-                	    </ul>
-                	</div>
                 </h3>
 
                 <!-- <h5 class="float-right" style="color: white;">All Record(s)</h5> -->
@@ -178,6 +94,75 @@ $(document).ready(function() {
                         </span>
                     </div>
                 </div>
+                |
+                <div class="dropdown float-right" id="hide_services">
+                    <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" id="ecom-orders-overview-drop" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span>Services</span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ecom-orders-overview-drop" x-placement="bottom-end" style="overflow: auto; height: 300px; position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(96px, 31px, 0px);">
+                        <?php
+                          $select_services = mysqli_query($conn, "SELECT * FROM space ORDER BY space_name");
+                          while($fetch_services = mysqli_fetch_array($select_services))
+                          {
+                            echo '
+                            <button class="dropdown-item" id="'.$fetch_services['space_id'].'" onclick="filter_services(this.id)">
+                                <i class="fa fa-fw fa-th-list mr-5"></i>'.$fetch_services['space_name'].'
+                            </button>
+                            ';
+                          }
+                         ?>
+                    </div>
+                </div>
+
+                <div class="dropdown float-right" id="hide_list" style="display: none;">
+                    <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" id="ecom-orders-overview-drop" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span>List</span>
+                    </button>
+                    <div id="filter_list" class="dropdown-menu dropdown-menu-right" aria-labelledby="ecom-orders-overview-drop" x-placement="bottom-end" style="overflow: auto; height: 200px; position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(96px, 31px, 0px);">
+                    </div>
+                </div>
+
+                <div class="dropdown float-right" id="hide_status" style="display: none;">
+                    <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" id="ecom-orders-overview-drop" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span>Status</span>
+                    </button>
+                    <div id="filter_status" class="dropdown-menu dropdown-menu-right" aria-labelledby="ecom-orders-overview-drop" x-placement="bottom-end" style="overflow: auto; height: 300px; position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(96px, 31px, 0px);">
+                    </div>
+                </div>
+                |
+                <div class="dropdown float-right">
+                    <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" id="ecom-orders-overview-drop" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span>Filter</span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ecom-orders-overview-drop" x-placement="bottom-end" style="overflow: auto; height: 300px; position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(96px, 31px, 0px);">
+                        <?php
+                          $user_id = $_SESSION['user'];
+                          $select_filter_status = mysqli_query($conn, "SELECT * FROM filter_status WHERE user_id = $user_id");
+                          while($fetch_filter = mysqli_fetch_array($select_filter_status))
+                          {
+                            $filter_status_id = $fetch_filter['filter_status_id'];
+                            $status_array = explode(",", $fetch_filter['array_status']); // convert string to array
+                            $count_status = count($status_array);
+                            echo '<label>List of Status Filter by Batch:</label>';
+                            for ($x = 1; $x <= $count_status; $x++)
+                            {
+                              $y = $x - 1;
+                              $final_status_id = $status_array[$y];
+                              // echo $final_status_id.'<br>';
+                              $get_status_name = mysqli_query($conn, "SELECT * FROM status WHERE status_id = '$final_status_id'");
+                              $result = mysqli_fetch_array($get_status_name);
+                              $status_name = $result['status_name'];
+                              echo '
+                              <button class="dropdown-item" id="'.$filter_status_id.'" onclick="delete_filter_status_id(this.id)">
+                                  <i class="fa fa-fw fa-th-list mr-5"></i>'.$status_name.'
+                              </button>
+                              ';
+                            }
+                          }
+                         ?>
+                    </div>
+                </div>
+
             </div>
             <table class="block table table-bordered table-striped table-hover table-vcenter js-dataTable-full <?php echo $md_body; ?>">
                 <thead>
@@ -289,238 +274,7 @@ $(document).ready(function() {
 
                         $count = 1;
                         // $select_task = mysqli_query($conn, "SELECT * FROM task");
-                        while($fetch_task = mysqli_fetch_array($select_task))
-                        {
-                            $task_status_id = $fetch_task['task_status_id'];
-                            $task_list_id = $fetch_task['task_list_id']; // get list id
-                            $task_id = $fetch_task['task_id'];
-
-                            $date_today = date('Y-m-d');
-                            $today = date("Y-m-d"); // Get current date
-                            $tomorrow = date('Y-m-d', strtotime(' +1 day')); // Get tomorrow date
-                            $tomorrow2 = date('Y-m-d', strtotime(' +2 day'));
-                            $tomorrow3 = date('Y-m-d', strtotime(' +3 day'));
-                            $tomorrow4 = date('Y-m-d', strtotime(' +4 day'));
-                            $tomorrow5 = date('Y-m-d', strtotime(' +5 day'));
-                            $tomorrow6 = date('Y-m-d', strtotime(' +6 day'));
-                            $due_date_time = $fetch_task['task_due_date']; // ex: 2020-12-10 00:00:00
-                            $ymd = substr($due_date_time, -19, 10); // 2020-12-10 00:00:00 // Y-m-d = 2020-12-10 00
-
-                            $select_list = mysqli_query($conn, "SELECT * FROM list WHERE list_id = '$task_list_id'");
-                            $list_name = mysqli_fetch_array($select_list);
-
-                            echo'
-                            <tr style="cursor: pointer;" id="taskid_'.$task_id.'" onclick="view_task(this.id)">
-                                <td>'.$count++.'</td>
-                                <td>';
-                                    $task_name = $fetch_task['task_name'];
-                                    $new__task_name = substr($task_name, 0, 18); // get only 10 character
-                                    if(strlen($task_name) > 18)
-                                    {
-                                        echo '<span data-toggle="popover" title="'.$fetch_task['task_name'].'" data-placement="bottom">'.$new__task_name.'...</span>';
-                                    }
-                                    else
-                                    {
-                                        echo '<span data-toggle="popover" title="'.$fetch_task['task_name'].'" data-placement="bottom">'.$new__task_name.'</span>';
-                                    }
-                                        $total_tag_per_task = $fetch_task['task_tag'];
-                                        $tag_array = explode(",", $total_tag_per_task); // convert string to array
-                                        $count_tag = count($tag_array);
-                                        if ($total_tag_per_task == "")
-                                        {}
-                                        else
-                                        {
-                                            for ($x = 1; $x <= $count_tag; $x++)
-                                            {
-                                                $y = $x - 1;
-                                                $final_tag_name = $tag_array[$y];
-                                                $get_tag_color = mysqli_query($conn, "SELECT * FROM tags WHERE tag_id = '$final_tag_name'");
-                                                $result_get_tag_color = mysqli_fetch_array($get_tag_color);
-                                                $tag_name = $result_get_tag_color['tag_name'];
-                                                $new__tag_name = substr($tag_name, 0, 5); // get only 10 character
-                                                echo '<span style="background-color: '.$result_get_tag_color['tag_color'].'; color:#fff; padding:2px 7px 2px 5px; border-top-right-radius: 25px; border-bottom-right-radius: 25px; font-size: 11px; margin: 0px 0px 0px 5px;" data-toggle="popover" title="'.$tag_name.'" data-placement="bottom">';
-                                                if(strlen($tag_name) > 5)
-                                                {
-                                                    echo''.$new__tag_name.'..';
-                                                }
-                                                else
-                                                {
-                                                    echo''.$new__tag_name.'';
-                                                }
-                                                echo '</span>';
-                                            }
-                                        }
-                                    echo '
-                                </td>
-                                <td class="d-none d-sm-table-cell">';
-                                    if($ymd == $today)
-                                    {
-                                        $task_priority = "D Urgent";
-                                        mysqli_query($conn, "UPDATE task SET task_priority='$task_priority' WHERE task_id='$task_id'") or die(mysqli_error());
-                                        echo'<span class="badge badge-danger">Today</span>';
-                                    }
-                                    else if($ymd == $tomorrow)
-                                    {
-                                        $task_priority = "C High";
-                                        mysqli_query($conn, "UPDATE task SET task_priority='$task_priority' WHERE task_id='$task_id'") or die(mysqli_error());
-                                        echo'<span class="badge badge-warning">Tomorrow</span>';
-                                    }
-                                    else if($due_date_time == "" or $due_date_time == '0000-00-00')
-                                    {
-                                        echo'<span class="badge badge-primary">No Due Date yet!!</span>';
-                                    }
-                                    else if($due_date_time < $date_today)
-                                    {
-                                        echo'<span class="badge badge-info">Overdue</span>';
-                                    }
-                                    else if($ymd === $tomorrow2)
-                                    {
-                                        echo'<span class="badge badge-info">'.date("l", strtotime($due_date_time)).'</span>';
-                                    }
-                                    else if($ymd === $tomorrow3)
-                                    {
-                                        echo'<span class="badge badge-info">'.date("l", strtotime($due_date_time)).'</span>';
-                                    }
-                                    else if($ymd === $tomorrow4)
-                                    {
-                                        echo'<span class="badge badge-info">'.date("l", strtotime($due_date_time)).'</span>';
-                                    }
-                                    else if($ymd === $tomorrow5)
-                                    {
-                                        echo'<span class="badge badge-info">'.date("l", strtotime($due_date_time)).'</span>';
-                                    }
-                                    else if($ymd === $tomorrow6)
-                                    {
-                                        echo'<span class="badge badge-info">'.date("l", strtotime($due_date_time)).'</span>';
-                                    }
-                                    else
-                                    {
-                                      echo'<span class="badge badge-success">'.$due_date_time.'</span>';
-                                    }
-                                echo'
-                                </td>
-
-
-                                <td class="d-none d-sm-table-cell">'.$fetch_task['task_date_created'].'</td>
-                                <td class="d-none d-sm-table-cell">';
-                                if($fetch_task['task_priority'] == "D Urgent")
-                                {
-                                    echo '<span style="display: none;">D</span><span class="badge badge-danger">Urgent</span>';
-                                }
-                                else if($fetch_task['task_priority'] == "C High")
-                                {
-                                    echo '<span style="display: none;">C</span><span class="badge badge-warning">High</span>';
-                                }
-                                else if($fetch_task['task_priority'] == "B Normal")
-                                {
-                                    echo '<span style="display: none;">B</span><span class="badge badge-primary">Normal</span>';
-                                }
-                                else if($fetch_task['task_priority'] == "A Low")
-                                {
-                                    echo '<span style="display: none;">A</span><span class="badge badge-secondary">Low</span>';
-                                }
-                                else
-                                {}
-                                echo'
-                                </td>
-                                <td class="d-none d-sm-table-cell text-center">';
-                                $total_assign_to = $fetch_task['task_assign_to']; // get the assign id
-                                if ($total_assign_to == 0)
-                                {
-                                    echo 'Unassign';
-                                }
-                                else
-                                {
-                                    $assign_array = explode(",",$total_assign_to); // string to array
-                                    $count_assign = count($assign_array); // count the array
-                                    for($c = 0; $c < $count_assign; $c++)
-                                    {
-                                        $assign_id = $assign_array[$c];
-                                        $select_user = mysqli_query($conn, "SELECT * FROM user WHERE user_id = '$assign_id'");
-                                        $fetch_user = mysqli_fetch_array($select_user);
-                                        $get_first_letter_in_fname = $fetch_user['fname'];
-                                        $get_first_letter_in_lname = $fetch_user['lname'];
-                                        if($fetch_user['profile_pic'] != "")
-                                        {
-                                            echo '<img type="button" title="'.$fetch_user['fname'].' '.$fetch_user['lname'].'" src="../assets/media/upload/'.$fetch_user['profile_pic'].'" style="width:33px; height:33px; border-radius:50px; margin: 0px -5px 0px -5px; border: 1px solid #fff;">
-                                                <span style="display: none;">'.$fetch_user['fname'].' '.$fetch_user['lname'].'</span>';
-                                        }
-                                        else
-                                        {
-                                            echo '<span class="btn btn-circle" type="button" title="'.$fetch_user['fname'].' '.$fetch_user['lname'].'" style="background-color: '.$fetch_user['user_color'].'; margin: 0px -5px 0px -5px; border: 1px solid #fff;">
-                                                <i class="text-white" style="font-size: 12px;">'.$get_first_letter_in_fname[0].''.$get_first_letter_in_lname[0].'</i>
-                                                </span>
-                                                </span><span style="display: none;">'.$fetch_user['fname'].' '.$fetch_user['lname'].'</span>';
-                                        }
-                                    }
-                                }
-                                echo'
-                                </td>
-                                <td class="d-none d-sm-table-cell text-center">';
-                                $list_space_id = $list_name['list_space_id'];
-                                $select_space = mysqli_query($conn, "SELECT * FROM space WHERE space_id = '$list_space_id'");
-                                $fetch_space = mysqli_fetch_array($select_space);
-
-                                $space_name = $fetch_space['space_name'];
-                                echo '<input type="hidden" id="spacename'.$task_id.'" value="'.$space_name.'">';
-
-                                $new_name = substr($space_name, 0, 15); // get only 10 character
-                                if(strlen($space_name) > 15)
-                                {
-                                    echo '<span data-toggle="popover" title="'.$new_name.'" data-placement="bottom" data-content="ID: '.$list_space_id.'">'.$new_name.'...</span>';
-                                }
-                                else
-                                {
-                                    echo '<span data-toggle="popover" title="'.$new_name.'" data-placement="bottom" data-content="ID: '.$list_space_id.'">'.$new_name.'</span>';
-                                }
-                                echo'
-                                </td>
-                                <td class="d-none d-sm-table-cell text-center">';
-
-                                $list_name = $list_name['list_name'];
-                                echo '<input type="hidden" id="listname'.$task_id.'" value="'.$list_name.'">';
-                                echo '<input type="hidden" id="listid'.$task_id.'" value="'.$task_list_id.'">';
-
-                                $new__list_name = substr($list_name, 0, 12); // get only 10 character
-                                if(strlen($list_name) > 12)
-                                {
-                                    echo '<span data-toggle="popover" title="'.$new__list_name.'" data-placement="bottom" data-content="ID: '.$task_list_id.'">'.$new__list_name.'...</span>';
-                                }
-                                else
-                                {
-                                    echo '<span data-toggle="popover" title="'.$new__list_name.'" data-placement="bottom" data-content="ID: '.$task_list_id.'">'.$new__list_name.'</span>';
-                                }
-                                echo'
-                                </td>';
-                                $select_status = mysqli_query($conn, "SELECT * FROM status WHERE status_id = '$task_status_id'");
-                                $fetch_status_name = mysqli_fetch_array($select_status);
-
-                                $select_task_list_id = mysqli_query($conn, "SELECT * FROM status WHERE status_list_id = '$task_list_id' ORDER BY status_order_no DESC LIMIT 1");
-                                $last_status = mysqli_fetch_array($select_task_list_id);
-                                $last_status_id = $last_status['status_id'];
-                                if($last_status_id == $fetch_task['task_status_id']) // identify if task is done
-                                {
-                                    echo '<td class="text-center text-white bg-gd-sea" data-toggle="popover" title="'.$fetch_status_name['status_name'].'" data-placement="bottom" data-content="ID: '.$task_status_id.'">Finish</td>';
-                                }
-                                else
-                                {
-                                    echo '<td class="text-center text-white" style="background-color: '.$fetch_status_name['status_color'].';">';
-                                        $new_name = substr($fetch_status_name['status_name'], 0, 23); // get specific character
-                                        if(strlen($fetch_status_name['status_name']) > 23)
-                                        {
-                                            echo '<span data-toggle="popover" title="'.$fetch_status_name['status_name'].'" data-placement="bottom" data-content="ID: '.$task_status_id.'">'.$new_name.'...</span>';
-                                        }
-                                        else
-                                        {
-                                            echo '<span data-toggle="popover" title="'.$fetch_status_name['status_name'].'" data-placement="bottom" data-content="ID: '.$task_status_id.'">'.$new_name.'</span>';
-                                        }
-                                        echo '
-                                    </td>';
-                                }
-                                echo'
-                            </tr>
-                            ';
-                        }
+                        include 'view_list_everything_table.php';
                     ?>
                 </tbody>
             </table>
@@ -540,5 +294,75 @@ $(document).ready(function() {
         list_id = document.getElementById("listid" + new_id).value;
 
         document.location = 'main_dashboard.php?space_name='+space_name+'&list_name='+list_name+'&list_id='+list_id+'&get_task_id='+new_id+'&b=1';
+    }
+
+    function filter_services(id)
+    {
+      // alert(id);
+      space_id = id;
+      $.ajax({
+          url: 'ajax.php',
+          type: 'POST',
+          async: false,
+          data:{
+              space_id: space_id,
+              filter_services:1,
+          },
+          success: function(data){
+              alert('You can now filter list!');
+              document.getElementById("hide_services").style.display = "none";
+              document.getElementById("hide_list").style.display = "";
+              $('#filter_list').html(data);
+            }
+        });
+    }
+
+    function filter_list(id)
+    {
+      $.ajax({
+          url: 'ajax.php',
+          type: 'POST',
+          async: false,
+          data:{
+              list_id: id,
+              filter_list:1,
+          },
+          success: function(data){
+              alert('You can now filter status!');
+              document.getElementById("hide_list").style.display = "none";
+              document.getElementById("hide_status").style.display = "";
+              $('#filter_status').html(data);
+            }
+        });
+    }
+
+    function filter_status()
+    {
+      var array = []
+      var checkboxes = document.querySelectorAll('input[type=checkbox]:checked')
+
+      for (var i = 0; i < checkboxes.length; i++) {
+          array.push(checkboxes[i].value)
+      }
+      // alert(array);
+      $.ajax({
+          url: 'ajax.php',
+          type: 'POST',
+          async: false,
+          data:{
+              status_id: array,
+              filter_status:1,
+          },
+          success: function(data){
+              if (data == 'success') {
+                location.reload();
+              }
+            }
+        });
+    }
+
+    function delete_filter_status_id(id)
+    {
+      alert(id);
     }
 </script>

@@ -2345,7 +2345,8 @@ $(document).ready(function(){
                             <!-- Task comment -->
                             <div class="col-md-6"  style="margin: -20px 0px 20px 0px;">
                                 <div style="background-color: #fff;box-shadow:0px 2px 4px #b3b3b3;">
-                                    <div data-toggle="slimscroll" data-height="390px">
+                                  <div style="overflow: scroll; height: 390px;">
+                                    <!-- <div data-toggle="slimscroll" data-height="390px" style="overflow: auto;"> -->
                                         <table class="js-table-checkable table table-hover table-vcenter">
                                             <tbody id="comment_area">
                                                 <?php include('fetch_comment.php'); ?>

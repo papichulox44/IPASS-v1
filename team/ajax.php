@@ -3661,4 +3661,52 @@
             echo 'success';
         }
     }
+
+    if(isset($_POST['filter_services']))
+    {
+        $space_id = $_POST['space_id'];
+
+        $result = mysqli_query($conn, "SELECT * FROM list WHERE list_space_id = '$space_id' ORDER BY list_name") or die(mysqli_error());
+        while($rows = mysqli_fetch_array($result))
+        {
+          echo '
+          <button class="dropdown-item" id="'.$rows['list_id'].'" onclick="filter_list(this.id)">
+              <i class="fa fa-fw fa-th-list mr-5"></i>'.$rows['list_name'].'
+          </button>
+          ';
+        }
+    }
+
+    if(isset($_POST['filter_list']))
+    {
+        $list_id = $_POST['list_id'];
+
+        $result = mysqli_query($conn, "SELECT * FROM status WHERE status_list_id = '$list_id' ORDER BY status_order_no") or die(mysqli_error());
+        while($rows = mysqli_fetch_array($result))
+        {
+          echo '
+          <button class="dropdown-item">
+          <input type="checkbox" id="status" value="'.$rows['status_id'].'">
+          <label>'.$rows['status_name'].'</label>
+          </button>
+          ';
+        }
+        echo '
+          <button class="btn btn-success form-control" onclick="filter_status()">
+          Filter
+          </button>
+        ';
+    }
+
+    if(isset($_POST['filter_status']))
+    {
+        $user_id = $_SESSION['user'];
+        $status_id = $_POST['status_id'];
+        $array_status_id = join(',', $status_id);
+        $delete_filter = mysqli_query($conn, "DELETE FROM filter_status WHERE user_id = $user_id") or die(mysqli_error());
+        $result = mysqli_query($conn, "INSERT INTO filter_status (user_id, array_status) VALUES ($user_id, '$array_status_id')") or die(mysqli_error());
+        if ($result) {
+          echo 'success';
+        }
+    }
 ?>
