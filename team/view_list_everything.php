@@ -138,6 +138,9 @@
                         <?php
                           $user_id = $_SESSION['user'];
                           $select_filter_status = mysqli_query($conn, "SELECT * FROM filter_status WHERE user_id = $user_id");
+                          if (mysqli_num_rows($select_filter_status) === 0) {
+                            echo "<label>At the moment there's no batch filter in the status!</label>";
+                          }
                           while($fetch_filter = mysqli_fetch_array($select_filter_status))
                           {
                             $filter_status_id = $fetch_filter['filter_status_id'];
@@ -273,8 +276,77 @@
                             }
 
                         $count = 1;
-                        // $select_task = mysqli_query($conn, "SELECT * FROM task");
-                        include 'view_list_everything_table.php';
+
+                        while($fetch_task = mysqli_fetch_array($select_task))
+                        {
+                          $status_id = $fetch_task['task_status_id'];
+                          $user_id = $_SESSION['user'];
+                          $query_filter_status = mysqli_query($conn, "SELECT * FROM filter_status WHERE user_id = $user_id");
+                          $data = mysqli_fetch_array($query_filter_status);
+                          $array_status = $data['array_status'];
+                          if (mysqli_num_rows($query_filter_status) === 1) {
+                            $value_array = explode(",", $array_status);
+                            if(count($value_array) === 1)
+                            {
+                              $value1 = $value_array[0];
+                              if ($value1 === $status_id) {
+                                include 'view_list_everything_table.php';
+                              }
+                            }
+                            else if(count($value_array) === 2)
+                            {
+                              $value1 = $value_array[0];
+                              $value2 = $value_array[1];
+                              if ($value1 === $status_id OR $value2 === $status_id) {
+                                include 'view_list_everything_table.php';
+                              }
+                            }
+                            else if(count($value_array) === 3)
+                            {
+                              $value1 = $value_array[0];
+                              $value2 = $value_array[1];
+                              $value3 = $value_array[2];
+                              if ($value1 === $status_id OR $value2 === $status_id OR $value3 === $status_id) {
+                                include 'view_list_everything_table.php';
+                              }
+                            }
+                            else if(count($value_array) === 4)
+                            {
+                              $value1 = $value_array[0];
+                              $value2 = $value_array[1];
+                              $value3 = $value_array[2];
+                              $value4 = $value_array[3];
+                              if ($value1 === $status_id OR $value2 === $status_id OR $value3 === $status_id OR $value4 === $status_id) {
+                                include 'view_list_everything_table.php';
+                              }
+                            }
+                            else if(count($value_array) === 5)
+                            {
+                              $value1 = $value_array[0];
+                              $value2 = $value_array[1];
+                              $value3 = $value_array[2];
+                              $value4 = $value_array[3];
+                              $value5 = $value_array[4];
+                              if ($value1 === $status_id OR $value2 === $status_id OR $value3 === $status_id OR $value4 === $status_id OR $value5 === $status_id) {
+                                include 'view_list_everything_table.php';
+                              }
+                            }
+                            else if(count($value_array) === 6)
+                            {
+                              $value1 = $value_array[0];
+                              $value2 = $value_array[1];
+                              $value3 = $value_array[2];
+                              $value4 = $value_array[3];
+                              $value5 = $value_array[4];
+                              $value6 = $value_array[5];
+                              if ($value1 === $status_id OR $value2 === $status_id OR $value3 === $status_id OR $value4 === $status_id OR $value5 === $status_id OR $value5 === $status_id) {
+                                include 'view_list_everything_table.php';
+                              }
+                            }
+                          } else {
+                            include 'view_list_everything_table.php';
+                          }
+                        }
                     ?>
                 </tbody>
             </table>
@@ -363,6 +435,23 @@
 
     function delete_filter_status_id(id)
     {
-      alert(id);
+      if(confirm("Are you sure you want to removed this batch filter?"))
+      {
+        $.ajax({
+            url: 'ajax.php',
+            type: 'POST',
+            async: false,
+            data:{
+                filter_status_id: id,
+                delete_filter_status_id:1,
+            },
+            success: function(data){
+                if (data == 'success') {
+                  alert('Filter batch successfully removed!!');
+                  location.reload();
+                }
+              }
+          });
+      }
     }
 </script>

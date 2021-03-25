@@ -3709,4 +3709,13 @@
           echo 'success';
         }
     }
+
+    if(isset($_POST['delete_filter_status_id']))
+    {
+        $filter_status_id = $_POST['filter_status_id'];
+        $result = mysqli_query($conn, "DELETE FROM filter_status WHERE filter_status_id = $filter_status_id") or die(mysqli_error());
+        if ($result) {
+          echo 'success';
+        }
+    }
 ?>

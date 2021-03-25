@@ -1,6 +1,5 @@
 <?php
-while($fetch_task = mysqli_fetch_array($select_task))
-{
+
     $task_status_id = $fetch_task['task_status_id'];
     $task_list_id = $fetch_task['task_list_id']; // get list id
     $task_id = $fetch_task['task_id'];
@@ -230,6 +229,5 @@ while($fetch_task = mysqli_fetch_array($select_task))
         echo'
     </tr>
     ';
-}
 
 ?>
