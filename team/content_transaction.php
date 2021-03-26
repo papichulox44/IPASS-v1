@@ -101,7 +101,7 @@
                                            No Remarks
                                             <!-- <i class="fa fa-fw fa-check mr-5"></i>All Remarks -->
                                         </button>
-                                        <?php 
+                                        <?php
                                         $query = mysqli_query($conn, "SELECT * FROM tbl_remarks");
 
                                         while ($data = mysqli_fetch_array($query)) {
@@ -164,6 +164,71 @@
                                         </span>
                                     </div>
                                 </div>
+                                |
+                                <div class="dropdown float-right" id="hide_services">
+                                    <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" id="ecom-orders-overview-drop" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span>Services</span>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ecom-orders-overview-drop" x-placement="bottom-end" style="overflow: auto; height: 300px; position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(96px, 31px, 0px);">
+                                        <?php
+                                          $select_services = mysqli_query($conn, "SELECT * FROM space ORDER BY space_name");
+                                          while($fetch_services = mysqli_fetch_array($select_services))
+                                          {
+                                            echo '
+                                            <button class="dropdown-item" id="'.$fetch_services['space_id'].'" onclick="filter_services(this.id)">
+                                                <i class="fa fa-fw fa-th-list mr-5"></i>'.$fetch_services['space_name'].'
+                                            </button>
+                                            ';
+                                          }
+                                         ?>
+                                    </div>
+                                </div>
+
+                                <div class="dropdown float-right" id="hide_phase" style="display: none;">
+                                    <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" id="ecom-orders-overview-drop" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span>Phase</span>
+                                    </button>
+                                    <div id="filter_phase" class="dropdown-menu dropdown-menu-right" aria-labelledby="ecom-orders-overview-drop" x-placement="bottom-end" style="overflow: auto; height: 300px; position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(96px, 31px, 0px);">
+                                    </div>
+                                </div>
+
+                                |
+                                <div class="dropdown float-right">
+                                    <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" id="ecom-orders-overview-drop" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span>Filter</span>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ecom-orders-overview-drop" x-placement="bottom-end" style="overflow: auto; height: 300px; position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(96px, 31px, 0px);">
+                                        <?php
+                                          $user_id = $_SESSION['user'];
+                                          $select_filter_status = mysqli_query($conn, "SELECT * FROM filter_status WHERE user_id = $user_id AND filter_name = 'transaction'");
+                                          if (mysqli_num_rows($select_filter_status) === 0) {
+                                            echo "<label>At the moment there's no batch filter in the phase(s)!</label>";
+                                          }
+                                          while($fetch_filter = mysqli_fetch_array($select_filter_status))
+                                          {
+                                            $filter_status_id = $fetch_filter['filter_status_id'];
+                                            $status_array = explode(",", $fetch_filter['array_status']); // convert string to array
+                                            $count_status = count($status_array);
+                                            echo '<label>List of Phase(s) Filter by Batch:</label>';
+                                            for ($x = 1; $x <= $count_status; $x++)
+                                            {
+                                              $y = $x - 1;
+                                              $final_status_id = $status_array[$y];
+                                              // echo $final_status_id.'<br>';
+                                              $get_status_name = mysqli_query($conn, "SELECT * FROM finance_phase WHERE phase_id = '$final_status_id'");
+                                              $result = mysqli_fetch_array($get_status_name);
+                                              $status_name = $result['phase_name'];
+                                              echo '
+                                              <button class="dropdown-item" id="'.$filter_status_id.'" onclick="delete_filter_status_id(this.id)">
+                                                  <i class="fa fa-fw fa-th-list mr-5"></i>'.$status_name.'
+                                              </button>
+                                              ';
+                                            }
+                                          }
+                                         ?>
+                                    </div>
+                                </div>
+
                             </div>
 
                             <!-- Transaction Page table -->
@@ -227,6 +292,74 @@
     <script type="text/javascript" src="../assets/js/jquery-1.6.4.min.js"></script>
     <script type="text/javascript" src="../assets/js/jquery-3.2.1.min.js"></script>
     <script>
+
+        function filter_services(id)
+        {
+          space_id = id;
+          $.ajax({
+              url: 'ajax_transaction.php',
+              type: 'POST',
+              async: false,
+              data:{
+                  space_id: space_id,
+                  filter_services:1,
+              },
+              success: function(data){
+                  alert('You can now phase list!');
+                  document.getElementById("hide_services").style.display = "none";
+                  document.getElementById("hide_phase").style.display = "";
+                  $('#filter_phase').html(data);
+                }
+            });
+        }
+
+        function filter_phase()
+        {
+          var array = []
+          var checkboxes = document.querySelectorAll('input[type=checkbox]:checked')
+
+          for (var i = 0; i < checkboxes.length; i++) {
+              array.push(checkboxes[i].value)
+          }
+          // alert(array);
+          $.ajax({
+              url: 'ajax_transaction.php',
+              type: 'POST',
+              async: false,
+              data:{
+                  status_id: array,
+                  filter_phase:1,
+              },
+              success: function(data){
+                  if (data == 'success') {
+                    location.reload();
+                  }
+                }
+            });
+        }
+
+        function delete_filter_status_id(id)
+        {
+          if(confirm("Are you sure you want to removed this batch filter?"))
+          {
+            $.ajax({
+                url: 'ajax_transaction.php',
+                type: 'POST',
+                async: false,
+                data:{
+                    filter_status_id: id,
+                    delete_filter_status_id:1,
+                },
+                success: function(data){
+                    if (data == 'success') {
+                      alert('Filter batch successfully removed!!');
+                      location.reload();
+                    }
+                  }
+              });
+          }
+        }
+
         document.getElementById("view_by").innerHTML = "<?php echo $view;?>";
         var view_by = document.getElementById("view_by").innerHTML;
         document.getElementById("filterby").innerHTML = "<?php echo $filter;?>";
@@ -235,12 +368,12 @@
         var get_to = "<?php echo $to; ?>";
 
         if(view_by == "All Remarks")
-        { 
+        {
             view_all_transaction();
         }
         else
-        { 
-            view_all_transaction(); 
+        {
+            view_all_transaction();
         }
 
 
@@ -798,7 +931,7 @@
             myImg.style.width = (currWidth - 100) + "px";
             // myImg.style.height = (currWidth - 100) + "px";
           }
-        } 
+        }
 
         function rotateImage() {
             // alert('Nag rotate');
@@ -830,7 +963,7 @@
             myImg.style.transform = "rotate("+(total) + "deg)";
             // myImg.style.height = (currWidth - 100) + "px";
           }
-        } 
+        }
 
         function delete_transaction(id)
         {
@@ -859,7 +992,8 @@
                           if (response == 'success') {
                             alert('Transaction Successfully Deleted!!');
                             $("#modal-trans-details").modal('hide');
-                            view_all_transaction(); 
+                            // view_all_transaction();
+                            location.reload();
                           }
                         }
                     });

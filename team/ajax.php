@@ -1447,6 +1447,7 @@
         $tran_transaction_no = $_POST['tran_transaction_no'];
         $tran_currency = $_POST['tran_currency'];
         $tran_amount = $_POST['tran_amount'];
+        $date1 = date('Y-m-d H:i:s');
 
         $tran_charge = $_POST['tran_charge'];
         $tran_charge_type = $_POST['tran_charge_type'];
@@ -1467,6 +1468,7 @@
         $tran_php_rate = $_POST['tran_php_rate'];
         $tran_php_total = $_POST['tran_php_total'];
         $tran_client_php_total = $_POST['tran_client_php_total'];
+        $comment = 'Add new payment|Trans. No '.$tran_transaction_no.' |Amount: $'.$tran_usd_total.'';
 
         $attachment_name = $_FILES['file_attachment']['name'];
         $attachment_temp = $_FILES['file_attachment']['tmp_name'];
@@ -1488,7 +1490,8 @@
             if($attachment_size < 10000000) // Maximum 10 MB
             {
                 move_uploaded_file($attachment_temp, $location);
-                mysqli_query($conn,"INSERT INTO finance_transaction values ('','$user_id','$phase_id','$task_id','$tran_date','$tran_method','$tran_transaction_no','$tran_currency','$tran_amount','$charge','$tran_initial','$tran_usd_rate','$tran_usd_total','$tran_php_rate','$tran_php_total','$tran_client_rate','$tran_client_php_total','$tran_note','$image')") or die(mysqli_error());
+                mysqli_query($conn,"INSERT INTO comment (comment_task_id, comment_user_id, comment_message, comment_date, comment_type) values ($task_id, $user_id, '$comment', '$date1', 1)") or die(mysqli_error());
+                mysqli_query($conn,"INSERT INTO finance_transaction (val_add_by, val_phase_id, val_assign_to, val_date, val_method, val_transaction_no, val_currency, val_amount, val_charge, val_initial_amount, val_usd_rate, val_usd_total, val_php_rate, val_php_total, val_client_rate, val_client_total, val_note, val_attachment) values ('$user_id','$phase_id','$task_id','$tran_date','$tran_method','$tran_transaction_no','$tran_currency','$tran_amount','$charge','$tran_initial','$tran_usd_rate','$tran_usd_total','$tran_php_rate','$tran_php_total','$tran_client_rate','$tran_client_php_total','$tran_note','$image')") or die(mysqli_error());
                 echo "success";
             }
             else
@@ -3703,8 +3706,8 @@
         $user_id = $_SESSION['user'];
         $status_id = $_POST['status_id'];
         $array_status_id = join(',', $status_id);
-        $delete_filter = mysqli_query($conn, "DELETE FROM filter_status WHERE user_id = $user_id") or die(mysqli_error());
-        $result = mysqli_query($conn, "INSERT INTO filter_status (user_id, array_status) VALUES ($user_id, '$array_status_id')") or die(mysqli_error());
+        $delete_filter = mysqli_query($conn, "DELETE FROM filter_status WHERE user_id = $user_id AND filter_name = 'everything'") or die(mysqli_error());
+        $result = mysqli_query($conn, "INSERT INTO filter_status (user_id, array_status, filter_name) VALUES ($user_id, '$array_status_id', 'everything')") or die(mysqli_error());
         if ($result) {
           echo 'success';
         }

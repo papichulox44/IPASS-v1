@@ -2781,8 +2781,10 @@ function save_transac()
                     if(data == "success")
                     {
                         alert("Transaction added successfully.");
+                        displayChat();
                         clear_finance_field();
                         view_transaction_per_phase();
+
                     }
                     else if(data == "error2")
                     {

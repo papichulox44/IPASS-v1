@@ -137,7 +137,7 @@
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ecom-orders-overview-drop" x-placement="bottom-end" style="overflow: auto; height: 300px; position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(96px, 31px, 0px);">
                         <?php
                           $user_id = $_SESSION['user'];
-                          $select_filter_status = mysqli_query($conn, "SELECT * FROM filter_status WHERE user_id = $user_id");
+                          $select_filter_status = mysqli_query($conn, "SELECT * FROM filter_status WHERE user_id = $user_id AND filter_name = 'everything'");
                           if (mysqli_num_rows($select_filter_status) === 0) {
                             echo "<label>At the moment there's no batch filter in the status!</label>";
                           }
@@ -281,7 +281,7 @@
                         {
                           $status_id = $fetch_task['task_status_id'];
                           $user_id = $_SESSION['user'];
-                          $query_filter_status = mysqli_query($conn, "SELECT * FROM filter_status WHERE user_id = $user_id");
+                          $query_filter_status = mysqli_query($conn, "SELECT * FROM filter_status WHERE user_id = $user_id AND filter_name = 'everything'");
                           $data = mysqli_fetch_array($query_filter_status);
                           $array_status = $data['array_status'];
                           if (mysqli_num_rows($query_filter_status) === 1) {
