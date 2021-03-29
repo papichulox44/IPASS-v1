@@ -2127,8 +2127,13 @@
             {
                 echo'<div class="form-group row">
                         <label class="col-lg-4 col-form-label">'.$rows['requirement_name'].'</label>
-                        <div class="col-lg-8">
+                        <div class="col-lg-6">
                             <input type="text" class="form-control" id="requirement_input_field'.$rows['requirement_id'].'" value="'.$value.'">
+                        </div>
+                        <div class="col-lg-2">
+                            <button type="button" class="btn btn-sm btn-circle btn-alt-success mr-5 mb-5" id="'.$rows['requirement_id'].'" onclick="save_requirement(this.id)">
+                                <i class="fa fa-check"></i>
+                            </button>
                         </div>
                     </div>';
             }
@@ -2136,7 +2141,7 @@
             {
                 echo'<div class="form-group row">
                         <label class="col-lg-4 col-form-label">'.$rows['requirement_name'].'</label>
-                        <div class="col-lg-8">';
+                        <div class="col-lg-6">';
                             $select_field1 = mysqli_query($conn, "SELECT * FROM requirement_child WHERE child_id = '$value'");
                             $get_color = mysqli_fetch_array($select_field1);
                             if($get_color['child_color'] == "")
@@ -2162,6 +2167,11 @@
                                 echo'
                             </select>
                         </div>
+                        <div class="col-lg-2">
+                            <button type="button" class="btn btn-sm btn-circle btn-alt-success mr-5 mb-5" id="'.$rows['requirement_id'].'" onclick="save_requirement(this.id)">
+                                <i class="fa fa-check"></i>
+                            </button>
+                        </div>
                     </div>';
             }
         }
@@ -2169,11 +2179,11 @@
 	    {}
 	    else
 	    {
-	        echo '<div class="row">
-	                <div class="col-12">
-	                    <button type="button" class="btn btn-md btn-noborder btn-primary btn-block" onclick="btn_save_requirements_field()"><li class="fa fa-check"></li> Save</button>
-	                </div>
-	            </div>';
+	        // echo '<div class="row">
+	        //         <div class="col-12">
+	        //             <button type="button" class="btn btn-md btn-noborder btn-primary btn-block" onclick="btn_save_requirements_field()"><li class="fa fa-check"></li> Save</button>
+	        //         </div>
+	        //     </div>';
 	    }
     }
     // -----------------------  END DISPLAY REQUIREMENTS FIELD IN TASK -----------------------

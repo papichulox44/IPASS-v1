@@ -4711,6 +4711,30 @@ function btn_save_requirements_field()
     });
 }
 
+function save_requirement(id) {
+    // alert(id);
+    user_id = <?php echo $id; ?>;
+    task_id = document.getElementById("task_id_when_click").value;
+    field_value = document.getElementById("requirement_input_field" + id).value;
+    // alert(field_value);
+    $.ajax({
+        type: "POST",
+        url: "ajax.php",
+        data: {
+            user_id:user_id,
+            task_id:task_id,
+            field_id_in_array: id,
+            field_value: field_value,
+            save_requirements_field_value: 1,
+        },
+        success: function(){
+          alert('Requirements updated successfully.');
+          display_requirements();
+          display_requirement_comment();
+        }
+    });
+}
+
 function display_requirement_comment(){
     id = <?php echo $id; ?>;
     task_id = document.getElementById("task_id_when_click").value;
