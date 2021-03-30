@@ -1833,30 +1833,40 @@ $(document).ready(function(){
                             <button class="btn btn-sm dark-blue" data-toggle="dropdown"><i class="si si-user-follow"></i></button>
                             <form method="post">
                                 <div class="dropdown-menu dropdown-menu-left shadow">
-                                    <div data-toggle="slimscroll" data-height="350px" data-color="#42a5f5" data-opacity="1" data-always-visible="true" style="background-color: #fff; padding: 5px;">
-                                        <?php
-                                            $assign_num = 1;
-                                            $search_member = mysqli_query($conn, "SELECT * FROM user ORDER BY fname ASC");
-                                            while($find_search_member = mysqli_fetch_array($search_member))
-                                            {
-                                                $get_first_letter_in_fname = $find_search_member['fname'];
-                                                $get_first_letter_in_lname = $find_search_member['lname'];
-                                                echo'
-                                                <input type="hidden" name="txt_modal_assign_task_id" id="modal_assign'.$assign_num++.'" value="">
-                                                <input type="hidden" name="txt_modal_user_id" value="'.$find_search_member['user_id'].'">
-                                                <button type="button" class="dropdown-item" style="border-radius: 50px;" id="'.$find_search_member['user_id'].','.$get_first_letter_in_fname.' '.$get_first_letter_in_lname.'" onclick="assign_member(this.id)">';
-                                                    if($find_search_member['profile_pic'] != "")
-                                                    {
-                                                        echo'<img style="width:28px; height:28px; border-radius:50px; margin: 0px 10px 0px 0px;" src="../assets/media/upload/'.$find_search_member['profile_pic'].'">';
-                                                    }
-                                                    else
-                                                    {
-                                                        echo'<span class="btn btn-sm btn-circle" style="font-size: 11px; width:25px; border-radius:50px; margin: 0px 10px 0px 0px; padding: 8px 0px 0px 0px; color:#fff; background-color: '.$find_search_member['user_color'].'">'.$get_first_letter_in_fname[0].''.$get_first_letter_in_lname[0].'</span>';
-                                                    }
-                                                echo''.$find_search_member['fname'].' '.$find_search_member['mname'].' '.$find_search_member['lname'].'
-                                                </button>';
-                                            }
-                                        ?>
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text border-0">
+                                                <i class="fa fa-search"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" class="form-control border-0" placeholder="Search.." id="search_user" onkeyup="filterUser()">
+                                    </div>
+                                    <div id="filter_user">
+                                      <div data-toggle="slimscroll" data-height="350px" data-color="#42a5f5" data-opacity="1" data-always-visible="true" style="background-color: #fff; padding: 5px;">
+                                          <?php
+                                              $assign_num = 1;
+                                              $search_member = mysqli_query($conn, "SELECT * FROM user ORDER BY fname ASC");
+                                              while($find_search_member = mysqli_fetch_array($search_member))
+                                              {
+                                                  $get_first_letter_in_fname = $find_search_member['fname'];
+                                                  $get_first_letter_in_lname = $find_search_member['lname'];
+                                                  echo'
+                                                  <input type="hidden" name="txt_modal_assign_task_id" id="modal_assign'.$assign_num++.'" value="">
+                                                  <input type="hidden" name="txt_modal_user_id" value="'.$find_search_member['user_id'].'">
+                                                  <button type="button" class="dropdown-item" style="border-radius: 50px;" id="'.$find_search_member['user_id'].','.$get_first_letter_in_fname.' '.$get_first_letter_in_lname.'" onclick="assign_member(this.id)">';
+                                                      if($find_search_member['profile_pic'] != "")
+                                                      {
+                                                          echo'<img style="width:28px; height:28px; border-radius:50px; margin: 0px 10px 0px 0px;" src="../assets/media/upload/'.$find_search_member['profile_pic'].'">';
+                                                      }
+                                                      else
+                                                      {
+                                                          echo'<span class="btn btn-sm btn-circle" style="font-size: 11px; width:25px; border-radius:50px; margin: 0px 10px 0px 0px; padding: 8px 0px 0px 0px; color:#fff; background-color: '.$find_search_member['user_color'].'">'.$get_first_letter_in_fname[0].''.$get_first_letter_in_lname[0].'</span>';
+                                                      }
+                                                  echo''.$find_search_member['fname'].' '.$find_search_member['mname'].' '.$find_search_member['lname'].'
+                                                  </button>';
+                                              }
+                                          ?>
+                                      </div>
                                     </div>
                                 </div>
                             </form>
@@ -2393,6 +2403,22 @@ $(document).ready(function(){
 
 
 <script type="text/javascript">
+function filterUser() {
+  var input, filter, ul, li, a, i;
+  //input = document.getElementById("myInput");
+  input = document.getElementById("search_user");
+  filter = input.value.toUpperCase();
+  div = document.getElementById("filter_user");
+  a = div.getElementsByTagName("button");
+  for (i = 0; i < a.length; i++) {
+    txtValue = a[i].textContent || a[i].innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      a[i].style.display = "";
+    } else {
+      a[i].style.display = "none";
+    }
+  }
+}
 
 document.getElementById("tran_php_rate").onkeypress = function(event){
     if (event.keyCode == 13 || event.which == 13){
