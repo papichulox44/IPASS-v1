@@ -6830,6 +6830,41 @@ function display_assign_field_phase(){
                             <input type="hidden" id="email_blasting">
                             <input type="hidden" id="email_task_status_id">
                         </label>
+                        <div class="block-content" id="display_email_blast" style="background-color: #f0f2f5; display: none;">
+                            <div class="block">
+                                <div class="block-header block-header-default" style="margin-top: -20px; background-color: #0d7694;">
+                                    <h3 class="block-title text-white">For Email Blasting</h3>
+                                    <div class="block-options">
+                                        <button type="button" class="btn-block-option text-white" data-toggle="block-option" data-action="content_toggle"></button>
+                                    </div>
+                                </div>
+                                <div class="block-content">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label style="text-align: center;font-weight: bold;">List of Status</label>
+                                            <div data-toggle="slimscroll" data-height="150px" data-color="#42A5F5">
+                                                <table class="table table table-hover">
+                                                    <tbody class="js-table-sections-header" id="hide_status">
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label style="text-align: center;font-weight: bold;">List of Status to be Show in Client Portal</label>
+                                            <div data-toggle="slimscroll" data-height="150px" data-color="#42A5F5">
+                                                <table class="table table table-hover">
+                                                    <tbody class="js-table-sections-header" id="show_status">
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
                             <!-- CKEditor -->
                                 <div class="block-content" style="background-color: <?php echo $md_editor; ?>;">
                                     <div class="form-group row">

@@ -293,6 +293,8 @@ tbody > tr:hover {
     function get_status_id(id)
     {
         document.getElementById("task_status_id").value = id;
+        x = document.getElementById("display_email_blast");
+        x.style.display = '';
     }
 
     function show_step(id)
