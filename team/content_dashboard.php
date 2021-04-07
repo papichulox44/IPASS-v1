@@ -6590,7 +6590,7 @@ function display_assign_field_phase(){
     // fetch_email_pictures();
     function fetch_email_pictures()
     {
-        // alert('Nag alert ang email pictures');
+        // alert('Nag alert ang email pictures');\
         $.ajax({
         url: './ajax.php',
         type: 'POST',
@@ -6700,6 +6700,13 @@ function display_assign_field_phase(){
         email_blasting = document.getElementById("email_blasting").value;
         if (email_blasting == 1)
         {
+              var array = []
+             var checkboxes = document.querySelectorAll('input[type=checkbox]:checked')
+
+             for (var i = 0; i < checkboxes.length; i++) {
+                 array.push(checkboxes[i].value)
+             }
+             // alert(array);
             user_id = <?php echo $_SESSION['user']; ?>;
             email_id = document.getElementById("email_email_id").value;
             task_status_id = document.getElementById("email_task_status_id").value;
@@ -6713,6 +6720,7 @@ function display_assign_field_phase(){
                     type: 'POST',
                     async: false,
                     data:{
+                        contact_id:array,
                         email_id:email_id,
                         user_id:user_id,
                         task_status_id:task_status_id,
@@ -6723,6 +6731,9 @@ function display_assign_field_phase(){
                     success: function(data){
                         if (data == 'success')
                         {
+                            to_be_email_blast(task_status_id);
+                            done_blasting(task_status_id);
+                            count_check_email();
                             alert('Email Blasting Successfully Sent!');
                         }
                     }
@@ -6841,19 +6852,19 @@ function display_assign_field_phase(){
                                 <div class="block-content">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <label style="text-align: center;font-weight: bold;">List of Status</label>
+                                            <label style="text-align: center;font-weight: bold;">List of Email to be Blast <label id="count_blast" style="color: red;"></label> </label>
                                             <div data-toggle="slimscroll" data-height="150px" data-color="#42A5F5">
                                                 <table class="table table table-hover">
-                                                    <tbody class="js-table-sections-header" id="hide_status">
+                                                    <tbody id="to_be_email_blast">
                                                     </tbody>
                                                 </table>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <label style="text-align: center;font-weight: bold;">List of Status to be Show in Client Portal</label>
+                                            <label style="text-align: center;font-weight: bold;">Done Blasting <label id="total_blast" style="color: green;"></label></label>
                                             <div data-toggle="slimscroll" data-height="150px" data-color="#42A5F5">
                                                 <table class="table table table-hover">
-                                                    <tbody class="js-table-sections-header" id="show_status">
+                                                    <tbody id="done_blasting">
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -6879,7 +6890,7 @@ function display_assign_field_phase(){
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <textarea class="form-control mb-15" id="email_content_editable" rows="12" placeholder="Paste source here.."></textarea>
-                                                <button type="button" class="btn btn-block btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#modal-extra-large" onclick="send_editable_email()">
+                                                <button type="button" class="btn btn-block btn-primary" onclick="send_editable_email()">
                                                     Send Now
                                                 </button>
                                             </div>
@@ -6911,6 +6922,10 @@ function display_assign_field_phase(){
 
 <script type="text/javascript">
 
+    function count_check_email(){
+    document.getElementById("count_blast").innerHTML = document.querySelectorAll("input:checked").length;
+    // alert('Na alert');
+    }
 
     function input_field_textarea(id)
     {

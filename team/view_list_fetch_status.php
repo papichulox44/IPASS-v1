@@ -295,6 +295,60 @@ tbody > tr:hover {
         document.getElementById("task_status_id").value = id;
         x = document.getElementById("display_email_blast");
         x.style.display = '';
+        to_be_email_blast(id);
+        done_blasting(id);
+        count_check_email();
+    }
+
+    function to_be_email_blast(id)
+    {
+        // alert(id);
+        $.ajax({
+            url: './ajax.php',
+            type: 'POST',
+            async: false,
+            data:{
+                status_id:id,
+                to_be_email_blast: 1,
+            },
+            success: function(data){
+              $('#to_be_email_blast').html(data);
+        }
+        });
+
+    }
+
+    function done_blasting(id)
+    {
+        // alert(id);
+        $.ajax({
+            url: './ajax.php',
+            type: 'POST',
+            async: false,
+            data:{
+                status_id:id,
+                done_blasting: 1,
+            },
+            success: function(data){
+              $('#done_blasting').html(data);
+              count_total_blast(id)
+        }
+        });
+    }
+    function count_total_blast(id) {
+      // document.getElementById("total_blast").innerHTML = data;
+      $.ajax({
+          url: './ajax.php',
+          type: 'POST',
+          async: false,
+          data:{
+              status_id:id,
+              count_total_blast: 1,
+          },
+          success: function(data){
+            document.getElementById("total_blast").innerHTML = data;
+      }
+      });
     }
 
     function show_step(id)

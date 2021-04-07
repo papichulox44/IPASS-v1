@@ -1,6 +1,11 @@
 <?php
     session_start();
     include("../conn.php");
+    use PHPMailer\PHPMailer\PHPMailer;
+  	require_once 'phpmailer/Exception.php';
+  	require_once 'phpmailer/PHPMailer.php';
+  	require_once 'phpmailer/SMTP.php';
+  	$mail = new PHPMailer(true);
 
     // ----------------------- DISPLAY ASSIGN EMAIL -----------------------
     if(isset($_POST['display_email_assign']))
@@ -3521,6 +3526,7 @@
 
     if(isset($_POST['send_email_blasting']))
     {
+        $contact_id = $_POST['contact_id'];
         $email_id = $_POST['email_id'];
         $user_id = $_POST['user_id'];
         $task_status_id = $_POST['task_status_id'];
@@ -3537,55 +3543,50 @@
         $data = mysqli_fetch_array($result);
         $pass = $data['list_email_password'];
 
-        $query = mysqli_query($conn, "SELECT contact.contact_fname, contact.contact_email, task.task_id FROM task INNER JOIN contact ON task.task_contact = contact.contact_id WHERE task_status_id = '$task_status_id'");
+        foreach($contact_id as $contact_id){
+          $query = mysqli_query($conn, "SELECT contact.contact_fname, contact.contact_email, task.task_id, task.task_status_id, task.task_list_id FROM task INNER JOIN contact ON task.task_contact = contact.contact_id WHERE contact.contact_id = '$contact_id'");
+          $data = mysqli_fetch_array($query);
+              $contact_fname = $data['contact_fname'];
+              $contact_email = $data['contact_email'];
+              $task_id = $data['task_id'];
+              $task_status_id = $data['task_status_id'];
+        			$task_list_id = $data['task_list_id'];
 
-        while($data = mysqli_fetch_array($query))
-        {
-            $contact_fname = $data['contact_fname'];
-            $contact_email = $data['contact_email'];
-            $task_id = $data['task_id'];
+              $message = '
+              <div style="padding: 20px 0px 0px 0px; background-color: #189AA7;" class="shadow">
+                  <img src="https://ipasspmt.com/assets/media/photos/email_header.png" style="width: 100%;">
+                  <table width="100%" border="0" cellspacing="0" cellpadding="20" style="background-color: #47bcde; color: #5a5f61; font-family:verdana;">
+                      <tr>
+                          <td style="background-color: #fff; border-top: 10px solid #189AA7; border-bottom: 10px solid #189AA7;">
+                              <p style="margin-top: -5px;">Hi '.$contact_fname.',</p>
+                              '.$email_content.'
+                          </td>
+                      </tr>
+                  </table>
+                  <div style="text-align: center; padding: 20px 0px; color: #fff; background-color: #189AA7;">
+                      PROCESSING MADE EASY BY IPASS<br>
+                      Rm 1, 2nd Floor, Doña Segunda Complex,<br>
+                      Ponciano Street, Davao City, Philippines 8000<br><br>
+                      <a href="https://ipassprocessing.com/" style="color: white;">https://ipassprocessing.com/</a>
+                  </div>
+              </div>
+              ';
+                  $mail->isSMTP();
+                  $mail->Host = 'smtp.gmail.com';
+                  $mail->SMTPAuth = true;
+                  $mail->Username = "$from"; // Gmail address which you want to use as SMTP server
+                  $mail->Password = "$pass"; // Gmail address Password
+                  $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                  $mail->Port = '587';
+                  //$mail->setFrom('test_email@ipasspmt.com'); // Gmail address which you used as SMTP server
+                  $mail->setFrom("$from");
+                  $mail->addAddress("$contact_email"); // Email address where you want to receive emails (you can use any of your gmail address including the gmail address which you used as SMTP server)
 
-            $message = '
-            <div style="padding: 20px 0px 0px 0px; background-color: #189AA7;" class="shadow">
-                <img src="https://ipasspmt.com/assets/media/photos/email_header.png" style="width: 100%;">
-                <table width="100%" border="0" cellspacing="0" cellpadding="20" style="background-color: #47bcde; color: #5a5f61; font-family:verdana;">
-                    <tr>
-                        <td style="background-color: #fff; border-top: 10px solid #189AA7; border-bottom: 10px solid #189AA7;">
-                            <p style="margin-top: -5px;">Hi '.$contact_fname.',</p>
-                            '.$email_content.'
-                        </td>
-                    </tr>
-                </table>
-                <div style="text-align: center; padding: 20px 0px; color: #fff; background-color: #189AA7;">
-                    PROCESSING MADE EASY BY IPASS<br>
-                    Rm 1, 2nd Floor, Doña Segunda Complex,<br>
-                    Ponciano Street, Davao City, Philippines 8000<br><br>
-                    <a href="https://ipassprocessing.com/" style="color: white;">https://ipassprocessing.com/</a>
-                </div>
-            </div>
-            ';
-
-            try{
-                $mail->isSMTP();
-                $mail->Host = 'smtp.gmail.com';
-                $mail->SMTPAuth = true;
-                $mail->Username = "$from"; // Gmail address which you want to use as SMTP server
-                $mail->Password = "$pass"; // Gmail address Password
-                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-                $mail->Port = '587';
-
-                //$mail->setFrom('test_email@ipasspmt.com'); // Gmail address which you used as SMTP server
-                $mail->setFrom("$from");
-                $mail->addAddress("$contact_email"); // Email address where you want to receive emails (you can use any of your gmail address including the gmail address which you used as SMTP server)
-
-                $mail->isHTML(true);
-                $mail->Subject = "$email_subject";
-                $mail->Body = "$message";
-                $mail->send();
-                mysqli_query($conn, "INSERT INTO email_send_history (email_send_date, email_send_by, email_format_id, email_send_to, email_task_id, email_content) values ('$date', '$user_id', '$email_id', '$contact_email', '$task_id', '$email_content')") or die(mysqli_error());
-              } catch (Exception $e){
-
-              }
+                  $mail->isHTML(true);
+                  $mail->Subject = "$email_subject";
+                  $mail->Body = "$message";
+                  $mail->send();
+                  mysqli_query($conn, "INSERT INTO email_send_history (email_send_date, email_send_by, email_format_id, email_send_to, email_task_id, email_content, email_blast, email_status_id, email_list_id) values ('$date', '$user_id', '$email_id', '$contact_email', '$task_id', '$email_content', '1', '$task_status_id', '$task_list_id')") or die(mysqli_error());
         }
         echo "success";
     }
@@ -3731,4 +3732,53 @@
           echo 'success';
         }
     }
+
+    if(isset($_POST['to_be_email_blast']))
+    {
+        $status_id = $_POST['status_id'];
+        $result = mysqli_query($conn, "SELECT contact.contact_email, contact.contact_id FROM task INNER JOIN contact ON task.task_contact = contact.contact_id WHERE task_status_id = '$status_id'") or die(mysqli_error());
+        while($row = mysqli_fetch_array($result))
+        {
+          $email_send_to = $row['contact_email'];
+          $result_history = mysqli_query($conn, "SELECT * FROM email_send_history WHERE email_send_to = '$email_send_to' AND email_blast = 1 AND email_status_id = $status_id") or die(mysqli_error());
+          $count = mysqli_num_rows($result_history);
+          echo '
+                <tr>
+                  <td'; if ($count == 1) {
+                    echo 'style="display: none;"';
+                  } echo '>
+                  <input type="checkbox" id="mag_blast" name="mag_blast" value="'.$row['contact_id'].'" onclick="count_check_email()">
+                  <labe>'.$row['contact_email'].'</label><br>
+                  </td>
+                </tr>
+          ';
+        }
+    }
+
+    if(isset($_POST['done_blasting']))
+    {
+        $status_id = $_POST['status_id'];
+        $result = mysqli_query($conn, "SELECT * FROM email_send_history WHERE email_status_id = '$status_id'") or die(mysqli_error());
+        while($row = mysqli_fetch_array($result))
+        {
+          echo '
+                <tr>
+                  <td>
+                  <labe>'.$row['email_send_to'].'</label><br>
+                  </td>
+                </tr>
+          ';
+        }
+    }
+
+    if(isset($_POST['count_total_blast']))
+    {
+        $status_id = $_POST['status_id'];
+        $result = mysqli_query($conn, "SELECT Count( email_send_history.email_send_id ) AS total_blast FROM email_send_history WHERE email_status_id = '$status_id'") or die(mysqli_error());
+        while($row = mysqli_fetch_array($result))
+        {
+          echo $row['total_blast'];
+        }
+    }
+
 ?>
