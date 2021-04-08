@@ -494,7 +494,7 @@
               <tbody id="myTable">
               <tr>
                 <td>
-                <button class="dropdown-item" id="'.$result_findstatus['email_id'].'" onclick="send_email_blasting(this.id)">
+                <button class="dropdown-item">
                 <i class="fa fa-square mr-5" style="color: #3f9ce8;"></i><span data-toggle="popover" title="'.$email_name.'" data-placement="bottom">'.substr($email_name, 0, 30).'...</span>
                 </button>
                 </td>
@@ -3529,7 +3529,7 @@
         $contact_id = $_POST['contact_id'];
         $email_id = $_POST['email_id'];
         $user_id = $_POST['user_id'];
-        $task_status_id = $_POST['task_status_id'];
+        $status_id = $_POST['task_status_id'];
         $email_subject = $_POST['email_subject'];
         $email_content = $_POST['email_content'];
         $date = date('Y-m-d H:i:s');
@@ -3586,7 +3586,7 @@
                   $mail->Subject = "$email_subject";
                   $mail->Body = "$message";
                   $mail->send();
-                  mysqli_query($conn, "INSERT INTO email_send_history (email_send_date, email_send_by, email_format_id, email_send_to, email_task_id, email_content, email_blast, email_status_id, email_list_id) values ('$date', '$user_id', '$email_id', '$contact_email', '$task_id', '$email_content', '1', '$task_status_id', '$task_list_id')") or die(mysqli_error());
+                  mysqli_query($conn, "INSERT INTO email_send_history (email_send_date, email_send_by, email_format_id, email_send_to, email_task_id, email_content, email_blast, email_status_id, email_list_id) values ('$date', '$user_id', '$email_id', '$contact_email', '$task_id', '$email_content', '1', '$status_id', '$task_list_id')") or die(mysqli_error());
         }
         echo "success";
     }
@@ -3764,7 +3764,7 @@
           echo '
                 <tr>
                   <td>
-                  <labe>'.$row['email_send_to'].'</label><br>
+                  <label>'.$row['email_send_to'].'</label><br>
                   </td>
                 </tr>
           ';
