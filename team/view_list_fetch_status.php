@@ -97,7 +97,7 @@ tbody > tr:hover {
                     </span>-->
                         <!-- <button style="margin-right: 5px;" id="<?php echo $final_status_id; ?>" type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modal-blast" onclick="get_status_id(this.id)"> -->
                         <button style="margin-right: 5px;" id="<?php echo $final_status_id; ?>" type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modal-blast" onclick="get_status_id(this.id)">
-                            Email Blast
+                            Email Blasting
                         </button>
                         <button type="button" class="btn btn-sm btn-secondary float-right" data-toggle="modal" data-target="#modal-add_task">
                             <i class="fa fa-plus text-success mr-5"></i>Add
