@@ -3676,6 +3676,16 @@
         }
     }
 
+    if(isset($_POST['add_category']))
+    {
+        $cat_name = $_POST['cat_name'];
+
+        $result = mysqli_query($conn, "INSERT INTO tbl_category (cat_name) VALUES ('$cat_name')") or die(mysqli_error());
+        if ($result) {
+            echo 'success';
+        }
+    }
+
     if(isset($_POST['filter_services']))
     {
         $space_id = $_POST['space_id'];

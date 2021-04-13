@@ -3,7 +3,7 @@
     $md_text = "text-muted";
     $md_body = "";
     if($mode_type == "Dark") //insert
-    { 
+    {
         $md_primary_darker = "bg-primary-darker";
         $md_text = "text-white";
         $md_body = "bg-gray-darker text-body-color-light";
@@ -12,7 +12,7 @@
 <!-- Main Container -->
 <main id="main-container">
     <!-- Page Content -->
-    <div class="content <?php echo $md_primary_darker; ?>">                    
+    <div class="content <?php echo $md_primary_darker; ?>">
         <!-- Dynamic Table Full -->
         <div class="block block-rounded shadow <?php echo $md_body; ?>">
             <div class="block-header content-heading <?php echo $md_body; ?>">
@@ -38,7 +38,7 @@
                             $finduser = mysqli_query($conn, "SELECT * FROM user ORDER BY fname ASC");
                             while($result_finduser = mysqli_fetch_array($finduser))
                             {
-                                $get_first_letter_in_fname = $result_finduser['fname'];     
+                                $get_first_letter_in_fname = $result_finduser['fname'];
                                 $get_first_letter_in_lname = $result_finduser['lname'];
                                 echo '
                                 <tr style="cursor: pointer;">
@@ -59,10 +59,10 @@
                                         if($result_finduser['user_type'] == 'Admin')
                                         {echo'<span class="badge badge-primary">Admin</span>';}
                                         else if($result_finduser['user_type'] == 'Supervisory')
-                                        {echo'<span class="badge badge-warning">Supervisory</span>';} 
+                                        {echo'<span class="badge badge-warning">Supervisory</span>';}
                                         else if($result_finduser['user_type'] == 'Member')
                                         {echo'<span class="badge badge-success">Member</span>';}
-                                        else 
+                                        else
                                         {echo'<span class="badge badge-danger">Invalidate</span>';}
                                     echo'
                                     </td>
@@ -71,10 +71,10 @@
                                         if($result_finduser['user_type'] == 'Admin')
                                         {echo'<span class="badge badge-primary">'; if($result_finduser['department'] == ''){ echo 'Not yet assign!'; } else { echo $result_finduser['department']; } echo'</span>';}
                                         else if($result_finduser['user_type'] == 'Supervisory')
-                                        {echo'<span class="badge badge-warning">'; if($result_finduser['department'] == ''){ echo 'Not yet assign!'; } else { echo $result_finduser['department']; } echo'</span>';} 
+                                        {echo'<span class="badge badge-warning">'; if($result_finduser['department'] == ''){ echo 'Not yet assign!'; } else { echo $result_finduser['department']; } echo'</span>';}
                                         else if($result_finduser['user_type'] == 'Member')
                                         {echo'<span class="badge badge-success">'; if($result_finduser['department'] == ''){ echo 'Not yet assign!'; } else { echo $result_finduser['department']; } echo'</span>';}
-                                        else 
+                                        else
                                         {echo'<span class="badge badge-danger">'; if($result_finduser['department'] == ''){ echo 'Not yet assign!'; } else { echo $result_finduser['department']; } echo'</span>';}
                                     echo'
                                     </td>
@@ -83,10 +83,10 @@
                                         if($result_finduser['user_type'] == 'Admin')
                                         {echo'<span class="badge badge-primary">'; if($result_finduser['category'] == ''){ echo 'Not yet assign!'; } else { echo $result_finduser['category']; } echo'</span>';}
                                         else if($result_finduser['user_type'] == 'Supervisory')
-                                        {echo'<span class="badge badge-warning">'; if($result_finduser['category'] == ''){ echo 'Not yet assign!'; } else { echo $result_finduser['category']; } echo'</span>';} 
+                                        {echo'<span class="badge badge-warning">'; if($result_finduser['category'] == ''){ echo 'Not yet assign!'; } else { echo $result_finduser['category']; } echo'</span>';}
                                         else if($result_finduser['user_type'] == 'Member')
                                         {echo'<span class="badge badge-success">'; if($result_finduser['category'] == ''){ echo 'Not yet assign!'; } else { echo $result_finduser['category']; } echo'</span>';}
-                                        else 
+                                        else
                                         {echo'<span class="badge badge-danger">'; if($result_finduser['category'] == ''){ echo 'Not yet assign!'; } else { echo $result_finduser['category']; } echo'</span>';}
                                     echo'
                                     </td>
@@ -95,7 +95,7 @@
                                         {echo'<img style="width: 37px; height: 37px; border-radius:50px;" src="../assets/media/upload/'.$result_finduser['profile_pic'].'">';}
                                         else
                                         {echo '<span class="btn btn-lg btn-circle" style="color:#fff; background-color: '.$result_finduser['user_color'].'">'.$get_first_letter_in_fname[0].''.$get_first_letter_in_lname[0].'</span>';}
-                                    echo'   
+                                    echo'
                                     </td>
                                 </tr>';
                         }
@@ -166,11 +166,25 @@
                 </div>
                 <div class="block-content">
                     <input type="hidden" id="user_id_category">
+                    <div class="row">
+                      <div class="col-sm-8">
+                        <input class="form-control" type="text" id="add_category_name" value="" placeholder="Add New Category">
+                      </div>
+                      <div class="col-sm-4">
+                        <button class="form-control btn btn-success" type="button" onclick="add_category()">Add</button>
+                      </div>
+                    </div><br>
                     <select id="category" class="form-control">
                         <option selected="" disabled="" value="">Select Category</option>
-                        <option value="Application 1">Application 1</option>
-                        <option value="Application 2">Application 2</option>
-                        <option value="Application 3">Application 3</option>
+                        <?php
+                          $query = mysqli_query($conn, "SELECT * FROM tbl_category ORDER BY cat_name") or die(mysqli_error());
+                          while($data = mysqli_fetch_array($query))
+                          {
+                            echo '
+                              <option value="'.$data['cat_name'].'">'.$data['cat_name'].'</option>
+                            ';
+                          }
+                         ?>
                     </select><br>
                 </div>
             </div>
@@ -202,7 +216,7 @@
     }
 
     function save_department()
-    {  
+    {
         if(confirm("Are you sure?"))
         {
             user_id = document.getElementById("user_id_department").value
@@ -220,17 +234,17 @@
                 },
                 success: function(data){
                     if(data = 'success')
-                    {   
+                    {
                         alert('Successfully Update Department!!');
                         location.reload();
                     }
                 }
             });
         }
-    }   
+    }
 
     function save_category()
-    {  
+    {
         if(confirm("Are you sure?"))
         {
             user_id = document.getElementById("user_id_category").value
@@ -248,13 +262,36 @@
                 },
                 success: function(data){
                     if(data = 'success')
-                    {   
+                    {
                         alert('Successfully Update Category!!');
                         location.reload();
                     }
                 }
             });
         }
+    }
+
+    function add_category() {
+      if(confirm("Are you sure?"))
+      {
+        cat_name = document.getElementById("add_category_name").value
+        $.ajax({
+            url: 'ajax.php',
+            type: 'POST',
+            async: false,
+            data:{
+                cat_name:cat_name,
+                add_category: 1,
+            },
+            success: function(data){
+                if(data = 'success')
+                {
+                    alert('Successfully Added New Category!!');
+                    location.reload();
+                }
+            }
+        });
+      }
     }
 
 </script>
