@@ -1,4 +1,4 @@
-<?php   
+<?php
     $user_type = $row['user_type'];
     $user_id = $row['user_id'];
 ?>
@@ -9,7 +9,7 @@
         <div class="content-header content-header-fullrow px-15">
             <!-- Mini Mode -->
             <div class="content-header-section sidebar-mini-visible-b">
-                <!-- Logo 
+                <!-- Logo
                 <span class="content-header-item font-w700 font-size-xl float-left animated fadeIn">
                     <span class="text-dual-primary-dark">c</span><span class="text-primary">b</span>
                 </span>-->
@@ -39,7 +39,7 @@
                         <img class="img-avatar img-avatar32" src="../assets/media/upload/<?php echo $row['profile_pic']; ?>">
                     <?php else: ?>
                         <img class="img-avatar img-avatar32" src="../assets/media/photos/avatar.jpg">
-                    <?php endif; ?>                               
+                    <?php endif; ?>
                 </a>
             </div>
             <!-- END Visible only in mini mode -->
@@ -50,7 +50,7 @@
                         <img class="img-avatar" src="../assets/media/upload/<?php echo $row['profile_pic']; ?>">
                     <?php else: ?>
                         <img class="img-avatar" src="../assets/media/photos/avatar.jpg">
-                    <?php endif; ?>                               
+                    <?php endif; ?>
                 </a>
                 <ul class="list-inline mt-10">
                     <li class="list-inline-item">
@@ -67,11 +67,11 @@
                             <i class="fa fa-2x fa-circle"></i>
                         </a>
                     </li>
-                    <?php 
+                    <?php
                         if($user_type == "Admin")
                         {
                             echo '<span class="badge badge-primary text-white">'.$row['user_type'].'</span> ';
-                        }   
+                        }
                         else if($user_type == "Supervisory")
                         {
                             echo '<span class="badge text-white" style="background-color: #d0a218;">'.$row['user_type'].'</span> ';
@@ -87,20 +87,20 @@
         </div>
         <!-- END Side User -->
 
-<?php 
+<?php
     if($user_type == "Admin")
     { ?>
         <!-- ADMIN Side Navigation -->
         <div class="content-side content-side-full">
             <ul class="nav-main">
-                <?php 
+                <?php
                     $user_id = $row['user_id'];
 
                     $findcontact = mysqli_query($conn, "SELECT * FROM contact WHERE contact_assign_to = ''");
                     $total_unassign = mysqli_num_rows($findcontact);
                     if($highlight == "main_dashboard.php")
                     {
-                        if (empty($_GET['space_name'])) 
+                        if (empty($_GET['space_name']))
                         {
                             $dashboard_style = "background-color: #20527b; color: #eee;";
                             $ico1 = "text-white-op";
@@ -142,15 +142,27 @@
                     }
                     else if($highlight == "main_contact_add.php")
                     {
-                        $opencontact = "open"; 
+                        $opencontact = "open";
                         $add = "background-color: #20527b; color: #eee; padding-left: 15px; margin-left: -15px;";
                         $ico5 = "text-white-op";
                     }
                     else if($highlight == "main_contact_assign.php")
                     {
-                        $opencontact = "open"; 
+                        $opencontact = "open";
                         $assign = "background-color: #20527b; color: #eee; padding-left: 15px; margin-left: -15px;";
                         $ico6 = "text-white-op";
+                    }
+                    else if($highlight == "individual_report.php")
+                    {
+                        $openreport = "open";
+                        $ind_report = "background-color: #20527b; color: #eee; padding-left: 15px; margin-left: -15px;";
+                        $ico9 = "text-white-op";
+                    }
+                    else if($highlight == "summary_report.php")
+                    {
+                        $openreport = "open";
+                        $sum_report = "background-color: #20527b; color: #eee; padding-left: 15px; margin-left: -15px;";
+                        $ico10 = "text-white-op";
                     }
                     else if($highlight == "main_add_space.php")
                     {
@@ -174,26 +186,37 @@
                 <li>
                     <a href="main_inbox.php" style="<?php echo $inbox_style; ?>"><i class="si si-envelope <?php echo $ico2; ?>"></i><span class="sidebar-mini-hide">Inbox</span>
                         <small id="new_message"></small>
-                    </a>                        
+                    </a>
                 </li>
                 <li>
-                    <a href="main_email_format.php" style="<?php echo $email_style; ?>"><i class="fa fa-send-o <?php echo $ico10; ?>"></i><span class="sidebar-mini-hide">Email format</span>   
-                    </a>                        
+                    <a href="main_email_format.php" style="<?php echo $email_style; ?>"><i class="fa fa-send-o <?php echo $ico10; ?>"></i><span class="sidebar-mini-hide">Email format</span>
+                    </a>
                 </li>
                 <li>
-                    <a href="email_blasting.php" style="<?php echo $blasting_style; ?>"><i class="fa fa-send text-white-op"></i><span class="sidebar-mini-hide">Email Blasting</span>   
-                    </a>                        
+                    <a href="email_blasting.php" style="<?php echo $blasting_style; ?>"><i class="fa fa-send text-white-op"></i><span class="sidebar-mini-hide">Email Blasting</span>
+                    </a>
+                </li>
+                <li class="<?php echo $openreport;?>">
+                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="fa fa-bar-chart <?php echo $ico9; ?>"></i><span class="sidebar-mini-hide">Reports</span></a>
+                    <ul>
+                        <li>
+                            <a href="individual_report.php" style="<?php echo $ind_report;?>">Individual Report</a>
+                        </li>
+                        <li>
+                            <a href="summary_report.php" style="<?php echo $sum_report;?>">Summary Report</a>
+                        </li>
+                    </ul>
                 </li>
                 <li>
                     <a href="main_transaction.php?view=All Remarks&filter=This Week" style="<?php echo $transaction_style; ?>"><i class="si si-wallet <?php echo $ico9; ?>"></i><span class="sidebar-mini-hide">Transaction</span>
                         <small id="new_message"></small>
-                    </a>                        
+                    </a>
                 </li>
                 <li>
                     <a href="main_notification.php" style="<?php echo $notification_style; ?>"><i class="si si-bell <?php echo $ico3; ?>"></i><span class="sidebar-mini-hide">Notification</span></a>
                 </li>
                 <li>
-                    <a href="main_people.php" style="<?php echo $people_style; ?>"><i class="si si-users <?php echo $ico4; ?>"></i><span class="sidebar-mini-hide">Member 
+                    <a href="main_people.php" style="<?php echo $people_style; ?>"><i class="si si-users <?php echo $ico4; ?>"></i><span class="sidebar-mini-hide">Member
                         <?php
                             $select_user = mysqli_query($conn, "SELECT * FROM user WHERE user_type = ''");
                             $count_user = mysqli_num_rows($select_user);
@@ -202,7 +225,7 @@
                             { echo '<span class="badge badge-danger">'.$count_user.'</span>'; }
                         ?>
                     </span></a>
-                </li> 
+                </li>
                 <li class="<?php echo $opencontact;?>">
                     <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="fa fa-address-book-o <?php echo $ico5; ?>"></i><span class="sidebar-mini-hide">Contact</span>
                         <?php
@@ -213,8 +236,8 @@
                     </a>
                     <ul>
                         <li>
-                            
-                            <a href="main_contact_add.php" style="<?php echo $add;?>">Add | Unassign 
+
+                            <a href="main_contact_add.php" style="<?php echo $add;?>">Add | Unassign
                                 <?php
                                     if($total_unassign == 0){}
                                     else
@@ -226,7 +249,7 @@
                             <a href="main_contact_assign.php" style="<?php echo $assign;?>">Assign contact</a>
                         </li>
                     </ul>
-                </li> 
+                </li>
                 <li class="<?php echo $openspaces;?>">
                     <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-grid <?php echo $ico6; ?>"></i><span class="sidebar-mini-hide">Services</span></a>
                     <ul>
@@ -237,7 +260,7 @@
                             <a href="main_everything.php?filter=All&due_date=This Week" style="<?php echo $children_everything;?>">Everything</a>
                         </li>
                         <?php
-                        if (empty($_GET['space_name'])) 
+                        if (empty($_GET['space_name']))
                         {
                             $que = mysqli_query($conn,"SELECT space_id FROM space");
                             $res = mysqli_fetch_array($que);
@@ -249,25 +272,25 @@
                             $space_names = $_GET['space_name'];
                             $que = mysqli_query($conn,"SELECT space_id FROM space WHERE space_name='$space_names'");
                             $res = mysqli_fetch_array($que);
-                            $space_id = $res['space_id']; 
+                            $space_id = $res['space_id'];
                             $list_id = $_GET['list_id'];
                         }
 
                         $select_space_sort = mysqli_query($conn, "SELECT * FROM space_sort");
                         $count_sort = mysqli_num_rows($select_space_sort);
                         if($count_sort == 0) // check if no sorting in admin
-                        {  
-                            $findspace = mysqli_query($conn, "SELECT * FROM space ORDER BY space_name ASC"); 
+                        {
+                            $findspace = mysqli_query($conn, "SELECT * FROM space ORDER BY space_name ASC");
                         }
                         else // if has sorting in admin
                         {
                             $findspace = mysqli_query($conn, "SELECT * FROM space_sort ORDER BY sort_space_order ASC");
                         }
-                        
+
                         while($result_findspace = mysqli_fetch_array($findspace))
                         {
                             if($count_sort == 0) // check if no sorting in admin
-                            {  
+                            {
                                 $list_space_id = $result_findspace['space_id'];
                                 $space_name = $result_findspace['space_name'];
                             }
@@ -279,7 +302,7 @@
                                 $space_name = $rows['space_name'];
                             }
 
-                            
+
                             if($list_space_id == $space_id)
                             {?>
                                 <li class="open">
@@ -294,20 +317,20 @@
                                             {?>
                                                 <li>
                                                     <a style="background-color: #20527b; color: #eee; padding-left: 15px; margin-left: -15px;" href="main_dashboard.php?space_name=<?php echo $space_name; ?>&list_name=<?php echo $result_findlist['list_name']; ?>&list_id=<?php echo $result_findlist['list_id']; ?>"><?php echo $result_findlist['list_name']; ?></a>
-                                                </li>                                            
-                                        <?php 
-                                            }   
+                                                </li>
+                                        <?php
+                                            }
                                             else
                                             {?>
                                                 <li>
                                                     <a href="main_dashboard.php?space_name=<?php echo $space_name; ?>&list_name=<?php echo $result_findlist['list_name']; ?>&list_id=<?php echo $result_findlist['list_id']; ?>"><?php echo $result_findlist['list_name']; ?></a>
-                                                </li> 
-                                        <?php 
-                                            }                                      
-                                        }?> 
+                                                </li>
+                                        <?php
+                                            }
+                                        }?>
                                     </ul>
                                 </li>
-                            <?php 
+                            <?php
                             }
                             else
                             {?>
@@ -317,48 +340,48 @@
                                         <?php
                                             $findlist = mysqli_query($conn, "SELECT * FROM list WHERE list_space_id = '$list_space_id' ORDER BY list_name ASC");
                                             while($result_findlist = mysqli_fetch_array($findlist))
-                                        {?> 
+                                        {?>
                                         <li>
                                             <a href="main_dashboard.php?space_name=<?php echo $space_name; ?>&list_name=<?php echo $result_findlist['list_name']; ?>&list_id=<?php echo $result_findlist['list_id']; ?>"><?php echo $result_findlist['list_name']; ?></a>
-                                        </li>                                            
-                                        <?php                                        
-                                        }?> 
+                                        </li>
+                                        <?php
+                                        }?>
                                     </ul>
                                 </li>
-                            <?php 
-                            }                                       
-                        }?>                                    
+                            <?php
+                            }
+                        }?>
                     </ul>
-                </li>   
+                </li>
 <!--                 <li>
                     <a href="#"><i class="si si-calendar"></i><span class="sidebar-mini-hide">Calendar</span></a>
                 </li> -->
 <!--                 <li>
                     <a href="#"><i class="si si-trash"></i><span class="sidebar-mini-hide">Trash</span></a>
-                </li>  -->                           
+                </li>  -->
                 <li>
                     <a href="logout.php?logout"><i class="si si-logout"></i><span class="sidebar-mini-hide">Sign Out</span></a>
-                </li>                           
+                </li>
             </ul>
         </div>
         <!-- END ADMIN Side Navigation -->
     <?php }
     else
-    { ?> 
+    { ?>
         <!-- MEMBER Side Navigation -->
         <div class="content-side content-side-full">
             <ul class="nav-main">
-                <?php 
+                <?php
                     $user_id = $row['user_id'];
 
                     $findcontact = mysqli_query($conn, "SELECT * FROM contact WHERE contact_assign_to = ''");
                     $total_unassign = mysqli_num_rows($findcontact);
 
                     if($user_type == "Supervisory") // Supervisory
-                    { 
+                    {
                         if($highlight == "main_dashboard.php")
                         {
-                            if (empty($_GET['space_name'])) 
+                            if (empty($_GET['space_name']))
                             {
                                 $dashboard_style = "background-color: #946401; color: #eee;";
                                 $ico1 = "text-white-op";
@@ -386,13 +409,13 @@
                         }
                         else if($highlight == "main_contact_add.php")
                         {
-                            $opencontact = "open"; 
+                            $opencontact = "open";
                             $add = "background-color: #946401; color: #eee; padding-left: 15px; margin-left: -15px;";
                             $ico5 = "text-white-op";
                         }
                         else if($highlight == "main_contact_assign.php")
                         {
-                            $opencontact = "open"; 
+                            $opencontact = "open";
                             $assign = "background-color: #946401; color: #eee; padding-left: 15px; margin-left: -15px;";
                             $ico6 = "text-white-op";
                         }
@@ -415,7 +438,7 @@
                     {
                         if($highlight == "main_dashboard.php")
                         {
-                            if (empty($_GET['space_name'])) 
+                            if (empty($_GET['space_name']))
                             {
                                 $dashboard_style = "background-color: #1f7575; color: #eee;";
                                 $ico1 = "text-white-op";
@@ -443,13 +466,13 @@
                         }
                         else if($highlight == "main_contact_add.php")
                         {
-                            $opencontact = "open"; 
+                            $opencontact = "open";
                             $add = "background-color: #1f7575; color: #eee; padding-left: 15px; margin-left: -15px;";
                             $ico5 = "text-white-op";
                         }
                         else if($highlight == "main_contact_assign.php")
                         {
-                            $opencontact = "open"; 
+                            $opencontact = "open";
                             $assign = "background-color: #1f7575; color: #eee; padding-left: 15px; margin-left: -15px;";
                             $ico6 = "text-white-op";
                         }
@@ -475,7 +498,7 @@
                 <li>
                     <a href="main_inbox.php" style="<?php echo $inbox_style; ?>"><i class="si si-envelope <?php echo $ico2; ?>"></i><span class="sidebar-mini-hide">Inbox </span>
                         <small id="new_message"></small>
-                    </a>                        
+                    </a>
                 </li>
                 <li>
                     <a href="main_notification.php" style="<?php echo $notification_style; ?>"><i class="si si-bell <?php echo $ico3; ?>"></i><span class="sidebar-mini-hide">Notification</span></a>
@@ -490,8 +513,8 @@
                     </a>
                     <ul>
                         <li>
-                            
-                            <a href="main_contact_add.php" style="<?php echo $add;?>">Add | Unassign 
+
+                            <a href="main_contact_add.php" style="<?php echo $add;?>">Add | Unassign
                                 <?php
                                     if($total_unassign == 0){}
                                     else
@@ -503,7 +526,7 @@
                             <a href="main_contact_assign.php" style="<?php echo $assign;?>">Assign contact</a>
                         </li>
                     </ul>
-                </li> 
+                </li>
                 <li class="<?php echo $openspaces;?>">
                     <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-grid"></i><span class="sidebar-mini-hide">Services</span></a>
                     <ul>
@@ -511,7 +534,7 @@
                             <a href="main_everything.php?filter=All&due_date=This Week" style="<?php echo $children_everything;?>">Everything</a>
                         </li>
                         <?php
-                        if (empty($_GET['space_name'])) 
+                        if (empty($_GET['space_name']))
                         {
                             $que = mysqli_query($conn,"SELECT space_id FROM space");
                             $res = mysqli_fetch_array($que);
@@ -523,14 +546,14 @@
                             $space_names = $_GET['space_name'];
                             $que = mysqli_query($conn,"SELECT space_id FROM space WHERE space_name='$space_names'");
                             $res = mysqli_fetch_array($que);
-                            $space_id = $res['space_id']; 
+                            $space_id = $res['space_id'];
                             $list_id = $_GET['list_id'];
                         }
 
                         $select_space_sort = mysqli_query($conn, "SELECT * FROM space_sort");
                         $count_sort = mysqli_num_rows($select_space_sort);
                         if($count_sort == 0) // check if no sorting in admin
-                        {  
+                        {
                             $findspace = mysqli_query($conn, "SELECT * FROM space WHERE space_type='IPASS Processing Workspace' ORDER BY space_name ASC");
                         }
                         else // if has sorting in admin
@@ -541,7 +564,7 @@
                         while($result_findspace = mysqli_fetch_array($findspace))
                         {
                             if($count_sort == 0) // check if no sorting in admin
-                            {  
+                            {
                                 $list_space_id = $result_findspace['space_id'];
                                 $space_name = $result_findspace['space_name'];
                             }
@@ -570,20 +593,20 @@
                                                 ?>
                                                 <li>
                                                     <a style="<?php echo $bg; ?>; padding-left: 15px; margin-left: -15px;" href="main_dashboard.php?space_name=<?php echo $space_name; ?>&list_name=<?php echo $result_findlist['list_name']; ?>&list_id=<?php echo $result_findlist['list_id']; ?>"><?php echo $result_findlist['list_name']; ?></a>
-                                                </li>                                            
-                                        <?php 
-                                            }   
+                                                </li>
+                                        <?php
+                                            }
                                             else
                                             {?>
                                                 <li>
                                                     <a href="main_dashboard.php?space_name=<?php echo $space_name; ?>&list_name=<?php echo $result_findlist['list_name']; ?>&list_id=<?php echo $result_findlist['list_id']; ?>"><?php echo $result_findlist['list_name']; ?></a>
-                                                </li> 
-                                        <?php 
-                                            }                                      
-                                        }?> 
+                                                </li>
+                                        <?php
+                                            }
+                                        }?>
                                     </ul>
                                 </li>
-                            <?php 
+                            <?php
                             }
                             else
                             {?>
@@ -593,25 +616,25 @@
                                         <?php
                                             $findlist = mysqli_query($conn, "SELECT * FROM list WHERE list_space_id = '$list_space_id' ORDER BY list_name ASC");
                                             while($result_findlist = mysqli_fetch_array($findlist))
-                                        {?> 
+                                        {?>
                                         <li>
                                             <a href="main_dashboard.php?space_name=<?php echo $space_name; ?>&list_name=<?php echo $result_findlist['list_name']; ?>&list_id=<?php echo $result_findlist['list_id']; ?>"><?php echo $result_findlist['list_name']; ?></a>
-                                        </li>                                            
-                                        <?php                                        
-                                        }?> 
+                                        </li>
+                                        <?php
+                                        }?>
                                     </ul>
                                 </li>
-                            <?php 
-                            }                                       
-                        }?>                                    
+                            <?php
+                            }
+                        }?>
                     </ul>
-                </li>   
+                </li>
                 <!-- <li>
                     <a href="#"><i class="si si-calendar"></i><span class="sidebar-mini-hide">Calendar</span></a>
-                </li>   -->                        
+                </li>   -->
                 <li>
                     <a href="logout.php?logout"><i class="si si-logout"></i><span class="sidebar-mini-hide">Sign Out</span></a>
-                </li>                       
+                </li>
             </ul>
         </div>
 
@@ -632,7 +655,7 @@
     //     var user_id = <?php echo $user_id ?>;
     //     $.ajax({
     //         url: 'fetch_contact.php',
-    //         type: 'POST', 
+    //         type: 'POST',
     //         async: false,
     //         data:{
     //             user_id:user_id,
@@ -644,5 +667,3 @@
     //             }
     //     });
 </script>
-
-
