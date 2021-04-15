@@ -202,7 +202,7 @@
 					            </div>
 					        </div>
 
-                            <div class="block-content <?php echo $md_table_body;?> mb-20" id="list_of_remarks"></div>
+                            <div class="block-content <?php echo $md_table_body;?> mb-20" id="list_of_remarks" style="overflow: auto; height: 500px;"></div>
 
                         </div>
                     </div>
@@ -1597,4 +1597,22 @@
 	          document.location='dashboard.php?filter=Custom Date&From='+date_from+'&To='+date_to;
 	        }
 	    }
+
+		// 	$("#list_of_remarks").scroll(function () {
+		// 		alert('Nag alert sya. Yeheyy');
+    //    // if ($('#list_of_remarks').scrollTop() >= ($(document).height() - $('#list_of_remarks').height() - 1)) {
+    //    //    // $(".load_more").trigger('click');
+		// 		// 	alert('Nag scroll sya sa baba!!');
+    //    // }
+    // });
+		$("#list_of_remarks").scroll(function() {
+			// alert('Nag alert sya. Yeheyy');
+			// if($("#list_of_remarks").scrollTop() + $("#list_of_remarks").height() > $("#list_of_remarks").height()) {
+			if ($('#list_of_remarks').scrollTop() >= ($('#list_of_remarks').height() - 10)) {
+				alerts();
+				}
+		});
+		function alerts() {
+			alert('Nag alert sya. Yeheyy');
+		}
 </script>

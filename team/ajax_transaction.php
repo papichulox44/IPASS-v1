@@ -1391,7 +1391,7 @@
     if (isset($_POST['view_list_of_remarks'])) {
 
         echo '
-        <div class="col-lg-12" style="overflow: auto; height: 500px;">
+        <div class="col-lg-12">
             <div class="table-responsive">
                 <table class="table table-bordered table-striped text-white">
                     <tr>
