@@ -55,7 +55,7 @@
                 include 'left_sidebar_menu.php';
             ?>
             <?php include 'header.php'; ?>
-            <?php include 'content_everything.php'; ?>
+            <?php include 'content_everything_box.php'; ?>
         </div>
         <!-- END Page Container -->
         <script>

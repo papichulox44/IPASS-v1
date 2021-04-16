@@ -43,15 +43,15 @@
 </style>
 <div class="bs-example">
     <ul class="nav nav-tabs" id="myTab">
-        <li><a data-toggle="tab" href="#sectionA">List</a></li>
-        <li><a target="_blank" href="./main_everything_box.php?filter=<?php echo $_GET['filter']; ?>">Box</a></li>
+        <li><a data-toggle="tab" href="#sectionC">Box</a></li>
     </ul>
     <div class="tab-content">
-        <!-- List View -->
-        <div id="sectionA" class="tab-pane fade in">
-            <?php include("view_list_everything.php"); ?>
-        </div>
         <!-- END List View -->
+        <!-- Box -->
+        <div id="sectionC" class="tab-pane fade">
+            <?php include("view_box_everything.php"); ?>
+        </div>
+        <!-- End Box -->
     </div>
 </div>
 <script src="../assets/js/jquery.min.js"></script>
