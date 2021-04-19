@@ -125,19 +125,25 @@
                 </div>
                 <div class="block-content">
                     <input type="hidden" id="user_id_department">
+                    <div class="row">
+                      <div class="col-sm-8">
+                        <input class="form-control" type="text" id="add_department_name" value="" placeholder="Add New Department">
+                      </div>
+                      <div class="col-sm-4">
+                        <button class="form-control btn btn-success" type="button" onclick="add_department()">Add</button>
+                      </div>
+                    </div><br>
                     <select id="department" class="form-control">
                         <option selected="" disabled="" value="">Select Department</option>
-                        <option value="APPLICATION">APPLICATION</option>
-                        <option value="Cebu">Cebu</option>
-                        <option value="CES">CES</option>
-                        <option value="CRM">CRM</option>
-                        <option value="Customer Care">Customer Care</option>
-                        <option value="DVD">DVD</option>
-                        <option value="HC">HC</option>
-                        <option value="Middle East">Middle East</option>
-                        <option value="Finance">Finance</option>
-                        <option value="TM">TM</option>
-                        <option value="Manila">Manila</option>
+                        <?php
+                          $query = mysqli_query($conn, "SELECT * FROM tbl_department ORDER BY dep_name") or die(mysqli_error());
+                          while($data = mysqli_fetch_array($query))
+                          {
+                            echo '
+                              <option value="'.$data['dep_name'].'">'.$data['dep_name'].'</option>
+                            ';
+                          }
+                         ?>
                     </select><br>
                 </div>
             </div>
@@ -287,6 +293,29 @@
                 if(data = 'success')
                 {
                     alert('Successfully Added New Category!!');
+                    location.reload();
+                }
+            }
+        });
+      }
+    }
+
+    function add_department() {
+      if(confirm("Are you sure?"))
+      {
+        dep_name = document.getElementById("add_department_name").value
+        $.ajax({
+            url: 'ajax.php',
+            type: 'POST',
+            async: false,
+            data:{
+                dep_name:dep_name,
+                add_department: 1,
+            },
+            success: function(data){
+                if(data = 'success')
+                {
+                    alert('Successfully Added New Department!!');
                     location.reload();
                 }
             }

@@ -1889,21 +1889,21 @@
         $rows = mysqli_fetch_array($results);
         $finance_phase_id = $rows['finance_phase_id'];
 
-        $select_transaction = mysqli_query($conn, "SELECT * FROM finance_transaction WHERE val_phase_id = '$finance_phase_id'");
-        $count = mysqli_num_rows($select_transaction);
-        if($count > 0) // cannot delete any field if has transaction under specific phase
+        // $select_transaction = mysqli_query($conn, "SELECT * FROM finance_transaction WHERE val_phase_id = '$finance_phase_id'");
+        // $count = mysqli_num_rows($select_transaction);
+        // if($count > 0) // cannot delete any field if has transaction under specific phase
+        // {
+        //     echo 'Make sure no transaction is assign to any task that link into this phase.';
+        // }
+        // else // delete
+        // {
+        if($rows['finance_type'] == "dropdown") // check if dropdown to delete child
         {
-            echo 'Make sure no transaction is assign to any task that link into this phase.';
+            mysqli_query($conn,"DELETE from finance_child where child_field_id = '$field_id'"); // delete child/option
         }
-        else // delete
-        {
-            if($rows['finance_type'] == "dropdown") // check if dropdown to delete child
-            {
-                mysqli_query($conn,"DELETE from finance_child where child_field_id = '$field_id'"); // delete child/option
-            }
-            mysqli_query($conn,"DELETE from finance_field where finance_id = '$field_id'"); // delete the field
-            echo 'Field deleted.';
-        }
+        mysqli_query($conn,"DELETE from finance_field where finance_id = '$field_id'"); // delete the field
+        echo 'Field deleted.';
+        // }
     }
     // -----------------------  END DELETE FINANCE FIELD -----------------------
 
@@ -3681,6 +3681,16 @@
         $cat_name = $_POST['cat_name'];
 
         $result = mysqli_query($conn, "INSERT INTO tbl_category (cat_name) VALUES ('$cat_name')") or die(mysqli_error());
+        if ($result) {
+            echo 'success';
+        }
+    }
+
+    if(isset($_POST['add_department']))
+    {
+        $dep_name = $_POST['dep_name'];
+
+        $result = mysqli_query($conn, "INSERT INTO tbl_department (dep_name) VALUES ('$dep_name')") or die(mysqli_error());
         if ($result) {
             echo 'success';
         }
