@@ -1,9 +1,9 @@
-<?php include ("session.php"); ?> 
+<?php include ("session.php"); ?>
 <!doctype html>
 <html lang="en" class="no-focus">
     <?php include 'head.php'; ?>
     <link rel="stylesheet" href="../assets/js/plugins/magnific-popup/magnific-popup.css">
-    
+
     <style type="text/css">
         .loader-wrapper {
           width: 100%;
@@ -54,12 +54,12 @@
         <!--<div id="page-container" class="sidebar-o sidebar-inverse enable-page-overlay side-scroll page-header-modern main-content-boxed">-->
         <!--<div id="page-container" class="sidebar-o sidebar-inverse enable-page-overlay side-scroll">-->
         <div id="page-container" class="sidebar-mini sidebar-o <?php echo $inverse; ?>">
-            <?php 
+            <?php
                 $highlight = "main_dashboard.php";
                 include 'left_sidebar_menu.php';
             ?>
-            <?php include 'header.php'; ?>  
-            <?php include 'content_dashboard.php'; ?> 
+            <?php include 'header.php'; ?>
+            <?php include 'content_dashboard.php'; ?>
         </div>
         <!-- END Page Container -->
         <script>
@@ -67,8 +67,8 @@
           $(".loader-wrapper").fadeOut("slow");
         });
         </script>
-        
-        
+
+
         <script src="../assets/js/codebase.core.min.js"></script>
         <script src="../assets/js/codebase.app.min.js"></script>
         <script>jQuery(function () {
@@ -84,7 +84,7 @@
         <script src="../assets/js/plugins/jquery-ui/jquery-ui.min.js"></script>
         <script src="../assets/js/plugins/jquery-ui/jquery.ui.touch-punch.min.js"></script>
 
-           
+
         <!-- Page JS Code -->
         <script src="../assets/js/pages/be_pages_generic_scrumboard.min.js"></script>
 
@@ -94,7 +94,7 @@
 
         <!-- Page JS Code -->
         <script src="../assets/js/pages/be_tables_datatables.min.js"></script>
-        
+
 
         <script src="../assets/js/plugins/easy-pie-chart/jquery.easypiechart.min.js"></script>
         <script>jQuery(function(){ Codebase.helpers('easy-pie-chart'); });</script>

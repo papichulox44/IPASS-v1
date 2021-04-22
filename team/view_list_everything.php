@@ -8,7 +8,6 @@
             <div class="block-header content-heading">
                 <h3 class="block-title" style="color: white;">All Record(s)
                 </h3>
-
                 <!-- <h5 class="float-right" style="color: white;">All Record(s)</h5> -->
 
                 <div class="dropdown float-right">
@@ -167,10 +166,21 @@
                 </div>
 
             </div>
-            <table class="block table table-bordered table-striped table-hover table-vcenter js-dataTable-full <?php echo $md_body; ?>">
+            <label style="margin-bottom: -5px;">Total Task: <label id="total_task">20</label> / <label><?php
+            $count_task = mysqli_query($conn, "SELECT Count(task.task_id) AS final_total_task FROM task");
+            $data = mysqli_fetch_assoc($count_task);
+            $final_total_task = $data['final_total_task'];
+            echo number_format($final_total_task);
+             ?></label></label><br>
+            <label>Total Search: <label id="total_search">0</label></label>
+            <div id="search_loading" style="display: none;" class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <input style="width: 200px; float: right; margin-bottom: 5px;" id="myInput" type="text" class="form-control" placeholder="Search..">
+            <table class="block table table-sort table-arrows table-bordered table-striped table-hover table-vcenter <?php echo $md_body; ?>">
                 <thead>
                     <tr>
-                        <th>No.</th>
+                        <th>Task No.</th>
                         <th>Name</th>
                         <th class="d-none d-sm-table-cell">Due_Date</th>
                         <th class="d-none d-sm-table-cell">Date_Created</th>
@@ -181,183 +191,205 @@
                         <th class="text-center">Status</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <?php
-                        date_default_timezone_set('Asia/Manila');
-
-                        if (isset($_GET['filter']) or isset($_GET['due_date'])) {
-                                $filterby = $_GET['filter'];
-                                $due_date = $_GET['due_date'];
-                                $due_date_filter = '';
-
-                                if($due_date == "All")
-                                {
-                                    $due_date_filter = '';
-                                }
-                                else if($due_date == "Today")
-                                {
-                                    $filter_due = date("Y-m-d");
-                                    $due_date_filter = "LIKE '%".$filter_due."%'";
-                                }
-                                else if($due_date == "This Week")
-                                {
-                                    $dt = new DateTime();
-                                    $dates = [];
-                                    for ($d = 1; $d <= 7; $d++) {
-                                        $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
-                                        $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
-                                    }
-                                    $from_due = current($dates); // monday
-                                    $to_due = end($dates); // sunday
-
-                                    $due_date_filter = "BETWEEN '".$from_due."' AND '".$to_due."'";
-                                }
-                                else if($due_date == "This Month")
-                                {
-                                    $filter_due = date("Y-m");
-                                    $due_date_filter = "LIKE '%".$filter_due."%'";
-                                }
-                                else if($due_date == "This Year")
-                                {
-                                    $filter_due = date("Y");
-                                    $due_date_filter = "LIKE '%".$filter_due."%'";
-                                }
-                                else if($due_date == "Custom Date")
-                                {
-                                    $get_from_due = $_GET['From_due'];
-                                    $get_to_due = $_GET['To_due'];
-                                    $due_date_filter = "BETWEEN '".$get_from_due."' AND '".$get_to_due."'";
-                                }
-
-
-                                if($filterby == "All")
-                                {
-                                    if($due_date == "All")
-                                    {
-                                        $select_task = mysqli_query($conn, "SELECT * FROM task ORDER BY task_date_created DESC");                                    }
-                                    else
-                                    {
-                                        $select_task = mysqli_query($conn, "SELECT * FROM task WHERE task_due_date $due_date_filter ORDER BY task_date_created DESC");
-                                    }
-                                }
-                                else if($filterby == "Today")
-                                {
-                                    $filter = date("Y-m-d");
-                                    $select_task = mysqli_query($conn, "SELECT * FROM task WHERE task_date_created LIKE '%$filter%' AND task_due_date $due_date_filter");
-                                }
-                                else if($filterby == "This Week")
-                                {
-                                    $dt = new DateTime();
-                                    $dates = [];
-                                    for ($d = 1; $d <= 7; $d++) {
-                                        $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
-                                        $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
-                                    }
-                                    $from = current($dates); // monday
-                                    $to = end($dates); // sunday
-                                    $select_task = mysqli_query($conn, "SELECT * FROM task WHERE task_date_created BETWEEN '$from' AND '$to' AND task_due_date $due_date_filter ORDER BY task_date_created DESC");
-                                }
-                                else if($filterby == "This Month")
-                                {
-                                    $filter = date("Y-m");
-                                    $select_task = mysqli_query($conn, "SELECT * FROM task WHERE task_date_created LIKE '%$filter%' AND task_due_date $due_date_filter ORDER BY task_date_created DESC");
-                                }
-                                else if($filterby == "This Year")
-                                {
-                                    $filter = date("Y");
-                                    $select_task = mysqli_query($conn, "SELECT * FROM task WHERE task_date_created LIKE '%$filter%' AND task_due_date $due_date_filter ORDER BY task_date_created DESC");
-                                }
-                                else if($filterby == "Custom Date")
-                                {
-                                    $get_from = $_GET['From'];
-                                    $get_to = $_GET['To'];
-                                    $select_task = mysqli_query($conn, "SELECT * FROM task WHERE task_date_created BETWEEN '$get_from' AND '$get_to' AND task_due_date $due_date_filter ORDER BY task_date_created DESC");
-                                }
-                            }
-
-                        $count = 1;
-
-                        while($fetch_task = mysqli_fetch_array($select_task))
-                        {
-                          $status_id = $fetch_task['task_status_id'];
-                          $user_id = $_SESSION['user'];
-                          $query_filter_status = mysqli_query($conn, "SELECT * FROM filter_status WHERE user_id = $user_id AND filter_name = 'everything'");
-                          $data = mysqli_fetch_array($query_filter_status);
-                          $array_status = $data['array_status'];
-                          if (mysqli_num_rows($query_filter_status) === 1) {
-                            $value_array = explode(",", $array_status);
-                            if(count($value_array) === 1)
-                            {
-                              $value1 = $value_array[0];
-                              if ($value1 === $status_id) {
-                                include 'view_list_everything_table.php';
-                              }
-                            }
-                            else if(count($value_array) === 2)
-                            {
-                              $value1 = $value_array[0];
-                              $value2 = $value_array[1];
-                              if ($value1 === $status_id OR $value2 === $status_id) {
-                                include 'view_list_everything_table.php';
-                              }
-                            }
-                            else if(count($value_array) === 3)
-                            {
-                              $value1 = $value_array[0];
-                              $value2 = $value_array[1];
-                              $value3 = $value_array[2];
-                              if ($value1 === $status_id OR $value2 === $status_id OR $value3 === $status_id) {
-                                include 'view_list_everything_table.php';
-                              }
-                            }
-                            else if(count($value_array) === 4)
-                            {
-                              $value1 = $value_array[0];
-                              $value2 = $value_array[1];
-                              $value3 = $value_array[2];
-                              $value4 = $value_array[3];
-                              if ($value1 === $status_id OR $value2 === $status_id OR $value3 === $status_id OR $value4 === $status_id) {
-                                include 'view_list_everything_table.php';
-                              }
-                            }
-                            else if(count($value_array) === 5)
-                            {
-                              $value1 = $value_array[0];
-                              $value2 = $value_array[1];
-                              $value3 = $value_array[2];
-                              $value4 = $value_array[3];
-                              $value5 = $value_array[4];
-                              if ($value1 === $status_id OR $value2 === $status_id OR $value3 === $status_id OR $value4 === $status_id OR $value5 === $status_id) {
-                                include 'view_list_everything_table.php';
-                              }
-                            }
-                            else if(count($value_array) === 6)
-                            {
-                              $value1 = $value_array[0];
-                              $value2 = $value_array[1];
-                              $value3 = $value_array[2];
-                              $value4 = $value_array[3];
-                              $value5 = $value_array[4];
-                              $value6 = $value_array[5];
-                              if ($value1 === $status_id OR $value2 === $status_id OR $value3 === $status_id OR $value4 === $status_id OR $value5 === $status_id OR $value5 === $status_id) {
-                                include 'view_list_everything_table.php';
-                              }
-                            }
-                          } else {
-                            include 'view_list_everything_table.php';
-                          }
-                        }
-                    ?>
+                <tbody id="load_data">
                 </tbody>
             </table>
+            <div id="load_data_message"></div>
         </div>
         <!-- END Dynamic Table Full -->
     </div>
     <!-- END Page Content -->
 </main>
 <!-- END Main Container -->
-
+<script src = '../assets/table-sort.js'></script>
 <script type="text/javascript">
+$(document).ready(function(){
+
+    var limit = 20;
+    var start = 0;
+    var action = 'inactive';
+    function load_task_data(limit, start)
+    {
+    filter = '<?php echo $_GET['filter']; ?>';
+    due_date = '<?php echo $_GET['due_date']; ?>';
+    $.ajax({
+        url:"view_list_everything_query.php",
+        method:"POST",
+        data:{limit:limit, start:start, filter:filter, due_date:due_date, load_country_data:1},
+        cache:false,
+        success:function(data)
+        {
+        $('#load_data').append(data);
+        if(data == '')
+        {
+         $('#load_data_message').html("<button type='button' class='btn btn-info'>No More Task Found</button>");
+         action = 'active';
+        }
+        else
+        {
+          var seen = {};
+          table = document.getElementById("load_data");
+          tr = table.getElementsByTagName("tr");
+          for (i = 0; i < tr.length; i++) {
+              td = tr[i].getElementsByTagName("td")[0];
+              if (seen[td.textContent]) {
+                  tr[i].remove();
+              } else {
+                  seen[td.textContent]=true;
+              }
+          }
+          var rowCount = $("#load_data tr:visible").length;
+          document.getElementById("total_task").innerHTML = rowCount;
+         $('#load_data_message').html("<button type='button' class='btn btn-warning'>Please Wait....</button>");
+         action = "inactive";
+        }
+      }
+    });
+    }
+
+    if(action == 'inactive')
+      {
+      action = 'active';
+      load_task_data(limit, start);
+      }
+    $(window).scroll(function(){
+    if($(window).scrollTop() + $(window).height() > $("#load_data").height() && action == 'inactive')
+      {
+      action = 'active';
+      start = start + limit;
+      setTimeout(function(){
+      load_task_data(limit, start);
+      }, 1000);
+      }
+      });
+    });
+
+    $(document).ready(function(){
+      $("#myInput").on("keyup", function() {
+        var inputlength = this.value.length;
+        var value = $(this).val();
+        $("#load_data tr").filter(function() {
+          var rowCount = $("#load_data tr:visible").length;
+          if(inputlength == "0"){
+              document.getElementById("total_search").innerHTML = 0;
+              document.getElementById("total_task").innerHTML = rowCount;
+             var seen = {};
+              table = document.getElementById("load_data");
+              tr = table.getElementsByTagName("tr");
+              for (i = 0; i < tr.length; i++) {
+                  td = tr[i].getElementsByTagName("td")[0];
+                  if (seen[td.textContent]) {
+                      tr[i].remove();
+                  } else {
+                      seen[td.textContent]=true;
+                  }
+              }
+          } else {
+              document.getElementById("total_search").innerHTML = rowCount;
+          }
+          $(this).toggle($(this).text().indexOf(value) > -1)
+
+        });
+      });
+    });
+
+    var limit_search = 20;
+    var start_search = 0;
+    var action_search = 'inactive';
+    document.getElementById("myInput").onkeypress = function(event){
+    if (event.keyCode == 13 || event.which == 13){
+        var myInput = document.getElementById("myInput").value;
+        filter = '<?php echo $_GET['filter']; ?>';
+        due_date = '<?php echo $_GET['due_date']; ?>';
+        $.ajax({
+            url:"view_list_everything_query.php",
+            method:"POST",
+            data:{limit:limit_search, start:start_search, myInput:myInput, filter:filter, due_date:due_date, load_task_search_data:1},
+            cache:false,
+            success:function(data)
+            {
+            $('#load_data').append(data);
+            if(data == '')
+            {
+             alert("No Task Found!!");
+            }
+            else
+            {
+              var seen = {};
+              table = document.getElementById("load_data");
+              tr = table.getElementsByTagName("tr");
+              for (i = 0; i < tr.length; i++) {
+                  td = tr[i].getElementsByTagName("td")[0];
+                  if (seen[td.textContent]) {
+                      tr[i].remove();
+                  } else {
+                      seen[td.textContent]=true;
+                  }
+              }
+              var rowCount = $("#load_data tr:visible").length;
+              document.getElementById("total_task").innerHTML = rowCount;
+              x = document.getElementById("search_loading");
+              x.style.display = "";
+              setTimeout(function(){
+              limit_start_search(myInput);
+             }, 1000);
+            }
+          }
+        });
+        }
+    };
+
+    function limit_start_search(myInput){
+      start_search = start_search + limit_search;
+      load_task_search_data(myInput, limit_search, start_search);
+    }
+
+    function load_task_search_data(myInput, limit_search, start_search){
+      filter = '<?php echo $_GET['filter']; ?>';
+      due_date = '<?php echo $_GET['due_date']; ?>';
+      $.ajax({
+          url: "view_list_everything_query.php",
+          type: "POST",
+          async: false,
+          data:{
+              myInput: myInput,
+              filter:filter,
+              due_date:due_date,
+              limit: limit_search,
+              start: start_search,
+              load_task_search_data:1,
+          },
+          cache:false,
+          success: function(data){
+              $('#load_data').append(data);
+              if (data === "") {
+                x = document.getElementById("search_loading");
+                x.style.display = "none";
+                alert("Task Successfully Extract from the Database!! Thank you for the Patience..");
+                reset_start();
+              } else {
+                var seen = {};
+                table = document.getElementById("load_data");
+                tr = table.getElementsByTagName("tr");
+                for (i = 0; i < tr.length; i++) {
+                    td = tr[i].getElementsByTagName("td")[0];
+                    if (seen[td.textContent]) {
+                        tr[i].remove();
+                    } else {
+                        seen[td.textContent]=true;
+                    }
+                }
+                var rowCount = $("#load_data tr:visible").length;
+                document.getElementById("total_task").innerHTML = rowCount;
+                setTimeout(function(){
+                limit_start_search(myInput);
+               }, 1000);
+              }
+          }
+      });
+    }
+
+
     function view_task(id)
     {
         new_id = id.replace("taskid_", "");

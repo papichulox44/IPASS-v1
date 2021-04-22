@@ -20,7 +20,7 @@
 
     echo'
     <tr style="cursor: pointer;" id="taskid_'.$task_id.'" onclick="view_task(this.id)">
-        <td>'.$count++.'</td>
+        <td>Task ID: '.$task_id.'</td>
         <td>';
             $task_name = $fetch_task['task_name'];
             $new__task_name = substr($task_name, 0, 18); // get only 10 character

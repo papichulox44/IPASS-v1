@@ -189,7 +189,6 @@
                                 $filterby = $_GET['filter'];
                                 $due_date = $_GET['due_date'];
                                 $due_date_filter = '';
-
                                 if($due_date == "All")
                                 {
                                     $due_date_filter = '';
