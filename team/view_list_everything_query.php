@@ -132,7 +132,8 @@
       {
           if($due_date == "All")
           {
-              $select_task = mysqli_query($conn, "SELECT * FROM task $batch_status_filter LIMIT $start, $limit");                                    }
+              $select_task = mysqli_query($conn, "SELECT * FROM task $batch_status_filter LIMIT $start, $limit");
+          }
           else
           {
               $select_task = mysqli_query($conn, "SELECT * FROM task WHERE task_due_date $due_date_filter $batch_status_filter LIMIT $start, $limit");
@@ -228,11 +229,6 @@
       $query_filter_status = mysqli_query($conn, "SELECT * FROM filter_status WHERE user_id = $user_id AND filter_name = 'everything'");
       $data = mysqli_fetch_array($query_filter_status);
       $array_status = $data['array_status'];
-      if ($array_status) {
-        $input_filter = "AND task_name LIKE '%$myInput%'";
-      } else {
-        $input_filter = "WHERE task_name like '%$myInput%'";
-      }
       if (mysqli_num_rows($query_filter_status) === 1) {
         $value_array = explode(",", $array_status);
         if(count($value_array) === 1)
@@ -306,13 +302,176 @@
              }
       }
 
+      if ($myInput === 'No Due Date') {
+        if ($array_status) {
+          $input_filter = "AND task_due_date is null";
+        } else {
+          if($due_date == "All"){
+            $input_filter = "WHERE task_due_date is null";
+          } else {
+            $input_filter = "AND task_due_date is null";
+          }
+        }
+      }
+      else if ($myInput === 'Overdue'){
+        $overdue = date('Y-m-d', strtotime(' -1 day'));
+        $start_date = '2020-01-01';
+        if ($array_status) {
+          $input_filter = "AND task_due_date BETWEEN '$start_date' AND '$overdue'";
+        } else {
+          if($due_date == "All"){
+            $input_filter = "WHERE task_due_date BETWEEN '$start_date' AND '$overdue'";
+          } else {
+            $input_filter = "AND task_due_date BETWEEN '$start_date' AND '$overdue'";
+          }
+        }
+      }
+      else if ($myInput === 'Today'){
+        $today = date('Y-m-d');
+        if ($array_status) {
+          $input_filter = "AND task_due_date = '$today'";
+        } else {
+          if($due_date == "All"){
+            $input_filter = "WHERE task_due_date = '$today'";
+          } else {
+            $input_filter = "AND task_due_date = '$today'";
+          }
+        }
+      }
+      else if ($myInput === 'Tomorrow'){
+        $tomorrow = date('Y-m-d', strtotime(' +1 day'));
+        if ($array_status) {
+          $input_filter = "AND task_due_date = '$tomorrow'";
+        } else {
+          if($due_date == "All"){
+            $input_filter = "WHERE task_due_date = '$tomorrow'";
+          } else {
+            $input_filter = "AND task_due_date = '$tomorrow'";
+          }
+        }
+      }
+      else if ($myInput === 'Urgent'){
+        $priority = 'D Urgent';
+        if ($array_status) {
+          $input_filter = "AND task_priority = '$priority'";
+        } else {
+          if($due_date == "All"){
+            $input_filter = "WHERE task_priority = '$priority'";
+          } else {
+            $input_filter = "AND task_priority = '$priority'";
+          }
+        }
+      }
+      else if ($myInput === 'High'){
+        $priority = 'C High';
+        if ($array_status) {
+          $input_filter = "AND task_priority = '$priority'";
+        } else {
+          if($due_date == "All"){
+            $input_filter = "WHERE task_priority = '$priority'";
+          } else {
+            $input_filter = "AND task_priority = '$priority'";
+          }
+        }
+      }
+      else if ($myInput === 'Normal'){
+        $priority = 'B Normal';
+        if ($array_status) {
+          $input_filter = "AND task_priority = '$priority'";
+        } else {
+          if($due_date == "All"){
+            $input_filter = "WHERE task_priority = '$priority'";
+          } else {
+            $input_filter = "AND task_priority = '$priority'";
+          }
+        }
+      }
+      else if ($myInput === 'Low'){
+        $priority = 'A Low';
+        if ($array_status) {
+          $input_filter = "AND task_priority = '$priority'";
+        } else {
+          if($due_date == "All"){
+            $input_filter = "WHERE task_priority = '$priority'";
+          } else {
+            $input_filter = "AND task_priority = '$priority'";
+          }
+        }
+      }
+      // else if ($myInput === 'Monday'){
+      //   $today = date("Y-m-d");
+      //   if (date("l", strtotime($today)) === 'Monday') {
+      //   $date_result = date("Y-m-d");
+      //     if ($array_status) {
+      //       $input_filter = "AND task_due_date = '$date_result'";
+      //     } else {
+      //       if($due_date == "All"){
+      //         $input_filter = "WHERE task_due_date = '$date_result'";
+      //       } else {
+      //         $input_filter = "AND task_due_date = '$date_result'";
+      //       }
+      //     }
+      //   }
+      //   else if (date("l", strtotime($today)) === 'Tuesday') {
+      //   $date_result = date('Y-m-d', strtotime(' +1 day'));
+      //     if ($array_status) {
+      //       $input_filter = "AND task_due_date = '$date_result'";
+      //     } else {
+      //       if($due_date == "All"){
+      //         $input_filter = "WHERE task_due_date = '$date_result'";
+      //       } else {
+      //         $input_filter = "AND task_due_date = '$date_result'";
+      //       }
+      //     }
+      //   }
+      // }
+      //
+      // else if ($myInput === 'Tuesday'){
+      //   $today = date("Y-m-d");
+      //   if (date("l", strtotime($today)) === 'Monday') {
+      //   $date_result = date("Y-m-d");
+      //     if ($array_status) {
+      //       $input_filter = "AND task_due_date = '$date_result'";
+      //     } else {
+      //       if($due_date == "All"){
+      //         $input_filter = "WHERE task_due_date = '$date_result'";
+      //       } else {
+      //         $input_filter = "AND task_due_date = '$date_result'";
+      //       }
+      //     }
+      //   }
+      //   else if (date("l", strtotime($today)) === 'Tuesday') {
+      //   $date_result = date('Y-m-d', strtotime(' +1 day'));
+      //     if ($array_status) {
+      //       $input_filter = "AND task_due_date = '$date_result'";
+      //     } else {
+      //       if($due_date == "All"){
+      //         $input_filter = "WHERE task_due_date = '$date_result'";
+      //       } else {
+      //         $input_filter = "AND task_due_date = '$date_result'";
+      //       }
+      //     }
+      //   }
+      // }
 
+      else {
+        if ($array_status) {
+          $input_filter = "AND task_name LIKE '%$myInput%'";
+        } else {
+          if($due_date == "All"){
+            $input_filter = "WHERE task_name like '%$myInput%'";
+          } else {
+            $input_filter = "AND task_name LIKE '%$myInput%'";
+          }
+        }
+      }
 
       if($filter == "All")
       {
           if($due_date == "All")
           {
-              $select_task = mysqli_query($conn, "SELECT * FROM task $batch_status_filter $input_filter LIMIT $start, $limit");                                    }
+              $select_task = mysqli_query($conn, "SELECT * FROM task $batch_status_filter $input_filter LIMIT $start, $limit");
+          }
           else
           {
               $select_task = mysqli_query($conn, "SELECT * FROM task WHERE task_due_date $due_date_filter $batch_status_filter $input_filter LIMIT $start, $limit");

@@ -212,10 +212,14 @@ $(document).ready(function(){
     {
     filter = '<?php echo $_GET['filter']; ?>';
     due_date = '<?php echo $_GET['due_date']; ?>';
+    From = '<?php if(isset($_GET['From'])) { echo $_GET['From']; } ?>';
+    To = '<?php if(isset($_GET['To'])) { echo $_GET['To']; } ?>';
+    From_due = '<?php if(isset($_GET['From_due'])) { echo $_GET['From_due']; } ?>';
+    To_due = '<?php if(isset($_GET['To_due'])) { echo $_GET['To_due']; } ?>';
     $.ajax({
         url:"view_list_everything_query.php",
         method:"POST",
-        data:{limit:limit, start:start, filter:filter, due_date:due_date, load_country_data:1},
+        data:{limit:limit, start:start, filter:filter, due_date:due_date, From:From, To:To, From_due:From_due, To_due:To_due, load_country_data:1},
         cache:false,
         success:function(data)
         {
@@ -301,10 +305,14 @@ $(document).ready(function(){
         var myInput = document.getElementById("myInput").value;
         filter = '<?php echo $_GET['filter']; ?>';
         due_date = '<?php echo $_GET['due_date']; ?>';
+        From = '<?php if(isset($_GET['From'])) { echo $_GET['From']; } ?>';
+        To = '<?php if(isset($_GET['To'])) { echo $_GET['To']; } ?>';
+        From_due = '<?php if(isset($_GET['From_due'])) { echo $_GET['From_due']; } ?>';
+        To_due = '<?php if(isset($_GET['To_due'])) { echo $_GET['To_due']; } ?>';
         $.ajax({
             url:"view_list_everything_query.php",
             method:"POST",
-            data:{limit:limit_search, start:start_search, myInput:myInput, filter:filter, due_date:due_date, load_task_search_data:1},
+            data:{limit:limit_search, start:start_search, myInput:myInput, filter:filter, due_date:due_date, From:From, To:To, From_due:From_due, To_due:To_due, load_task_search_data:1},
             cache:false,
             success:function(data)
             {
@@ -381,6 +389,7 @@ $(document).ready(function(){
                 }
                 var rowCount = $("#load_data tr:visible").length;
                 document.getElementById("total_task").innerHTML = rowCount;
+                document.getElementById("total_search").innerHTML = rowCount;
                 setTimeout(function(){
                 limit_start_search(myInput);
                }, 1000);
