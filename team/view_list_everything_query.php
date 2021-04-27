@@ -398,62 +398,611 @@
           }
         }
       }
-      // else if ($myInput === 'Monday'){
-      //   $today = date("Y-m-d");
-      //   if (date("l", strtotime($today)) === 'Monday') {
-      //   $date_result = date("Y-m-d");
-      //     if ($array_status) {
-      //       $input_filter = "AND task_due_date = '$date_result'";
-      //     } else {
-      //       if($due_date == "All"){
-      //         $input_filter = "WHERE task_due_date = '$date_result'";
-      //       } else {
-      //         $input_filter = "AND task_due_date = '$date_result'";
-      //       }
-      //     }
-      //   }
-      //   else if (date("l", strtotime($today)) === 'Tuesday') {
-      //   $date_result = date('Y-m-d', strtotime(' +1 day'));
-      //     if ($array_status) {
-      //       $input_filter = "AND task_due_date = '$date_result'";
-      //     } else {
-      //       if($due_date == "All"){
-      //         $input_filter = "WHERE task_due_date = '$date_result'";
-      //       } else {
-      //         $input_filter = "AND task_due_date = '$date_result'";
-      //       }
-      //     }
-      //   }
-      // }
-      //
-      // else if ($myInput === 'Tuesday'){
-      //   $today = date("Y-m-d");
-      //   if (date("l", strtotime($today)) === 'Monday') {
-      //   $date_result = date("Y-m-d");
-      //     if ($array_status) {
-      //       $input_filter = "AND task_due_date = '$date_result'";
-      //     } else {
-      //       if($due_date == "All"){
-      //         $input_filter = "WHERE task_due_date = '$date_result'";
-      //       } else {
-      //         $input_filter = "AND task_due_date = '$date_result'";
-      //       }
-      //     }
-      //   }
-      //   else if (date("l", strtotime($today)) === 'Tuesday') {
-      //   $date_result = date('Y-m-d', strtotime(' +1 day'));
-      //     if ($array_status) {
-      //       $input_filter = "AND task_due_date = '$date_result'";
-      //     } else {
-      //       if($due_date == "All"){
-      //         $input_filter = "WHERE task_due_date = '$date_result'";
-      //       } else {
-      //         $input_filter = "AND task_due_date = '$date_result'";
-      //       }
-      //     }
-      //   }
-      // }
-
+      else if ($myInput === 'Monday' || $myInput === 'Tuesday' || $myInput === 'Wednesday' || $myInput === 'Thursday' || $myInput === 'Friday' || $myInput === 'Saturday' || $myInput === 'Sunday'){
+        $today = date("Y-m-d");
+        if (date("l", strtotime($today)) === 'Monday') {
+          if ($myInput === 'Monday') {
+            $date_result = date("Y-m-d");
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Tuesday') {
+            $date_result = date('Y-m-d', strtotime(' +1 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Wednesday') {
+            $date_result = date('Y-m-d', strtotime(' +2 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Thursday') {
+            $date_result = date('Y-m-d', strtotime(' +3 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Friday') {
+            $date_result = date('Y-m-d', strtotime(' +4 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Saturday') {
+            $date_result = date('Y-m-d', strtotime(' +5 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Sunday') {
+            $date_result = date('Y-m-d', strtotime(' +6 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+        }
+        else if (date("l", strtotime($today)) === 'Tuesday') {
+          if ($myInput === 'Monday') {
+            $date_result = date('Y-m-d', strtotime(' +6 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Tuesday') {
+            $date_result = date("Y-m-d");
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Wednesday') {
+            $date_result = date('Y-m-d', strtotime(' +1 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Thursday') {
+            $date_result = date('Y-m-d', strtotime(' +2 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Friday') {
+            $date_result = date('Y-m-d', strtotime(' +3 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Saturday') {
+            $date_result = date('Y-m-d', strtotime(' +4 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Sunday') {
+            $date_result = date('Y-m-d', strtotime(' +5 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+        }
+        else if (date("l", strtotime($today)) === 'Wednesday') {
+          if ($myInput === 'Monday') {
+            $date_result = date('Y-m-d', strtotime(' +5 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Tuesday') {
+            $date_result = date('Y-m-d', strtotime(' +6 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Wednesday') {
+            $date_result = date("Y-m-d");
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Thursday') {
+            $date_result = date('Y-m-d', strtotime(' +1 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Friday') {
+            $date_result = date('Y-m-d', strtotime(' +2 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Saturday') {
+            $date_result = date('Y-m-d', strtotime(' +3 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Sunday') {
+            $date_result = date('Y-m-d', strtotime(' +4 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+        }
+        else if (date("l", strtotime($today)) === 'Thursday') {
+          if ($myInput === 'Monday') {
+            $date_result = date('Y-m-d', strtotime(' +4 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Tuesday') {
+            $date_result = date('Y-m-d', strtotime(' +5 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Wednesday') {
+            $date_result = date('Y-m-d', strtotime(' +6 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Thursday') {
+            $date_result = date("Y-m-d");
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Friday') {
+            $date_result = date('Y-m-d', strtotime(' +1 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Saturday') {
+            $date_result = date('Y-m-d', strtotime(' +2 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Sunday') {
+            $date_result = date('Y-m-d', strtotime(' +3 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+        }
+        else if (date("l", strtotime($today)) === 'Friday') {
+          if ($myInput === 'Monday') {
+            $date_result = date('Y-m-d', strtotime(' +3 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Tuesday') {
+            $date_result = date('Y-m-d', strtotime(' +4 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Wednesday') {
+            $date_result = date('Y-m-d', strtotime(' +5 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Thursday') {
+            $date_result = date('Y-m-d', strtotime(' +6 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Friday') {
+            $date_result = date("Y-m-d");
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Saturday') {
+            $date_result = date('Y-m-d', strtotime(' +1 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Sunday') {
+            $date_result = date('Y-m-d', strtotime(' +2 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+        }
+        else if (date("l", strtotime($today)) === 'Saturday') {
+          if ($myInput === 'Monday') {
+            $date_result = date('Y-m-d', strtotime(' +2 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Tuesday') {
+            $date_result = date('Y-m-d', strtotime(' +3 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Wednesday') {
+            $date_result = date('Y-m-d', strtotime(' +4 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Thursday') {
+            $date_result = date('Y-m-d', strtotime(' +5 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Friday') {
+            $date_result = date('Y-m-d', strtotime(' +6 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Saturday') {
+            $date_result = date("Y-m-d");
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Sunday') {
+            $date_result = date('Y-m-d', strtotime(' +1 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+        }
+        else if (date("l", strtotime($today)) === 'Sunday') {
+          if ($myInput === 'Monday') {
+            $date_result = date('Y-m-d', strtotime(' +1 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Tuesday') {
+            $date_result = date('Y-m-d', strtotime(' +2 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Wednesday') {
+            $date_result = date('Y-m-d', strtotime(' +3 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Thursday') {
+            $date_result = date('Y-m-d', strtotime(' +4 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Friday') {
+            $date_result = date('Y-m-d', strtotime(' +5 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Saturday') {
+            $date_result = date('Y-m-d', strtotime(' +6 day'));
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+          else if ($myInput === 'Sunday') {
+            $date_result = date("Y-m-d");
+            if ($array_status) {
+              $input_filter = "AND task_due_date = '$date_result'";
+            } else {
+              if($due_date == "All"){
+                $input_filter = "WHERE task_due_date = '$date_result'";
+              } else {
+                $input_filter = "AND task_due_date = '$date_result'";
+              }
+            }
+          }
+        }
+      }
       else {
         if ($array_status) {
           $input_filter = "AND task_name LIKE '%$myInput%'";
