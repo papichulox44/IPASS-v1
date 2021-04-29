@@ -355,6 +355,10 @@ $(document).ready(function(){
     function load_task_search_data(myInput, limit_search, start_search){
       filter = '<?php echo $_GET['filter']; ?>';
       due_date = '<?php echo $_GET['due_date']; ?>';
+      From = '<?php if(isset($_GET['From'])) { echo $_GET['From']; } ?>';
+      To = '<?php if(isset($_GET['To'])) { echo $_GET['To']; } ?>';
+      From_due = '<?php if(isset($_GET['From_due'])) { echo $_GET['From_due']; } ?>';
+      To_due = '<?php if(isset($_GET['To_due'])) { echo $_GET['To_due']; } ?>';
       $.ajax({
           url: "view_list_everything_query.php",
           type: "POST",
@@ -363,6 +367,10 @@ $(document).ready(function(){
               myInput: myInput,
               filter:filter,
               due_date:due_date,
+              From:From,
+              To:To,
+              From_due,
+              To_due:To_due,
               limit: limit_search,
               start: start_search,
               load_task_search_data:1,

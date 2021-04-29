@@ -1168,7 +1168,7 @@
                         $fetch_custom_amount = mysqli_fetch_array($select_custom_amount);
                         $count1 = mysqli_num_rows($select_custom_amount);
 
-                        $select_finance_field_hs = mysqli_query($conn, "SELECT * FROM finance_field_hide WHERE hideshow_task_id = '$task_id' AND hideshow_field_id = '$field_id'");
+                        $select_finance_field_hs = mysqli_query($conn, "SELECT * FROM finance_field_hide WHERE hideshow_task_id = '$task_id' AND hideshow_field_id = '$field_id' LIMIT 1");
                         $fetch_hs = mysqli_fetch_array($select_finance_field_hs);
                         $count = mysqli_num_rows($select_finance_field_hs);
                         if($count == 1) // if field is hide in specific task
@@ -1330,11 +1330,13 @@
         $field_id = $_POST['field_id'];
 
         $select_hide = mysqli_query($conn, "SELECT * FROM finance_field_hide WHERE hideshow_task_id = '$task_id' AND hideshow_field_id = '$field_id'");
-        $fetch_select_hide = mysqli_fetch_array($select_hide);
-        $hideshow_id = $fetch_select_hide['hideshow_id'];
-        $count = mysqli_num_rows($select_hide);
-        if($count == 1)
+        // $fetch_select_hide = mysqli_fetch_array($select_hide);
+        // $hideshow_id = $fetch_select_hide['hideshow_id'];
+        // $count = mysqli_num_rows($select_hide);
+        // if($count == 1)
+        while($data = mysqli_fetch_array($select_hide))
         {
+      			$hideshow_id = $data['hideshow_id'];
             mysqli_query($conn,"DELETE from finance_field_hide where hideshow_id = '$hideshow_id'") or die(mysqli_error());// delete
             echo 'update';
         }

@@ -19,9 +19,9 @@
     $list_name = mysqli_fetch_array($select_list);
 
     echo'
-    <tr style="cursor: pointer;" id="taskid_'.$task_id.'" onclick="view_task(this.id)">
-        <td>Task ID: '.$task_id.'</td>
-        <td>';
+    <tr style="cursor: pointer;">
+        <td id="taskid_'.$task_id.'" onclick="view_task(this.id)">Task ID: '.$task_id.'</td>
+        <td id="taskid_'.$task_id.'" onclick="view_task(this.id)">';
             $task_name = $fetch_task['task_name'];
             $new__task_name = substr($task_name, 0, 18); // get only 10 character
             if(strlen($task_name) > 18)
@@ -61,7 +61,7 @@
                 }
             echo '
         </td>
-        <td class="d-none d-sm-table-cell">';
+        <td class="d-none d-sm-table-cell" id="taskid_'.$task_id.'" onclick="view_task(this.id)">';
             if($ymd == $today)
             {
                 $task_priority = "D Urgent";
@@ -110,8 +110,8 @@
         </td>
 
 
-        <td class="d-none d-sm-table-cell">'.$fetch_task['task_date_created'].'</td>
-        <td class="d-none d-sm-table-cell">';
+        <td class="d-none d-sm-table-cell" id="taskid_'.$task_id.'" onclick="view_task(this.id)">'.$fetch_task['task_date_created'].'</td>
+        <td class="d-none d-sm-table-cell" id="taskid_'.$task_id.'" onclick="view_task(this.id)">';
         if($fetch_task['task_priority'] == "D Urgent")
         {
             echo '<span style="display: none;">D</span><span class="badge badge-danger">Urgent</span>';
@@ -132,7 +132,7 @@
         {}
         echo'
         </td>
-        <td class="d-none d-sm-table-cell text-center">';
+        <td class="d-none d-sm-table-cell text-center" id="taskid_'.$task_id.'" onclick="view_task(this.id)">';
         $total_assign_to = $fetch_task['task_assign_to']; // get the assign id
         if ($total_assign_to == 0)
         {
@@ -165,7 +165,7 @@
         }
         echo'
         </td>
-        <td class="d-none d-sm-table-cell text-center">';
+        <td class="d-none d-sm-table-cell text-center" id="taskid_'.$task_id.'" onclick="view_task(this.id)">';
         $list_space_id = $list_name['list_space_id'];
         $select_space = mysqli_query($conn, "SELECT * FROM space WHERE space_id = '$list_space_id'");
         $fetch_space = mysqli_fetch_array($select_space);
@@ -184,7 +184,7 @@
         }
         echo'
         </td>
-        <td class="d-none d-sm-table-cell text-center">';
+        <td class="d-none d-sm-table-cell text-center" id="taskid_'.$task_id.'" onclick="view_task(this.id)">';
 
         $list_name = $list_name['list_name'];
         echo '<input type="hidden" id="listname'.$task_id.'" value="'.$list_name.'">';
@@ -209,11 +209,11 @@
         $last_status_id = $last_status['status_id'];
         if($last_status_id == $fetch_task['task_status_id']) // identify if task is done
         {
-            echo '<td class="text-center text-white bg-gd-sea" data-toggle="popover" title="'.$fetch_status_name['status_name'].'" data-placement="bottom" data-content="ID: '.$task_status_id.'">Finish</td>';
+            echo '<td class="text-center text-white bg-gd-sea" data-toggle="popover" title="'.$fetch_status_name['status_name'].'" data-placement="bottom" data-content="ID: '.$task_status_id.'" id="taskid_'.$task_id.'" onclick="view_task(this.id)">Finish</td>';
         }
         else
         {
-            echo '<td class="text-center text-white" style="background-color: '.$fetch_status_name['status_color'].';">';
+            echo '<td class="text-center text-white" style="background-color: '.$fetch_status_name['status_color'].';" id="taskid_'.$task_id.'" onclick="view_task(this.id)">';
                 $new_name = substr($fetch_status_name['status_name'], 0, 23); // get specific character
                 if(strlen($fetch_status_name['status_name']) > 23)
                 {

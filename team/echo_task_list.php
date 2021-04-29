@@ -1,10 +1,10 @@
 <?php
 echo'
-    <tr class"hoverme" id="taskmodal'.$result_findstatus['task_id'].'" onclick="show_task_modal(this.id)" data-toggle="modal" data-target="#modal-extra-large">
+    <tr class"hoverme" data-toggle="modal" data-target="#modal-extra-large">
     <input type="hidden" value="'.$result_findstatus['task_name'].'" id="rename'.$result_findstatus['task_id'].'">
         <button type="button" class="view_data" hidden="hidden" value="'.$result_findstatus['task_id'].'" id="btnStartVisit'.$result_findstatus['task_id'].'"></button>
-        <td class="text-center">Task ID: '.$result_findstatus['task_id'].'</td>
-        <td class="font-w600">'.$result_findstatus['task_name'].'';
+        <td class="text-center" id="taskmodal'.$result_findstatus['task_id'].'" onclick="show_task_modal(this.id)">Task ID: '.$result_findstatus['task_id'].'</td>
+        <td class="font-w600" id="taskmodal'.$result_findstatus['task_id'].'" onclick="show_task_modal(this.id)">'.$result_findstatus['task_name'].'';
             $total_tag_per_task = $result_findstatus['task_tag'];
             $tag_array = explode(",", $total_tag_per_task); // convert string to array
             $count_tag = count($tag_array);
@@ -23,7 +23,7 @@ echo'
             }
         echo'
         </td>
-        <td class="d-none d-sm-table-cell">';
+        <td class="d-none d-sm-table-cell" id="taskmodal'.$result_findstatus['task_id'].'" onclick="show_task_modal(this.id)">';
             if($ymd === $today)
             {
                 $task_priority = "D Urgent";
@@ -71,7 +71,7 @@ echo'
             }
         echo'
         </td>
-        <td>';
+        <td id="taskmodal'.$result_findstatus['task_id'].'" onclick="show_task_modal(this.id)">';
         if($result_findstatus['task_priority'] === "D Urgent")
         {
             echo '<span style="display: none;">D</span><span class="badge badge-danger">Urgent</span>';
@@ -94,11 +94,11 @@ echo'
         $data = mysqli_fetch_assoc($comment_query);
         $date_updated = $data['comment_date'];
         echo'
-        <td class="text-center">
+        </td>
+        <td class="text-center" id="taskmodal'.$result_findstatus['task_id'].'" onclick="show_task_modal(this.id)">
             '.$date_updated.'
         </td>
-        </td>
-        <td class="d-none d-sm-table-cell text-center">';
+        <td class="d-none d-sm-table-cell text-center" id="taskmodal'.$result_findstatus['task_id'].'" onclick="show_task_modal(this.id)">';
         if ($total_assign_to === 0)
         {
             echo 'Unassign';
@@ -155,11 +155,11 @@ echo'
                 $child_name = $fetch_child['child_name'];
                 $child_color = $fetch_child['child_color'];
 
-                echo '<td class="d-none d-sm-table-cell text-center text-white" style="background-color: '.$child_color.';">'.$child_name.'</td>';
+                echo '<td class="d-none d-sm-table-cell text-center text-white" style="background-color: '.$child_color.';" id="taskmodal'.$result_findstatus['task_id'].'" onclick="show_task_modal(this.id)">'.$child_name.'</td>';
             }
             else
             {
-                echo '<td class="d-none d-sm-table-cell text-center">'.$fetch_name1[''.$col_name1.''].'</td>';
+                echo '<td class="d-none d-sm-table-cell text-center" id="taskmodal'.$result_findstatus['task_id'].'" onclick="show_task_modal(this.id)">'.$fetch_name1[''.$col_name1.''].'</td>';
             }
         }
 //_______________________________ END auto create td
