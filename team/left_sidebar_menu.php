@@ -152,18 +152,6 @@
                         $assign = "background-color: #20527b; color: #eee; padding-left: 15px; margin-left: -15px;";
                         $ico6 = "text-white-op";
                     }
-                    else if($highlight == "individual_report.php")
-                    {
-                        $openreport = "open";
-                        $ind_report = "background-color: #20527b; color: #eee; padding-left: 15px; margin-left: -15px;";
-                        $ico9 = "text-white-op";
-                    }
-                    else if($highlight == "summary_report.php")
-                    {
-                        $openreport = "open";
-                        $sum_report = "background-color: #20527b; color: #eee; padding-left: 15px; margin-left: -15px;";
-                        $ico10 = "text-white-op";
-                    }
                     else if($highlight == "main_add_space.php")
                     {
                         $openspaces = "open";
@@ -196,17 +184,6 @@
                     <a href="email_blasting.php" style="<?php echo $blasting_style; ?>"><i class="fa fa-send text-white-op"></i><span class="sidebar-mini-hide">Email Blasting</span>
                     </a>
                 </li>
-                <li class="<?php echo $openreport;?>">
-                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="fa fa-bar-chart <?php echo $ico9; ?>"></i><span class="sidebar-mini-hide">Reports</span></a>
-                    <ul>
-                        <li>
-                            <a href="individual_report.php" style="<?php echo $ind_report;?>">Individual Report</a>
-                        </li>
-                        <li>
-                            <a href="summary_report.php" style="<?php echo $sum_report;?>">Summary Report</a>
-                        </li>
-                    </ul>
-                </li>
                 <li>
                     <a href="main_transaction.php?view=All Remarks&filter=This Week" style="<?php echo $transaction_style; ?>"><i class="si si-wallet <?php echo $ico9; ?>"></i><span class="sidebar-mini-hide">Transaction</span>
                         <small id="new_message"></small>
@@ -224,7 +201,7 @@
                             else
                             { echo '<span class="badge badge-danger">'.$count_user.'</span>'; }
                         ?>
-                    </span></a>
+                    </span>/ <span class="sidebar-mini-hide">Report</span></a>
                 </li>
                 <li class="<?php echo $opencontact;?>">
                     <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="fa fa-address-book-o <?php echo $ico5; ?>"></i><span class="sidebar-mini-hide">Contact</span>

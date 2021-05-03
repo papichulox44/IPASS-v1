@@ -16,7 +16,9 @@
         <!-- Dynamic Table Full -->
         <div class="block block-rounded shadow <?php echo $md_body; ?>">
             <div class="block-header content-heading <?php echo $md_body; ?>">
-                <h3 class="block-title <?php echo $md_text; ?>">Member</h3>
+                <h3 class="block-title <?php echo $md_text; ?>">Member / Individual Report
+                  <button type="button" class="btn btn-success pull-right" name="button"><i class="fa fa-bar-chart"></i> View Summary Report</button>
+                </h3>
             </div>
             <div class="block-content block-content-full <?php echo $md_body; ?>">
                 <!-- DataTables functionality is initialized with .js-dataTable-full class in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->
@@ -54,7 +56,7 @@
                                     }
                                     echo'
                                     </td>
-                                    <td class="d-none d-sm-table-cell">'.$result_finduser['email'].'</td>
+                                    <td class="d-none d-sm-table-cell" class="text-center" data-toggle="modal" data-target="#modal-report" id="'.$result_finduser['user_id'].'" onclick="show_department(this.id)">'.$result_finduser['email'].'</td>
                                     <td class="d-none d-sm-table-cell text-center" style="font-size: 18px;">';
                                         if($result_finduser['user_type'] == 'Admin')
                                         {echo'<span class="badge badge-primary">Admin</span>';}
@@ -203,6 +205,62 @@
     </div>
 </div>
 <!-- END Small Modal -->
+
+<!-- Extra Large Modal -->
+<div class="modal fade" id="modal-report" tabindex="-1" role="dialog" aria-labelledby="modal-extra-large" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="block block-themed block-transparent mb-0">
+                <div class="block-header bg-primary-dark">
+                    <h3 class="block-title">Individual Report</h3>
+                    <div class="block-options">
+                        <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                            <i class="si si-close"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="block-content">
+                  <div class="col-lg-12">
+                    <!-- Block Tabs Animated Slide Up -->
+                    <div class="block">
+                        <ul class="nav nav-tabs nav-tabs-block" data-toggle="tabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#btabs-animated-slideup-home">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#btabs-animated-slideup-profile">Profile</a>
+                            </li>
+                            <li class="nav-item ml-auto">
+                                <a class="nav-link" href="#btabs-animated-slideup-settings"><i class="si si-settings"></i></a>
+                            </li>
+                        </ul>
+                        <div class="block-content tab-content overflow-hidden">
+                            <div class="tab-pane fade fade-up show active" id="btabs-animated-slideup-home" role="tabpanel">
+                                <h4 class="font-w400">Home Content</h4>
+                                <p>Content slides up..</p>
+                            </div>
+                            <div class="tab-pane fade fade-up" id="btabs-animated-slideup-profile" role="tabpanel">
+                                <h4 class="font-w400">Profile Content</h4>
+                                <p>Content slides up..</p>
+                            </div>
+                            <div class="tab-pane fade fade-up" id="btabs-animated-slideup-settings" role="tabpanel">
+                                <h4 class="font-w400">Settings Content</h4>
+                                <p>Content slides up..</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-alt-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-alt-success" data-dismiss="modal">
+                    <i class="fa fa-check"></i> Perfect
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END Extra Large Modal -->
 
 <script type="text/javascript" src="../assets/js/jquery-1.6.4.min.js"></script>
 <script type="text/javascript" src="../assets/js/jquery-3.2.1.min.js"></script>
