@@ -9,6 +9,28 @@
         $md_body = "bg-gray-darker text-body-color-light";
     }
 ?>
+<style type="text/css">
+    .filterchild{
+        display: none;
+    }
+    .filterparent
+    {
+      cursor: pointer;
+    }
+    .filterparent:hover .filterchild {
+        display: block;
+    }
+    .hov_row:hover{
+        cursor: pointer;
+    }
+</style>
+<style>
+#chartdiv {
+  width: 100%;
+  height: 500px;
+}
+
+</style>
 <!-- Main Container -->
 <main id="main-container">
     <!-- Page Content -->
@@ -18,6 +40,47 @@
             <div class="block-header content-heading <?php echo $md_body; ?>">
                 <h3 class="block-title <?php echo $md_text; ?>">Member / Individual Report
                   <button type="button" class="btn btn-success pull-right" name="button"><i class="fa fa-bar-chart"></i> View Summary Report</button>
+                  <div class="dropdown float-right">
+                      <button type="button" style="margin-top: 4px; margin-right: 2px;" class="btn btn-sm btn-secondary dropdown-toggle" id="ecom-orders-overview-drop" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <span>Filter Report Date</span>
+                      </button>
+                      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ecom-orders-overview-drop" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(96px, 31px, 0px);">
+                          <button class="dropdown-item" id="all" onclick="filter_date(this.id)">
+                              <i class="fa fa-fw fa-circle-o mr-5"></i>All
+                          </button>
+                          <button class="dropdown-item" id="today" onclick="filter_date(this.id)">
+                              <i class="fa fa-fw fa-calendar mr-5"></i>Today
+                          </button>
+                          <button class="dropdown-item" id="this_week" onclick="filter_date(this.id)">
+                              <i class="fa fa-fw fa-calendar mr-5"></i>This Week
+                          </button>
+                          <button class="dropdown-item" id="month" onclick="filter_date(this.id)">
+                              <i class="fa fa-fw fa-calendar mr-5"></i>This Month
+                          </button>
+                          <button class="dropdown-item" id="year" onclick="filter_date(this.id)">
+                              <i class="fa fa-fw fa-calendar mr-5"></i>This Year
+                          </button>
+                          <span class="filterparent">
+                              <form class="dropdown-item filterparent">
+                                  <i class="fa fa-fw fa-calendar mr-5"></i>Custom Date
+                              </form>
+                              <div class="dropdown-menu dropdown-menu-right shadow filterchild" style="position: absolute; top: 185px; right: 120px;">
+                                  <label for="example-datepicker4">Custom date</label>
+                                  <div class="form-material">
+                                      <input type="date" class="js-datepicker form-control" id="filter_from" data-week-start="1" data-today-highlight="true" data-date-format="mm/dd/yy" placeholder="mm/dd/yy" required>
+                                      <label for="example-datepicker4">From:</label>
+                                  </div>
+                                  <div class="form-material">
+                                      <input type="date" class="js-datepicker form-control" id="filter_to" data-week-start="1" data-today-highlight="true" data-date-format="mm/dd/yy" placeholder="mm/dd/yy" required>
+                                      <label for="example-datepicker4">To:</label>
+                                  </div>
+                                  <div class="form-material">
+                                      <button class="btn btn-sm btn-noborder btn-alt-primary btn-block" id="custom" onclick="filter_date(this.id)"><i class="fa fa-check-square-o"></i>Go</button>
+                                  </div>
+                              </div>
+                          </span>
+                      </div>
+                  </div>
                 </h3>
             </div>
             <div class="block-content block-content-full <?php echo $md_body; ?>">
@@ -56,7 +119,7 @@
                                     }
                                     echo'
                                     </td>
-                                    <td class="d-none d-sm-table-cell" class="text-center" data-toggle="modal" data-target="#modal-report" id="'.$result_finduser['user_id'].'" onclick="show_department(this.id)">'.$result_finduser['email'].'</td>
+                                    <td class="d-none d-sm-table-cell" class="text-center" data-toggle="modal" data-target="#modal-report" id="'.$result_finduser['user_id'].'" onclick="show_individual_report(this.id)">'.$result_finduser['email'].'</td>
                                     <td class="d-none d-sm-table-cell text-center" style="font-size: 18px;">';
                                         if($result_finduser['user_type'] == 'Admin')
                                         {echo'<span class="badge badge-primary">Admin</span>';}
@@ -207,50 +270,20 @@
 <!-- END Small Modal -->
 
 <!-- Extra Large Modal -->
-<div class="modal fade" id="modal-report" tabindex="-1" role="dialog" aria-labelledby="modal-extra-large" aria-hidden="true">
+<div class="modal fade" id="modal-report" tabindex="-1" role="dialog" aria-labelledby="modal-extra-large" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="block block-themed block-transparent mb-0">
                 <div class="block-header bg-primary-dark">
                     <h3 class="block-title">Individual Report</h3>
                     <div class="block-options">
-                        <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                        <button type="button" onclick="close_modal()" class="btn-block-option" data-dismiss="modal" aria-label="Close">
                             <i class="si si-close"></i>
                         </button>
                     </div>
                 </div>
-                <div class="block-content">
-                  <div class="col-lg-12">
-                    <!-- Block Tabs Animated Slide Up -->
-                    <div class="block">
-                        <ul class="nav nav-tabs nav-tabs-block" data-toggle="tabs" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" href="#btabs-animated-slideup-home">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#btabs-animated-slideup-profile">Profile</a>
-                            </li>
-                            <li class="nav-item ml-auto">
-                                <a class="nav-link" href="#btabs-animated-slideup-settings"><i class="si si-settings"></i></a>
-                            </li>
-                        </ul>
-                        <div class="block-content tab-content overflow-hidden">
-                            <div class="tab-pane fade fade-up show active" id="btabs-animated-slideup-home" role="tabpanel">
-                                <h4 class="font-w400">Home Content</h4>
-                                <p>Content slides up..</p>
-                            </div>
-                            <div class="tab-pane fade fade-up" id="btabs-animated-slideup-profile" role="tabpanel">
-                                <h4 class="font-w400">Profile Content</h4>
-                                <p>Content slides up..</p>
-                            </div>
-                            <div class="tab-pane fade fade-up" id="btabs-animated-slideup-settings" role="tabpanel">
-                                <h4 class="font-w400">Settings Content</h4>
-                                <p>Content slides up..</p>
-                            </div>
-                        </div>
-                    </div>
+                <div class="block-content" id="show_individual_report">
                 </div>
-            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-alt-secondary" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-alt-success" data-dismiss="modal">
@@ -264,6 +297,9 @@
 
 <script type="text/javascript" src="../assets/js/jquery-1.6.4.min.js"></script>
 <script type="text/javascript" src="../assets/js/jquery-3.2.1.min.js"></script>
+<script src="../assets/chart/core.js"></script>
+<script src="../assets/chart/charts.js"></script>
+<script src="../assets/chart/animated.js"></script>
 <script type="text/javascript">
     function show_department(id)
     {
@@ -378,6 +414,48 @@
                 }
             }
         });
+      }
+    }
+
+    function show_individual_report(id) {
+      filter_report = '<?php echo $_GET['filter_report']; ?>';
+      filter_from = '<?php if(isset($_GET['filter_from'])) { echo $_GET['filter_from']; } ?>';
+      filter_to = '<?php if(isset($_GET['filter_to'])) { echo $_GET['filter_to']; } ?>';
+      $.ajax({
+          url: 'ajax.php',
+          type: 'POST',
+          async: false,
+          data:{
+              user_id:id,
+              filter_report:filter_report,
+              filter_from:filter_from,
+              filter_to:filter_to,
+              show_individual_report: 1,
+          },
+          success: function(data){
+              $('#show_individual_report').html(data);
+          }
+      });
+    }
+
+    function filter_date(id) {
+      if (id == 'custom') {
+        filter_from = document.getElementById("filter_from").value
+        filter_to = document.getElementById("filter_to").value
+        document.location='main_people.php?filter_report='+id+'&filter_from='+filter_from+'&filter_to='+filter_to;
+      } else {
+        document.location='main_people.php?filter_report='+id;
+      }
+    }
+
+    function close_modal() {
+      filter_report = '<?php echo $_GET['filter_report'] ?>';
+      if (filter_report == 'custom') {
+        filter_from = '<?php if(isset($_GET['filter_from'])) { echo $_GET['filter_from']; } ?>';
+        filter_to = '<?php if(isset($_GET['filter_to'])) { echo $_GET['filter_to']; } ?>';
+        document.location='main_people.php?filter_report='+filter_report+'&filter_from='+filter_from+'&filter_to='+filter_to;
+      } else {
+        document.location='main_people.php?filter_report='+filter_report;
       }
     }
 

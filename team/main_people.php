@@ -1,15 +1,15 @@
-<?php include ("session.php"); ?> 
+<?php include ("session.php"); ?>
 <!doctype html>
 <html lang="en" class="no-focus">
     <?php include 'head.php'; ?>
     <body class="<?php echo $body; ?>">
         <div id="page-container" class="sidebar-o <?php echo $inverse; ?> enable-page-overlay side-scroll">
-            <?php 
+            <?php
                 $highlight = "main_people.php";
                 include 'left_sidebar_menu.php';
             ?>
-            <?php include 'header.php'; ?>  
-            <?php include 'content_people.php'; ?> 
+            <?php include 'header.php'; ?>
+            <?php include 'content_people.php'; ?>
         </div>
         <!-- END Page Container -->
 
@@ -26,7 +26,7 @@
         <script src="../assets/js/plugins/jquery-ui/jquery-ui.min.js"></script>
         <script src="../assets/js/plugins/jquery-ui/jquery.ui.touch-punch.min.js"></script>
 
-           
+
         <!-- Page JS Code -->
         <script src="../assets/js/pages/be_pages_generic_scrumboard.min.js"></script>
 

@@ -193,7 +193,7 @@
                     <a href="main_notification.php" style="<?php echo $notification_style; ?>"><i class="si si-bell <?php echo $ico3; ?>"></i><span class="sidebar-mini-hide">Notification</span></a>
                 </li>
                 <li>
-                    <a href="main_people.php" style="<?php echo $people_style; ?>"><i class="si si-users <?php echo $ico4; ?>"></i><span class="sidebar-mini-hide">Member
+                    <a href="main_people.php?filter_report=all" style="<?php echo $people_style; ?>"><i class="si si-users <?php echo $ico4; ?>"></i><span class="sidebar-mini-hide">Member
                         <?php
                             $select_user = mysqli_query($conn, "SELECT * FROM user WHERE user_type = ''");
                             $count_user = mysqli_num_rows($select_user);

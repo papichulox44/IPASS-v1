@@ -9,6 +9,12 @@
       $start = $_POST['start'];
       $filter = $_POST['filter'];
       $due_date = $_POST['due_date'];
+
+      $From = $_POST['From'];
+      $To = $_POST['To'];
+      $From_due = $_POST['From_due'];
+      $To_due = $_POST['To_due'];
+
       $due_date_filter = '';
       if($due_date == "All")
       {
@@ -44,8 +50,8 @@
       }
       else if($due_date == "Custom Date")
       {
-          $get_from_due = $_GET['From_due'];
-          $get_to_due = $_GET['To_due'];
+          $get_from_due = $_POST['From_due'];
+          $get_to_due = $_POST['To_due'];
           $due_date_filter = "BETWEEN '".$get_from_due."' AND '".$get_to_due."'";
       }
 
@@ -168,8 +174,8 @@
       }
       else if($filter == "Custom Date")
       {
-          $get_from = $_GET['From'];
-          $get_to = $_GET['To'];
+          $get_from = $_POST['From'];
+          $get_to = $_POST['To'];
           $select_task = mysqli_query($conn, "SELECT * FROM task WHERE task_date_created BETWEEN '$get_from' AND '$get_to' AND task_due_date $due_date_filter LIMIT $start, $limit");
       }
       while($fetch_task = mysqli_fetch_array($select_task))
@@ -185,6 +191,10 @@
       $filter = $_POST['filter'];
       $due_date = $_POST['due_date'];
       $myInput = $_POST['myInput'];
+      $From = $_POST['From'];
+      $To = $_POST['To'];
+      $From_due = $_POST['From_due'];
+      $To_due = $_POST['To_due'];
       $due_date_filter = '';
       if($due_date == "All")
       {
@@ -220,8 +230,8 @@
       }
       else if($due_date == "Custom Date")
       {
-          $get_from_due = $_GET['From_due'];
-          $get_to_due = $_GET['To_due'];
+          $get_from_due = $_POST['From_due'];
+          $get_to_due = $_POST['To_due'];
           $due_date_filter = "BETWEEN '".$get_from_due."' AND '".$get_to_due."'";
       }
 
@@ -1055,8 +1065,8 @@
       }
       else if($filter == "Custom Date")
       {
-          $get_from = $_GET['From'];
-          $get_to = $_GET['To'];
+          $get_from = $_POST['From'];
+          $get_to = $_POST['To'];
           $select_task = mysqli_query($conn, "SELECT * FROM task WHERE task_date_created BETWEEN '$get_from' AND '$get_to' AND task_due_date $due_date_filter $input_filter LIMIT $start, $limit");
       }
       while($fetch_task = mysqli_fetch_array($select_task))
