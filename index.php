@@ -12,7 +12,7 @@
 
         $res=mysqli_query($conn,"SELECT user_id, username, password, user_type FROM user WHERE username = '$user' AND user_type != ''");
         $row=mysqli_fetch_array($res);
-        $count = mysqli_num_rows($res); 
+        $count = mysqli_num_rows($res);
 
         if($count == 1 && $row['password']==(md5($upass)))
         {
@@ -20,15 +20,21 @@
             $_SESSION['user_type'] = $row['user_type'];
             $a_id = $row['user_id'];
             mysqli_query($conn, "UPDATE user SET log = '1' WHERE user_id = '$a_id'") or die(mysqli_error());
-            header("Location:team/dashboard.php");
-            // echo $_SESSION['user_type'];
-        }      
+            if($row['user_type'] == 'Suspended')
+            {
+              echo "
+                  <script>alert('Your account has been Suspended. Please contact the Administrator!!');</script>
+                ";
+            } else {
+                header("Location:team/dashboard.php");
+            }
+        }
         else
         {
             ?>
                 <script>alert('Sorry, incorrect login details. Only validated account can access this site.');</script>
             <?php
-        } 
+        }
     }
     $date_maintenance = '2020-11-05';
     if (date("Y-m-d") == $date_maintenance) {
@@ -53,7 +59,7 @@
                                     <style type="text/css">
                                         .logo {width: 90px; margin: -20px 0px -50px 0px;}
                                     </style>
-                                    <img src="assets/media/photos/logo-ipass.png" class="logo corporate"> 
+                                    <img src="assets/media/photos/logo-ipass.png" class="logo corporate">
                                 </div>
                                 <!-- END Header -->
                                 <form method="post">

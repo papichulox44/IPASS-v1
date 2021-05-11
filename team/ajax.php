@@ -177,7 +177,7 @@
         $send = mail($to,$subject,$message,$headers);
         if($send)
         {
-            $comment_insert = mysqli_query($conn, "INSERT INTO comment (comment_task_id, comment_user_id, comment_message, comment_date, comment_type) VALUES ('$task_id', '$user_id', '$comment', '$date', '1')") or die(mysqli_error());
+            $comment_insert = mysqli_query($conn, "INSERT INTO comment (comment_task_id, comment_user_id, comment_message, comment_date, comment_type) VALUES ('$task_id', '$user_id', '$comment', '$date', '4')") or die(mysqli_error());
             if ($comment_insert) {
                 echo "Email sent successfully.";
             }
@@ -535,7 +535,7 @@
             $new_array = str_replace($task_status_id,$status_id,$assign_array); // current,change_to,array
             $new_assign_to = implode(",",$new_array); // convert array to string
             mysqli_query($conn, "UPDATE contact SET contact_assign_to = '$new_assign_to' WHERE contact_id = '$contact_id'") or die(mysqli_error());
-            $comment_insert = mysqli_query($conn, "INSERT INTO comment (comment_task_id, comment_user_id, comment_message, comment_date, comment_type) VALUES ($task_id, $user_id, '$comment', NOW(), 1)") or die(mysqli_error());
+            $comment_insert = mysqli_query($conn, "INSERT INTO comment (comment_task_id, comment_user_id, comment_message, comment_date, comment_type) VALUES ($task_id, $user_id, '$comment', NOW(), 3)") or die(mysqli_error());
             echo 'move';
         }
         else
@@ -614,7 +614,7 @@
         $due_date_and_time = $txt_date. " " .$txt_time;
         $comment = 'Update Due Date to: "'.$due_date_and_time.'".';
 
-        mysqli_query($conn, "INSERT INTO comment (comment_task_id, comment_user_id, comment_message, comment_date, comment_type) VALUES ($task_id, $user_id, '$comment', NOW(), 1)") or die(mysqli_error());
+        mysqli_query($conn, "INSERT INTO comment (comment_task_id, comment_user_id, comment_message, comment_date, comment_type) VALUES ($task_id, $user_id, '$comment', NOW(), 2)") or die(mysqli_error());
         mysqli_query($conn, "UPDATE task SET task_due_date = '$due_date_and_time' WHERE task_id='$task_id'") or die(mysqli_error());
     }
     if(isset($_POST['assign_tag']))
@@ -3817,11 +3817,23 @@
         $filter_created = '';
         $filter_assigned = '';
         $filter_unassigned = '';
+        $filter_add = '';
+        $filter_cf = '';
+        $filter_due = '';
+        $filter_move = '';
+        $filter_wc = '';
+        $filter_es = '';
         if($filter_report == "all")
         {
             $filter_created = '';
             $filter_assigned = '';
             $filter_unassigned = '';
+            $filter_add = '';
+            $filter_cf = '';
+            $filter_due = '';
+            $filter_move = '';
+            $filter_wc = '';
+            $filter_es = '';
         }
         else if($filter_report == "today")
         {
@@ -3829,6 +3841,12 @@
             $filter_created = "AND contact_date_created LIKE '%".$today."%'";
             $filter_assigned = "AND task_date_created LIKE '%".$today."%'";
             $filter_unassigned = "AND task_date_created LIKE '%".$today."%'";
+            $filter_add = "AND task.task_date_created LIKE '%".$today."%'";
+            $filter_cf = "AND comment_date LIKE '%".$today."%'";
+            $filter_due = "AND comment_date LIKE '%".$today."%'";
+            $filter_move = "AND comment_date LIKE '%".$today."%'";
+            $filter_wc = "AND comment_date LIKE '%".$today."%'";
+            $filter_es = "AND comment_date LIKE '%".$today."%'";
         }
         else if($filter_report == "this_week")
         {
@@ -3844,6 +3862,12 @@
             $filter_created = "AND contact_date_created BETWEEN '".$from."' AND '".$to."'";
             $filter_assigned = "AND task_date_created BETWEEN '".$from."' AND '".$to."'";
             $filter_unassigned = "AND task_date_created BETWEEN '".$from."' AND '".$to."'";
+            $filter_add = "AND task.task_date_created BETWEEN '".$from."' AND '".$to."'";
+            $filter_cf = "AND comment_date BETWEEN '".$from."' AND '".$to."'";
+            $filter_due = "AND comment_date BETWEEN '".$from."' AND '".$to."'";
+            $filter_move = "AND comment_date BETWEEN '".$from."' AND '".$to."'";
+            $filter_wc = "AND comment_date BETWEEN '".$from."' AND '".$to."'";
+            $filter_es = "AND comment_date BETWEEN '".$from."' AND '".$to."'";
         }
         else if($filter_report == "month")
         {
@@ -3851,6 +3875,12 @@
             $filter_created = "AND contact_date_created LIKE '%".$month."%'";
             $filter_assigned = "AND task_date_created LIKE '%".$month."%'";
             $filter_unassigned = "AND task_date_created LIKE '%".$month."%'";
+            $filter_add = "AND task.task_date_created LIKE '%".$month."%'";
+            $filter_cf = "AND comment_date LIKE '%".$month."%'";
+            $filter_due = "AND comment_date LIKE '%".$month."%'";
+            $filter_move = "AND comment_date LIKE '%".$month."%'";
+            $filter_wc = "AND comment_date LIKE '%".$month."%'";
+            $filter_es = "AND comment_date LIKE '%".$month."%'";
         }
         else if($filter_report == "year")
         {
@@ -3858,12 +3888,24 @@
             $filter_created = "AND contact_date_created LIKE '%".$year."%'";
             $filter_assigned = "AND task_date_created LIKE '%".$year."%'";
             $filter_unassigned = "AND task_date_created LIKE '%".$year."%'";
+            $filter_add = "AND task.task_date_created LIKE '%".$year."%'";
+            $filter_cf = "AND comment_date LIKE '%".$year."%'";
+            $filter_due = "AND comment_date LIKE '%".$year."%'";
+            $filter_move = "AND comment_date LIKE '%".$year."%'";
+            $filter_wc = "AND comment_date LIKE '%".$year."%'";
+            $filter_es = "AND comment_date LIKE '%".$year."%'";
         }
         else if($filter_report == "custom")
         {
             $filter_created = "AND contact_date_created BETWEEN '".$filter_from."' AND '".$filter_to."'";
             $filter_assigned = "AND task_date_created BETWEEN '".$filter_from."' AND '".$filter_to."'";
             $filter_unassigned = "AND task_date_created BETWEEN '".$filter_from."' AND '".$filter_to."'";
+            $filter_add = "AND task.task_date_created BETWEEN '".$filter_from."' AND '".$filter_to."'";
+            $filter_cf = "AND comment_date BETWEEN '".$filter_from."' AND '".$filter_to."'";
+            $filter_due = "AND comment_date BETWEEN '".$filter_from."' AND '".$filter_to."'";
+            $filter_move = "AND comment_date BETWEEN '".$filter_from."' AND '".$filter_to."'";
+            $filter_wc = "AND comment_date BETWEEN '".$filter_from."' AND '".$filter_to."'";
+            $filter_es = "AND comment_date BETWEEN '".$filter_from."' AND '".$filter_to."'";
         }
 
         $query_created_count = mysqli_query($conn, "SELECT Count(contact.contact_id) as total_created FROM contact WHERE contact_created_by = $user_id $filter_created") or die(mysqli_error());
@@ -3877,6 +3919,30 @@
         $query_unassigned_count = mysqli_query($conn, "SELECT Count(task.task_id) as total_unassigned FROM task WHERE task_created_by = $user_id AND task_status_id = '' $filter_unassigned") or die(mysqli_error());
         $data_unassigned_count = mysqli_fetch_assoc($query_unassigned_count);
         $unassigned_count = $data_unassigned_count['total_unassigned'];
+
+        $query_add_count = mysqli_query($conn, "SELECT Count(contact.contact_id) AS total_add FROM contact INNER JOIN task ON task.task_contact = contact.contact_id WHERE contact.contact_created_by = $user_id $filter_add") or die(mysqli_error());
+        $data_add_count = mysqli_fetch_assoc($query_add_count);
+        $add_count = $data_add_count['total_add'];
+
+        $query_cf_count = mysqli_query($conn, "SELECT Count(comment.comment_id) AS total_cf FROM comment INNER JOIN task ON comment.comment_task_id = task.task_id WHERE comment_user_id = $user_id AND comment_type = 1 $filter_cf") or die(mysqli_error());
+        $data_cf_count = mysqli_fetch_assoc($query_cf_count);
+        $cf_count = $data_cf_count['total_cf'];
+
+        $query_due_count = mysqli_query($conn, "SELECT Count(comment.comment_id) AS total_due FROM comment INNER JOIN task ON comment.comment_task_id = task.task_id WHERE comment_user_id = $user_id AND comment_type = 2 $filter_due") or die(mysqli_error());
+        $data_due_count = mysqli_fetch_assoc($query_due_count);
+        $due_count = $data_due_count['total_due'];
+
+        $query_move_count = mysqli_query($conn, "SELECT Count(comment.comment_id) AS total_move FROM comment INNER JOIN task ON comment.comment_task_id = task.task_id WHERE comment_user_id = $user_id AND comment_type = 3 $filter_move") or die(mysqli_error());
+        $data_move_count = mysqli_fetch_assoc($query_move_count);
+        $move_count = $data_move_count['total_move'];
+
+        $query_wc_count = mysqli_query($conn, "SELECT Count(comment.comment_id) AS total_wc FROM comment INNER JOIN task ON comment.comment_task_id = task.task_id WHERE comment_user_id = $user_id AND comment_type is NULL $filter_wc") or die(mysqli_error());
+        $data_wc_count = mysqli_fetch_assoc($query_wc_count);
+        $wc_count = $data_wc_count['total_wc'];
+
+        $query_es_count = mysqli_query($conn, "SELECT Count(comment.comment_id) AS total_es FROM comment INNER JOIN task ON comment.comment_task_id = task.task_id WHERE comment_user_id = $user_id AND comment_type = 4 $filter_wc") or die(mysqli_error());
+        $data_es_count = mysqli_fetch_assoc($query_es_count);
+        $es_count = $data_es_count['total_es'];
         echo '
         <div class="col-lg-12">
           <h3>List Activities of '.$name.'</h3>
@@ -3890,33 +3956,34 @@
                       <a class="nav-link" href="#assigned">Assigned<span class="badge badge-danger badge-pill font-w300" style="font-size: 9px;" >'.$assigned_count.'</span></a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link" href="#unassigned">Unassigned<span class="badge badge-danger badge-pill font-w300" style="font-size: 9px;" >'.$unassigned_count.'</span></a></a>
+                      <a class="nav-link" href="#unassigned">Unassigned<span class="badge badge-danger badge-pill font-w300" style="font-size: 9px;" >'.$unassigned_count.'</span></a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link" href="#add">Add</a>
+                      <a class="nav-link" href="#add">Add<span class="badge badge-danger badge-pill font-w300" style="font-size: 9px;" >'.$add_count.'</span></a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link" href="#customfield">Custom Field</a>
+                      <a class="nav-link" href="#customfield">Custom Field<span class="badge badge-danger badge-pill font-w300" style="font-size: 9px;" >'.$cf_count.'</span></a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link" href="#duedate">Due Date</a>
+                      <a class="nav-link" href="#duedate">Due Date<span class="badge badge-danger badge-pill font-w300" style="font-size: 9px;" >'.$due_count.'</span></a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link" href="#movement">Movement</a>
+                      <a class="nav-link" href="#movement">Movement<span class="badge badge-danger badge-pill font-w300" style="font-size: 9px;" >'.$move_count.'</span></a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link" href="#writtencomments">Written Comments</a>
+                      <a class="nav-link" href="#writtencomments">Written Comments<span class="badge badge-danger badge-pill font-w300" style="font-size: 9px;" >'.$wc_count.'</span></a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link" href="#emailsent">Email Sent</a>
+                      <a class="nav-link" href="#emailsent">Email Sent<span class="badge badge-danger badge-pill font-w300" style="font-size: 9px;" >'.$es_count.'</span></a>
                   </li>
               </ul>
               <div class="block-content tab-content overflow-hidden" style="width: 840px;">
                   <div class="tab-pane fade fade-up show active" id="created" role="tabpanel">
                     <div style="overflow: auto; height: 300px;" id="scroll_created">
-                      <table class="table table-bordered">
+                      <table class="table table-bordered table-hover">
                       <thead>
                         <tr>
+                          <td>#</td>
                           <td>Contact Name</td>
                           <td>Date Created</td>
                         <tr>
@@ -3928,9 +3995,10 @@
                   </div>
                   <div class="tab-pane fade fade-up" id="assigned" role="tabpanel">
                     <div style="overflow: auto; height: 300px;" id="scroll_assigned">
-                      <table class="table table-bordered">
+                      <table class="table table-bordered table-hover">
                       <thead>
                         <tr>
+                          <td>#</td>
                           <td>Task Name</td>
                           <td>Date Created</td>
                         <tr>
@@ -3942,9 +4010,10 @@
                   </div>
                   <div class="tab-pane fade fade-up" id="unassigned" role="tabpanel">
                     <div style="overflow: auto; height: 300px;" id="scroll_unassigned">
-                      <table class="table table-bordered">
+                      <table class="table table-bordered table-hover">
                       <thead>
                         <tr>
+                          <td>#</td>
                           <td>Task Name</td>
                           <td>Date Created</td>
                         <tr>
@@ -3956,9 +4025,10 @@
                   </div>
                   <div class="tab-pane fade fade-up" id="add" role="tabpanel">
                     <div style="overflow: auto; height: 300px;" id="scroll_add">
-                      <table class="table table-bordered">
+                      <table class="table table-bordered table-hover">
                       <thead>
                         <tr>
+                          <td>#</td>
                           <td>Task Name</td>
                           <td>Date Created</td>
                         <tr>
@@ -3969,24 +4039,84 @@
                     </div>
                   </div>
                   <div class="tab-pane fade fade-up" id="customfield" role="tabpanel">
-                      <h4 class="font-w400">Profile Content</h4>
-                      <p>Content slides up..</p>
+                    <div style="overflow: auto; height: 300px;" id="scroll_cf">
+                      <table class="table table-bordered table-hover">
+                      <thead>
+                        <tr>
+                          <td>#</td>
+                          <td>Task Name</td>
+                          <td>Comment</td>
+                          <td>Date Created</td>
+                        <tr>
+                      </thead>
+                      <tbody id="load_data_cf">
+                      <tbody>
+                      </table>
+                    </div>
                   </div>
                   <div class="tab-pane fade fade-up" id="duedate" role="tabpanel">
-                      <h4 class="font-w400">Profile Content</h4>
-                      <p>Content slides up..</p>
+                    <div style="overflow: auto; height: 300px;" id="scroll_due">
+                      <table class="table table-bordered table-hover">
+                      <thead>
+                        <tr>
+                          <td>#</td>
+                          <td>Task Name</td>
+                          <td>Comment</td>
+                          <td>Date Created</td>
+                        <tr>
+                      </thead>
+                      <tbody id="load_data_due">
+                      <tbody>
+                      </table>
+                    </div>
                   </div>
                   <div class="tab-pane fade fade-up" id="movement" role="tabpanel">
-                      <h4 class="font-w400">Profile Content</h4>
-                      <p>Content slides up..</p>
+                    <div style="overflow: auto; height: 300px;" id="scroll_move">
+                      <table class="table table-bordered table-hover">
+                      <thead>
+                        <tr>
+                          <td>#</td>
+                          <td>Task Name</td>
+                          <td>Comment</td>
+                          <td>Date Created</td>
+                        <tr>
+                      </thead>
+                      <tbody id="load_data_move">
+                      <tbody>
+                      </table>
+                    </div>
                   </div>
                   <div class="tab-pane fade fade-up" id="writtencomments" role="tabpanel">
-                      <h4 class="font-w400">Profile Content</h4>
-                      <p>Content slides up..</p>
+                    <div style="overflow: auto; height: 300px;" id="scroll_wc">
+                      <table class="table table-bordered table-hover">
+                      <thead>
+                        <tr>
+                          <td>#</td>
+                          <td>Task Name</td>
+                          <td>Comment</td>
+                          <td>Date Created</td>
+                        <tr>
+                      </thead>
+                      <tbody id="load_data_wc">
+                      <tbody>
+                      </table>
+                    </div>
                   </div>
                   <div class="tab-pane fade fade-up" id="emailsent" role="tabpanel">
-                      <h4 class="font-w400">Profile Content</h4>
-                      <p>Content slides up..</p>
+                    <div style="overflow: auto; height: 300px;" id="scroll_es">
+                      <table class="table table-bordered table-hover">
+                      <thead>
+                        <tr>
+                          <td>#</td>
+                          <td>Task Name</td>
+                          <td>Comment</td>
+                          <td>Date Created</td>
+                        <tr>
+                      </thead>
+                      <tbody id="load_data_es">
+                      <tbody>
+                      </table>
+                    </div>
                   </div>
               </div>
           </div>
@@ -4019,22 +4149,22 @@
         "numbers": '.$unassigned_count.'
         }, {
         "activities": "Add",
-        "numbers": 50
+        "numbers": '.$add_count.'
         }, {
         "activities": "Custom Field",
-        "numbers": 64
+        "numbers": '.$cf_count.'
         }, {
         "activities": "Due Date",
-        "numbers": 34
+        "numbers": '.$due_count.'
         }, {
         "activities": "Movement",
-        "numbers": 99
+        "numbers": '.$move_count.'
         }, {
         "activities": "Written Comments",
-        "numbers": 60
+        "numbers": '.$wc_count.'
         }, {
         "activities": "Email Sent",
-        "numbers": 50
+        "numbers": '.$es_count.'
         } ];
 
         // Add and configure Series
@@ -4205,6 +4335,312 @@
           }
     		});
 
+        var limit_add = 20;
+        var start_add = 0;
+        var user_id_add = '.$user_id.';
+        var action_add= "inactive";
+        function load_add_data(limit_add, start_add, user_id_add){
+        filter_report_add = "'.$filter_report.'";
+        filter_from_add = "'.$filter_from.'";
+        filter_to_add = "'.$filter_to.'";
+        $.ajax({
+            url:"ajax.php",
+            method:"POST",
+            data:{
+              limit_add:limit_add,
+              start_add:start_add,
+              user_id_add:user_id_add,
+              filter_report_add:filter_report_add,
+              filter_from_add:filter_from_add,
+              filter_to_add:filter_to_add,
+              load_add_data:1},
+            cache:false,
+            success:function(data)
+            {
+            $("#load_data_add").append(data);
+            if(data == "")
+            {
+              var start_add = 0;
+             action_add = "active";
+            }
+            else
+            {
+             action_add = "inactive";
+            }
+          }
+        });
+        }
+
+        if(action_add == "inactive")
+          {
+          action_add = "active";
+          load_add_data(limit_add, start_add, user_id_add);
+          }
+        $("#scroll_add").scroll(function() {
+    			if ($("#scroll_add").scrollTop() + $("#scroll_add").height() > $("#scroll_add").height() && action_add == "inactive") {
+            action_add = "active";
+            start_add = start_add + limit_add;
+            setTimeout(function(){
+            load_add_data(limit_add, start_add, user_id_add);
+            }, 1000);
+          }
+    		});
+
+        var limit_cf = 20;
+        var start_cf = 0;
+        var user_id_cf = '.$user_id.';
+        var action_cf = "inactive";
+        function load_cf_data(limit_cf, start_cf, user_id_cf){
+        filter_report_cf = "'.$filter_report.'";
+        filter_from_cf = "'.$filter_from.'";
+        filter_to_cf = "'.$filter_to.'";
+        $.ajax({
+            url:"ajax.php",
+            method:"POST",
+            data:{
+              limit:limit_cf,
+              start:start_cf,
+              user_id:user_id_cf,
+              filter_report:filter_report_cf,
+              filter_from:filter_from_cf,
+              filter_to:filter_to_cf,
+              load_cf_data:1},
+            cache:false,
+            success:function(data)
+            {
+            $("#load_data_cf").append(data);
+            if(data == "")
+            {
+              var start_cf = 0;
+             action_cf = "active";
+            }
+            else
+            {
+             action_cf = "inactive";
+            }
+          }
+        });
+        }
+
+        if(action_cf == "inactive")
+          {
+          action_cf = "active";
+          load_cf_data(limit_cf, start_cf, user_id_cf);
+          }
+        $("#scroll_cf").scroll(function() {
+    			if ($("#scroll_cf").scrollTop() + $("#scroll_cf").height() > $("#scroll_cf").height() && action_cf == "inactive") {
+            action_cf = "active";
+            start_cf = start_cf + limit_cf;
+            setTimeout(function(){
+            load_cf_data(limit_cf, start_cf, user_id_cf);
+            }, 1000);
+          }
+    		});
+
+        var limit_due = 20;
+        var start_due = 0;
+        var user_id_due = '.$user_id.';
+        var action_due = "inactive";
+        function load_due_data(limit_due, start_due, user_id_due){
+        filter_report_due = "'.$filter_report.'";
+        filter_from_due = "'.$filter_from.'";
+        filter_to_due = "'.$filter_to.'";
+        $.ajax({
+            url:"ajax.php",
+            method:"POST",
+            data:{
+              limit:limit_due,
+              start:start_due,
+              user_id:user_id_due,
+              filter_report:filter_report_due,
+              filter_from:filter_from_due,
+              filter_to:filter_to_due,
+              load_due_data:1},
+            cache:false,
+            success:function(data)
+            {
+            $("#load_data_due").append(data);
+            if(data == "")
+            {
+              var start_due = 0;
+             action_due = "active";
+            }
+            else
+            {
+             action_due = "inactive";
+            }
+          }
+        });
+        }
+
+        if(action_due == "inactive")
+          {
+          action_due = "active";
+          load_due_data(limit_due, start_due, user_id_due);
+          }
+        $("#scroll_due").scroll(function() {
+          if ($("#scroll_due").scrollTop() + $("#scroll_due").height() > $("#scroll_due").height() && action_due == "inactive") {
+            action_due = "active";
+            start_due = start_due + limit_due;
+            setTimeout(function(){
+            load_due_data(limit_due, start_due, user_id_due);
+            }, 1000);
+          }
+        });
+
+        var limit_move = 20;
+        var start_move = 0;
+        var user_id_move = '.$user_id.';
+        var action_move = "inactive";
+        function load_move_data(limit_move, start_move, user_id_move){
+        filter_report_move = "'.$filter_report.'";
+        filter_from_move = "'.$filter_from.'";
+        filter_to_move = "'.$filter_to.'";
+        $.ajax({
+            url:"ajax.php",
+            method:"POST",
+            data:{
+              limit:limit_move,
+              start:start_move,
+              user_id:user_id_move,
+              filter_report:filter_report_move,
+              filter_from:filter_from_move,
+              filter_to:filter_to_move,
+              load_move_data:1},
+            cache:false,
+            success:function(data)
+            {
+            $("#load_data_move").append(data);
+            if(data == "")
+            {
+              var start_move = 0;
+             action_move = "active";
+            }
+            else
+            {
+             action_move = "inactive";
+            }
+          }
+        });
+        }
+
+        if(action_move == "inactive")
+          {
+          action_move = "active";
+          load_move_data(limit_move, start_move, user_id_move);
+          }
+        $("#scroll_move").scroll(function() {
+          if ($("#scroll_move").scrollTop() + $("#scroll_move").height() > $("#scroll_move").height() && action_move == "inactive") {
+            action_move = "active";
+            start_move = start_move + limit_move;
+            setTimeout(function(){
+            load_move_data(limit_move, start_move, user_id_move);
+            }, 1000);
+          }
+        });
+
+        var limit_wc = 20;
+        var start_wc = 0;
+        var user_id_wc = '.$user_id.';
+        var action_wc = "inactive";
+        function load_wc_data(limit_wc, start_wc, user_id_wc){
+        filter_report_wc = "'.$filter_report.'";
+        filter_from_wc = "'.$filter_from.'";
+        filter_to_wc = "'.$filter_to.'";
+        $.ajax({
+            url:"ajax.php",
+            method:"POST",
+            data:{
+              limit:limit_wc,
+              start:start_wc,
+              user_id:user_id_wc,
+              filter_report:filter_report_wc,
+              filter_from:filter_from_wc,
+              filter_to:filter_to_wc,
+              load_wc_data:1},
+            cache:false,
+            success:function(data)
+            {
+            $("#load_data_wc").append(data);
+            if(data == "")
+            {
+              var start_wc = 0;
+             action_wc = "active";
+            }
+            else
+            {
+             action_wc = "inactive";
+            }
+          }
+        });
+        }
+
+        if(action_wc == "inactive")
+          {
+          action_wc = "active";
+          load_wc_data(limit_wc, start_wc, user_id_wc);
+          }
+        $("#scroll_wc").scroll(function() {
+          if ($("#scroll_wc").scrollTop() + $("#scroll_wc").height() > $("#scroll_wc").height() && action_wc == "inactive") {
+            action_wc = "active";
+            start_wc = start_wc + limit_wc;
+            setTimeout(function(){
+            load_wc_data(limit_wc, start_wc, user_id_wc);
+            }, 1000);
+          }
+        });
+
+        var limit_es = 20;
+        var start_es = 0;
+        var user_id_es = '.$user_id.';
+        var action_es = "inactive";
+        function load_es_data(limit_es, start_es, user_id_es){
+        filter_report_es = "'.$filter_report.'";
+        filter_from_es = "'.$filter_from.'";
+        filter_to_es = "'.$filter_to.'";
+        $.ajax({
+            url:"ajax.php",
+            method:"POST",
+            data:{
+              limit:limit_es,
+              start:start_es,
+              user_id:user_id_es,
+              filter_report:filter_report_es,
+              filter_from:filter_from_es,
+              filter_to:filter_to_es,
+              load_es_data:1},
+            cache:false,
+            success:function(data)
+            {
+            $("#load_data_es").append(data);
+            if(data == "")
+            {
+              var start_es = 0;
+             action_es = "active";
+            }
+            else
+            {
+             action_es = "inactive";
+            }
+          }
+        });
+        }
+
+        if(action_es == "inactive")
+          {
+          action_es = "active";
+          load_es_data(limit_es, start_es, user_id_es);
+          }
+        $("#scroll_es").scroll(function() {
+          if ($("#scroll_es").scrollTop() + $("#scroll_es").height() > $("#scroll_es").height() && action_es == "inactive") {
+            action_es = "active";
+            start_es = start_es + limit_es;
+            setTimeout(function(){
+            load_es_data(limit_es, start_es, user_id_es);
+            }, 1000);
+          }
+        });
+
 
       </script>
       <script src="../assets/js/codebase.core.min.js"></script>
@@ -4260,11 +4696,13 @@
             $filter = "AND contact_date_created BETWEEN '".$filter_from."' AND '".$filter_to."'";
         }
 
-        $query_created = mysqli_query($conn, "SELECT * FROM contact WHERE contact_created_by = $user_id $filter LIMIT $start_created, $limit_created") or die(mysqli_error());
+        $count = 1 + $start_created;
+        $query_created = mysqli_query($conn, "SELECT * FROM contact WHERE contact_created_by = $user_id $filter ORDER BY contact_date_created DESC LIMIT $start_created, $limit_created") or die(mysqli_error());
         while($data_created = mysqli_fetch_array($query_created))
         {
           echo '
             <tr>
+              <td>'.$count++.'</td>
               <td>'.$data_created['contact_fname'].' '.$data_created['contact_lname'].'</td>
               <td>'.$data_created['contact_date_created'].'</td>
             </tr>
@@ -4320,11 +4758,13 @@
             $filter = "AND task_date_created BETWEEN '".$filter_from."' AND '".$filter_to."'";
         }
 
-        $query_assigned = mysqli_query($conn, "SELECT * FROM task WHERE task_created_by = $user_id AND task_status_id != '' $filter LIMIT $start_assgined, $limit_assigned") or die(mysqli_error());
+        $count = 1 + $start_assgined;
+        $query_assigned = mysqli_query($conn, "SELECT * FROM task WHERE task_created_by = $user_id AND task_status_id != '' $filter ORDER BY task_date_created DESC LIMIT $start_assgined, $limit_assigned") or die(mysqli_error());
         while($data_assigned = mysqli_fetch_array($query_assigned))
         {
           echo '
             <tr>
+              <td>'.$count++.'</td>
               <td>'.$data_assigned['task_name'].'</td>
               <td>'.$data_assigned['task_date_created'].'</td>
             </tr>
@@ -4380,13 +4820,398 @@
             $filter = "AND task_date_created BETWEEN '".$filter_from."' AND '".$filter_to."'";
         }
 
-        $query_unassigned = mysqli_query($conn, "SELECT * FROM task WHERE task_created_by = $user_id AND task_status_id = '' $filter LIMIT $start_unassgined, $limit_unassigned") or die(mysqli_error());
+        $count = 1 + $start_unassgined;
+        $query_unassigned = mysqli_query($conn, "SELECT * FROM task WHERE task_created_by = $user_id AND task_status_id = '' $filter ORDER BY task_date_created DESC LIMIT $start_unassgined, $limit_unassigned") or die(mysqli_error());
         while($data_unassigned = mysqli_fetch_array($query_unassigned))
         {
           echo '
             <tr>
+              <td>'.$count++.'</td>
               <td>'.$data_unassigned['task_name'].'</td>
               <td>'.$data_unassigned['task_date_created'].'</td>
+            </tr>
+          ';
+        }
+    }
+
+    if(isset($_POST['load_add_data']))
+    {
+        $limit = $_POST['limit_add'];
+        $start = $_POST['start_add'];
+        $user_id = $_POST['user_id_add'];
+
+        $filter_report = $_POST['filter_report_add'];
+        $filter_from = $_POST['filter_from_add'];
+        $filter_to = $_POST['filter_to_add'];
+
+        $filter = '';
+        if($filter_report == "all")
+        {
+            $filter = '';
+        }
+        else if($filter_report == "today")
+        {
+            $today = date("Y-m-d");
+            $filter = "AND task_date_created LIKE '%".$today."%'";
+        }
+        else if($filter_report == "this_week")
+        {
+            $dt = new DateTime();
+            $dates = [];
+            for ($d = 1; $d <= 7; $d++) {
+                $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
+                $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
+            }
+            $from = current($dates); // monday
+            $to = end($dates); // sunday
+
+            $filter = "AND task_date_created BETWEEN '".$from."' AND '".$to."'";
+        }
+        else if($filter_report == "month")
+        {
+            $month = date("Y-m");
+            $filter = "AND task_date_created LIKE '%".$month."%'";
+        }
+        else if($filter_report == "year")
+        {
+            $year = date("Y");
+            $due_date_filter = "AND task_date_created LIKE '%".$year."%'";
+        }
+        else if($filter_report == "custom")
+        {
+            $filter = "AND task_date_created BETWEEN '".$filter_from."' AND '".$filter_to."'";
+        }
+
+        $count = 1 + $start;
+        $query_add = mysqli_query($conn, "SELECT * FROM contact INNER JOIN task ON task.task_contact = contact.contact_id WHERE contact.contact_created_by = $user_id $filter ORDER BY task_date_created DESC  LIMIT $start, $limit") or die(mysqli_error());
+        while($data_add = mysqli_fetch_array($query_add))
+        {
+          echo '
+            <tr>
+              <td>'.$count++.'</td>
+              <td>'.$data_add['task_name'].'</td>
+              <td>'.$data_add['task_date_created'].'</td>
+            </tr>
+          ';
+        }
+    }
+
+    if(isset($_POST['load_cf_data']))
+    {
+        $limit = $_POST['limit'];
+        $start = $_POST['start'];
+        $user_id = $_POST['user_id'];
+
+        $filter_report = $_POST['filter_report'];
+        $filter_from = $_POST['filter_from'];
+        $filter_to = $_POST['filter_to'];
+
+        $filter = '';
+        if($filter_report == "all")
+        {
+            $filter = '';
+        }
+        else if($filter_report == "today")
+        {
+            $today = date("Y-m-d");
+            $filter = "AND comment_date LIKE '%".$today."%'";
+        }
+        else if($filter_report == "this_week")
+        {
+            $dt = new DateTime();
+            $dates = [];
+            for ($d = 1; $d <= 7; $d++) {
+                $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
+                $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
+            }
+            $from = current($dates); // monday
+            $to = end($dates); // sunday
+
+            $filter = "AND comment_date BETWEEN '".$from."' AND '".$to."'";
+        }
+        else if($filter_report == "month")
+        {
+            $month = date("Y-m");
+            $filter = "AND comment_date LIKE '%".$month."%'";
+        }
+        else if($filter_report == "year")
+        {
+            $year = date("Y");
+            $due_date_filter = "AND comment_date LIKE '%".$year."%'";
+        }
+        else if($filter_report == "custom")
+        {
+            $filter = "AND comment_date BETWEEN '".$filter_from."' AND '".$filter_to."'";
+        }
+
+        $count = 1 + $start;
+        $query = mysqli_query($conn, "SELECT task.task_id, task.task_name, comment.comment_message, comment.comment_date FROM comment INNER JOIN task ON comment.comment_task_id = task.task_id WHERE comment.comment_user_id = $user_id AND comment.comment_type = '1' $filter ORDER BY comment_date DESC LIMIT $start, $limit") or die(mysqli_error());
+        while($data = mysqli_fetch_array($query))
+        {
+          $task_id = $data['task_id'];
+          $query_lang = mysqli_query($conn, "SELECT list.list_name, task.task_id, space.space_name, task.task_list_id FROM task INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id WHERE task.task_id = $task_id") or die(mysqli_error());
+          $data_lang = mysqli_fetch_assoc($query_lang);
+          $service_name = $data_lang['space_name'];
+          $list_name = $data_lang['list_name'];
+          $task_list_id = $data_lang['task_list_id'];
+          echo '
+            <tr style="cursor: pointer; id="'.$service_name.','.$list_name.','.$task_list_id.','.$task_id.'" onclick="view_task(this.id)">
+              <td>'.$count++.', '.$service_name.'</td>
+              <td>'.$data['task_name'].'</td>
+              <td>'.$data['comment_message'].'</td>
+              <td>'.$data['comment_date'].'</td>
+            </tr>
+          ';
+        }
+    }
+
+    if(isset($_POST['load_due_data']))
+    {
+        $limit = $_POST['limit'];
+        $start = $_POST['start'];
+        $user_id = $_POST['user_id'];
+
+        $filter_report = $_POST['filter_report'];
+        $filter_from = $_POST['filter_from'];
+        $filter_to = $_POST['filter_to'];
+
+        $filter = '';
+        if($filter_report == "all")
+        {
+            $filter = '';
+        }
+        else if($filter_report == "today")
+        {
+            $today = date("Y-m-d");
+            $filter = "AND comment_date LIKE '%".$today."%'";
+        }
+        else if($filter_report == "this_week")
+        {
+            $dt = new DateTime();
+            $dates = [];
+            for ($d = 1; $d <= 7; $d++) {
+                $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
+                $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
+            }
+            $from = current($dates); // monday
+            $to = end($dates); // sunday
+
+            $filter = "AND comment_date BETWEEN '".$from."' AND '".$to."'";
+        }
+        else if($filter_report == "month")
+        {
+            $month = date("Y-m");
+            $filter = "AND comment_date LIKE '%".$month."%'";
+        }
+        else if($filter_report == "year")
+        {
+            $year = date("Y");
+            $due_date_filter = "AND comment_date LIKE '%".$year."%'";
+        }
+        else if($filter_report == "custom")
+        {
+            $filter = "AND comment_date BETWEEN '".$filter_from."' AND '".$filter_to."'";
+        }
+
+        $count = 1 + $start;
+        $query = mysqli_query($conn, "SELECT task.task_id, task.task_name, comment.comment_message, comment.comment_date FROM comment INNER JOIN task ON comment.comment_task_id = task.task_id WHERE comment.comment_user_id = $user_id AND comment.comment_type = '2' $filter ORDER BY comment_date DESC LIMIT $start, $limit") or die(mysqli_error());
+        while($data = mysqli_fetch_array($query))
+        {
+          echo '
+            <tr style="cursor: pointer;">
+              <td>'.$count++.'</td>
+              <td>'.$data['task_name'].'</td>
+              <td>'.$data['comment_message'].'</td>
+              <td>'.$data['comment_date'].'</td>
+            </tr>
+          ';
+        }
+    }
+
+    if(isset($_POST['load_move_data']))
+    {
+        $limit = $_POST['limit'];
+        $start = $_POST['start'];
+        $user_id = $_POST['user_id'];
+
+        $filter_report = $_POST['filter_report'];
+        $filter_from = $_POST['filter_from'];
+        $filter_to = $_POST['filter_to'];
+
+        $filter = '';
+        if($filter_report == "all")
+        {
+            $filter = '';
+        }
+        else if($filter_report == "today")
+        {
+            $today = date("Y-m-d");
+            $filter = "AND comment_date LIKE '%".$today."%'";
+        }
+        else if($filter_report == "this_week")
+        {
+            $dt = new DateTime();
+            $dates = [];
+            for ($d = 1; $d <= 7; $d++) {
+                $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
+                $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
+            }
+            $from = current($dates); // monday
+            $to = end($dates); // sunday
+
+            $filter = "AND comment_date BETWEEN '".$from."' AND '".$to."'";
+        }
+        else if($filter_report == "month")
+        {
+            $month = date("Y-m");
+            $filter = "AND comment_date LIKE '%".$month."%'";
+        }
+        else if($filter_report == "year")
+        {
+            $year = date("Y");
+            $due_date_filter = "AND comment_date LIKE '%".$year."%'";
+        }
+        else if($filter_report == "custom")
+        {
+            $filter = "AND comment_date BETWEEN '".$filter_from."' AND '".$filter_to."'";
+        }
+
+        $count = 1 + $start;
+        $query = mysqli_query($conn, "SELECT task.task_id, task.task_name, comment.comment_message, comment.comment_date FROM comment INNER JOIN task ON comment.comment_task_id = task.task_id WHERE comment.comment_user_id = $user_id AND comment.comment_type = '3' $filter ORDER BY comment_date DESC LIMIT $start, $limit") or die(mysqli_error());
+        while($data = mysqli_fetch_array($query))
+        {
+          echo '
+            <tr style="cursor: pointer;">
+              <td>'.$count++.'</td>
+              <td>'.$data['task_name'].'</td>
+              <td>'.$data['comment_message'].'</td>
+              <td>'.$data['comment_date'].'</td>
+            </tr>
+          ';
+        }
+    }
+
+    if(isset($_POST['load_wc_data']))
+    {
+        $limit = $_POST['limit'];
+        $start = $_POST['start'];
+        $user_id = $_POST['user_id'];
+
+        $filter_report = $_POST['filter_report'];
+        $filter_from = $_POST['filter_from'];
+        $filter_to = $_POST['filter_to'];
+
+        $filter = '';
+        if($filter_report == "all")
+        {
+            $filter = '';
+        }
+        else if($filter_report == "today")
+        {
+            $today = date("Y-m-d");
+            $filter = "AND comment_date LIKE '%".$today."%'";
+        }
+        else if($filter_report == "this_week")
+        {
+            $dt = new DateTime();
+            $dates = [];
+            for ($d = 1; $d <= 7; $d++) {
+                $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
+                $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
+            }
+            $from = current($dates); // monday
+            $to = end($dates); // sunday
+
+            $filter = "AND comment_date BETWEEN '".$from."' AND '".$to."'";
+        }
+        else if($filter_report == "month")
+        {
+            $month = date("Y-m");
+            $filter = "AND comment_date LIKE '%".$month."%'";
+        }
+        else if($filter_report == "year")
+        {
+            $year = date("Y");
+            $due_date_filter = "AND comment_date LIKE '%".$year."%'";
+        }
+        else if($filter_report == "custom")
+        {
+            $filter = "AND comment_date BETWEEN '".$filter_from."' AND '".$filter_to."'";
+        }
+
+        $count = 1 + $start;
+        $query = mysqli_query($conn, "SELECT task.task_id, task.task_name, comment.comment_message, comment.comment_date FROM comment INNER JOIN task ON comment.comment_task_id = task.task_id WHERE comment.comment_user_id = $user_id AND comment.comment_type is null $filter ORDER BY comment_date DESC LIMIT $start, $limit") or die(mysqli_error());
+        while($data = mysqli_fetch_array($query))
+        {
+          echo '
+            <tr style="cursor: pointer;">
+              <td>'.$count++.'</td>
+              <td>'.$data['task_name'].'</td>
+              <td>'.$data['comment_message'].'</td>
+              <td>'.$data['comment_date'].'</td>
+            </tr>
+          ';
+        }
+    }
+
+    if(isset($_POST['load_es_data']))
+    {
+        $limit = $_POST['limit'];
+        $start = $_POST['start'];
+        $user_id = $_POST['user_id'];
+
+        $filter_report = $_POST['filter_report'];
+        $filter_from = $_POST['filter_from'];
+        $filter_to = $_POST['filter_to'];
+
+        $filter = '';
+        if($filter_report == "all")
+        {
+            $filter = '';
+        }
+        else if($filter_report == "today")
+        {
+            $today = date("Y-m-d");
+            $filter = "AND comment_date LIKE '%".$today."%'";
+        }
+        else if($filter_report == "this_week")
+        {
+            $dt = new DateTime();
+            $dates = [];
+            for ($d = 1; $d <= 7; $d++) {
+                $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
+                $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
+            }
+            $from = current($dates); // monday
+            $to = end($dates); // sunday
+
+            $filter = "AND comment_date BETWEEN '".$from."' AND '".$to."'";
+        }
+        else if($filter_report == "month")
+        {
+            $month = date("Y-m");
+            $filter = "AND comment_date LIKE '%".$month."%'";
+        }
+        else if($filter_report == "year")
+        {
+            $year = date("Y");
+            $due_date_filter = "AND comment_date LIKE '%".$year."%'";
+        }
+        else if($filter_report == "custom")
+        {
+            $filter = "AND comment_date BETWEEN '".$filter_from."' AND '".$filter_to."'";
+        }
+
+        $count = 1 + $start;
+        $query = mysqli_query($conn, "SELECT task.task_id, task.task_name, comment.comment_message, comment.comment_date FROM comment INNER JOIN task ON comment.comment_task_id = task.task_id WHERE comment.comment_user_id = $user_id AND comment.comment_type = '4' $filter ORDER BY comment_date DESC LIMIT $start, $limit") or die(mysqli_error());
+        while($data = mysqli_fetch_array($query))
+        {
+          echo '
+            <tr style="cursor: pointer;">
+              <td>'.$count++.'</td>
+              <td>'.$data['task_name'].'</td>
+              <td>'.$data['comment_message'].'</td>
+              <td>'.$data['comment_date'].'</td>
             </tr>
           ';
         }

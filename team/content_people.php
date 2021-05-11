@@ -127,6 +127,8 @@
                                         {echo'<span class="badge badge-warning">Supervisory</span>';}
                                         else if($result_finduser['user_type'] == 'Member')
                                         {echo'<span class="badge badge-success">Member</span>';}
+                                        else if($result_finduser['user_type'] == 'Suspended')
+                                        {echo'<span class="badge badge-danger">Suspended</span>';}
                                         else
                                         {echo'<span class="badge badge-danger">Invalidate</span>';}
                                     echo'
@@ -139,6 +141,8 @@
                                         {echo'<span class="badge badge-warning">'; if($result_finduser['department'] == ''){ echo 'Not yet assign!'; } else { echo $result_finduser['department']; } echo'</span>';}
                                         else if($result_finduser['user_type'] == 'Member')
                                         {echo'<span class="badge badge-success">'; if($result_finduser['department'] == ''){ echo 'Not yet assign!'; } else { echo $result_finduser['department']; } echo'</span>';}
+                                        else if($result_finduser['user_type'] == 'Suspended')
+                                        {echo'<span class="badge badge-danger">'; if($result_finduser['department'] == ''){ echo 'Not yet assign!'; } else { echo $result_finduser['department']; } echo'</span>';}
                                         else
                                         {echo'<span class="badge badge-danger">'; if($result_finduser['department'] == ''){ echo 'Not yet assign!'; } else { echo $result_finduser['department']; } echo'</span>';}
                                     echo'
@@ -151,6 +155,8 @@
                                         {echo'<span class="badge badge-warning">'; if($result_finduser['category'] == ''){ echo 'Not yet assign!'; } else { echo $result_finduser['category']; } echo'</span>';}
                                         else if($result_finduser['user_type'] == 'Member')
                                         {echo'<span class="badge badge-success">'; if($result_finduser['category'] == ''){ echo 'Not yet assign!'; } else { echo $result_finduser['category']; } echo'</span>';}
+                                        else if($result_finduser['user_type'] == 'Suspended')
+                                        {echo'<span class="badge badge-danger">'; if($result_finduser['category'] == ''){ echo 'Not yet assign!'; } else { echo $result_finduser['category']; } echo'</span>';}
                                         else
                                         {echo'<span class="badge badge-danger">'; if($result_finduser['category'] == ''){ echo 'Not yet assign!'; } else { echo $result_finduser['category']; } echo'</span>';}
                                     echo'
@@ -457,6 +463,10 @@
       } else {
         document.location='main_people.php?filter_report='+filter_report;
       }
+    }
+
+    function view_task(id) {
+      alert(id);
     }
 
 </script>

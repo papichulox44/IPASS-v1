@@ -4,7 +4,7 @@
     $md_text = "text-muted";
     $md_body = "";
     if($mode_type == "Dark") //insert
-    { 
+    {
         $md_primary_darker = "bg-primary-darker";
         $md_text = "text-white";
         $md_body = "bg-gray-darker text-body-color-light";
@@ -21,21 +21,28 @@
     if(isset($_POST['btn_admin']))
     {
         $user_type = "Admin";
-        mysqli_query($conn, "UPDATE user SET user_type='$user_type' WHERE user_id='$userid'") or die(mysqli_error());  
-        echo "<script>document.location='main_people_details.php?userid=$userid'</script>";  
-    } 
+        mysqli_query($conn, "UPDATE user SET user_type='$user_type' WHERE user_id='$userid'") or die(mysqli_error());
+        echo "<script>document.location='main_people_details.php?userid=$userid'</script>";
+    }
     if(isset($_POST['btn_supervisory']))
     {
         $user_type = "Supervisory";
-        mysqli_query($conn, "UPDATE user SET user_type='$user_type' WHERE user_id='$userid'") or die(mysqli_error());  
-        echo "<script>document.location='main_people_details.php?userid=$userid'</script>";  
-    } 
+        mysqli_query($conn, "UPDATE user SET user_type='$user_type' WHERE user_id='$userid'") or die(mysqli_error());
+        echo "<script>document.location='main_people_details.php?userid=$userid'</script>";
+    }
     if(isset($_POST['btn_member']))
     {
         $user_type = "Member";
-        mysqli_query($conn, "UPDATE user SET user_type='$user_type' WHERE user_id='$userid'") or die(mysqli_error());  
-        echo "<script>document.location='main_people_details.php?userid=$userid'</script>";  
-    } 
+        mysqli_query($conn, "UPDATE user SET user_type='$user_type' WHERE user_id='$userid'") or die(mysqli_error());
+        echo "<script>document.location='main_people_details.php?userid=$userid'</script>";
+    }
+
+    if(isset($_POST['btn_suspended']))
+    {
+        $user_type = "Suspended";
+        mysqli_query($conn, "UPDATE user SET user_type='$user_type' WHERE user_id='$userid'") or die(mysqli_error());
+        echo "<script>document.location='main_people_details.php?userid=$userid'</script>";
+    }
 
     if(isset($_POST['btn_delete']))
     {
@@ -61,23 +68,23 @@
                     if (in_array($userid, $b))
                     {
                         echo "<script type='text/javascript'>alert('Note: Cannot delete member already assign to task.');</script>";
-                        echo "<script>document.location='main_people.php'</script>"; 
+                        echo "<script>document.location='main_people.php'</script>";
                         break;
                     }
                     else
                     {
                         if($lastid == $fetch_select_tasks['task_id'])
                         {
-                            $existing_frofile = $fetch_select_user['profile_pic']; 
+                            $existing_frofile = $fetch_select_user['profile_pic'];
                             if($existing_frofile != "")
                             {
                                 array_map('unlink', glob("../assets/media/upload/".$existing_frofile)); // remove image
                             }
                             mysqli_query($conn, "DELETE FROM user WHERE user_id='$userid'") or die(mysqli_error());
-                            echo "<script>document.location='main_people.php'</script>"; 
+                            echo "<script>document.location='main_people.php'</script>";
                         }
                         else
-                        {} 
+                        {}
                     }
                 }
             }
@@ -86,7 +93,7 @@
 ?>
 <div class="content <?php echo $md_primary_darker; ?>">
     <div class="block">
-        <div class="block-content block-rounded shadow <?php echo $md_body; ?>">  
+        <div class="block-content block-rounded shadow <?php echo $md_body; ?>">
             <!-- Personal Details -->
             <form method="post">
                 <h2 class="content-heading <?php echo $md_text; ?>" style="margin-top: -40px;">
@@ -102,7 +109,7 @@
                                     <img class="prof" src="../assets/media/upload/<?php echo $fetch_select_user['profile_pic']; ?>">
                                 <?php else: ?>
                                     <img class="prof" src="../assets/media/photos/avatar.jpg">
-                                <?php endif; ?>  
+                                <?php endif; ?>
                             </div>
                             <?php
                             if($fetch_select_user['user_type'] == "Admin")
@@ -129,8 +136,16 @@
                                 <div class="font-size-sm text-white-op">MEMBER</div>
                             </div>';
                             }
+                            else if($fetch_select_user['user_type'] == "Suspended")
+                            {
+                                echo'
+                            <div class="block-content block-content-full block-content-sm btn-warning">
+                                <div class="font-w600 text-white mb-5">'.$fetch_select_user['fname'].' '.$fetch_select_user['mname'].' '.$fetch_select_user['lname'].'</div>
+                                <div class="font-size-sm text-white-op">SUSPENDED</div>
+                            </div>';
+                            }
                             else
-                            {                                                
+                            {
                                 echo'
                             <div class="block-content block-content-full block-content-sm bg-gd-pulse">
                                 <div class="font-w600 text-white mb-5">'.$fetch_select_user['fname'].' '.$fetch_select_user['mname'].' '.$fetch_select_user['lname'].'</div>
@@ -142,7 +157,7 @@
                                 <div class="row items-push">
                                 </div>
                             </div>
-                        </div>                                   
+                        </div>
                     </div>
                     <div class="col-lg-8">
                         <div class="form-group row">
@@ -154,7 +169,7 @@
                                 <label for="crypto-settings-street-1">Middle Name</label>
                                 <input type="text" class="form-control form-control-lg" id="crypto-settings-street-1" name="mname" value="<?php echo $fetch_select_user['mname'];?>" readonly>
                             </div>
-                        </div> 
+                        </div>
                         <div class="form-group row">
                             <div class="col-6">
                                 <label for="crypto-settings-street-1">Last Name</label>
@@ -164,8 +179,8 @@
                                 <label for="crypto-settings-street-1">Birthdate</label>
                                 <input type="date" class="form-control form-control-lg" id="crypto-settings-street-1" name="bdate" value="<?php echo $fetch_select_user['bdate'];?>" readonly>
                             </div>
-                        </div> 
-                        <div class="form-group row">                                            
+                        </div>
+                        <div class="form-group row">
                             <div class="col-6">
                                 <label for="crypto-settings-street-1">Email Address</label>
                                 <input type="email" class="form-control form-control-lg" name="email" value="<?php echo $fetch_select_user['email'];?>" readonly>
@@ -174,7 +189,7 @@
                                 <label for="crypto-settings-street-1">Contact Number</label>
                                 <input type="text" class="form-control form-control-lg" name="cnumber" value="<?php echo $fetch_select_user['contact_number'];?>" placeholder="eg: 0000-000-0000" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" readonly>
                             </div>
-                        </div> 
+                        </div>
                         <div class="form-group row">
                             <div class="col-12">
                                 <label for="crypto-settings-email">Address</label>
@@ -190,16 +205,19 @@
                             <div class="col-md-3 mb-5">
                                 <button type="submit" class="btn btn-sm btn-hero btn-noborder bg-gd-sun btn-block" name="btn_supervisory" style="color: #fff;">Supervisory</button>
                             </div>
-                            <div class="col-md-3 mb-5">
+                            <div class="col-md-2 mb-5">
                                 <button type="submit" class="btn btn-sm btn-hero btn-noborder bg-gd-earth btn-block" name="btn_member" style="color: #fff;">Member</button>
                             </div>
-                            <div class="col-md-3 mb-5">
+                            <div class="col-md-2 mb-5">
+                                <button type="submit" class="btn btn-sm btn-hero btn-noborder btn-warning btn-block" name="btn_suspended" style="color: #fff;">Suspended</button>
+                            </div>
+                            <div class="col-md-2 mb-5">
                                 <button type="submit" class="btn btn-sm btn-hero btn-noborder bg-gd-cherry btn-block" name="btn_delete" style="color: #fff;">Delete</button>
                             </div>
                         </div>
                         </form>
                     </div>
-                </div>                                                         
+                </div>
             </form>
         </div>
     </div>
