@@ -3,14 +3,14 @@
 
         if(isset($_POST['btn_add']))
         {
-          $fname     = $_POST['fname'];  
-          $mname     = $_POST['mname'];  
-          $lname     = $_POST['lname']; 
-          $bdate     = $_POST['bdate'];   
-          $address     = $_POST['address'];  
-          $contact_number     = $_POST['contact_number'];  
-          $email     = $_POST['email'];  
-          $username     = $_POST['username'];  
+          $fname     = htmlspecialchars($_POST['fname']);
+          $mname     = htmlspecialchars($_POST['mname']);
+          $lname     = htmlspecialchars($_POST['lname']);
+          $bdate     = $_POST['bdate'];
+          $address     = htmlspecialchars($_POST['address']);
+          $contact_number     = htmlspecialchars($_POST['contact_number']);
+          $email     = htmlspecialchars($_POST['email']);
+          $username     = htmlspecialchars($_POST['username']);
           $password     = md5(mysqli_real_escape_string($conn,$_POST['password']));
 
           $arrX = array("#AD0000","#AD0046","#AD006F","#AD00A1","#9000AD","#5600AD","#0015AD","#005FAD","#0088AD","#00ADA9","#00AD67","#00AD1D","#6FAD00","#A9AD00","#AD9000","#AD5F00","#AD2500","#5C797C","#39595C","#14292C");
@@ -30,13 +30,13 @@
               else
               {
               echo "<script type='text/javascript'>alert('Opps database username not found');</script>";
-              }     
+              }
           }
           else
-          { 
+          {
             echo "<script type='text/javascript'>alert('Username already Exist...!');</script>";
           }
-        }              
+        }
 ?>
 <!doctype html>
 <html lang="en" class="no-focus">
@@ -58,7 +58,7 @@
                                     <style type="text/css">
                                         .logo {width: 90px; margin: -20px 0px -50px 0px;}
                                     </style>
-                                    <img src="assets/media/photos/logo-ipass.png" class="logo"> 
+                                    <img src="assets/media/photos/logo-ipass.png" class="logo">
                                 </div>
                                 <!-- END Header -->
                                 <form class="js-validation-signin" method="POST" action="./signup.php" onsubmit="return checkForm(this);">
@@ -148,7 +148,7 @@
                                                     <a class="btn btn-sm btn-hero btn-noborder btn-alt-secondary btn-block mb-5" href="forgot_password.php">
                                                         <i class="fa fa-warning mr-5"></i> Forgot Password
                                                     </a>
-                                                </div>                                                
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -157,12 +157,12 @@
                                 <script type="text/javascript">
                                   function checkForm(form)
                                   {
-                                    if(form.password.value == form.confirm_password.value) 
+                                    if(form.password.value == form.confirm_password.value)
                                     {
                                       if(form.password.value.length < 6) {
                                         alert("Password must contain at least six characters!");
                                         form.password.focus();
-                                        return false;   
+                                        return false;
                                       }
                                       if(form.password.value == form.username.value) {
                                         alert("Password must be different from Username!");
@@ -187,8 +187,8 @@
                                         form.password.focus();
                                         return false;
                                       }
-                                    } 
-                                    else 
+                                    }
+                                    else
                                     {
                                       alert("Confirmation not match. Please try again.");
                                       form.confirm_password.focus();

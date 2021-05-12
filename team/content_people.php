@@ -29,7 +29,6 @@
   width: 100%;
   height: 500px;
 }
-
 </style>
 <!-- Main Container -->
 <main id="main-container">
@@ -465,8 +464,14 @@
       }
     }
 
-    function view_task(id) {
-      alert(id);
+    function view_lang(id) {
+      array = id.split(',')
+      service_name = array[0];
+      list_name = array[1];
+      list_id = array[2];
+      task_id = array[3];
+
+      window.open('main_dashboard.php?space_name='+service_name+'&list_name='+list_name+'&list_id='+list_id+'&get_task_id='+task_id);
     }
 
 </script>

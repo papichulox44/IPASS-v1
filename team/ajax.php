@@ -3977,7 +3977,7 @@
                       <a class="nav-link" href="#emailsent">Email Sent<span class="badge badge-danger badge-pill font-w300" style="font-size: 9px;" >'.$es_count.'</span></a>
                   </li>
               </ul>
-              <div class="block-content tab-content overflow-hidden" style="width: 840px;">
+              <div class="block-content tab-content overflow-hidden">
                   <div class="tab-pane fade fade-up show active" id="created" role="tabpanel">
                     <div style="overflow: auto; height: 300px;" id="scroll_created">
                       <table class="table table-bordered table-hover">
@@ -4955,8 +4955,8 @@
           $list_name = $data_lang['list_name'];
           $task_list_id = $data_lang['task_list_id'];
           echo '
-            <tr style="cursor: pointer; id="'.$service_name.','.$list_name.','.$task_list_id.','.$task_id.'" onclick="view_task(this.id)">
-              <td>'.$count++.', '.$service_name.'</td>
+            <tr style="cursor: pointer;" id="'.$service_name.','.$list_name.','.$task_list_id.','.$task_id.'" onclick="view_lang(this.id)">
+              <td>'.$count++.'</td>
               <td>'.$data['task_name'].'</td>
               <td>'.$data['comment_message'].'</td>
               <td>'.$data['comment_date'].'</td>
@@ -5017,8 +5017,14 @@
         $query = mysqli_query($conn, "SELECT task.task_id, task.task_name, comment.comment_message, comment.comment_date FROM comment INNER JOIN task ON comment.comment_task_id = task.task_id WHERE comment.comment_user_id = $user_id AND comment.comment_type = '2' $filter ORDER BY comment_date DESC LIMIT $start, $limit") or die(mysqli_error());
         while($data = mysqli_fetch_array($query))
         {
+          $task_id = $data['task_id'];
+          $query_lang = mysqli_query($conn, "SELECT list.list_name, task.task_id, space.space_name, task.task_list_id FROM task INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id WHERE task.task_id = $task_id") or die(mysqli_error());
+          $data_lang = mysqli_fetch_assoc($query_lang);
+          $service_name = $data_lang['space_name'];
+          $list_name = $data_lang['list_name'];
+          $task_list_id = $data_lang['task_list_id'];
           echo '
-            <tr style="cursor: pointer;">
+            <tr style="cursor: pointer;" id="'.$service_name.','.$list_name.','.$task_list_id.','.$task_id.'" onclick="view_lang(this.id)">
               <td>'.$count++.'</td>
               <td>'.$data['task_name'].'</td>
               <td>'.$data['comment_message'].'</td>
@@ -5080,8 +5086,14 @@
         $query = mysqli_query($conn, "SELECT task.task_id, task.task_name, comment.comment_message, comment.comment_date FROM comment INNER JOIN task ON comment.comment_task_id = task.task_id WHERE comment.comment_user_id = $user_id AND comment.comment_type = '3' $filter ORDER BY comment_date DESC LIMIT $start, $limit") or die(mysqli_error());
         while($data = mysqli_fetch_array($query))
         {
+          $task_id = $data['task_id'];
+          $query_lang = mysqli_query($conn, "SELECT list.list_name, task.task_id, space.space_name, task.task_list_id FROM task INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id WHERE task.task_id = $task_id") or die(mysqli_error());
+          $data_lang = mysqli_fetch_assoc($query_lang);
+          $service_name = $data_lang['space_name'];
+          $list_name = $data_lang['list_name'];
+          $task_list_id = $data_lang['task_list_id'];
           echo '
-            <tr style="cursor: pointer;">
+            <tr style="cursor: pointer;" id="'.$service_name.','.$list_name.','.$task_list_id.','.$task_id.'" onclick="view_lang(this.id)">
               <td>'.$count++.'</td>
               <td>'.$data['task_name'].'</td>
               <td>'.$data['comment_message'].'</td>
@@ -5143,8 +5155,14 @@
         $query = mysqli_query($conn, "SELECT task.task_id, task.task_name, comment.comment_message, comment.comment_date FROM comment INNER JOIN task ON comment.comment_task_id = task.task_id WHERE comment.comment_user_id = $user_id AND comment.comment_type is null $filter ORDER BY comment_date DESC LIMIT $start, $limit") or die(mysqli_error());
         while($data = mysqli_fetch_array($query))
         {
+          $task_id = $data['task_id'];
+          $query_lang = mysqli_query($conn, "SELECT list.list_name, task.task_id, space.space_name, task.task_list_id FROM task INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id WHERE task.task_id = $task_id") or die(mysqli_error());
+          $data_lang = mysqli_fetch_assoc($query_lang);
+          $service_name = $data_lang['space_name'];
+          $list_name = $data_lang['list_name'];
+          $task_list_id = $data_lang['task_list_id'];
           echo '
-            <tr style="cursor: pointer;">
+            <tr style="cursor: pointer;" id="'.$service_name.','.$list_name.','.$task_list_id.','.$task_id.'" onclick="view_lang(this.id)">
               <td>'.$count++.'</td>
               <td>'.$data['task_name'].'</td>
               <td>'.$data['comment_message'].'</td>
@@ -5206,8 +5224,14 @@
         $query = mysqli_query($conn, "SELECT task.task_id, task.task_name, comment.comment_message, comment.comment_date FROM comment INNER JOIN task ON comment.comment_task_id = task.task_id WHERE comment.comment_user_id = $user_id AND comment.comment_type = '4' $filter ORDER BY comment_date DESC LIMIT $start, $limit") or die(mysqli_error());
         while($data = mysqli_fetch_array($query))
         {
+          $task_id = $data['task_id'];
+          $query_lang = mysqli_query($conn, "SELECT list.list_name, task.task_id, space.space_name, task.task_list_id FROM task INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id WHERE task.task_id = $task_id") or die(mysqli_error());
+          $data_lang = mysqli_fetch_assoc($query_lang);
+          $service_name = $data_lang['space_name'];
+          $list_name = $data_lang['list_name'];
+          $task_list_id = $data_lang['task_list_id'];
           echo '
-            <tr style="cursor: pointer;">
+            <tr style="cursor: pointer;" id="'.$service_name.','.$list_name.','.$task_list_id.','.$task_id.'" onclick="view_lang(this.id)">
               <td>'.$count++.'</td>
               <td>'.$data['task_name'].'</td>
               <td>'.$data['comment_message'].'</td>

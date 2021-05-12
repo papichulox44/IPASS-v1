@@ -4437,7 +4437,7 @@ input[type=submit].btn-block {
 .nav-tabs .nav-item.show .nav-link,
 .nav-tabs .nav-link.active {
 	color: #575757;
-	background-color: #fff;
+	background-color: lightblue;
 	border-color: #e4e7ed
 }
 
@@ -10796,7 +10796,7 @@ label {
 .nav-tabs-block .nav-item.show .nav-link,
 .nav-tabs-block .nav-link.active {
 	color: #575757;
-	background-color: #fff;
+	background-color: lightblue;
 	border-color: transparent
 }
 
