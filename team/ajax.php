@@ -3962,6 +3962,7 @@
           }
         }
         echo '
+        
         <div class="col-lg-12">
           <h3>List Activities of '.$name.'</h3>
           <!-- Block Tabs Animated Slide Up -->
