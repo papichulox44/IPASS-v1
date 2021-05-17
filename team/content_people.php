@@ -290,10 +290,6 @@
                 <div class="block-content" id="show_individual_report">
                 </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-alt-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-alt-success" data-dismiss="modal">
-                    <i class="fa fa-check"></i> Perfect
-                </button>
             </div>
         </div>
     </div>
@@ -302,9 +298,7 @@
 
 <script type="text/javascript" src="../assets/js/jquery-1.6.4.min.js"></script>
 <script type="text/javascript" src="../assets/js/jquery-3.2.1.min.js"></script>
-<script src="../assets/chart/core.js"></script>
-<script src="../assets/chart/charts.js"></script>
-<script src="../assets/chart/animated.js"></script>
+<script src="../assets/Chart.min.js"></script>
 <script type="text/javascript">
     function show_department(id)
     {

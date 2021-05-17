@@ -3962,7 +3962,6 @@
           }
         }
         echo '
-        
         <div class="col-lg-12">
           <h3>List Activities of '.$name.'</h3>
           <!-- Block Tabs Animated Slide Up -->
@@ -4160,68 +4159,33 @@
           </div>
       </div>
       <div class="col-lg-12">
-        <div id="chartdiv"></div>
+        <canvas id="chartdiv"></canvas>
       </div>
 
 
       <script>
 
-        am4core.ready(function() {
+      var xValues = ["Created", "Assigned", "Unassigned", "Add", "Custom Field", "Due Date", "Assigned Due Date", "Movement", "Written Comments", "Email Sent"];
+      var yValues = ['.$created_count.', '.$assigned_count.', '.$unassigned_count.', '.$add_count.', '.$cf_count.', '.$due_count.', '.$ad_count.', '.$move_count.', '.$wc_count.', '.$es_count.'];
+      var barColors = ["red","orange","yellow","green","blue","purple","brown ","black","gray","lightblue"];
 
-        // Themes begin
-        am4core.useTheme(am4themes_animated);
-        // Themes end
-
-        // Create chart instance
-        var chart = am4core.create("chartdiv", am4charts.PieChart);
-
-        // Add data
-        chart.data = [ {
-        "activities": "Created",
-        "numbers": '.$created_count.'
-        }, {
-        "activities": "Assigned",
-        "numbers": '.$assigned_count.'
-        }, {
-        "activities": "Unassigned",
-        "numbers": '.$unassigned_count.'
-        }, {
-        "activities": "Add",
-        "numbers": '.$add_count.'
-        }, {
-        "activities": "Custom Field",
-        "numbers": '.$cf_count.'
-        }, {
-        "activities": "Due Date",
-        "numbers": '.$due_count.'
-        }, {
-        "activities": "Assigned Due Date",
-        "numbers": '.$ad_count.'
-        }, {
-        "activities": "Movement",
-        "numbers": '.$move_count.'
-        }, {
-        "activities": "Written Comments",
-        "numbers": '.$wc_count.'
-        }, {
-        "activities": "Email Sent",
-        "numbers": '.$es_count.'
-        } ];
-
-        // Add and configure Series
-        var pieSeries = chart.series.push(new am4charts.PieSeries());
-        pieSeries.dataFields.value = "numbers";
-        pieSeries.dataFields.category = "activities";
-        pieSeries.slices.template.stroke = am4core.color("#fff");
-        pieSeries.slices.template.strokeWidth = 2;
-        pieSeries.slices.template.strokeOpacity = 1;
-
-        // This creates initial animation
-        pieSeries.hiddenState.properties.opacity = 1;
-        pieSeries.hiddenState.properties.endAngle = -90;
-        pieSeries.hiddenState.properties.startAngle = -90;
-
-        }); // end am4core.ready()
+      new Chart("chartdiv", {
+        type: "bar",
+        data: {
+          labels: xValues,
+          datasets: [{
+            backgroundColor: barColors,
+            data: yValues
+          }]
+        },
+        options: {
+          legend: {display: false},
+          title: {
+            display: true,
+            text: "Number of Activities"
+          }
+        }
+      });
 
         var limit_created = 20;
         var start_created = 0;
