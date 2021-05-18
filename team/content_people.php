@@ -98,6 +98,17 @@
                     </thead>
                     <tbody>
                         <?php
+                            if ($_SESSION['user_type'] == 'Admin') {
+                              $main_personal1 = 'main_personal_details.php';
+                              $main_personal2 = 'main_people_details.php?userid=';
+                              $department = 'modal-small-department';
+                              $category = 'modal-small-category';
+                            } else {
+                              $main_personal1 = '#';
+                              $main_personal2 = '#';
+                              $department = '#';
+                              $category = '#';
+                            }
                             $countuser = 1;
                             $finduser = mysqli_query($conn, "SELECT * FROM user ORDER BY fname ASC");
                             while($result_finduser = mysqli_fetch_array($finduser))
@@ -110,11 +121,11 @@
                                     <td class="font-w600">';
                                     if($row['user_id'] == $result_finduser['user_id'])
                                     {
-                                        echo'<a href="main_personal_details.php">'.$result_finduser['fname'].' '.$result_finduser['mname'].' '.$result_finduser['lname'].'</a>';
+                                        echo'<a href="'.$main_personal1.'">'.$result_finduser['fname'].' '.$result_finduser['mname'].' '.$result_finduser['lname'].'</a>';
                                     }
                                     else
                                     {
-                                        echo'<a href="main_people_details.php?userid='.$result_finduser['user_id'].'">'.$result_finduser['fname'].' '.$result_finduser['mname'].' '.$result_finduser['lname'].'</a>';
+                                        echo'<a href="'.$main_personal2.''.$result_finduser['user_id'].'">'.$result_finduser['fname'].' '.$result_finduser['mname'].' '.$result_finduser['lname'].'</a>';
                                     }
                                     echo'
                                     </td>
@@ -132,7 +143,7 @@
                                         {echo'<span class="badge badge-danger">Invalidate</span>';}
                                     echo'
                                     </td>
-                                    <td class="text-center" data-toggle="modal" data-target="#modal-small-department" id="'.$result_finduser['user_id'].'" onclick="show_department(this.id)" style="font-size: 18px;">
+                                    <td class="text-center" data-toggle="modal" data-target="#'.$department.'" id="'.$result_finduser['user_id'].'" onclick="show_department(this.id)" style="font-size: 18px;">
                                         ';
                                         if($result_finduser['user_type'] == 'Admin')
                                         {echo'<span class="badge badge-primary">'; if($result_finduser['department'] == ''){ echo 'Not yet assign!'; } else { echo $result_finduser['department']; } echo'</span>';}
@@ -146,7 +157,7 @@
                                         {echo'<span class="badge badge-danger">'; if($result_finduser['department'] == ''){ echo 'Not yet assign!'; } else { echo $result_finduser['department']; } echo'</span>';}
                                     echo'
                                     </td>
-                                    <td class="text-center" data-toggle="modal" data-target="#modal-small-category" id="'.$result_finduser['user_id'].'" onclick="show_category(this.id)" style="font-size: 18px;">
+                                    <td class="text-center" data-toggle="modal" data-target="#'.$category.'" id="'.$result_finduser['user_id'].'" onclick="show_category(this.id)" style="font-size: 18px;">
                                         ';
                                         if($result_finduser['user_type'] == 'Admin')
                                         {echo'<span class="badge badge-primary">'; if($result_finduser['category'] == ''){ echo 'Not yet assign!'; } else { echo $result_finduser['category']; } echo'</span>';}

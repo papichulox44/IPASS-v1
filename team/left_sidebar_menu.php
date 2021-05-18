@@ -480,6 +480,20 @@
                 <li>
                     <a href="main_notification.php" style="<?php echo $notification_style; ?>"><i class="si si-bell <?php echo $ico3; ?>"></i><span class="sidebar-mini-hide">Notification</span></a>
                 </li>
+                <?php if ($_SESSION['user_type'] == 'Supervisory') {
+                ?>
+                <li>
+                    <a href="main_people.php?filter_report=all" style="<?php echo $people_style; ?>"><i class="si si-users <?php echo $ico4; ?>"></i><span class="sidebar-mini-hide">Member
+                        <?php
+                            $select_user = mysqli_query($conn, "SELECT * FROM user WHERE user_type = ''");
+                            $count_user = mysqli_num_rows($select_user);
+                            if($count_user == 0) {}
+                            else
+                            { echo '<span class="badge badge-danger">'.$count_user.'</span>'; }
+                        ?>
+                    </span>/ <span class="sidebar-mini-hide">Report</span></a>
+                </li>
+                <?php } ?>
                 <li class="<?php echo $opencontact;?>">
                     <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="fa fa-address-book-o"></i><span class="sidebar-mini-hide">Contact</span>
                         <?php
