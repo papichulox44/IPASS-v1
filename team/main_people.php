@@ -11,6 +11,27 @@
             <?php include 'header.php'; ?>
             <?php include 'content_people.php'; ?>
         </div>
+        <!-- Extra Large Modal -->
+        <div class="modal fade" id="modal-summary-report" tabindex="-1" role="dialog" aria-labelledby="modal-extra-large" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="block block-themed block-transparent mb-0">
+                        <div class="block-header bg-primary-dark">
+                            <h3 class="block-title">Summary Report</h3>
+                            <div class="block-options">
+                                <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                    <i class="si si-close"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="block-content" id="show_summary_report">
+                        </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END Extra Large Modal -->
         <!-- END Page Container -->
 
         <script src="../assets/js/codebase.core.min.js"></script>

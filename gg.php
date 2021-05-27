@@ -1,5 +1,5 @@
-<?php 
-	session_start();
+<?php
+		session_start();
     include_once './conn.php';
     use PHPMailer\PHPMailer\PHPMailer;
     require_once './team/phpmailer/Exception.php';
@@ -8,7 +8,7 @@
     $mail = new PHPMailer(true);
 
 	if (isset($_POST['forgot_password'])) {
-        
+
         $email = $_POST['email'];
 
         $query = mysqli_query($conn, "SELECT * FROM user WHERE email = '$email'");
@@ -51,7 +51,7 @@
                 </div>
             </div>
             ';
-            
+
             try{
                 $mail->isSMTP();
                 $mail->Host = 'smtp.gmail.com';
@@ -78,5 +78,20 @@
             }
         mysqli_close($conn);
     }
+
+		if (isset($_POST['login_verification'])) {
+			$inputcode = $_POST['inputcode'];
+			$user_id = $_POST['user_id'];
+			$user_type = $_POST['user_type'];
+			// echo $user_type;
+			$query = mysqli_query($conn,"SELECT * FROM tbl_verification WHERE verification_code = $inputcode AND user_id = $user_id AND verification_status = 0");
+			if (mysqli_num_rows($query) == 1) {
+				$_SESSION['user'] = $user_id;
+				$_SESSION['user_type'] = $user_type;
+				echo 'success';
+			} else {
+				echo 'failed';
+			}
+		}
 
  ?>

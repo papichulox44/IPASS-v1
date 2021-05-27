@@ -37,50 +37,52 @@
         <!-- Dynamic Table Full -->
         <div class="block block-rounded shadow <?php echo $md_body; ?>">
             <div class="block-header content-heading <?php echo $md_body; ?>">
-                <h3 class="block-title <?php echo $md_text; ?>">Member / Individual Report
-                  <button type="button" class="btn btn-success pull-right" name="button"><i class="fa fa-bar-chart"></i> View Summary Report</button>
-                  <div class="dropdown float-right">
-                      <button type="button" style="margin-top: 4px; margin-right: 2px;" class="btn btn-sm btn-secondary dropdown-toggle" id="ecom-orders-overview-drop" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <span>Filter Report Date</span>
-                      </button>
-                      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ecom-orders-overview-drop" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(96px, 31px, 0px);">
-                          <button class="dropdown-item" id="all" onclick="filter_date(this.id)">
-                              <i class="fa fa-fw fa-circle-o mr-5"></i>All
-                          </button>
-                          <button class="dropdown-item" id="today" onclick="filter_date(this.id)">
-                              <i class="fa fa-fw fa-calendar mr-5"></i>Today
-                          </button>
-                          <button class="dropdown-item" id="this_week" onclick="filter_date(this.id)">
-                              <i class="fa fa-fw fa-calendar mr-5"></i>This Week
-                          </button>
-                          <button class="dropdown-item" id="month" onclick="filter_date(this.id)">
-                              <i class="fa fa-fw fa-calendar mr-5"></i>This Month
-                          </button>
-                          <button class="dropdown-item" id="year" onclick="filter_date(this.id)">
-                              <i class="fa fa-fw fa-calendar mr-5"></i>This Year
-                          </button>
-                          <span class="filterparent">
-                              <form class="dropdown-item filterparent">
-                                  <i class="fa fa-fw fa-calendar mr-5"></i>Custom Date
-                              </form>
-                              <div class="dropdown-menu dropdown-menu-right shadow filterchild" style="position: absolute; top: 185px; right: 120px;">
-                                  <label for="example-datepicker4">Custom date</label>
-                                  <div class="form-material">
-                                      <input type="date" class="js-datepicker form-control" id="filter_from" data-week-start="1" data-today-highlight="true" data-date-format="mm/dd/yy" placeholder="mm/dd/yy" required>
-                                      <label for="example-datepicker4">From:</label>
-                                  </div>
-                                  <div class="form-material">
-                                      <input type="date" class="js-datepicker form-control" id="filter_to" data-week-start="1" data-today-highlight="true" data-date-format="mm/dd/yy" placeholder="mm/dd/yy" required>
-                                      <label for="example-datepicker4">To:</label>
-                                  </div>
-                                  <div class="form-material">
-                                      <button class="btn btn-sm btn-noborder btn-alt-primary btn-block" id="custom" onclick="filter_date(this.id)"><i class="fa fa-check-square-o"></i>Go</button>
-                                  </div>
-                              </div>
-                          </span>
-                      </div>
-                  </div>
-                </h3>
+                <h3 class="block-title <?php echo $md_text; ?>">Member / Individual Report </h3>
+                <div class="dropdown float-right">
+                    <button type="button" style="margin-top: 4px; margin-right: 2px;" class="btn btn-sm btn-secondary dropdown-toggle" id="ecom-orders-overview-drop" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span>Filter Report Date</span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ecom-orders-overview-drop" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(96px, 31px, 0px);">
+                        <button class="dropdown-item" id="all" onclick="filter_date(this.id)">
+                            <i class="fa fa-fw fa-circle-o mr-5"></i>All
+                        </button>
+                        <button class="dropdown-item" id="today" onclick="filter_date(this.id)">
+                            <i class="fa fa-fw fa-calendar mr-5"></i>Today
+                        </button>
+                        <button class="dropdown-item" id="yesterday" onclick="filter_date(this.id)">
+                            <i class="fa fa-fw fa-calendar mr-5"></i>Yesterday
+                        </button>
+                        <button class="dropdown-item" id="this_week" onclick="filter_date(this.id)">
+                            <i class="fa fa-fw fa-calendar mr-5"></i>This Week
+                        </button>
+                        <button class="dropdown-item" id="month" onclick="filter_date(this.id)">
+                            <i class="fa fa-fw fa-calendar mr-5"></i>This Month
+                        </button>
+                        <button class="dropdown-item" id="year" onclick="filter_date(this.id)">
+                            <i class="fa fa-fw fa-calendar mr-5"></i>This Year
+                        </button>
+                        <span class="filterparent">
+                            <form class="dropdown-item filterparent">
+                                <i class="fa fa-fw fa-calendar mr-5"></i>Custom Date
+                            </form>
+                            <div class="dropdown-menu dropdown-menu-right shadow filterchild" style="position: absolute; top: 185px; right: 120px;">
+                                <label for="example-datepicker4">Custom date</label>
+                                <div class="form-material">
+                                    <input type="date" class="js-datepicker form-control" id="filter_from" data-week-start="1" data-today-highlight="true" data-date-format="mm/dd/yy" placeholder="mm/dd/yy" required>
+                                    <label for="example-datepicker4">From:</label>
+                                </div>
+                                <div class="form-material">
+                                    <input type="date" class="js-datepicker form-control" id="filter_to" data-week-start="1" data-today-highlight="true" data-date-format="mm/dd/yy" placeholder="mm/dd/yy" required>
+                                    <label for="example-datepicker4">To:</label>
+                                </div>
+                                <div class="form-material">
+                                    <button class="btn btn-sm btn-noborder btn-alt-primary btn-block" id="custom" onclick="filter_date(this.id)"><i class="fa fa-check-square-o"></i>Go</button>
+                                </div>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+                <button type="button" data-toggle="modal" data-target="#modal-summary-report" class="btn btn-success pull-right"><i class="fa fa-bar-chart"></i> View Summary Report</button>
             </div>
             <div class="block-content block-content-full <?php echo $md_body; ?>">
                 <!-- DataTables functionality is initialized with .js-dataTable-full class in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->

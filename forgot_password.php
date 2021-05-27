@@ -18,7 +18,7 @@
                                     <style type="text/css">
                                         .logo {width: 90px; margin: -20px 0px -50px 0px;}
                                     </style>
-                                    <img src="assets/media/photos/logo-ipass.png" class="logo"> 
+                                    <img src="assets/media/photos/logo-ipass.png" class="logo">
                                 </div>
                                 <!-- END Header -->
                                     <div class="block block-themed block-rounded block-shadow">
@@ -69,7 +69,7 @@
         <script type="text/javascript">
             function forgot_password()
             {
-                
+
                 email = document.getElementById("email").value;
                 // alert(email);
                 if (email ==  '') {
@@ -77,7 +77,7 @@
                 } else {
                     if(confirm("Are you sure you?"))
                     {
-                        $.ajax({ 
+                        $.ajax({
                         url:"gg.php",
                         method:"post",
                         data:{

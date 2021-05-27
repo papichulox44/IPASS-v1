@@ -469,6 +469,7 @@
                         <i class="si si-tag mr-5"></i> Tag
                     </form>
                     <div class="dropdown-menu dropdown-menu-right shadow filterchild" style="position: absolute; top: 148px; right: 130px;">
+                      <div data-toggle="slimscroll" data-height="350px" data-color="#42a5f5" data-opacity="1" data-always-visible="true" style="background-color: #fff; padding: 5px;">
                         <?php
                             $que_find_tag = mysqli_query($conn, "SELECT * FROM tags WHERE tag_list_id = '$status_list_id'");
                             while($res_que_find_tag = mysqli_fetch_array($que_find_tag))
@@ -481,6 +482,7 @@
                                 </a>';
                             }
                         ?>
+                      </div>
                     </div>
                 </span>
 <!------------ Assign ------------>

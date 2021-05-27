@@ -2,47 +2,13 @@
     session_start();
     include_once 'conn.php';
     date_default_timezone_set('Asia/Manila');
-
-    if(isset($_POST['btn_sign_in']))
-    {
-        $user = mysqli_real_escape_string($conn,$_POST['username']);
-        $upass = mysqli_real_escape_string($conn,$_POST['password']);
-        $user = trim($user);
-        $upass = trim($upass);
-
-        $res=mysqli_query($conn,"SELECT user_id, username, password, user_type FROM user WHERE username = '$user' AND user_type != ''");
-        $row=mysqli_fetch_array($res);
-        $count = mysqli_num_rows($res);
-
-        if($count == 1 && $row['password']==(md5($upass)))
-        {
-            $_SESSION['user'] = $row['user_id'];
-            $_SESSION['user_type'] = $row['user_type'];
-            $a_id = $row['user_id'];
-            mysqli_query($conn, "UPDATE user SET log = '1' WHERE user_id = '$a_id'") or die(mysqli_error());
-            if($row['user_type'] == 'Suspended')
-            {
-              echo "
-                  <script>alert('Your account has been Suspended. Please contact the Administrator!!');</script>
-                ";
-            } else {
-                header("Location:team/dashboard.php");
-            }
-        }
-        else
-        {
-            ?>
-                <script>alert('Sorry, incorrect login details. Only validated account can access this site.');</script>
-            <?php
-        }
-    }
-    $date_maintenance = '2020-11-05';
-    if (date("Y-m-d") == $date_maintenance) {
-    // header("Location: http://ipasspmt.com/");
+    use PHPMailer\PHPMailer\PHPMailer;
+    require_once './team/phpmailer/Exception.php';
+    require_once './team/phpmailer/PHPMailer.php';
+    require_once './team/phpmailer/SMTP.php';
+    $mail = new PHPMailer(true);
 ?>
 
-
-<?php } else { ?>
 <html lang="en" class="no-focus">
     <?php include_once 'head.php';?>
     <body>
@@ -62,12 +28,13 @@
                                     <img src="assets/media/photos/logo-ipass.png" class="logo corporate">
                                 </div>
                                 <!-- END Header -->
-                                <form method="post">
+
                                     <div class="block block-themed block-rounded block-shadow shadow">
                                         <div class="block-header bg-corporate">
                                             <h3 class="block-title">Sign In</h3>
                                         </div>
-                                        <div class="block-content text-muted">
+                                        <form method="post">
+                                        <div class="block-content text-muted" id="input_form">
                                             <div class="form-group row">
                                                 <div class="col-12">
                                                     <label for="login-username">Username</label>
@@ -88,6 +55,24 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        </form>
+                                        <div class="block-content text-muted" id="verification_form" style="display: none;">
+                                            <div class="form-group row">
+                                                <div class="col-12">
+                                                    <label for="login-password">Enter Verification Code:</label>
+                                                    <input type="number" class="form-control" id="veri_code">
+                                                    <input type="hidden" class="form-control" id="user_id">
+                                                    <input type="hidden" class="form-control" id="user_type">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-12">
+                                                    <button class="btn btn-sm btn-hero btn-noborder bg-corporate btn-block" onclick="confirm_code()">
+                                                        <span class="text-white"><i class="si si-login mr-10"></i> Confirm</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="block-content bg-body-light">
                                             <div class="form-group text-center">
                                                 <a class="link-effect text-muted mr-10 mb-5 d-inline-block" href="signup.php">
@@ -99,7 +84,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </form>
+
                                 <!-- END Sign In Form -->
                             </div>
                         </div>
@@ -111,5 +96,124 @@
         </div>
         <!-- END Page Container -->
     </body>
+    <!-- Modal -->
+    <script src="./assets/jquery.min.js"></script>
+    <?php
+    if(isset($_POST['btn_sign_in']))
+    {
+        $user = mysqli_real_escape_string($conn,$_POST['username']);
+        $upass = mysqli_real_escape_string($conn,$_POST['password']);
+        $user = trim($user);
+        $upass = trim($upass);
+
+        $res=mysqli_query($conn,"SELECT * FROM user WHERE username = '$user' AND user_type != ''");
+        $row=mysqli_fetch_array($res);
+        $count = mysqli_num_rows($res);
+
+        if($count == 1 && $row['password']==(md5($upass)))
+        {
+            $user_id = $row['user_id'];
+            $user_type = $row['user_type'];
+            $code = rand(1,100000);
+            $data_time = date("Y-m-d H:i:s");
+            if($row['user_type'] == 'Suspended')
+            {
+              echo "
+                  <script>alert('Your account has been Suspended. Please contact the Administrator!!');</script>
+                ";
+            }
+            elseif ($row['user_id'] == 1 OR $row['user_id'] == 2){
+              $_SESSION['user'] = $row['user_id'];
+      				$_SESSION['user_type'] = $row['user_type'];
+              echo '
+              <script>
+              document.location = "team/dashboard.php";
+              </script>
+              ';
+            }
+            else {
+                $message = '
+                <div style="padding: 20px 0px 0px 0px; background-color: #189AA7;" class="shadow">
+                    <img src="https://ipassprocessingportal.com/assets/media/photos/email_header.png" style="width: 100%;">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="20" style="background-color: #47bcde; color: #5a5f61; font-family:verdana;">
+                        <tr>
+                            <td style="background-color: #fff; border-top: 10px solid #189AA7; border-bottom: 10px solid #189AA7;">
+                                <h2 class="text-center">Username: '.$row['username'].'</h2>
+                                <h2 class="text-center">Verification Code: '.$code.'</h2>
+                            </td>
+                        </tr>
+                    </table>
+                    <div style="text-align: center; padding: 20px 0px; color: #fff; background-color: #189AA7;">
+                        PROCESSING MADE EASY BY IPASS<br>
+                        Rm 1, 2nd Floor, Doña Segunda Complex,<br>
+                        Ponciano Street, Davao City, Philippines 8000<br><br>
+                        <a href="https://ipassprocessing.com/" style="color: white;">https://ipassprocessing.com/</a>
+                    </div>
+                </div>
+                ';
+                    $mail->isSMTP();
+                    $mail->Host = 'smtp.gmail.com';
+                    $mail->SMTPAuth = true;
+                    $mail->Username = 'dave@infinityhub.com'; // Gmail address which you want to use as SMTP server
+                    $mail->Password = 'david_flores'; // Gmail address Password
+                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                    $mail->Port = '587';
+                    //$mail->setFrom('test_email@ipasspmt.com'); // Gmail address which you used as SMTP server
+                    $mail->setFrom('dave@infinityhub.com');
+                    $mail->addAddress('dave.flores199x@gmail.com'); // Email address where you want to receive emails (you can use any of your gmail address including the gmail address which you used as SMTP server)
+
+                    $mail->isHTML(true);
+                    $mail->Subject = 'Login Verification of '.$row['fname'].' '.$row['lname'].'';
+                    $mail->Body = "$message";
+                    $mail->send();
+
+                    mysqli_query($conn,"UPDATE tbl_verification SET verification_status = 1  WHERE verification_status = 0 AND user_id = $user_id");
+
+                    $insert_verification = mysqli_query($conn,"INSERT INTO tbl_verification (verification_code, user_id, date_created) VALUES ($code, $user_id, '$data_time')");
+                    if ($insert_verification) {
+                      echo '
+                      <script>
+                        document.getElementById("input_form").style.display = "none";
+                        document.getElementById("verification_form").style.display = "";
+                        document.getElementById("user_id").value = '.$user_id.';
+                        document.getElementById("user_type").value = "'.$user_type.'";
+                      </script>
+                      ';
+                    }
+            }
+        }
+        else
+        {
+            ?>
+                <script>alert('Sorry, incorrect login details. Only validated account can access this site.');</script>
+            <?php
+        }
+    }
+     ?>
+     <script>
+      function confirm_code() {
+        veri_code = document.getElementById("veri_code").value
+        user_id = document.getElementById("user_id").value
+        user_type = document.getElementById("user_type").value
+
+        $.ajax({
+          url:"gg.php",
+          method:"post",
+          data:{
+              user_type:user_type,
+              inputcode:veri_code,
+              user_id:user_id,
+              login_verification:1,
+          },
+          success:function(response){
+            if (response == "success") {
+              document.location = "team/dashboard.php";
+            } else {
+              alert("Invalid Verification Code!! Please try again...");
+              location.reload();
+            }
+          }
+        });
+      }
+     </script>
 </html>
-<?php } ?>

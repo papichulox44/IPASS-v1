@@ -3851,6 +3851,20 @@
             $filter_es = "AND comment_date LIKE '%".$today."%'";
             $filter_ass_due = "LIKE '%".$today."%'";
         }
+        else if($filter_report == "yesterday")
+        {
+            $yesterday = date('Y-m-d', strtotime(' -1 day')); // Get tomorrow date
+            $filter_created = "AND contact_date_created LIKE '%".$yesterday."%'";
+            $filter_assigned = "AND task_date_created LIKE '%".$yesterday."%'";
+            $filter_unassigned = "AND task_date_created LIKE '%".$yesterday."%'";
+            $filter_add = "AND task.task_date_created LIKE '%".$yesterday."%'";
+            $filter_cf = "AND comment_date LIKE '%".$yesterday."%'";
+            $filter_due = "AND comment_date LIKE '%".$yesterday."%'";
+            $filter_move = "AND comment_date LIKE '%".$yesterday."%'";
+            $filter_wc = "AND comment_date LIKE '%".$yesterday."%'";
+            $filter_es = "AND comment_date LIKE '%".$yesterday."%'";
+            $filter_ass_due = "LIKE '%".$yesterday."%'";
+        }
         else if($filter_report == "this_week")
         {
             $dt = new DateTime();
@@ -3903,16 +3917,16 @@
         }
         else if($filter_report == "custom")
         {
-            $filter_created = "AND contact_date_created BETWEEN '".$filter_from."' AND '".$filter_to."'";
-            $filter_assigned = "AND task_date_created BETWEEN '".$filter_from."' AND '".$filter_to."'";
-            $filter_unassigned = "AND task_date_created BETWEEN '".$filter_from."' AND '".$filter_to."'";
-            $filter_add = "AND task.task_date_created BETWEEN '".$filter_from."' AND '".$filter_to."'";
-            $filter_cf = "AND comment_date BETWEEN '".$filter_from."' AND '".$filter_to."'";
-            $filter_due = "AND comment_date BETWEEN '".$filter_from."' AND '".$filter_to."'";
-            $filter_move = "AND comment_date BETWEEN '".$filter_from."' AND '".$filter_to."'";
-            $filter_wc = "AND comment_date BETWEEN '".$filter_from."' AND '".$filter_to."'";
-            $filter_es = "AND comment_date BETWEEN '".$filter_from."' AND '".$filter_to."'";
-            $filter_ass_due = "BETWEEN '".$filter_from."' AND '".$filter_to."'";
+            $filter_created = "AND contact_date_created BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
+            $filter_assigned = "AND task_date_created BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
+            $filter_unassigned = "AND task_date_created BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
+            $filter_add = "AND task.task_date_created BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
+            $filter_cf = "AND comment_date BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
+            $filter_due = "AND comment_date BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
+            $filter_move = "AND comment_date BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
+            $filter_wc = "AND comment_date BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
+            $filter_es = "AND comment_date BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
+            $filter_ass_due = "BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
         }
 
         $query_created_count = mysqli_query($conn, "SELECT Count(contact.contact_id) as total_created FROM contact WHERE contact_created_by = $user_id $filter_created") or die(mysqli_error());
@@ -4724,6 +4738,11 @@
             $today = date("Y-m-d");
             $filter = "AND contact_date_created LIKE '%".$today."%'";
         }
+        else if($filter_report == "yesterday")
+        {
+            $yesterday = date('Y-m-d', strtotime(' -1 day'));
+            $filter = "AND contact_date_created LIKE '%".$yesterday."%'";
+        }
         else if($filter_report == "this_week")
         {
             $dt = new DateTime();
@@ -4749,7 +4768,7 @@
         }
         else if($filter_report == "custom")
         {
-            $filter = "AND contact_date_created BETWEEN '".$filter_from."' AND '".$filter_to."'";
+            $filter = "AND contact_date_created BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
         }
 
         $count = 1 + $start_created;
@@ -4786,6 +4805,11 @@
             $today = date("Y-m-d");
             $filter = "AND task_date_created LIKE '%".$today."%'";
         }
+        else if($filter_report == "yesterday")
+        {
+            $yesterday = date('Y-m-d', strtotime(' -1 day'));
+            $filter = "AND task_date_created LIKE '%".$yesterday."%'";
+        }
         else if($filter_report == "this_week")
         {
             $dt = new DateTime();
@@ -4811,7 +4835,7 @@
         }
         else if($filter_report == "custom")
         {
-            $filter = "AND task_date_created BETWEEN '".$filter_from."' AND '".$filter_to."'";
+            $filter = "AND task_date_created BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
         }
 
         $count = 1 + $start_assgined;
@@ -4848,6 +4872,11 @@
             $today = date("Y-m-d");
             $filter = "AND task_date_created LIKE '%".$today."%'";
         }
+        else if($filter_report == "yesterday")
+        {
+            $yesterday = date('Y-m-d', strtotime(' -1 day'));
+            $filter = "AND task_date_created LIKE '%".$yesterday."%'";
+        }
         else if($filter_report == "this_week")
         {
             $dt = new DateTime();
@@ -4873,7 +4902,7 @@
         }
         else if($filter_report == "custom")
         {
-            $filter = "AND task_date_created BETWEEN '".$filter_from."' AND '".$filter_to."'";
+            $filter = "AND task_date_created BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
         }
 
         $count = 1 + $start_unassgined;
@@ -4910,6 +4939,11 @@
             $today = date("Y-m-d");
             $filter = "AND task_date_created LIKE '%".$today."%'";
         }
+        else if($filter_report == "yesterday")
+        {
+            $yesterday = date('Y-m-d', strtotime(' -1 day'));
+            $filter = "AND task_date_created LIKE '%".$yesterday."%'";
+        }
         else if($filter_report == "this_week")
         {
             $dt = new DateTime();
@@ -4935,7 +4969,7 @@
         }
         else if($filter_report == "custom")
         {
-            $filter = "AND task_date_created BETWEEN '".$filter_from."' AND '".$filter_to."'";
+            $filter = "AND task_date_created BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
         }
 
         $count = 1 + $start;
@@ -4972,6 +5006,11 @@
             $today = date("Y-m-d");
             $filter = "AND comment_date LIKE '%".$today."%'";
         }
+        else if($filter_report == "yesterday")
+        {
+            $yesterday = date('Y-m-d', strtotime(' -1 day'));
+            $filter = "AND comment_date LIKE '%".$yesterday."%'";
+        }
         else if($filter_report == "this_week")
         {
             $dt = new DateTime();
@@ -4997,7 +5036,7 @@
         }
         else if($filter_report == "custom")
         {
-            $filter = "AND comment_date BETWEEN '".$filter_from."' AND '".$filter_to."'";
+            $filter = "AND comment_date BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
         }
 
         $count = 1 + $start;
@@ -5041,6 +5080,11 @@
             $today = date("Y-m-d");
             $filter = "AND comment_date LIKE '%".$today."%'";
         }
+        else if($filter_report == "yesterday")
+        {
+            $yesterday = date('Y-m-d', strtotime(' -1 day'));
+            $filter = "AND comment_date LIKE '%".$yesterday."%'";
+        }
         else if($filter_report == "this_week")
         {
             $dt = new DateTime();
@@ -5066,7 +5110,7 @@
         }
         else if($filter_report == "custom")
         {
-            $filter = "AND comment_date BETWEEN '".$filter_from."' AND '".$filter_to."'";
+            $filter = "AND comment_date BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
         }
 
         $count = 1 + $start;
@@ -5110,6 +5154,11 @@
             $today = date("Y-m-d");
             $filter = "AND comment_date LIKE '%".$today."%'";
         }
+        else if($filter_report == "yesterday")
+        {
+            $yesterday = date('Y-m-d', strtotime(' -1 day'));
+            $filter = "AND comment_date LIKE '%".$yesterday."%'";
+        }
         else if($filter_report == "this_week")
         {
             $dt = new DateTime();
@@ -5135,7 +5184,7 @@
         }
         else if($filter_report == "custom")
         {
-            $filter = "AND comment_date BETWEEN '".$filter_from."' AND '".$filter_to."'";
+            $filter = "AND comment_date BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
         }
 
         $count = 1 + $start;
@@ -5179,6 +5228,11 @@
             $today = date("Y-m-d");
             $filter = "AND comment_date LIKE '%".$today."%'";
         }
+        else if($filter_report == "yesterday")
+        {
+            $yesterday = date('Y-m-d', strtotime(' -1 day'));
+            $filter = "AND comment_date LIKE '%".$yesterday."%'";
+        }
         else if($filter_report == "this_week")
         {
             $dt = new DateTime();
@@ -5204,7 +5258,7 @@
         }
         else if($filter_report == "custom")
         {
-            $filter = "AND comment_date BETWEEN '".$filter_from."' AND '".$filter_to."'";
+            $filter = "AND comment_date BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
         }
 
         $count = 1 + $start;
@@ -5248,6 +5302,11 @@
             $today = date("Y-m-d");
             $filter = "AND comment_date LIKE '%".$today."%'";
         }
+        else if($filter_report == "yesterday")
+        {
+            $yesterday = date('Y-m-d', strtotime(' -1 day'));
+            $filter = "AND comment_date LIKE '%".$yesterday."%'";
+        }
         else if($filter_report == "this_week")
         {
             $dt = new DateTime();
@@ -5273,7 +5332,7 @@
         }
         else if($filter_report == "custom")
         {
-            $filter = "AND comment_date BETWEEN '".$filter_from."' AND '".$filter_to."'";
+            $filter = "AND comment_date BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
         }
 
         $count = 1 + $start;
@@ -5317,6 +5376,11 @@
             $today = date("Y-m-d");
             $filter = "LIKE '%".$today."%'";
         }
+        else if($filter_report == "yesterday")
+        {
+            $yesterday = date('Y-m-d', strtotime(' -1 day'));
+            $filter = "LIKE '%".$yesterday."%'";
+        }
         else if($filter_report == "this_week")
         {
             $dt = new DateTime();
@@ -5342,7 +5406,7 @@
         }
         else if($filter_report == "custom")
         {
-            $filter = "BETWEEN '".$filter_from."' AND '".$filter_to."'";
+            $filter = "BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
         }
 
         $find_task = mysqli_query($conn, "SELECT * FROM task WHERE task_date_created $filter AND task_assign_to LIKE '%$user_id%' AND task_due_date != '0000-00-00' AND task_due_date IS NOT NULL ORDER BY task_due_date DESC LIMIT $start, $limit");
