@@ -1015,12 +1015,49 @@
       }
       else {
         if ($array_status) {
-          $input_filter = "AND task_name LIKE '%$myInput%'";
+          $select_tag = mysqli_query($conn, "SELECT * FROM tags WHERE tag_name LIKE '%$myInput%'");
+          $variables = [];
+          if (mysqli_num_rows($select_tag) == 0) {
+            $input_filter = "AND task_name LIKE '%$myInput%'";
+          } else {
+            while($row = mysqli_fetch_array($select_tag))
+            {
+              $variables[] = $row['tag_id'];
+            }
+            $row1 = implode(',', $variables);
+            $input_filter = "AND task_tag IN ($row1)";
+          }
+
         } else {
           if($due_date == "All"){
-            $input_filter = "WHERE task_name like '%$myInput%'";
+
+            $select_tag = mysqli_query($conn, "SELECT * FROM tags WHERE tag_name LIKE '%$myInput%'");
+            $variables = [];
+            if (mysqli_num_rows($select_tag) == 0) {
+              $input_filter = "WHERE task_name like '%$myInput%'";
+            } else {
+              while($row = mysqli_fetch_array($select_tag))
+              {
+                $variables[] = $row['tag_id'];
+              }
+              $row1 = implode(',', $variables);
+              $input_filter = "WHERE task_tag IN ($row1)";
+            }
+
           } else {
-            $input_filter = "AND task_name LIKE '%$myInput%'";
+
+            $select_tag = mysqli_query($conn, "SELECT * FROM tags WHERE tag_name LIKE '%$myInput%'");
+            $variables = [];
+            if (mysqli_num_rows($select_tag) == 0) {
+              $input_filter = "AND task_name LIKE '%$myInput%'";
+            } else {
+              while($row = mysqli_fetch_array($select_tag))
+              {
+                $variables[] = $row['tag_id'];
+              }
+              $row1 = implode(',', $variables);
+              $input_filter = "AND task_tag IN ($row1)";
+            }
           }
         }
       }

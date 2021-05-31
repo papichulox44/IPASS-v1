@@ -23,15 +23,7 @@
         <td id="taskid_'.$task_id.'" onclick="view_task(this.id)">Task ID: '.$task_id.'</td>
         <td id="taskid_'.$task_id.'" onclick="view_task(this.id)">';
             $task_name = $fetch_task['task_name'];
-            $new__task_name = substr($task_name, 0, 18); // get only 10 character
-            if(strlen($task_name) > 18)
-            {
-                echo '<span data-toggle="popover" title="'.$fetch_task['task_name'].'" data-placement="bottom">'.$new__task_name.'...</span>';
-            }
-            else
-            {
-                echo '<span data-toggle="popover" title="'.$fetch_task['task_name'].'" data-placement="bottom">'.$new__task_name.'</span>';
-            }
+            echo '<span data-toggle="popover" title="'.$fetch_task['task_name'].'" data-placement="bottom">'.$task_name.'</span>';
                 $total_tag_per_task = $fetch_task['task_tag'];
                 $tag_array = explode(",", $total_tag_per_task); // convert string to array
                 $count_tag = count($tag_array);
@@ -46,16 +38,8 @@
                         $get_tag_color = mysqli_query($conn, "SELECT * FROM tags WHERE tag_id = '$final_tag_name'");
                         $result_get_tag_color = mysqli_fetch_array($get_tag_color);
                         $tag_name = $result_get_tag_color['tag_name'];
-                        $new__tag_name = substr($tag_name, 0, 5); // get only 10 character
                         echo '<span style="background-color: '.$result_get_tag_color['tag_color'].'; color:#fff; padding:2px 7px 2px 5px; border-top-right-radius: 25px; border-bottom-right-radius: 25px; font-size: 11px; margin: 0px 0px 0px 5px;" data-toggle="popover" title="'.$tag_name.'" data-placement="bottom">';
-                        if(strlen($tag_name) > 5)
-                        {
-                            echo''.$new__tag_name.'..';
-                        }
-                        else
-                        {
-                            echo''.$new__tag_name.'';
-                        }
+                        echo $tag_name;
                         echo '</span>';
                     }
                 }
