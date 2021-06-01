@@ -69,6 +69,82 @@
 
                         $results = mysqli_query($conn, "SELECT task.task_name, space.space_name, list.list_name, finance_phase.phase_name, finance_transaction.val_date, finance_transaction.val_method, finance_transaction.val_transaction_no, finance_transaction.val_currency, finance_transaction.val_charge, finance_transaction.val_amount, finance_transaction.val_initial_amount, finance_transaction.val_usd_rate, finance_transaction.val_usd_total, finance_transaction.val_php_rate, finance_transaction.val_php_total, finance_transaction.val_client_rate, finance_transaction.val_client_total, finance_remarks.remarks_value,finance_transaction.val_assign_to, finance_transaction.val_phase_id, finance_transaction.val_id, finance_transaction.val_remarks FROM finance_phase INNER JOIN finance_transaction ON finance_transaction.val_phase_id = finance_phase.phase_id INNER JOIN task ON finance_transaction.val_assign_to = task.task_id LEFT JOIN finance_remarks ON finance_remarks.remarks_phase_id = finance_transaction.val_phase_id AND finance_remarks.remarks_to = finance_transaction.val_assign_to INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id $remarks ORDER BY task.task_name ASC, finance_phase.phase_name ASC, list.list_name ASC, finance_transaction.val_date DESC");
                     }
+                    else if($filterby == "Today")
+                    {
+                        if ($view_by == 'All Remarks') {
+                            $remarks = "";
+                        }
+                        else if ($view_by == 'No Remarks') {
+                            $remarks = "WHERE finance_transaction.val_remarks = ''";
+                        }
+                        else {
+                            $remarks = "WHERE finance_transaction.val_remarks = '$view_by'";
+                        }
+
+                        $today = date('Y-m-d');
+
+                        $results_total= mysqli_query($conn, "SELECT task.task_name, Sum(finance_transaction.val_usd_total) AS usd_total, Sum(finance_transaction.val_php_total) AS php_total, Sum(finance_transaction.val_client_total) AS client_total, finance_transaction.val_date FROM task INNER JOIN finance_transaction ON finance_transaction.val_assign_to = task.task_id WHERE finance_transaction.val_date LIKE '%$today%' GROUP BY task.task_name");
+
+                        $results = mysqli_query($conn, "SELECT task.task_name, space.space_name, list.list_name, finance_phase.phase_name, finance_transaction.val_date, finance_transaction.val_method, finance_transaction.val_transaction_no, finance_transaction.val_currency, finance_transaction.val_charge, finance_transaction.val_amount, finance_transaction.val_initial_amount, finance_transaction.val_usd_rate, finance_transaction.val_usd_total, finance_transaction.val_php_rate, finance_transaction.val_php_total, finance_transaction.val_client_rate, finance_transaction.val_client_total, finance_remarks.remarks_value,finance_transaction.val_assign_to, finance_transaction.val_phase_id, finance_transaction.val_id, finance_transaction.val_remarks FROM finance_phase INNER JOIN finance_transaction ON finance_transaction.val_phase_id = finance_phase.phase_id INNER JOIN task ON finance_transaction.val_assign_to = task.task_id LEFT JOIN finance_remarks ON finance_remarks.remarks_phase_id = finance_transaction.val_phase_id AND finance_remarks.remarks_to = finance_transaction.val_assign_to INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id $remarks AND finance_transaction.val_date LIKE '%$today%' ORDER BY task.task_name ASC, finance_phase.phase_name ASC, list.list_name ASC, finance_transaction.val_date DESC");
+
+                    }
+                    else if($filterby == "Yesterday")
+                    {
+                        if ($view_by == 'All Remarks') {
+                            $remarks = "";
+                        }
+                        else if ($view_by == 'No Remarks') {
+                            $remarks = "WHERE finance_transaction.val_remarks = ''";
+                        }
+                        else {
+                            $remarks = "WHERE finance_transaction.val_remarks = '$view_by'";
+                        }
+
+                        $yesterday = date('Y-m-d', strtotime(' -1 day'));
+
+                        $results_total= mysqli_query($conn, "SELECT task.task_name, Sum(finance_transaction.val_usd_total) AS usd_total, Sum(finance_transaction.val_php_total) AS php_total, Sum(finance_transaction.val_client_total) AS client_total, finance_transaction.val_date FROM task INNER JOIN finance_transaction ON finance_transaction.val_assign_to = task.task_id WHERE finance_transaction.val_date LIKE '%$yesterday%' GROUP BY task.task_name");
+
+                        $results = mysqli_query($conn, "SELECT task.task_name, space.space_name, list.list_name, finance_phase.phase_name, finance_transaction.val_date, finance_transaction.val_method, finance_transaction.val_transaction_no, finance_transaction.val_currency, finance_transaction.val_charge, finance_transaction.val_amount, finance_transaction.val_initial_amount, finance_transaction.val_usd_rate, finance_transaction.val_usd_total, finance_transaction.val_php_rate, finance_transaction.val_php_total, finance_transaction.val_client_rate, finance_transaction.val_client_total, finance_remarks.remarks_value,finance_transaction.val_assign_to, finance_transaction.val_phase_id, finance_transaction.val_id, finance_transaction.val_remarks FROM finance_phase INNER JOIN finance_transaction ON finance_transaction.val_phase_id = finance_phase.phase_id INNER JOIN task ON finance_transaction.val_assign_to = task.task_id LEFT JOIN finance_remarks ON finance_remarks.remarks_phase_id = finance_transaction.val_phase_id AND finance_remarks.remarks_to = finance_transaction.val_assign_to INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id $remarks AND finance_transaction.val_date LIKE '%$yesterday%' ORDER BY task.task_name ASC, finance_phase.phase_name ASC, list.list_name ASC, finance_transaction.val_date DESC");
+
+                    }
+                    else if($filterby == "This Month")
+                    {
+                        if ($view_by == 'All Remarks') {
+                            $remarks = "";
+                        }
+                        else if ($view_by == 'No Remarks') {
+                            $remarks = "WHERE finance_transaction.val_remarks = ''";
+                        }
+                        else {
+                            $remarks = "WHERE finance_transaction.val_remarks = '$view_by'";
+                        }
+
+                        $month = date('Y-m');
+
+                        $results_total= mysqli_query($conn, "SELECT task.task_name, Sum(finance_transaction.val_usd_total) AS usd_total, Sum(finance_transaction.val_php_total) AS php_total, Sum(finance_transaction.val_client_total) AS client_total, finance_transaction.val_date FROM task INNER JOIN finance_transaction ON finance_transaction.val_assign_to = task.task_id WHERE finance_transaction.val_date LIKE '%$month%' GROUP BY task.task_name");
+
+                        $results = mysqli_query($conn, "SELECT task.task_name, space.space_name, list.list_name, finance_phase.phase_name, finance_transaction.val_date, finance_transaction.val_method, finance_transaction.val_transaction_no, finance_transaction.val_currency, finance_transaction.val_charge, finance_transaction.val_amount, finance_transaction.val_initial_amount, finance_transaction.val_usd_rate, finance_transaction.val_usd_total, finance_transaction.val_php_rate, finance_transaction.val_php_total, finance_transaction.val_client_rate, finance_transaction.val_client_total, finance_remarks.remarks_value,finance_transaction.val_assign_to, finance_transaction.val_phase_id, finance_transaction.val_id, finance_transaction.val_remarks FROM finance_phase INNER JOIN finance_transaction ON finance_transaction.val_phase_id = finance_phase.phase_id INNER JOIN task ON finance_transaction.val_assign_to = task.task_id LEFT JOIN finance_remarks ON finance_remarks.remarks_phase_id = finance_transaction.val_phase_id AND finance_remarks.remarks_to = finance_transaction.val_assign_to INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id $remarks AND finance_transaction.val_date LIKE '%$month%' ORDER BY task.task_name ASC, finance_phase.phase_name ASC, list.list_name ASC, finance_transaction.val_date DESC");
+
+                    }
+                    else if($filterby == "This Year")
+                    {
+                        if ($view_by == 'All Remarks') {
+                            $remarks = "";
+                        }
+                        else if ($view_by == 'No Remarks') {
+                            $remarks = "WHERE finance_transaction.val_remarks = ''";
+                        }
+                        else {
+                            $remarks = "WHERE finance_transaction.val_remarks = '$view_by'";
+                        }
+
+                        $year = date('Y');
+
+                        $results_total= mysqli_query($conn, "SELECT task.task_name, Sum(finance_transaction.val_usd_total) AS usd_total, Sum(finance_transaction.val_php_total) AS php_total, Sum(finance_transaction.val_client_total) AS client_total, finance_transaction.val_date FROM task INNER JOIN finance_transaction ON finance_transaction.val_assign_to = task.task_id WHERE finance_transaction.val_date LIKE '%$year%' GROUP BY task.task_name");
+
+                        $results = mysqli_query($conn, "SELECT task.task_name, space.space_name, list.list_name, finance_phase.phase_name, finance_transaction.val_date, finance_transaction.val_method, finance_transaction.val_transaction_no, finance_transaction.val_currency, finance_transaction.val_charge, finance_transaction.val_amount, finance_transaction.val_initial_amount, finance_transaction.val_usd_rate, finance_transaction.val_usd_total, finance_transaction.val_php_rate, finance_transaction.val_php_total, finance_transaction.val_client_rate, finance_transaction.val_client_total, finance_remarks.remarks_value,finance_transaction.val_assign_to, finance_transaction.val_phase_id, finance_transaction.val_id, finance_transaction.val_remarks FROM finance_phase INNER JOIN finance_transaction ON finance_transaction.val_phase_id = finance_phase.phase_id INNER JOIN task ON finance_transaction.val_assign_to = task.task_id LEFT JOIN finance_remarks ON finance_remarks.remarks_phase_id = finance_transaction.val_phase_id AND finance_remarks.remarks_to = finance_transaction.val_assign_to INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id $remarks AND finance_transaction.val_date LIKE '%$year%' ORDER BY task.task_name ASC, finance_phase.phase_name ASC, list.list_name ASC, finance_transaction.val_date DESC");
+
+                    }
                     else if($filterby == "This Week")
                     {
                         if ($view_by == 'All Remarks') {

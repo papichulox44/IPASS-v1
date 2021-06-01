@@ -143,11 +143,26 @@
                                         <button class="dropdown-item" onclick="filter_tran_all()">
                                             <i class="fa fa-fw fa-circle-o mr-5"></i>All
                                         </button>
+                                        <button class="dropdown-item" id="Today" onclick="filter_date(this.id)">
+                                            <i class="fa fa-fw fa-calendar mr-5"></i>Today
+                                        </button>
+                                        <button class="dropdown-item" id="Yesterday" onclick="filter_date(this.id)">
+                                            <i class="fa fa-fw fa-calendar mr-5"></i>Yesterday
+                                        </button>
+                                        <button class="dropdown-item" id="This Week" onclick="filter_date(this.id)">
+                                            <i class="fa fa-fw fa-calendar mr-5"></i>This Week
+                                        </button>
+                                        <button class="dropdown-item" id="This Month" onclick="filter_date(this.id)">
+                                            <i class="fa fa-fw fa-calendar mr-5"></i>This Month
+                                        </button>
+                                        <button class="dropdown-item" id="This Year" onclick="filter_date(this.id)">
+                                            <i class="fa fa-fw fa-calendar mr-5"></i>This Year
+                                        </button>
                                         <span class="filterparent">
                                             <form class="dropdown-item filterparent">
                                                 <i class="fa fa-fw fa-calendar mr-5"></i>Custom Date
                                             </form>
-                                            <div class="dropdown-menu dropdown-menu-right shadow filterchild" style="position: absolute; top: 45px; right: 120px;">
+                                            <div class="dropdown-menu dropdown-menu-right shadow filterchild" style="position: absolute; top: 190px; right: 120px;">
                                                 <label for="example-datepicker4">Custom date</label>
                                                 <div class="form-material">
                                                     <input type="date" class="js-datepicker form-control" id="txt_date_from" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="mm/dd/yy" placeholder="mm/dd/yy" required>
@@ -474,6 +489,11 @@
         {
             document.getElementById("filterby").innerHTML = "All";
             document.location='main_transaction.php?view=' + view_by + '&filter=All';
+        }
+        function filter_date(id)
+        {
+            document.getElementById("filterby").innerHTML = id;
+            document.location='main_transaction.php?view=' + view_by + '&filter='+id;
         }
         function filter_tran_custom()
         {
