@@ -3,8 +3,8 @@
     $select_field = mysqli_query($conn, "SELECT * FROM field WHERE field_space_id = '$space_id' ORDER BY field_order ASC");
     while($fetch_select_field = mysqli_fetch_array($select_field))
     {
-        $field_assign_to = $fetch_select_field['field_assign_to']; 
-        if($field_assign_to != "")  
+        $field_assign_to = $fetch_select_field['field_assign_to'];
+        if($field_assign_to != "")
         {
             $assign_array = explode(",", $field_assign_to);
             $key = array_search($list_id,$assign_array); // get the key or position of list
@@ -16,7 +16,7 @@
                     echo'<div class="form-group row">
                             <label class="col-lg-4">'.$fetch_select_field['field_name'].'</label>
                             <div class="col-lg-8">
-                                <textarea class="form-control" rows="2" style="background-color: #fff;" readonly>'.$fetch_input_value[''.$fetch_select_field['field_col_name'].''].'</textarea>
+                                <textarea class="form-control" rows="4" style="background-color: #fff;" readonly>'.$fetch_input_value[''.$fetch_select_field['field_col_name'].''].'</textarea>
                             </div>
                         </div>';
                 }
@@ -133,13 +133,13 @@
                                         <label class="css-control css-control-primary css-radio">
                                             <input type="radio" class="css-control-input" name="radio-group2" disabled="true">
                                             <span class="css-control-indicator"></span> No
-                                        </label>';                            
+                                        </label>';
                                 }
-                                echo'    
+                                echo'
                             </div>
                         </div>';
                 }
             }
-        }        
+        }
     }
 ?>

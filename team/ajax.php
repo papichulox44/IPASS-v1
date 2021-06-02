@@ -4181,7 +4181,7 @@
 
       var xValues = ["Created", "Assigned", "Unassigned", "Add", "Custom Field", "Due Date", "Assigned Due Date", "Movement", "Written Comments", "Email Sent"];
       var yValues = ['.$created_count.', '.$assigned_count.', '.$unassigned_count.', '.$add_count.', '.$cf_count.', '.$due_count.', '.$ad_count.', '.$move_count.', '.$wc_count.', '.$es_count.'];
-      var barColors = ["red","orange","yellow","green","blue","purple","brown ","black","gray","lightblue"];
+      var barColors = ["#D99694","#D99694","#FAC090","#FAC090","#C3D69B","#C3D69B","#93CDDD","#93CDDD","#558ED5","#558ED5"];
 
       new Chart("chartdiv", {
         type: "bar",
@@ -5487,6 +5487,218 @@
             ';
           }
         }
+    }
+
+    if(isset($_POST['show_summary_report']))
+    {
+        // $filter_report = $_POST['filter_report'];
+        // $filter_from = $_POST['filter_from'];
+        // $filter_to = $_POST['filter_to'];
+        //
+        // $filter_created = '';
+        // $filter_assigned = '';
+        // $filter_unassigned = '';
+        // $filter_add = '';
+        // $filter_cf = '';
+        // $filter_due = '';
+        // $filter_move = '';
+        // $filter_wc = '';
+        // $filter_es = '';
+        // $filter_ass_due = '';
+        // if($filter_report == "all")
+        // {
+        //     $filter_created = '';
+        //     $filter_assigned = '';
+        //     $filter_unassigned = '';
+        //     $filter_add = '';
+        //     $filter_cf = '';
+        //     $filter_due = '';
+        //     $filter_move = '';
+        //     $filter_wc = '';
+        //     $filter_es = '';
+        //     $filter_ass_due = '';
+        // }
+        // else if($filter_report == "today")
+        // {
+        //     $today = date("Y-m-d");
+        //     $filter_created = "AND contact_date_created LIKE '%".$today."%'";
+        //     $filter_assigned = "AND task_date_created LIKE '%".$today."%'";
+        //     $filter_unassigned = "AND task_date_created LIKE '%".$today."%'";
+        //     $filter_add = "AND task.task_date_created LIKE '%".$today."%'";
+        //     $filter_cf = "AND comment_date LIKE '%".$today."%'";
+        //     $filter_due = "AND comment_date LIKE '%".$today."%'";
+        //     $filter_move = "AND comment_date LIKE '%".$today."%'";
+        //     $filter_wc = "AND comment_date LIKE '%".$today."%'";
+        //     $filter_es = "AND comment_date LIKE '%".$today."%'";
+        //     $filter_ass_due = "LIKE '%".$today."%'";
+        // }
+        // else if($filter_report == "yesterday")
+        // {
+        //     $yesterday = date('Y-m-d', strtotime(' -1 day')); // Get tomorrow date
+        //     $filter_created = "AND contact_date_created LIKE '%".$yesterday."%'";
+        //     $filter_assigned = "AND task_date_created LIKE '%".$yesterday."%'";
+        //     $filter_unassigned = "AND task_date_created LIKE '%".$yesterday."%'";
+        //     $filter_add = "AND task.task_date_created LIKE '%".$yesterday."%'";
+        //     $filter_cf = "AND comment_date LIKE '%".$yesterday."%'";
+        //     $filter_due = "AND comment_date LIKE '%".$yesterday."%'";
+        //     $filter_move = "AND comment_date LIKE '%".$yesterday."%'";
+        //     $filter_wc = "AND comment_date LIKE '%".$yesterday."%'";
+        //     $filter_es = "AND comment_date LIKE '%".$yesterday."%'";
+        //     $filter_ass_due = "LIKE '%".$yesterday."%'";
+        // }
+        // else if($filter_report == "this_week")
+        // {
+        //     $dt = new DateTime();
+        //     $dates = [];
+        //     for ($d = 1; $d <= 7; $d++) {
+        //         $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
+        //         $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
+        //     }
+        //     $from = current($dates); // monday
+        //     $to = end($dates); // sunday
+        //
+        //     $filter_created = "AND contact_date_created BETWEEN '".$from."' AND '".$to."'";
+        //     $filter_assigned = "AND task_date_created BETWEEN '".$from."' AND '".$to."'";
+        //     $filter_unassigned = "AND task_date_created BETWEEN '".$from."' AND '".$to."'";
+        //     $filter_add = "AND task.task_date_created BETWEEN '".$from."' AND '".$to."'";
+        //     $filter_cf = "AND comment_date BETWEEN '".$from."' AND '".$to."'";
+        //     $filter_due = "AND comment_date BETWEEN '".$from."' AND '".$to."'";
+        //     $filter_move = "AND comment_date BETWEEN '".$from."' AND '".$to."'";
+        //     $filter_wc = "AND comment_date BETWEEN '".$from."' AND '".$to."'";
+        //     $filter_es = "AND comment_date BETWEEN '".$from."' AND '".$to."'";
+        //     $filter_ass_due = "BETWEEN '".$from."' AND '".$to."'";
+        // }
+        // else if($filter_report == "month")
+        // {
+        //     $month = date("Y-m");
+        //     $filter_created = "AND contact_date_created LIKE '%".$month."%'";
+        //     $filter_assigned = "AND task_date_created LIKE '%".$month."%'";
+        //     $filter_unassigned = "AND task_date_created LIKE '%".$month."%'";
+        //     $filter_add = "AND task.task_date_created LIKE '%".$month."%'";
+        //     $filter_cf = "AND comment_date LIKE '%".$month."%'";
+        //     $filter_due = "AND comment_date LIKE '%".$month."%'";
+        //     $filter_move = "AND comment_date LIKE '%".$month."%'";
+        //     $filter_wc = "AND comment_date LIKE '%".$month."%'";
+        //     $filter_es = "AND comment_date LIKE '%".$month."%'";
+        //     $filter_ass_due = "LIKE '%".$month."%'";
+        // }
+        // else if($filter_report == "year")
+        // {
+        //     $year = date("Y");
+        //     $filter_created = "AND contact_date_created LIKE '%".$year."%'";
+        //     $filter_assigned = "AND task_date_created LIKE '%".$year."%'";
+        //     $filter_unassigned = "AND task_date_created LIKE '%".$year."%'";
+        //     $filter_add = "AND task.task_date_created LIKE '%".$year."%'";
+        //     $filter_cf = "AND comment_date LIKE '%".$year."%'";
+        //     $filter_due = "AND comment_date LIKE '%".$year."%'";
+        //     $filter_move = "AND comment_date LIKE '%".$year."%'";
+        //     $filter_wc = "AND comment_date LIKE '%".$year."%'";
+        //     $filter_es = "AND comment_date LIKE '%".$year."%'";
+        //     $filter_ass_due = "LIKE '%".$year."%'";
+        // }
+        // else if($filter_report == "custom")
+        // {
+        //     $filter_created = "AND contact_date_created BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
+        //     $filter_assigned = "AND task_date_created BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
+        //     $filter_unassigned = "AND task_date_created BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
+        //     $filter_add = "AND task.task_date_created BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
+        //     $filter_cf = "AND comment_date BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
+        //     $filter_due = "AND comment_date BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
+        //     $filter_move = "AND comment_date BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
+        //     $filter_wc = "AND comment_date BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
+        //     $filter_es = "AND comment_date BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
+        //     $filter_ass_due = "BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
+        // }
+        //
+        // $count = 1;
+        // $count1 = 1;
+        // $query_summary = mysqli_query($conn, "SELECT department FROM user WHERE department IS NOT NULL GROUP BY user.department") or die(mysqli_error());
+        // while($data_summary = mysqli_fetch_array($query_summary)){
+        //   $department = $data_summary['department'];
+        //
+        //   $query_created_count = mysqli_query($conn, "SELECT Count(contact.contact_id) as total_created FROM contact INNER JOIN `user` ON contact.contact_created_by = `user`.user_id WHERE `user`.department = '$department' $filter_created") or die(mysqli_error());
+        //   $data_created_count = mysqli_fetch_assoc($query_created_count);
+        //   $created_count = $data_created_count['total_created'];
+        //
+        //   $query_assigned_count = mysqli_query($conn, "SELECT Count(task.task_id) as total_assigned FROM task INNER JOIN `user` ON task.task_created_by = `user`.user_id WHERE `user`.department = '$department' $filter_assigned") or die(mysqli_error());
+        //   $data_assigned_count = mysqli_fetch_assoc($query_assigned_count);
+        //   $assigned_count = $data_assigned_count['total_assigned'];
+        //
+        //   $query_unassigned_count = mysqli_query($conn, "SELECT Count(task.task_id) as total_unassigned FROM task INNER JOIN `user` ON task.task_created_by = `user`.user_id WHERE `user`.department = '$department' AND task_status_id = '' $filter_unassigned") or die(mysqli_error());
+        //   $data_unassigned_count = mysqli_fetch_assoc($query_unassigned_count);
+        //   $unassigned_count = $data_unassigned_count['total_unassigned'];
+        //
+        //   $query_add_count = mysqli_query($conn, "SELECT Count(contact.contact_id) AS total_add FROM contact INNER JOIN task ON task.task_contact = contact.contact_id INNER JOIN `user` ON task.task_created_by = `user`.user_id WHERE `user`.department = '$department' $filter_add") or die(mysqli_error());
+        //   $data_add_count = mysqli_fetch_assoc($query_add_count);
+        //   $add_count = $data_add_count['total_add'];
+        //
+        //   $query_cf_count = mysqli_query($conn, "SELECT Count(comment.comment_id) AS total_cf FROM comment INNER JOIN task ON comment.comment_task_id = task.task_id INNER JOIN `user` ON task.task_created_by = `user`.user_id WHERE `user`.department = '$department' AND comment_type = 1 $filter_cf") or die(mysqli_error());
+        //   $data_cf_count = mysqli_fetch_assoc($query_cf_count);
+        //   $cf_count = $data_cf_count['total_cf'];
+        //
+        //   $query_due_count = mysqli_query($conn, "SELECT Count(comment.comment_id) AS total_due FROM comment INNER JOIN task ON comment.comment_task_id = task.task_id INNER JOIN `user` ON task.task_created_by = `user`.user_id WHERE `user`.department = '$department' AND comment_type = 2 $filter_due") or die(mysqli_error());
+        //   $data_due_count = mysqli_fetch_assoc($query_due_count);
+        //   $due_count = $data_due_count['total_due'];
+        //
+        //   $query_move_count = mysqli_query($conn, "SELECT Count(comment.comment_id) AS total_move FROM comment INNER JOIN task ON comment.comment_task_id = task.task_id INNER JOIN `user` ON task.task_created_by = `user`.user_id WHERE `user`.department = '$department' AND comment_type = 3 $filter_move") or die(mysqli_error());
+        //   $data_move_count = mysqli_fetch_assoc($query_move_count);
+        //   $move_count = $data_move_count['total_move'];
+        //
+        //   $query_wc_count = mysqli_query($conn, "SELECT Count(comment.comment_id) AS total_wc FROM comment INNER JOIN task ON comment.comment_task_id = task.task_id INNER JOIN `user` ON task.task_created_by = `user`.user_id WHERE `user`.department = '$department' AND comment_type is NULL $filter_wc") or die(mysqli_error());
+        //   $data_wc_count = mysqli_fetch_assoc($query_wc_count);
+        //   $wc_count = $data_wc_count['total_wc'];
+        //
+        //   $query_es_count = mysqli_query($conn, "SELECT Count(comment.comment_id) AS total_es FROM comment INNER JOIN task ON comment.comment_task_id = task.task_id INNER JOIN `user` ON task.task_created_by = `user`.user_id WHERE `user`.department = '$department' AND comment_type = 4 $filter_wc") or die(mysqli_error());
+        //   $data_es_count = mysqli_fetch_assoc($query_es_count);
+        //   $es_count = $data_es_count['total_es'];
+        //
+        //   $find_task = mysqli_query($conn, "SELECT Count(task.task_id) as total_ad FROM task INNER JOIN `user` ON task.task_created_by = `user`.user_id WHERE `user`.department = '$department' AND task_date_created $filter_ass_due AND task_due_date != '0000-00-00' AND task_due_date IS NOT NULL");
+        //   $data_ad_count = mysqli_fetch_assoc($find_task);
+        //   $ad_count = $data_ad_count['total_ad'];
+        //
+        //   echo '
+        //   <div class="col-lg-12">
+        //     <div class="block">
+        //         <ul class="nav nav-tabs nav-tabs-block" data-toggle="tabs" role="tablist">
+        //             <li class="nav-item">
+        //                 <a class="nav-link active" href="#'.$data_summary['department'].'">'.$data_summary['department'].'</a>
+        //             </li>
+        //         </ul>
+        //         <div class="block-content tab-content overflow-hidden">
+        //             <div class="tab-pane fade fade-up show active" id="'.$data_summary['department'].'" role="tabpanel">
+        //               <div class="col-lg-12">
+        //                 <canvas id="chartdiv'.$count++.'"></canvas>
+        //               </div>
+        //             </div>
+        //         </div>
+        //     </div>
+        // </div>
+        // <script>
+        // var xValues = ["Created", "Assigned", "Unassigned", "Add", "Custom Field", "Due Date", "Assigned Due Date", "Movement", "Written Comments", "Email Sent"];
+        // var yValues = ['.$created_count.', '.$assigned_count.', '.$unassigned_count.', '.$add_count.', '.$cf_count.', '.$due_count.', '.$ad_count.', '.$move_count.', '.$wc_count.', '.$es_count.'];
+        // var barColors = ["#D99694","#D99694","#FAC090","#FAC090","#C3D69B","#C3D69B","#93CDDD","#93CDDD","#558ED5","#558ED5"];
+        //
+        // new Chart("chartdiv'.$count1++.'", {
+        //   type: "bar",
+        //   data: {
+        //     labels: xValues,
+        //     datasets: [{
+        //       backgroundColor: barColors,
+        //       data: yValues
+        //     }]
+        //   },
+        //   options: {
+        //     legend: {display: false},
+        //     title: {
+        //       display: true,
+        //       text: "Number of Activities"
+        //     }
+        //   }
+        // });
+        // </script>
+        //   ';
+        // }
+
     }
 
 ?>

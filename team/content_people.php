@@ -82,7 +82,7 @@
                         </span>
                     </div>
                 </div>
-                <button type="button" data-toggle="modal" data-target="#modal-summary-report" class="btn btn-success pull-right"><i class="fa fa-bar-chart"></i> View Summary Report</button>
+                <button type="button" data-toggle="modal" data-target="#modal-summary-report" onclick="show_summary_report()" class="btn btn-success pull-right"><i class="fa fa-bar-chart"></i> View Summary Report</button>
             </div>
             <div class="block-content block-content-full <?php echo $md_body; ?>">
                 <!-- DataTables functionality is initialized with .js-dataTable-full class in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->
@@ -446,6 +446,26 @@
           },
           success: function(data){
               $('#show_individual_report').html(data);
+          }
+      });
+    }
+
+    function show_summary_report() {
+      filter_report = '<?php echo $_GET['filter_report']; ?>';
+      filter_from = '<?php if(isset($_GET['filter_from'])) { echo $_GET['filter_from']; } ?>';
+      filter_to = '<?php if(isset($_GET['filter_to'])) { echo $_GET['filter_to']; } ?>';
+      $.ajax({
+          url: 'ajax.php',
+          type: 'POST',
+          async: false,
+          data:{
+              filter_report:filter_report,
+              filter_from:filter_from,
+              filter_to:filter_to,
+              show_summary_report: 1,
+          },
+          success: function(data){
+              $('#show_summary_report').html(data);
           }
       });
     }

@@ -24,7 +24,19 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="block-content" id="show_summary_report">
+                        <div class="block-content">
+                          <select class="form-control" id="myDepartment" onchange="select_department()">
+                            <option disabled selected>Select Department Summary</option>
+                            <?php
+                            $query_summary = mysqli_query($conn, "SELECT department FROM user WHERE department IS NOT NULL GROUP BY user.department") or die(mysqli_error());
+                            while($data_summary = mysqli_fetch_array($query_summary)){
+                              echo '
+                              <option value="'.$data_summary['department'].'">'.$data_summary['department'].'</option>
+                              ';
+                            }
+                             ?>
+                          </select>
+                          <div id="show_summary_report"></div>
                         </div>
                     <div class="modal-footer">
                     </div>
@@ -33,7 +45,12 @@
         </div>
         <!-- END Extra Large Modal -->
         <!-- END Page Container -->
-
+        <script>
+          function select_department() {
+            var x = document.getElementById("myDepartment").value;
+            alert(x);
+          }
+        </script>
         <script src="../assets/js/codebase.core.min.js"></script>
         <script src="../assets/js/codebase.app.min.js"></script>
 
