@@ -26,7 +26,7 @@
                         </div>
                         <div class="block-content">
                           <select class="form-control" id="myDepartment" onchange="select_department()">
-                            <option disabled selected>Select Department Summary</option>
+                            <option disabled selected>Select Department</option>
                             <?php
                             $query_summary = mysqli_query($conn, "SELECT department FROM user WHERE department IS NOT NULL GROUP BY user.department") or die(mysqli_error());
                             while($data_summary = mysqli_fetch_array($query_summary)){
@@ -35,7 +35,7 @@
                               ';
                             }
                              ?>
-                          </select>
+                          </select> <br>
                           <div id="show_summary_report"></div>
                         </div>
                     <div class="modal-footer">
@@ -47,8 +47,8 @@
         <!-- END Page Container -->
         <script>
           function select_department() {
-            var x = document.getElementById("myDepartment").value;
-            alert(x);
+            var department = document.getElementById("myDepartment").value;
+            show_summary_report(department);
           }
         </script>
         <script src="../assets/js/codebase.core.min.js"></script>
