@@ -12,14 +12,14 @@
             <?php include 'content_people.php'; ?>
         </div>
         <!-- Extra Large Modal -->
-        <div class="modal fade" id="modal-summary-report" tabindex="-1" role="dialog" aria-labelledby="modal-extra-large" aria-hidden="true">
+        <div class="modal fade" id="modal-summary-report" tabindex="-1" role="dialog" aria-labelledby="modal-extra-large" aria-hidden="true" data-backdrop="static">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="block block-themed block-transparent mb-0">
                         <div class="block-header bg-primary-dark">
                             <h3 class="block-title">Summary Report</h3>
                             <div class="block-options">
-                                <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                <button type="button" onclick="close_modal()" class="btn-block-option" data-dismiss="modal" aria-label="Close">
                                     <i class="si si-close"></i>
                                 </button>
                             </div>

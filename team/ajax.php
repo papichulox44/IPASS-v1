@@ -3545,6 +3545,15 @@
         $data = mysqli_fetch_array($result);
         $pass = $data['list_email_password'];
 
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = "$from"; // Gmail address which you want to use as SMTP server
+        $mail->Password = "$pass"; // Gmail address Password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = '587';
+        //$mail->setFrom('test_email@ipasspmt.com'); // Gmail address which you used as SMTP server
+        $mail->setFrom("$from");
         foreach($contact_id as $contact_id){
           $query = mysqli_query($conn, "SELECT contact.contact_fname, contact.contact_email, task.task_id, task.task_status_id, task.task_list_id FROM task INNER JOIN contact ON task.task_contact = contact.contact_id WHERE contact.contact_id = '$contact_id'");
           $data = mysqli_fetch_array($query);
@@ -3553,14 +3562,13 @@
               $task_id = $data['task_id'];
               $task_status_id = $data['task_status_id'];
         			$task_list_id = $data['task_list_id'];
-
               $message = '
               <div style="padding: 20px 0px 0px 0px; background-color: #189AA7;" class="shadow">
-                  <img src="https://ipasspmt.com/assets/media/photos/email_header.png" style="width: 100%;">
+                  <img src="https://ipassprocessingportal.com/assets/media/photos/email_header.png" style="width: 100%;">
                   <table width="100%" border="0" cellspacing="0" cellpadding="20" style="background-color: #47bcde; color: #5a5f61; font-family:verdana;">
                       <tr>
                           <td style="background-color: #fff; border-top: 10px solid #189AA7; border-bottom: 10px solid #189AA7;">
-                              <p style="margin-top: -5px;">Hi '.$contact_fname.',</p>
+                              <p style="margin-top: -5px;">Hi,</p>
                               '.$email_content.'
                           </td>
                       </tr>
@@ -3573,23 +3581,15 @@
                   </div>
               </div>
               ';
-                  $mail->isSMTP();
-                  $mail->Host = 'smtp.gmail.com';
-                  $mail->SMTPAuth = true;
-                  $mail->Username = "$from"; // Gmail address which you want to use as SMTP server
-                  $mail->Password = "$pass"; // Gmail address Password
-                  $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-                  $mail->Port = '587';
-                  //$mail->setFrom('test_email@ipasspmt.com'); // Gmail address which you used as SMTP server
-                  $mail->setFrom("$from");
-                  $mail->addAddress("$contact_email"); // Email address where you want to receive emails (you can use any of your gmail address including the gmail address which you used as SMTP server)
-
-                  $mail->isHTML(true);
-                  $mail->Subject = "$email_subject";
-                  $mail->Body = "$message";
-                  $mail->send();
-                  mysqli_query($conn, "INSERT INTO email_send_history (email_send_date, email_send_by, email_format_id, email_send_to, email_task_id, email_content, email_blast, email_status_id, email_list_id) values ('$date', '$user_id', '$email_id', '$contact_email', '$task_id', '$email_content', '1', '$status_id', '$task_list_id')") or die(mysqli_error());
+        $mail->addAddress("$contact_email"); // Email address where you want to receive emails (you can use any of your gmail address including the gmail address which you used as SMTP server)
+        mysqli_query($conn, "INSERT INTO email_send_history (email_send_date, email_send_by, email_format_id, email_send_to, email_task_id, email_content, email_blast, email_status_id, email_list_id) values ('$date', '$user_id', '$email_id', '$contact_email', '$task_id', '$email_content', '1', '$status_id', '$task_list_id')") or die(mysqli_error());
         }
+
+        $mail->isHTML(true);
+        $mail->Subject = "$email_subject";
+        $mail->Body = "$message";
+        $mail->send();
+
         echo "success";
     }
 
@@ -5662,13 +5662,199 @@
             <div class="block">
                 <ul class="nav nav-tabs nav-tabs-block" data-toggle="tabs" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active">Department: '.$data_summary['department'].'</a>
+                        <a class="nav-link active" href="#department1">Department: '.$data_summary['department'].'</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#created_department">Created<span class="badge badge-danger badge-pill font-w300" style="font-size: 9px;" >'.$created_count.'</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#assigned_department">Assigned<span class="badge badge-danger badge-pill font-w300" style="font-size: 9px;" >'.$assigned_count.'</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#unassigned_department">Unassigned<span class="badge badge-danger badge-pill font-w300" style="font-size: 9px;" >'.$unassigned_count.'</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#add_department">Add<span class="badge badge-danger badge-pill font-w300" style="font-size: 9px;" >'.$add_count.'</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#customfield_department">Custom Field<span class="badge badge-danger badge-pill font-w300" style="font-size: 9px;" >'.$cf_count.'</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#duedate_department">Due Date<span class="badge badge-danger badge-pill font-w300" style="font-size: 9px;" >'.$due_count.'</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#assigneddue_department">Assigned Due Date<span class="badge badge-danger badge-pill font-w300" style="font-size: 9px;" >'.$ad_count.'</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#movement_department">Movement<span class="badge badge-danger badge-pill font-w300" style="font-size: 9px;" >'.$move_count.'</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#writtencomments_department">Written Comments<span class="badge badge-danger badge-pill font-w300" style="font-size: 9px;" >'.$wc_count.'</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#emailsent_department">Email Sent<span class="badge badge-danger badge-pill font-w300" style="font-size: 9px;" >'.$es_count.'</span></a>
                     </li>
                 </ul>
                 <div class="block-content tab-content overflow-hidden">
-                    <div class="tab-pane fade fade-up show active" role="tabpanel">
+                    <div class="tab-pane fade fade-up show active" id="department1" role="tabpanel">
                       <div class="col-lg-12">
                         <canvas id="chartdiv'.$count++.'"></canvas>
+                      </div>
+                    </div>
+                    <div class="tab-pane fade fade-up" id="created_department" role="tabpanel">
+                      <div style="overflow: auto; height: 300px;" id="scroll_created_department">
+                        <table class="table table-bordered table-hover">
+                        <thead>
+                          <tr>
+                            <td>#</td>
+                            <td>Contact Name</td>
+                            <td>Date Created</td>
+                          <tr>
+                        </thead>
+                        <tbody id="load_data_created_department">
+                        <tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="tab-pane fade fade-up" id="assigned_department" role="tabpanel">
+                      <div style="overflow: auto; height: 300px;" id="scroll_assigned_department">
+                        <table class="table table-bordered table-hover">
+                        <thead>
+                          <tr>
+                            <td>#</td>
+                            <td>Task Name</td>
+                            <td>Date Created</td>
+                          <tr>
+                        </thead>
+                        <tbody id="load_data_assigned_department">
+                        <tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="tab-pane fade fade-up" id="unassigned_department" role="tabpanel">
+                      <div style="overflow: auto; height: 300px;" id="scroll_unassigned_department">
+                        <table class="table table-bordered table-hover">
+                        <thead>
+                          <tr>
+                            <td>#</td>
+                            <td>Task Name</td>
+                            <td>Date Created</td>
+                          <tr>
+                        </thead>
+                        <tbody id="load_data_unassigned_department">
+                        <tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="tab-pane fade fade-up" id="add_department" role="tabpanel">
+                      <div style="overflow: auto; height: 300px;" id="scroll_add_department">
+                        <table class="table table-bordered table-hover">
+                        <thead>
+                          <tr>
+                            <td>#</td>
+                            <td>Task Name</td>
+                            <td>Date Created</td>
+                          <tr>
+                        </thead>
+                        <tbody id="load_data_add_department">
+                        <tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="tab-pane fade fade-up" id="customfield_department" role="tabpanel">
+                      <div style="overflow: auto; height: 300px;" id="scroll_cf_department">
+                        <table class="table table-bordered table-hover">
+                        <thead>
+                          <tr>
+                            <td>#</td>
+                            <td>Task Name</td>
+                            <td>Comment</td>
+                            <td>Date Created</td>
+                          <tr>
+                        </thead>
+                        <tbody id="load_data_cf_department">
+                        <tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="tab-pane fade fade-up" id="duedate_department" role="tabpanel">
+                      <div style="overflow: auto; height: 300px;" id="scroll_due_department">
+                        <table class="table table-bordered table-hover">
+                        <thead>
+                          <tr>
+                            <td>#</td>
+                            <td>Task Name</td>
+                            <td>Comment</td>
+                            <td>Date Created</td>
+                          <tr>
+                        </thead>
+                        <tbody id="load_data_due_department">
+                        <tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="tab-pane fade fade-up" id="assigneddue_department" role="tabpanel">
+                      <div style="overflow: auto; height: 300px;" id="scroll_assigneddue_department">
+                        <table class="table table-bordered table-hover">
+                        <thead>
+                          <tr>
+                            <td>Task #</td>
+                            <td>Task Name</td>
+                            <td class="text-center">Due Date</td>
+                            <td>Date Created</td>
+                          <tr>
+                        </thead>
+                        <tbody id="load_data_assigneddue_department">
+                        <tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="tab-pane fade fade-up" id="movement_department" role="tabpanel">
+                      <div style="overflow: auto; height: 300px;" id="scroll_move_department">
+                        <table class="table table-bordered table-hover">
+                        <thead>
+                          <tr>
+                            <td>#</td>
+                            <td>Task Name</td>
+                            <td>Comment</td>
+                            <td>Date Created</td>
+                          <tr>
+                        </thead>
+                        <tbody id="load_data_move_department">
+                        <tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="tab-pane fade fade-up" id="writtencomments_department" role="tabpanel">
+                      <div style="overflow: auto; height: 300px;" id="scroll_wc_department">
+                        <table class="table table-bordered table-hover">
+                        <thead>
+                          <tr>
+                            <td>#</td>
+                            <td>Task Name</td>
+                            <td>Comment</td>
+                            <td>Date Created</td>
+                          <tr>
+                        </thead>
+                        <tbody id="load_data_wc_department">
+                        <tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="tab-pane fade fade-up" id="emailsent_department" role="tabpanel">
+                      <div style="overflow: auto; height: 300px;" id="scroll_es_department">
+                        <table class="table table-bordered table-hover">
+                        <thead>
+                          <tr>
+                            <td>#</td>
+                            <td>Task Name</td>
+                            <td>Comment</td>
+                            <td>Date Created</td>
+                          <tr>
+                        </thead>
+                        <tbody id="load_data_es_department">
+                        <tbody>
+                        </table>
                       </div>
                     </div>
                 </div>
@@ -5696,6 +5882,509 @@
             }
           }
         });
+
+        var department = "'.$department.'";
+
+        var limit_created = 20;
+        var start_created = 0;
+        var action_created = "inactive";
+        function load_created_data_department(limit_created, start_created, department){
+        filter_report_created = "'.$filter_report.'";
+        filter_from_created = "'.$filter_from.'";
+        filter_to_created = "'.$filter_to.'";
+        $.ajax({
+            url:"ajax.php",
+            method:"POST",
+            data:{
+              limit:limit_created,
+              start:start_created,
+              department:department,
+              filter_report:filter_report_created,
+              filter_from:filter_from_created,
+              filter_to:filter_to_created,
+              load_created_data_department:1},
+            cache:false,
+            success:function(data)
+            {
+            $("#load_data_created_department").append(data);
+            if(data == "")
+            {
+              var start_created = 0;
+             action_created = "active";
+            }
+            else
+            {
+             action_created = "inactive";
+            }
+          }
+        });
+        }
+
+        if(action_created == "inactive")
+          {
+          action_created = "active";
+          load_created_data_department(limit_created, start_created, department);
+          }
+        $("#scroll_created_department").scroll(function() {
+    			if ($("#scroll_created_department").scrollTop() + $("#scroll_created_department").height() > $("#scroll_created_department").height() && action_created == "inactive") {
+            action_created = "active";
+            start_created = start_created + limit_created;
+            setTimeout(function(){
+            load_created_data_department(limit_created, start_created, department);
+            }, 1000);
+          }
+    		});
+
+        var limit_assigned = 20;
+        var start_assigned = 0;
+        var action_assigned= "inactive";
+        function load_assigned_data_department(limit_assigned, start_assgined, department){
+        filter_report_assigned = "'.$filter_report.'";
+        filter_from_assigned = "'.$filter_from.'";
+        filter_to_assigned = "'.$filter_to.'";
+        $.ajax({
+            url:"ajax.php",
+            method:"POST",
+            data:{
+              limit:limit_assigned,
+              start:start_assgined,
+              department:department,
+              filter_report:filter_report_assigned,
+              filter_from:filter_from_assigned,
+              filter_to:filter_to_assigned,
+              load_assigned_data_department:1},
+            cache:false,
+            success:function(data)
+            {
+            $("#load_data_assigned_department").append(data);
+            if(data == "")
+            {
+              var start_assigned = 0;
+             action_assigned = "active";
+            }
+            else
+            {
+             action_assigned = "inactive";
+            }
+          }
+        });
+        }
+
+        if(action_assigned == "inactive")
+          {
+          action_assigned = "active";
+          load_assigned_data_department(limit_assigned, start_assigned, department);
+          }
+        $("#scroll_assigned_department").scroll(function() {
+    			if ($("#scroll_assigned_department").scrollTop() + $("#scroll_assigned_department").height() > $("#scroll_assigned_department").height() && action_assigned == "inactive") {
+            action_assigned = "active";
+            start_assigned = start_assigned + limit_assigned;
+            setTimeout(function(){
+            load_assigned_data_department(limit_assigned, start_assigned, department);
+            }, 1000);
+          }
+    		});
+
+        var limit_unassigned = 20;
+        var start_unassigned = 0;
+        var action_unassigned= "inactive";
+        function load_unassigned_data_department(limit_unassigned, start_unassgined, department){
+        filter_report_unassigned = "'.$filter_report.'";
+        filter_from_unassigned = "'.$filter_from.'";
+        filter_to_unassigned = "'.$filter_to.'";
+        $.ajax({
+            url:"ajax.php",
+            method:"POST",
+            data:{
+              limit:limit_unassigned,
+              start:start_unassgined,
+              department:department,
+              filter_report:filter_report_unassigned,
+              filter_from:filter_from_unassigned,
+              filter_to:filter_to_unassigned,
+              load_unassigned_data_department:1},
+            cache:false,
+            success:function(data)
+            {
+            $("#load_data_unassigned_department").append(data);
+            if(data == "")
+            {
+              var start_unassigned = 0;
+             action_unassigned = "active";
+            }
+            else
+            {
+             action_unassigned = "inactive";
+            }
+          }
+        });
+        }
+
+        if(action_unassigned == "inactive")
+          {
+          action_unassigned = "active";
+          load_unassigned_data_department(limit_unassigned, start_unassigned, department);
+          }
+        $("#scroll_unassigned_department").scroll(function() {
+    			if ($("#scroll_unassigned_department").scrollTop() + $("#scroll_unassigned_department").height() > $("#scroll_unassigned_department").height() && action_unassigned == "inactive") {
+            action_unassigned = "active";
+            start_unassigned = start_unassigned + limit_unassigned;
+            setTimeout(function(){
+            load_unassigned_data_department(limit_unassigned, start_unassigned, department);
+            }, 1000);
+          }
+    		});
+
+        var limit_add = 20;
+        var start_add = 0;
+        var action_add= "inactive";
+        function load_add_data_department(limit_add, start_add, department){
+        filter_report_add = "'.$filter_report.'";
+        filter_from_add = "'.$filter_from.'";
+        filter_to_add = "'.$filter_to.'";
+        $.ajax({
+            url:"ajax.php",
+            method:"POST",
+            data:{
+              limit:limit_add,
+              start:start_add,
+              department:department,
+              filter_report:filter_report_add,
+              filter_from:filter_from_add,
+              filter_to:filter_to_add,
+              load_add_data_department:1},
+            cache:false,
+            success:function(data)
+            {
+            $("#load_data_add_department").append(data);
+            if(data == "")
+            {
+              var start_add = 0;
+             action_add = "active";
+            }
+            else
+            {
+             action_add = "inactive";
+            }
+          }
+        });
+        }
+
+        if(action_add == "inactive")
+          {
+          action_add = "active";
+          load_add_data_department(limit_add, start_add, department);
+          }
+        $("#scroll_add_department").scroll(function() {
+    			if ($("#scroll_add_department").scrollTop() + $("#scroll_add_department").height() > $("#scroll_add_department").height() && action_add == "inactive") {
+            action_add = "active";
+            start_add = start_add + limit_add;
+            setTimeout(function(){
+            load_add_data_department(limit_add, start_add, department);
+            }, 1000);
+          }
+    		});
+
+        var limit_cf = 20;
+        var start_cf = 0;
+        var action_cf = "inactive";
+        function load_cf_data_department(limit_cf, start_cf, department){
+        filter_report_cf = "'.$filter_report.'";
+        filter_from_cf = "'.$filter_from.'";
+        filter_to_cf = "'.$filter_to.'";
+        $.ajax({
+            url:"ajax.php",
+            method:"POST",
+            data:{
+              limit:limit_cf,
+              start:start_cf,
+              department:department,
+              filter_report:filter_report_cf,
+              filter_from:filter_from_cf,
+              filter_to:filter_to_cf,
+              load_cf_data_department:1},
+            cache:false,
+            success:function(data)
+            {
+            $("#load_data_cf_department").append(data);
+            if(data == "")
+            {
+              var start_cf = 0;
+             action_cf = "active";
+            }
+            else
+            {
+             action_cf = "inactive";
+            }
+          }
+        });
+        }
+
+        if(action_cf == "inactive")
+          {
+          action_cf = "active";
+          load_cf_data_department(limit_cf, start_cf, department);
+          }
+        $("#scroll_cf_department").scroll(function() {
+    			if ($("#scroll_cf_department").scrollTop() + $("#scroll_cf_department").height() > $("#scroll_cf_department").height() && action_cf == "inactive") {
+            action_cf = "active";
+            start_cf = start_cf + limit_cf;
+            setTimeout(function(){
+            load_cf_data_department(limit_cf, start_cf, department);
+            }, 1000);
+          }
+    		});
+
+        var limit_due = 20;
+        var start_due = 0;
+        var action_due = "inactive";
+        function load_due_data_department(limit_due, start_due, department){
+        filter_report_due = "'.$filter_report.'";
+        filter_from_due = "'.$filter_from.'";
+        filter_to_due = "'.$filter_to.'";
+        $.ajax({
+            url:"ajax.php",
+            method:"POST",
+            data:{
+              limit:limit_due,
+              start:start_due,
+              department:department,
+              filter_report:filter_report_due,
+              filter_from:filter_from_due,
+              filter_to:filter_to_due,
+              load_due_data_department:1},
+            cache:false,
+            success:function(data)
+            {
+            $("#load_data_due_department").append(data);
+            if(data == "")
+            {
+              var start_due = 0;
+             action_due = "active";
+            }
+            else
+            {
+             action_due = "inactive";
+            }
+          }
+        });
+        }
+
+        if(action_due == "inactive")
+          {
+          action_due = "active";
+          load_due_data_department(limit_due, start_due, department);
+          }
+        $("#scroll_due_department").scroll(function() {
+          if ($("#scroll_due_department").scrollTop() + $("#scroll_due_department").height() > $("#scroll_due_department").height() && action_due == "inactive") {
+            action_due = "active";
+            start_due = start_due + limit_due;
+            setTimeout(function(){
+            load_due_data_department(limit_due, start_due, department);
+            }, 1000);
+          }
+        });
+
+        var limit_move = 20;
+        var start_move = 0;
+        var action_move = "inactive";
+        function load_move_data_department(limit_move, start_move, department){
+        filter_report_move = "'.$filter_report.'";
+        filter_from_move = "'.$filter_from.'";
+        filter_to_move = "'.$filter_to.'";
+        $.ajax({
+            url:"ajax.php",
+            method:"POST",
+            data:{
+              limit:limit_move,
+              start:start_move,
+              department:department,
+              filter_report:filter_report_move,
+              filter_from:filter_from_move,
+              filter_to:filter_to_move,
+              load_move_data_department:1},
+            cache:false,
+            success:function(data)
+            {
+            $("#load_data_move_department").append(data);
+            if(data == "")
+            {
+              var start_move = 0;
+             action_move = "active";
+            }
+            else
+            {
+             action_move = "inactive";
+            }
+          }
+        });
+        }
+
+        if(action_move == "inactive")
+          {
+          action_move = "active";
+          load_move_data_department(limit_move, start_move, department);
+          }
+        $("#scroll_move_department").scroll(function() {
+          if ($("#scroll_move_department").scrollTop() + $("#scroll_move_department").height() > $("#scroll_move_department").height() && action_move == "inactive") {
+            action_move = "active";
+            start_move = start_move + limit_move;
+            setTimeout(function(){
+            load_move_data_department(limit_move, start_move, department);
+            }, 1000);
+          }
+        });
+
+        var limit_wc = 20;
+        var start_wc = 0;
+        var action_wc = "inactive";
+        function load_wc_data_department(limit_wc, start_wc, department){
+        filter_report_wc = "'.$filter_report.'";
+        filter_from_wc = "'.$filter_from.'";
+        filter_to_wc = "'.$filter_to.'";
+        $.ajax({
+            url:"ajax.php",
+            method:"POST",
+            data:{
+              limit:limit_wc,
+              start:start_wc,
+              department:department,
+              filter_report:filter_report_wc,
+              filter_from:filter_from_wc,
+              filter_to:filter_to_wc,
+              load_wc_data_department:1},
+            cache:false,
+            success:function(data)
+            {
+            $("#load_data_wc_department").append(data);
+            if(data == "")
+            {
+              var start_wc = 0;
+             action_wc = "active";
+            }
+            else
+            {
+             action_wc = "inactive";
+            }
+          }
+        });
+        }
+
+        if(action_wc == "inactive")
+          {
+          action_wc = "active";
+          load_wc_data_department(limit_wc, start_wc, department);
+          }
+        $("#scroll_wc_department").scroll(function() {
+          if ($("#scroll_wc_department").scrollTop() + $("#scroll_wc_department").height() > $("#scroll_wc_department").height() && action_wc == "inactive") {
+            action_wc = "active";
+            start_wc = start_wc + limit_wc;
+            setTimeout(function(){
+            load_wc_data_department(limit_wc, start_wc, department);
+            }, 1000);
+          }
+        });
+
+        var limit_es = 20;
+        var start_es = 0;
+        var action_es = "inactive";
+        function load_es_data_department(limit_es, start_es, department){
+        filter_report_es = "'.$filter_report.'";
+        filter_from_es = "'.$filter_from.'";
+        filter_to_es = "'.$filter_to.'";
+        $.ajax({
+            url:"ajax.php",
+            method:"POST",
+            data:{
+              limit:limit_es,
+              start:start_es,
+              department:department,
+              filter_report:filter_report_es,
+              filter_from:filter_from_es,
+              filter_to:filter_to_es,
+              load_es_data_department:1},
+            cache:false,
+            success:function(data)
+            {
+            $("#load_data_es_department").append(data);
+            if(data == "")
+            {
+              var start_es = 0;
+             action_es = "active";
+            }
+            else
+            {
+             action_es = "inactive";
+            }
+          }
+        });
+        }
+
+        if(action_es == "inactive")
+          {
+          action_es = "active";
+          load_es_data_department(limit_es, start_es, department);
+          }
+        $("#scroll_es_department").scroll(function() {
+          if ($("#scroll_es_department").scrollTop() + $("#scroll_es_department").height() > $("#scroll_es_department").height() && action_es == "inactive") {
+            action_es = "active";
+            start_es = start_es + limit_es;
+            setTimeout(function(){
+            load_es_data_department(limit_es, start_es, department);
+            }, 1000);
+          }
+        });
+
+        var limit_ad = 20;
+        var start_ad = 0;
+        var action_ad = "inactive";
+        function load_ad_data_department(limit_ad, start_ad, department){
+        filter_report_ad = "'.$filter_report.'";
+        filter_from_ad = "'.$filter_from.'";
+        filter_to_ad = "'.$filter_to.'";
+        $.ajax({
+            url:"ajax.php",
+            method:"POST",
+            data:{
+              limit:limit_ad,
+              start:start_ad,
+              department:department,
+              filter_report:filter_report_ad,
+              filter_from:filter_from_ad,
+              filter_to:filter_to_ad,
+              load_ad_data_department:1},
+            cache:false,
+            success:function(data)
+            {
+            $("#load_data_assigneddue_department").append(data);
+            if(data == "")
+            {
+              var start_ad = 0;
+             action_ad = "active";
+            }
+            else
+            {
+             action_ad = "inactive";
+            }
+          }
+        });
+        }
+
+        if(action_ad == "inactive")
+          {
+          action_ad = "active";
+          load_ad_data_department(limit_ad, start_ad, department);
+          }
+        $("#scroll_assigneddue_department").scroll(function() {
+          if ($("#scroll_assigneddue_department").scrollTop() + $("#scroll_assigneddue_department").height() > $("#scroll_assigneddue_department").height() && action_ad == "inactive") {
+            action_ad = "active";
+            start_ad = start_ad + limit_ad;
+            setTimeout(function(){
+            load_ad_data_department(limit_ad, start_ad, department);
+            }, 1000);
+          }
+        });
+
         </script>
           ';
         }
@@ -5788,6 +6477,781 @@
           </script>
         ';
       }
+      echo '
+      <script src="../assets/js/codebase.core.min.js"></script>
+      <script src="../assets/js/codebase.app.min.js"></script>
+      ';
+    }
+
+    if(isset($_POST['load_created_data_department']))
+    {
+        $limit = $_POST['limit'];
+        $start = $_POST['start'];
+        $department = $_POST['department'];
+
+        $filter_report = $_POST['filter_report'];
+        $filter_from = $_POST['filter_from'];
+        $filter_to = $_POST['filter_to'];
+
+        $filter = '';
+        if($filter_report == "all")
+        {
+            $filter = '';
+        }
+        else if($filter_report == "today")
+        {
+            $today = date("Y-m-d");
+            $filter = "AND contact_date_created LIKE '%".$today."%'";
+        }
+        else if($filter_report == "yesterday")
+        {
+            $yesterday = date('Y-m-d', strtotime(' -1 day'));
+            $filter = "AND contact_date_created LIKE '%".$yesterday."%'";
+        }
+        else if($filter_report == "this_week")
+        {
+            $dt = new DateTime();
+            $dates = [];
+            for ($d = 1; $d <= 7; $d++) {
+                $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
+                $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
+            }
+            $from = current($dates); // monday
+            $to = end($dates); // sunday
+
+            $filter = "AND contact_date_created BETWEEN '".$from."' AND '".$to."'";
+        }
+        else if($filter_report == "month")
+        {
+            $month = date("Y-m");
+            $filter = "AND contact_date_created LIKE '%".$month."%'";
+        }
+        else if($filter_report == "year")
+        {
+            $year = date("Y");
+            $due_date_filter = "AND contact_date_created LIKE '%".$year."%'";
+        }
+        else if($filter_report == "custom")
+        {
+            $filter = "AND contact_date_created BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
+        }
+
+        $count = 1 + $start;
+        $query_created = mysqli_query($conn, "SELECT * FROM contact INNER JOIN `user` ON contact.contact_created_by = `user`.user_id WHERE `user`.department = '$department' $filter ORDER BY contact_date_created DESC LIMIT $start, $limit") or die(mysqli_error());
+        while($data_created = mysqli_fetch_array($query_created))
+        {
+          echo '
+            <tr>
+              <td>'.$count++.'</td>
+              <td>'.$data_created['contact_fname'].' '.$data_created['contact_lname'].'</td>
+              <td>'.$data_created['contact_date_created'].'</td>
+            </tr>
+          ';
+        }
+    }
+
+    if(isset($_POST['load_assigned_data_department']))
+    {
+        $limit_assigned = $_POST['limit_assigned'];
+        $start_assgined = $_POST['start_assgined'];
+        $user_id = $_POST['user_id_assigned'];
+
+        $filter_report = $_POST['filter_report_assigned'];
+        $filter_from = $_POST['filter_from_assigned'];
+        $filter_to = $_POST['filter_to_assigned'];
+
+        $filter = '';
+        if($filter_report == "all")
+        {
+            $filter = '';
+        }
+        else if($filter_report == "today")
+        {
+            $today = date("Y-m-d");
+            $filter = "AND task_date_created LIKE '%".$today."%'";
+        }
+        else if($filter_report == "yesterday")
+        {
+            $yesterday = date('Y-m-d', strtotime(' -1 day'));
+            $filter = "AND task_date_created LIKE '%".$yesterday."%'";
+        }
+        else if($filter_report == "this_week")
+        {
+            $dt = new DateTime();
+            $dates = [];
+            for ($d = 1; $d <= 7; $d++) {
+                $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
+                $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
+            }
+            $from = current($dates); // monday
+            $to = end($dates); // sunday
+
+            $filter = "AND task_date_created BETWEEN '".$from."' AND '".$to."'";
+        }
+        else if($filter_report == "month")
+        {
+            $month = date("Y-m");
+            $filter = "AND task_date_created LIKE '%".$month."%'";
+        }
+        else if($filter_report == "year")
+        {
+            $year = date("Y");
+            $due_date_filter = "AND task_date_created LIKE '%".$year."%'";
+        }
+        else if($filter_report == "custom")
+        {
+            $filter = "AND task_date_created BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
+        }
+
+        $count = 1 + $start_assgined;
+        $query_assigned = mysqli_query($conn, "SELECT * FROM task WHERE task_created_by = $user_id AND task_status_id != '' $filter ORDER BY task_date_created DESC LIMIT $start_assgined, $limit_assigned") or die(mysqli_error());
+        while($data_assigned = mysqli_fetch_array($query_assigned))
+        {
+          echo '
+            <tr>
+              <td>'.$count++.'</td>
+              <td>'.$data_assigned['task_name'].'</td>
+              <td>'.$data_assigned['task_date_created'].'</td>
+            </tr>
+          ';
+        }
+    }
+
+    if(isset($_POST['load_unassigned_data_department']))
+    {
+        $limit_unassigned = $_POST['limit_unassigned'];
+        $start_unassgined = $_POST['start_unassgined'];
+        $user_id = $_POST['user_id_unassigned'];
+
+        $filter_report = $_POST['filter_report_unassigned'];
+        $filter_from = $_POST['filter_from_unassigned'];
+        $filter_to = $_POST['filter_to_unassigned'];
+
+        $filter = '';
+        if($filter_report == "all")
+        {
+            $filter = '';
+        }
+        else if($filter_report == "today")
+        {
+            $today = date("Y-m-d");
+            $filter = "AND task_date_created LIKE '%".$today."%'";
+        }
+        else if($filter_report == "yesterday")
+        {
+            $yesterday = date('Y-m-d', strtotime(' -1 day'));
+            $filter = "AND task_date_created LIKE '%".$yesterday."%'";
+        }
+        else if($filter_report == "this_week")
+        {
+            $dt = new DateTime();
+            $dates = [];
+            for ($d = 1; $d <= 7; $d++) {
+                $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
+                $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
+            }
+            $from = current($dates); // monday
+            $to = end($dates); // sunday
+
+            $filter = "AND task_date_created BETWEEN '".$from."' AND '".$to."'";
+        }
+        else if($filter_report == "month")
+        {
+            $month = date("Y-m");
+            $filter = "AND task_date_created LIKE '%".$month."%'";
+        }
+        else if($filter_report == "year")
+        {
+            $year = date("Y");
+            $due_date_filter = "AND task_date_created LIKE '%".$year."%'";
+        }
+        else if($filter_report == "custom")
+        {
+            $filter = "AND task_date_created BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
+        }
+
+        $count = 1 + $start_unassgined;
+        $query_unassigned = mysqli_query($conn, "SELECT * FROM task WHERE task_created_by = $user_id AND task_status_id = '' $filter ORDER BY task_date_created DESC LIMIT $start_unassgined, $limit_unassigned") or die(mysqli_error());
+        while($data_unassigned = mysqli_fetch_array($query_unassigned))
+        {
+          echo '
+            <tr>
+              <td>'.$count++.'</td>
+              <td>'.$data_unassigned['task_name'].'</td>
+              <td>'.$data_unassigned['task_date_created'].'</td>
+            </tr>
+          ';
+        }
+    }
+
+    if(isset($_POST['load_add_data_department']))
+    {
+        $limit = $_POST['limit_add'];
+        $start = $_POST['start_add'];
+        $user_id = $_POST['user_id_add'];
+
+        $filter_report = $_POST['filter_report_add'];
+        $filter_from = $_POST['filter_from_add'];
+        $filter_to = $_POST['filter_to_add'];
+
+        $filter = '';
+        if($filter_report == "all")
+        {
+            $filter = '';
+        }
+        else if($filter_report == "today")
+        {
+            $today = date("Y-m-d");
+            $filter = "AND task_date_created LIKE '%".$today."%'";
+        }
+        else if($filter_report == "yesterday")
+        {
+            $yesterday = date('Y-m-d', strtotime(' -1 day'));
+            $filter = "AND task_date_created LIKE '%".$yesterday."%'";
+        }
+        else if($filter_report == "this_week")
+        {
+            $dt = new DateTime();
+            $dates = [];
+            for ($d = 1; $d <= 7; $d++) {
+                $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
+                $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
+            }
+            $from = current($dates); // monday
+            $to = end($dates); // sunday
+
+            $filter = "AND task_date_created BETWEEN '".$from."' AND '".$to."'";
+        }
+        else if($filter_report == "month")
+        {
+            $month = date("Y-m");
+            $filter = "AND task_date_created LIKE '%".$month."%'";
+        }
+        else if($filter_report == "year")
+        {
+            $year = date("Y");
+            $due_date_filter = "AND task_date_created LIKE '%".$year."%'";
+        }
+        else if($filter_report == "custom")
+        {
+            $filter = "AND task_date_created BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
+        }
+
+        $count = 1 + $start;
+        $query_add = mysqli_query($conn, "SELECT * FROM contact INNER JOIN task ON task.task_contact = contact.contact_id WHERE contact.contact_created_by = $user_id $filter ORDER BY task_date_created DESC  LIMIT $start, $limit") or die(mysqli_error());
+        while($data_add = mysqli_fetch_array($query_add))
+        {
+          echo '
+            <tr>
+              <td>'.$count++.'</td>
+              <td>'.$data_add['task_name'].'</td>
+              <td>'.$data_add['task_date_created'].'</td>
+            </tr>
+          ';
+        }
+    }
+
+    if(isset($_POST['load_cf_data_department']))
+    {
+        $limit = $_POST['limit'];
+        $start = $_POST['start'];
+        $user_id = $_POST['user_id'];
+
+        $filter_report = $_POST['filter_report'];
+        $filter_from = $_POST['filter_from'];
+        $filter_to = $_POST['filter_to'];
+
+        $filter = '';
+        if($filter_report == "all")
+        {
+            $filter = '';
+        }
+        else if($filter_report == "today")
+        {
+            $today = date("Y-m-d");
+            $filter = "AND comment_date LIKE '%".$today."%'";
+        }
+        else if($filter_report == "yesterday")
+        {
+            $yesterday = date('Y-m-d', strtotime(' -1 day'));
+            $filter = "AND comment_date LIKE '%".$yesterday."%'";
+        }
+        else if($filter_report == "this_week")
+        {
+            $dt = new DateTime();
+            $dates = [];
+            for ($d = 1; $d <= 7; $d++) {
+                $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
+                $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
+            }
+            $from = current($dates); // monday
+            $to = end($dates); // sunday
+
+            $filter = "AND comment_date BETWEEN '".$from."' AND '".$to."'";
+        }
+        else if($filter_report == "month")
+        {
+            $month = date("Y-m");
+            $filter = "AND comment_date LIKE '%".$month."%'";
+        }
+        else if($filter_report == "year")
+        {
+            $year = date("Y");
+            $due_date_filter = "AND comment_date LIKE '%".$year."%'";
+        }
+        else if($filter_report == "custom")
+        {
+            $filter = "AND comment_date BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
+        }
+
+        $count = 1 + $start;
+        $query = mysqli_query($conn, "SELECT task.task_id, task.task_name, comment.comment_message, comment.comment_date FROM comment INNER JOIN task ON comment.comment_task_id = task.task_id WHERE comment.comment_user_id = $user_id AND comment.comment_type = '1' $filter ORDER BY comment_date DESC LIMIT $start, $limit") or die(mysqli_error());
+        while($data = mysqli_fetch_array($query))
+        {
+          $task_id = $data['task_id'];
+          $query_lang = mysqli_query($conn, "SELECT list.list_name, task.task_id, space.space_name, task.task_list_id FROM task INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id WHERE task.task_id = $task_id") or die(mysqli_error());
+          $data_lang = mysqli_fetch_assoc($query_lang);
+          $service_name = $data_lang['space_name'];
+          $list_name = $data_lang['list_name'];
+          $task_list_id = $data_lang['task_list_id'];
+          echo '
+            <tr style="cursor: pointer;" id="'.$service_name.','.$list_name.','.$task_list_id.','.$task_id.'" onclick="view_lang(this.id)">
+              <td>'.$count++.'</td>
+              <td>'.$data['task_name'].'</td>
+              <td>'.$data['comment_message'].'</td>
+              <td>'.$data['comment_date'].'</td>
+            </tr>
+          ';
+        }
+    }
+
+    if(isset($_POST['load_due_data_department']))
+    {
+        $limit = $_POST['limit'];
+        $start = $_POST['start'];
+        $user_id = $_POST['user_id'];
+
+        $filter_report = $_POST['filter_report'];
+        $filter_from = $_POST['filter_from'];
+        $filter_to = $_POST['filter_to'];
+
+        $filter = '';
+        if($filter_report == "all")
+        {
+            $filter = '';
+        }
+        else if($filter_report == "today")
+        {
+            $today = date("Y-m-d");
+            $filter = "AND comment_date LIKE '%".$today."%'";
+        }
+        else if($filter_report == "yesterday")
+        {
+            $yesterday = date('Y-m-d', strtotime(' -1 day'));
+            $filter = "AND comment_date LIKE '%".$yesterday."%'";
+        }
+        else if($filter_report == "this_week")
+        {
+            $dt = new DateTime();
+            $dates = [];
+            for ($d = 1; $d <= 7; $d++) {
+                $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
+                $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
+            }
+            $from = current($dates); // monday
+            $to = end($dates); // sunday
+
+            $filter = "AND comment_date BETWEEN '".$from."' AND '".$to."'";
+        }
+        else if($filter_report == "month")
+        {
+            $month = date("Y-m");
+            $filter = "AND comment_date LIKE '%".$month."%'";
+        }
+        else if($filter_report == "year")
+        {
+            $year = date("Y");
+            $due_date_filter = "AND comment_date LIKE '%".$year."%'";
+        }
+        else if($filter_report == "custom")
+        {
+            $filter = "AND comment_date BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
+        }
+
+        $count = 1 + $start;
+        $query = mysqli_query($conn, "SELECT task.task_id, task.task_name, comment.comment_message, comment.comment_date FROM comment INNER JOIN task ON comment.comment_task_id = task.task_id WHERE comment.comment_user_id = $user_id AND comment.comment_type = '2' $filter ORDER BY comment_date DESC LIMIT $start, $limit") or die(mysqli_error());
+        while($data = mysqli_fetch_array($query))
+        {
+          $task_id = $data['task_id'];
+          $query_lang = mysqli_query($conn, "SELECT list.list_name, task.task_id, space.space_name, task.task_list_id FROM task INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id WHERE task.task_id = $task_id") or die(mysqli_error());
+          $data_lang = mysqli_fetch_assoc($query_lang);
+          $service_name = $data_lang['space_name'];
+          $list_name = $data_lang['list_name'];
+          $task_list_id = $data_lang['task_list_id'];
+          echo '
+            <tr style="cursor: pointer;" id="'.$service_name.','.$list_name.','.$task_list_id.','.$task_id.'" onclick="view_lang(this.id)">
+              <td>'.$count++.'</td>
+              <td>'.$data['task_name'].'</td>
+              <td>'.$data['comment_message'].'</td>
+              <td>'.$data['comment_date'].'</td>
+            </tr>
+          ';
+        }
+    }
+
+    if(isset($_POST['load_move_data_department']))
+    {
+        $limit = $_POST['limit'];
+        $start = $_POST['start'];
+        $user_id = $_POST['user_id'];
+
+        $filter_report = $_POST['filter_report'];
+        $filter_from = $_POST['filter_from'];
+        $filter_to = $_POST['filter_to'];
+
+        $filter = '';
+        if($filter_report == "all")
+        {
+            $filter = '';
+        }
+        else if($filter_report == "today")
+        {
+            $today = date("Y-m-d");
+            $filter = "AND comment_date LIKE '%".$today."%'";
+        }
+        else if($filter_report == "yesterday")
+        {
+            $yesterday = date('Y-m-d', strtotime(' -1 day'));
+            $filter = "AND comment_date LIKE '%".$yesterday."%'";
+        }
+        else if($filter_report == "this_week")
+        {
+            $dt = new DateTime();
+            $dates = [];
+            for ($d = 1; $d <= 7; $d++) {
+                $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
+                $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
+            }
+            $from = current($dates); // monday
+            $to = end($dates); // sunday
+
+            $filter = "AND comment_date BETWEEN '".$from."' AND '".$to."'";
+        }
+        else if($filter_report == "month")
+        {
+            $month = date("Y-m");
+            $filter = "AND comment_date LIKE '%".$month."%'";
+        }
+        else if($filter_report == "year")
+        {
+            $year = date("Y");
+            $due_date_filter = "AND comment_date LIKE '%".$year."%'";
+        }
+        else if($filter_report == "custom")
+        {
+            $filter = "AND comment_date BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
+        }
+
+        $count = 1 + $start;
+        $query = mysqli_query($conn, "SELECT task.task_id, task.task_name, comment.comment_message, comment.comment_date FROM comment INNER JOIN task ON comment.comment_task_id = task.task_id WHERE comment.comment_user_id = $user_id AND comment.comment_type = '3' $filter ORDER BY comment_date DESC LIMIT $start, $limit") or die(mysqli_error());
+        while($data = mysqli_fetch_array($query))
+        {
+          $task_id = $data['task_id'];
+          $query_lang = mysqli_query($conn, "SELECT list.list_name, task.task_id, space.space_name, task.task_list_id FROM task INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id WHERE task.task_id = $task_id") or die(mysqli_error());
+          $data_lang = mysqli_fetch_assoc($query_lang);
+          $service_name = $data_lang['space_name'];
+          $list_name = $data_lang['list_name'];
+          $task_list_id = $data_lang['task_list_id'];
+          echo '
+            <tr style="cursor: pointer;" id="'.$service_name.','.$list_name.','.$task_list_id.','.$task_id.'" onclick="view_lang(this.id)">
+              <td>'.$count++.'</td>
+              <td>'.$data['task_name'].'</td>
+              <td>'.$data['comment_message'].'</td>
+              <td>'.$data['comment_date'].'</td>
+            </tr>
+          ';
+        }
+    }
+
+    if(isset($_POST['load_wc_data_department']))
+    {
+        $limit = $_POST['limit'];
+        $start = $_POST['start'];
+        $user_id = $_POST['user_id'];
+
+        $filter_report = $_POST['filter_report'];
+        $filter_from = $_POST['filter_from'];
+        $filter_to = $_POST['filter_to'];
+
+        $filter = '';
+        if($filter_report == "all")
+        {
+            $filter = '';
+        }
+        else if($filter_report == "today")
+        {
+            $today = date("Y-m-d");
+            $filter = "AND comment_date LIKE '%".$today."%'";
+        }
+        else if($filter_report == "yesterday")
+        {
+            $yesterday = date('Y-m-d', strtotime(' -1 day'));
+            $filter = "AND comment_date LIKE '%".$yesterday."%'";
+        }
+        else if($filter_report == "this_week")
+        {
+            $dt = new DateTime();
+            $dates = [];
+            for ($d = 1; $d <= 7; $d++) {
+                $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
+                $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
+            }
+            $from = current($dates); // monday
+            $to = end($dates); // sunday
+
+            $filter = "AND comment_date BETWEEN '".$from."' AND '".$to."'";
+        }
+        else if($filter_report == "month")
+        {
+            $month = date("Y-m");
+            $filter = "AND comment_date LIKE '%".$month."%'";
+        }
+        else if($filter_report == "year")
+        {
+            $year = date("Y");
+            $due_date_filter = "AND comment_date LIKE '%".$year."%'";
+        }
+        else if($filter_report == "custom")
+        {
+            $filter = "AND comment_date BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
+        }
+
+        $count = 1 + $start;
+        $query = mysqli_query($conn, "SELECT task.task_id, task.task_name, comment.comment_message, comment.comment_date FROM comment INNER JOIN task ON comment.comment_task_id = task.task_id WHERE comment.comment_user_id = $user_id AND comment.comment_type is null $filter ORDER BY comment_date DESC LIMIT $start, $limit") or die(mysqli_error());
+        while($data = mysqli_fetch_array($query))
+        {
+          $task_id = $data['task_id'];
+          $query_lang = mysqli_query($conn, "SELECT list.list_name, task.task_id, space.space_name, task.task_list_id FROM task INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id WHERE task.task_id = $task_id") or die(mysqli_error());
+          $data_lang = mysqli_fetch_assoc($query_lang);
+          $service_name = $data_lang['space_name'];
+          $list_name = $data_lang['list_name'];
+          $task_list_id = $data_lang['task_list_id'];
+          echo '
+            <tr style="cursor: pointer;" id="'.$service_name.','.$list_name.','.$task_list_id.','.$task_id.'" onclick="view_lang(this.id)">
+              <td>'.$count++.'</td>
+              <td>'.$data['task_name'].'</td>
+              <td>'.$data['comment_message'].'</td>
+              <td>'.$data['comment_date'].'</td>
+            </tr>
+          ';
+        }
+    }
+
+    if(isset($_POST['load_es_data_department']))
+    {
+        $limit = $_POST['limit'];
+        $start = $_POST['start'];
+        $user_id = $_POST['user_id'];
+
+        $filter_report = $_POST['filter_report'];
+        $filter_from = $_POST['filter_from'];
+        $filter_to = $_POST['filter_to'];
+
+        $filter = '';
+        if($filter_report == "all")
+        {
+            $filter = '';
+        }
+        else if($filter_report == "today")
+        {
+            $today = date("Y-m-d");
+            $filter = "AND comment_date LIKE '%".$today."%'";
+        }
+        else if($filter_report == "yesterday")
+        {
+            $yesterday = date('Y-m-d', strtotime(' -1 day'));
+            $filter = "AND comment_date LIKE '%".$yesterday."%'";
+        }
+        else if($filter_report == "this_week")
+        {
+            $dt = new DateTime();
+            $dates = [];
+            for ($d = 1; $d <= 7; $d++) {
+                $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
+                $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
+            }
+            $from = current($dates); // monday
+            $to = end($dates); // sunday
+
+            $filter = "AND comment_date BETWEEN '".$from."' AND '".$to."'";
+        }
+        else if($filter_report == "month")
+        {
+            $month = date("Y-m");
+            $filter = "AND comment_date LIKE '%".$month."%'";
+        }
+        else if($filter_report == "year")
+        {
+            $year = date("Y");
+            $due_date_filter = "AND comment_date LIKE '%".$year."%'";
+        }
+        else if($filter_report == "custom")
+        {
+            $filter = "AND comment_date BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
+        }
+
+        $count = 1 + $start;
+        $query = mysqli_query($conn, "SELECT task.task_id, task.task_name, comment.comment_message, comment.comment_date FROM comment INNER JOIN task ON comment.comment_task_id = task.task_id WHERE comment.comment_user_id = $user_id AND comment.comment_type = '4' $filter ORDER BY comment_date DESC LIMIT $start, $limit") or die(mysqli_error());
+        while($data = mysqli_fetch_array($query))
+        {
+          $task_id = $data['task_id'];
+          $query_lang = mysqli_query($conn, "SELECT list.list_name, task.task_id, space.space_name, task.task_list_id FROM task INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id WHERE task.task_id = $task_id") or die(mysqli_error());
+          $data_lang = mysqli_fetch_assoc($query_lang);
+          $service_name = $data_lang['space_name'];
+          $list_name = $data_lang['list_name'];
+          $task_list_id = $data_lang['task_list_id'];
+          echo '
+            <tr style="cursor: pointer;" id="'.$service_name.','.$list_name.','.$task_list_id.','.$task_id.'" onclick="view_lang(this.id)">
+              <td>'.$count++.'</td>
+              <td>'.$data['task_name'].'</td>
+              <td>'.$data['comment_message'].'</td>
+              <td>'.$data['comment_date'].'</td>
+            </tr>
+          ';
+        }
+    }
+
+    if(isset($_POST['load_ad_data_department']))
+    {
+        $limit = $_POST['limit'];
+        $start = $_POST['start'];
+        $user_id = $_POST['user_id'];
+
+        $filter_report = $_POST['filter_report'];
+        $filter_from = $_POST['filter_from'];
+        $filter_to = $_POST['filter_to'];
+
+        $filter = '';
+        if($filter_report == "all")
+        {
+            $filter = '';
+        }
+        else if($filter_report == "today")
+        {
+            $today = date("Y-m-d");
+            $filter = "LIKE '%".$today."%'";
+        }
+        else if($filter_report == "yesterday")
+        {
+            $yesterday = date('Y-m-d', strtotime(' -1 day'));
+            $filter = "LIKE '%".$yesterday."%'";
+        }
+        else if($filter_report == "this_week")
+        {
+            $dt = new DateTime();
+            $dates = [];
+            for ($d = 1; $d <= 7; $d++) {
+                $dt->setISODate($dt->format('o'), $dt->format('W'), $d);
+                $weekdate = ($dates[$dt->format('D')] = $dt->format('Y-m-d'));
+            }
+            $from = current($dates); // monday
+            $to = end($dates); // sunday
+
+            $filter = "BETWEEN '".$from."' AND '".$to."'";
+        }
+        else if($filter_report == "month")
+        {
+            $month = date("Y-m");
+            $filter = "LIKE '%".$month."%'";
+        }
+        else if($filter_report == "year")
+        {
+            $year = date("Y");
+            $due_date_filter = "LIKE '%".$year."%'";
+        }
+        else if($filter_report == "custom")
+        {
+            $filter = "BETWEEN '".$filter_from." 00:00:00' AND '".$filter_to." 23:59:59'";
+        }
+
+        $find_task = mysqli_query($conn, "SELECT * FROM task WHERE task_date_created $filter AND task_assign_to LIKE '%$user_id%' AND task_due_date != '0000-00-00' AND task_due_date IS NOT NULL ORDER BY task_due_date DESC LIMIT $start, $limit");
+        while($data = mysqli_fetch_array($find_task)){
+          $str_to_array = explode(",",$data['task_assign_to']);
+          if(in_array($user_id,$str_to_array))
+          {
+            $date_today = date('Y-m-d');
+            $today = date("Y-m-d"); // Get current date
+            $tomorrow = date('Y-m-d', strtotime(' +1 day')); // Get tomorrow date
+            $tomorrow2 = date('Y-m-d', strtotime(' +2 day'));
+            $tomorrow3 = date('Y-m-d', strtotime(' +3 day'));
+            $tomorrow4 = date('Y-m-d', strtotime(' +4 day'));
+            $tomorrow5 = date('Y-m-d', strtotime(' +5 day'));
+            $tomorrow6 = date('Y-m-d', strtotime(' +6 day'));
+            $due_date_time = $data['task_due_date']; // ex: 2020-12-10 00:00:00
+            $ymd = substr($due_date_time, -19, 10); // 2020-12-10 00:00:00 // Y-m-d = 2020-12-10 00
+
+            $task_id = $data['task_id'];
+            $query_lang = mysqli_query($conn, "SELECT list.list_name, task.task_id, space.space_name, task.task_list_id FROM task INNER JOIN list ON task.task_list_id = list.list_id INNER JOIN space ON list.list_space_id = space.space_id WHERE task.task_id = $task_id") or die(mysqli_error());
+            $data_lang = mysqli_fetch_assoc($query_lang);
+            $service_name = $data_lang['space_name'];
+            $list_name = $data_lang['list_name'];
+            $task_list_id = $data_lang['task_list_id'];
+            echo '
+              <tr style="cursor: pointer;" id="'.$service_name.','.$list_name.','.$task_list_id.','.$task_id.'" onclick="view_lang(this.id)">
+                <td>Task ID: '.$task_id.'</td>
+                <td>'.$data['task_name'].'</td>
+                <td class="text-center">';
+                if($ymd == $today)
+                {
+                    $task_priority = "D Urgent";
+                    mysqli_query($conn, "UPDATE task SET task_priority='$task_priority' WHERE task_id='$task_id'") or die(mysqli_error());
+                    echo'<span class="badge badge-danger">Today</span>';
+                }
+                else if($ymd == $tomorrow)
+                {
+                    $task_priority = "C High";
+                    mysqli_query($conn, "UPDATE task SET task_priority='$task_priority' WHERE task_id='$task_id'") or die(mysqli_error());
+                    echo'<span class="badge badge-warning">Tomorrow</span>';
+                }
+                else if($due_date_time == "" or $due_date_time == '0000-00-00')
+                {
+                    echo'<span class="badge badge-primary">No Due Date yet!!</span>';
+                }
+                else if($due_date_time < $date_today)
+                {
+                    echo'<span class="badge badge-info">Overdue</span>';
+                }
+                else if($ymd === $tomorrow2)
+                {
+                    echo'<span class="badge badge-info">'.date("l", strtotime($due_date_time)).'</span>';
+                }
+                else if($ymd === $tomorrow3)
+                {
+                    echo'<span class="badge badge-info">'.date("l", strtotime($due_date_time)).'</span>';
+                }
+                else if($ymd === $tomorrow4)
+                {
+                    echo'<span class="badge badge-info">'.date("l", strtotime($due_date_time)).'</span>';
+                }
+                else if($ymd === $tomorrow5)
+                {
+                    echo'<span class="badge badge-info">'.date("l", strtotime($due_date_time)).'</span>';
+                }
+                else if($ymd === $tomorrow6)
+                {
+                    echo'<span class="badge badge-info">'.date("l", strtotime($due_date_time)).'</span>';
+                }
+                else
+                {
+                  echo'<span class="badge badge-success">'.$due_date_time.'</span>';
+                }
+                echo '
+                </td>
+                <td>'.$data['task_date_created'].'</td>
+              </tr>
+            ';
+          }
+        }
     }
 
 ?>
